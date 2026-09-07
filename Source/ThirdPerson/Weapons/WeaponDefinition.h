@@ -9,6 +9,7 @@ class AWeaponProjectile;
 class UAnimMontage;
 class UTexture2D;
 class UParticleSystem;
+class UActionSet;
 
 UENUM(BlueprintType)
 enum class EWeaponType : uint8
@@ -24,6 +25,8 @@ class THIRDPERSON_API UWeaponDefinition : public UPrimaryDataAsset
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Actions")
+	TObjectPtr<UActionSet> ActionSet;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	FName WeaponId = NAME_None;
 

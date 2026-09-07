@@ -1,0 +1,54 @@
+主角动作系统实现验证 / 2026-09-07 / UE 5.8.2
+工程：E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject
+分支：main；开发起点：8b717e7bd336732db40727f6de1720be40d369fb
+
+改动入口：UWeaponDefinition.ActionSet -> UActionComponent；保存资产与代码原地修改。
+关键字段：GroundCombo=4，AirCombo=2；Dodge invulnerability=[0.05,0.30)；Warp.RotationType=Default，bWarpToFeetLocation=false；Dive.ContactWait 仅由真实 Landed 转入 Land。
+
+BASELINE（修改前全部 ThirdPerson 测试）
+命令："D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" /Engine/Maps/Entry -ExecCmds="Automation RunTests ThirdPerson" -TestExit="Automation Test Queue Empty" -ReportExportPath="E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/SwordActionBaseline" -unattended -NullRHI -nosound -nop4 -stdout -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/SwordActionBaseline.txt"
+输入：开发起点源码、已保存的项目地图/角色/武器/动画资产。
+进程退出状态：0。
+UE 原文：LogAutomationCommandLine: Display: ...Automation Test Queue Empty 25 tests performed.
+JSON：succeeded=16, succeededWithWarnings=9, failed=0, notRun=0, inProcess=0；25/25 通过。
+
+MODIFIED（最终保存状态，含近身第二刀朝向修复）
+命令：& 'E:/UNREAL/ue projects/ThirdPerson/DesignDocs/SwordActionSystem/Verify-SwordAction.ps1' -Render All
+输入：原工程当前源码、动作数据、动画蓝图、Montage、默认输入映射；测试入口 Automation RunTests ThirdPerson。
+实测脚本输出：
+BUILD ThirdPersonEditor EXIT=0
+BUILD ThirdPerson EXIT=0
+TEST NullRHI PASS=31 FAIL=0 EXIT=0
+TEST RHI PASS=31 FAIL=0 EXIT=0
+VERIFIED E:\UNREAL\ue projects\ThirdPerson\Saved\Automation\SwordActionVerification_20260907_183916
+NullRHI JSON：succeeded=19, succeededWithWarnings=12, failed=0；31/31 通过。
+RHI JSON：succeeded=19, succeededWithWarnings=12, failed=0；31/31 通过。
+所有子进程退出状态：0。逐个可执行文件与完整参数数组见 ImplementationEvidence/commands-and-results.json。
+
+原生资产重新读取
+命令："D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -run=pythonscript "-script=E:/UNREAL/ue projects/ThirdPerson/Saved/SwordActionImplementation/final_audit.py" -NullRHI -nosound -unattended -nop4 -stdout "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/SwordDeliveryReadback.txt"
+输出：SWORD_FINAL_AUDIT_OK；退出状态：0。
+读取：实际 BP_TPCCharacter CDO 的 StartingWeapon、19 个输入绑定、主动作集各招、ABP 编译状态及真实图连接。
+
+关键回归证据
+- 近身第二刀：增强断言先复现两项测试失败；前三刀原 Warp.RotationType=Facing(1)，第四刀为 Default(0)。修复前第二刀在 30 Hz 轨迹转至 -180° 并向后移动，导致两刀仅 25、四刀仅 83.75 伤害。
+- 修复后：四刀统一 Default(0)，6 项 Sword 测试全部通过；最终全部 31 项再次在 NullRHI/RHI 通过。ground_hit_summary.json 核对三种帧时步，两刀=50、四刀=108.75，朝向均为 0°。
+- Core 11×3 + Lifecycle 18×3 =87 个实际 PIE 场景，包含物理碰撞、默认资产、敌人落地/倒地/起身、空战、菜单/死亡重开、两套风格、墙体与平台消失。
+- 保留此前 25 项动作/投射物/Boss 回归。31 项为测试条目数，87 为两项参数化 PIE 测试内部场景数，二者不混加。
+- 30/60/120 是断言过真实 World DeltaSeconds 的固定逻辑时步，不是硬件帧率性能测评。
+
+警告记录
+通过项中的警告原文保留在三个 JSON 的 events 中；通过数包含 succeededWithWarnings。既有测试的临时世界缺少 NavMesh、World context 清理、预期缺 Montage 路径，以及游戏以 Warning 级别记录的 Enemy died / Player died 等，均未当作零警告或隐藏。
+资产构建与新进程读取没有蓝图编译错误；测试判断同时要求退出码 0、failed=0、每项 state=Success。
+
+结束 / 恢复状态
+自然结束、受击、播放失败与菜单清除伤害/刀光/根运动修正及输入缓存；起身仅在存活且实际落地时恢复 AI；Dead 状态拒绝旧回调。
+实测死亡 UI 完整显示后调用其 Restart 入口，新 Pawn 恢复满 HP/SP、Walking、零速度、正确视角、GameOnly 输入、鼠标隐藏与取消暂停。
+
+交付文件
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\SwordActionSystem\主角动作系统实现说明.md
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\SwordActionSystem\Verify-SwordAction.ps1
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\SwordActionSystem\IMPLEMENTATION_VERIFICATION.txt
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\SwordActionSystem\ImplementationEvidence
+
+渲染审阅：SwordCombo.png、SwordAirCombo.png、SwordDeathScreen.png 及 SwordBackWrap_00..05.png 为最终 RHI 原生游戏截图；后退 ±180° 六帧与足部 CSV 同步归档。

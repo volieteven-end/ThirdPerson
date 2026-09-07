@@ -38,9 +38,9 @@
 
 namespace
 {
-const FString Root=TEXT("/Game/Third/Bosses/Countess/");
+const FString CountessGraphRoot=TEXT("/Game/Third/Bosses/Countess/");
 template<class T> T* Find(const FString& Name)
-{ return LoadObject<T>(nullptr,*(Root+Name+TEXT(".")+FPackageName::GetLongPackageAssetName(Name)),nullptr,LOAD_NoWarn); }
+{ return LoadObject<T>(nullptr,*(CountessGraphRoot+Name+TEXT(".")+FPackageName::GetLongPackageAssetName(Name)),nullptr,LOAD_NoWarn); }
 bool Save(UObject* A)
 {
  A->MarkPackageDirty(); FSavePackageArgs Args; Args.TopLevelFlags=RF_Public|RF_Standalone; Args.SaveFlags=SAVE_NoError;
@@ -115,7 +115,7 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
  auto* BS=Find<UBlendSpace>(TEXT("Animations/BS_CountessLocomotion"));
  if (!BS)
  {
-  BS=NewObject<UBlendSpace>(CreatePackage(*(Root+TEXT("Animations/BS_CountessLocomotion"))),TEXT("BS_CountessLocomotion"),RF_Public|RF_Standalone);
+  BS=NewObject<UBlendSpace>(CreatePackage(*(CountessGraphRoot+TEXT("Animations/BS_CountessLocomotion"))),TEXT("BS_CountessLocomotion"),RF_Public|RF_Standalone);
   BS->SetSkeleton(Mesh->GetSkeleton()); BS->SetPreviewMesh(Mesh);
   // Direction in component space. Speed drives a separate calibrated playback-rate input.
   auto* Param=FindFProperty<FStructProperty>(UBlendSpace::StaticClass(),TEXT("BlendParameters"));
@@ -133,7 +133,7 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
  {
   auto* Factory=NewObject<UAnimBlueprintFactory>(); Factory->ParentClass=UCountessBossAnimInstance::StaticClass();
   Factory->TargetSkeleton=Mesh->GetSkeleton(); Factory->PreviewSkeletalMesh=Mesh;
-  BP=Cast<UAnimBlueprint>(Factory->FactoryCreateNew(UAnimBlueprint::StaticClass(),CreatePackage(*(Root+TEXT("Animations/ABP_CountessBoss"))),TEXT("ABP_CountessBoss"),RF_Public|RF_Standalone,nullptr,GWarn));
+  BP=Cast<UAnimBlueprint>(Factory->FactoryCreateNew(UAnimBlueprint::StaticClass(),CreatePackage(*(CountessGraphRoot+TEXT("Animations/ABP_CountessBoss"))),TEXT("ABP_CountessBoss"),RF_Public|RF_Standalone,nullptr,GWarn));
   if (!BP) return false;
   UEdGraph* G=nullptr; for (UEdGraph* Graph:BP->FunctionGraphs) if (Graph->GetFName()==TEXT("AnimGraph")) G=Graph;
   if (!G) return false;
@@ -167,9 +167,9 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
  auto* Tree=Find<UBehaviorTree>(TEXT("AI/BT_CountessBoss"));
  if (!Tree)
  {
-  Tree=DuplicateObject<UBehaviorTree>(ACountessBossAIController::CreateDefaultBossTree(GetTransientPackage()),CreatePackage(*(Root+TEXT("AI/BT_CountessBoss"))),TEXT("BT_CountessBoss"));
+  Tree=DuplicateObject<UBehaviorTree>(ACountessBossAIController::CreateDefaultBossTree(GetTransientPackage()),CreatePackage(*(CountessGraphRoot+TEXT("AI/BT_CountessBoss"))),TEXT("BT_CountessBoss"));
   Tree->SetFlags(RF_Public|RF_Standalone);
-  auto* BB=DuplicateObject<UBlackboardData>(Tree->BlackboardAsset,CreatePackage(*(Root+TEXT("AI/BB_CountessBoss"))),TEXT("BB_CountessBoss"));
+  auto* BB=DuplicateObject<UBlackboardData>(Tree->BlackboardAsset,CreatePackage(*(CountessGraphRoot+TEXT("AI/BB_CountessBoss"))),TEXT("BB_CountessBoss"));
   BB->SetFlags(RF_Public|RF_Standalone); Tree->BlackboardAsset=BB;
   auto* Graph=NewObject<UBehaviorTreeGraph>(Tree,TEXT("BehaviorTreeGraph")); Tree->BTGraph=Graph;
   UBTCompositeNode* RuntimeRoot=Tree->RootNode;
@@ -207,7 +207,7 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
  if (!Widget)
  {
   auto* Factory=NewObject<UWidgetBlueprintFactory>(); Factory->ParentClass=UBossStatusWidget::StaticClass();
-  Widget=Cast<UWidgetBlueprint>(Factory->FactoryCreateNew(UWidgetBlueprint::StaticClass(),CreatePackage(*(Root+TEXT("UI/WBP_BossStatus"))),TEXT("WBP_BossStatus"),RF_Public|RF_Standalone,nullptr,GWarn));
+  Widget=Cast<UWidgetBlueprint>(Factory->FactoryCreateNew(UWidgetBlueprint::StaticClass(),CreatePackage(*(CountessGraphRoot+TEXT("UI/WBP_BossStatus"))),TEXT("WBP_BossStatus"),RF_Public|RF_Standalone,nullptr,GWarn));
   if (!Widget) return false;
   FKismetEditorUtilities::CompileBlueprint(Widget); if (Widget->Status==BS_Error) return false;
   FAssetRegistryModule::AssetCreated(Widget); if (!Save(Widget)) return false;

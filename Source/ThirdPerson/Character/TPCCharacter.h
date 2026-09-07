@@ -16,6 +16,7 @@ class UInteractionComponent;
 class UInventoryComponent;
 class UHealthComponent;
 class UCombatComponent;	
+class UActionComponent;
 class UStaminaComponent;
 class UEquipmentComponent;
 class ULevelComponent;
@@ -34,17 +35,21 @@ class THIRDPERSON_API ATPCCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ATPCCharacter();
+    UFUNCTION(BlueprintCallable, Category="Death") void RestartAfterDeath();
 	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Landed(const FHitResult& Hit) override;
+    virtual void OnJumped_Implementation() override;
 	virtual void OnStartCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
 	virtual void OnEndCrouch(float HalfHeightAdjust, float ScaledHalfHeightAdjust) override;
 	UFUNCTION()
 	void HandleDeath();
 
 	void RespawnPlayer();
+    void FinishDeathPresentation();
+    bool bDeathPresentationReady = false;
 
 	FTimerHandle RespawnTimerHandle;
 public:	
@@ -66,6 +71,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UCombatComponent> CombatComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TObjectPtr<UActionComponent> ActionComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UStaminaComponent> StaminaComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UEquipmentComponent> EquipmentComponent;
@@ -82,6 +89,12 @@ public:
 	/** Optional separate dive action. Choose the physical key in IMC_Default. */
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> AirDiveAction;
+    UPROPERTY(EditDefaultsOnly, Category="Input") TObjectPtr<UInputAction> BuffAction;
+    UPROPERTY(EditDefaultsOnly, Category="Input") TObjectPtr<UInputAction> ToggleWeaponAction;
+    UFUNCTION(BlueprintCallable, Category="Combat") void HandleBuff();
+    UFUNCTION(BlueprintCallable, Category="Equipment") void HandleToggleWeapon();
+    UFUNCTION(BlueprintCallable, Category="Abilities") void SetDoubleJumpUnlocked(bool bUnlocked);
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities") bool bDoubleJumpUnlocked = false;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
@@ -153,6 +166,8 @@ public:
 	/** Capsule-to-target distance retained by attack magnetism. */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
 	float AttackMagnetismStopDistance = 120.f;
+	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
+	float MaxAttackWarpTranslation = 250.f;
 
 	/** Root-motion destination used for camera-facing attacks without a nearby lock target. */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
@@ -231,6 +246,8 @@ public:
 	TObjectPtr<UAnimSequenceBase> HitReactAir;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit Reactions")
 	TObjectPtr<UAnimSequenceBase> BlockHitReact;
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit Reactions")
+	TObjectPtr<UAnimSequenceBase> BlockBreachReact;
 	/** Minimum time movement input is ignored after taking a hit. */
 	UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit Reactions", meta = (ClampMin = "0.0"))
 	float HitMovementLockDuration = 0.35f;
@@ -271,8 +288,10 @@ public:
 	bool IsDashing() const { return MotionAction == ETPCMotionAction::Dodge; }
 	UFUNCTION(BlueprintPure, Category = "Combat|Action")
 	bool IsTurningInPlace() const { return MotionAction == ETPCMotionAction::Turn; }
+	bool IsGuardHitReactionActive() const;
 private:
 	friend struct FTPActionTestAccess;
+	friend struct FTPCSwordPIETestAccess;
 	bool StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction Action);
 	void CancelMotionAction(float BlendOutTime = 0.1f, bool bInterrupted = true);
 	void HandleMotionMontageEnded(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
@@ -285,6 +304,8 @@ private:
 	TWeakObjectPtr<UAnimMontage> ActiveMotionMontage;
 	int32 ActiveMotionInstanceId = INDEX_NONE;
 	uint64 MotionGeneration = 0;
+	uint64 MotionActionId = 0;
+	uint64 HitActionId = 0;
 	float NextTurnAllowedTime = 0.f;
 	float PreSprintMaxWalkSpeed = 450.f;
 	bool bActionDead = false;

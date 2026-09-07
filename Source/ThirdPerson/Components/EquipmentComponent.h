@@ -26,6 +26,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equipment")
 	void UnequipWeapon();
 
+    /** Animation commit changes visibility only; it never respawns the equipped actor. */
+    UFUNCTION(BlueprintCallable, Category = "Equipment") void SetWeaponDrawn(bool bDrawn);
+    UFUNCTION(BlueprintPure, Category = "Equipment") bool IsWeaponDrawn() const { return bWeaponDrawn; }
+
 	UFUNCTION(BlueprintPure, Category = "Equipment")
 	UWeaponDefinition* GetEquippedWeaponDefinition() const { return EquippedWeaponDefinition; }
 
@@ -44,6 +48,7 @@ protected:
 	TObjectPtr<UWeaponDefinition> StartingWeapon;
 
 private:
+    bool bWeaponDrawn = true;
 	UPROPERTY(Transient)
 	TObjectPtr<UWeaponDefinition> EquippedWeaponDefinition;
 

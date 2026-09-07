@@ -14,6 +14,7 @@
 #include "../Components/InventoryComponent.h"
 #include "../Components/HealthComponent.h"
 #include "../Components/CombatComponent.h"
+#include "../Components/ActionComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "Components/CapsuleComponent.h"
 #include "TimerManager.h"
@@ -53,7 +54,7 @@ namespace
 // Sets default values
 ATPCCharacter::ATPCCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bUseControllerRotationYaw=false;
 	// 角色朝移动方向转身，而不是直接跟随鼠标旋转
@@ -63,6 +64,7 @@ ATPCCharacter::ATPCCharacter()
 	GetCharacterMovement()->JumpZVelocity=650.f;
 	GetCharacterMovement()->AirControl=0.35f;
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+	GetCharacterMovement()->MaxWalkSpeedCrouched = 100.f;
 	// 弹簧臂：负责第三人称镜头距离、旋转和防穿墙
 	CameraBoom=CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
@@ -77,6 +79,7 @@ ATPCCharacter::ATPCCharacter()
 	InventoryComponent=CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 	HealthComponent=CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	CombatComponent=CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	ActionComponent=CreateDefaultSubobject<UActionComponent>(TEXT("ActionComponent"));
 	StaminaComponent = CreateDefaultSubobject<UStaminaComponent>(TEXT("StaminaComponent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
 	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
@@ -235,6 +238,8 @@ void ATPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	{
 		Input->BindAction(InteractAction,ETriggerEvent::Started,InteractionComponent.Get(),&UInteractionComponent::TryInteract);
 	}
+    if (BuffAction) Input->BindAction(BuffAction, ETriggerEvent::Started, this, &ThisClass::HandleBuff);
+    if (ToggleWeaponAction) Input->BindAction(ToggleWeaponAction, ETriggerEvent::Started, this, &ThisClass::HandleToggleWeapon);
 	if (AirDiveAction)
 	{
 		Input->BindAction(AirDiveAction, ETriggerEvent::Started, this, &ThisClass::HandleAirDiveAttack);
@@ -317,6 +322,12 @@ void ATPCCharacter::FinishLookInput()
 void ATPCCharacter::StartSprint()
 {
 	if (IsMovementInputLocked() || !StaminaComponent || StaminaComponent->GetCurrentStamina() <= 0.f) { StopSprint(); return; }
+    if (LockedTarget && Controller)
+    {
+        const FRotationMatrix ViewYaw(FRotator(0.f,Controller->GetControlRotation().Yaw,0.f));
+        const FVector Direction=(ViewYaw.GetUnitAxis(EAxis::X)*LastMoveInputAxis.X + ViewYaw.GetUnitAxis(EAxis::Y)*LastMoveInputAxis.Y).GetSafeNormal2D();
+        if (FVector::DotProduct(Direction,GetActorForwardVector())<.7f) return;
+    }
 	if (IsTurningInPlace()) { CancelMotionAction(); }
 	if (!bIsSprinting) { PreSprintMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed; }
 	bIsSprinting = true;
@@ -335,6 +346,7 @@ void ATPCCharacter::HandleDeath()
 {
 	if (bActionDead) { return; }
 	bActionDead = true;
+	if (ActionComponent) ActionComponent->EnterDead();
 	bAttackTargetAssistActive = false;
 	GetWorldTimerManager().ClearTimer(HitMovementLockTimerHandle);
 	CancelMotionAction(0.05f);
@@ -355,8 +367,20 @@ void ATPCCharacter::HandleDeath()
 			RespawnDelay =MontageLength + RespawnDelayAfterDeath;
 		}
 	}
-	GetWorldTimerManager().SetTimer(RespawnTimerHandle,this,&ThisClass::RespawnPlayer,RespawnDelay,false);
+	GetWorldTimerManager().SetTimer(RespawnTimerHandle,this,&ThisClass::FinishDeathPresentation,RespawnDelay,false);
 }
+void ATPCCharacter::FinishDeathPresentation()
+{
+    if (!bActionDead) return;
+    bDeathPresentationReady = true;
+    if (auto* PC = Cast<ATPCPlayerController>(Controller)) PC->ShowDeathScreen();
+}
+
+void ATPCCharacter::RestartAfterDeath()
+{
+    if (bActionDead && bDeathPresentationReady) RespawnPlayer();
+}
+
 void ATPCCharacter::RespawnPlayer()
 {
 	AController* RespawnController = Controller;
@@ -375,6 +399,18 @@ void ATPCCharacter::RespawnPlayer()
 
 		if (APawn* NewPawn = RespawnController->GetPawn())
 		{
+            if (auto* P = Cast<ATPCCharacter>(NewPawn))
+            {
+                P->HealthComponent->SetCurrentHealth(P->HealthComponent->GetMaxHealth());
+                P->StaminaComponent->SetCurrentStamina(P->StaminaComponent->GetMaxStamina());
+                P->ActionComponent->ClearInputBuffers();
+                P->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+                P->GetCharacterMovement()->StopMovementImmediately();
+                if (AActor* Start = GameMode->FindPlayerStart(RespawnController))
+                    P->SetActorLocationAndRotation(Start->GetActorLocation(), Start->GetActorRotation(), false, nullptr, ETeleportType::TeleportPhysics);
+                if (auto* PC = Cast<ATPCPlayerController>(RespawnController))
+                { PC->SetViewTarget(P); PC->RestoreGameplayInput(); }
+            }
 			UE_LOG(
 				LogTemp,
 				Warning,
@@ -391,7 +427,11 @@ void ATPCCharacter::HandleHealthChanged(float CurrentHealth,float MaxHealth)
 	if (bTookDamage && CurrentHealth > 0.f)
 	{
 		UAnimSequenceBase* HitAnimation = HitReactFront;
-		if (HealthComponent && HealthComponent->GetLastCombatHitResult().bBlocked && BlockHitReact)
+		if (HealthComponent && HealthComponent->GetLastCombatHitResult().bGuardBroken && BlockBreachReact)
+        {
+            HitAnimation = BlockBreachReact;
+        }
+        else if (HealthComponent && HealthComponent->GetLastCombatHitResult().bBlocked && BlockHitReact)
 		{
 			HitAnimation = BlockHitReact;
 		}
@@ -439,6 +479,7 @@ void ATPCCharacter::HandleHealthChanged(float CurrentHealth,float MaxHealth)
 }
 void ATPCCharacter::Dash()
 {
+	if (ActionComponent && !ActionComponent->AuthorizeOrBuffer(ETPCActionIntent::Dodge)) return;
     // Attacks still lock WASD, but no longer lock the dedicated dash action.
     if (TPCActionRules::BlocksDodge(bActionDead, bMovementLockedByHit,
         CombatComponent && CombatComponent->IsBlocking(), IsDashing()))
@@ -453,6 +494,7 @@ void ATPCCharacter::Dash()
 	const float CurrentTime =World->GetTimeSeconds();
 	if (CurrentTime - LastDashTime < DashCooldown)
 	{
+		if (ActionComponent) ActionComponent->BufferIntent(ETPCActionIntent::Dodge);
 		return;
 	}
 	FVector DashDirection = FVector::ZeroVector;
@@ -474,7 +516,6 @@ void ATPCCharacter::Dash()
 		DashDirection =GetActorForwardVector().GetSafeNormal2D();
 	}
 	
-	if (!StaminaComponent || StaminaComponent->GetCurrentStamina() < DashCost) { return; }
 
 	// Root-motion dodges move relative to the character, so classify the desired
 	// world-space direction in the character's local forward/right frame. This
@@ -498,6 +539,12 @@ void ATPCCharacter::Dash()
 			: DashLeftMontage.Get();
 	}
 
+    const UActionSet* SwordSet = ActionComponent ? ActionComponent->GetActionSet() : nullptr;
+    const int32 DirectionIndex = FMath::Abs(LocalForward) >= FMath::Abs(LocalRight) ? (LocalForward >= 0.f ? 0 : 1) : (LocalRight >= 0.f ? 3 : 2);
+    const UActionDefinition* DodgeDefinition = SwordSet && SwordSet->Dodges.IsValidIndex(DirectionIndex) ? SwordSet->Dodges[DirectionIndex].Get() : nullptr;
+    if (DodgeDefinition) SelectedDashMontage = DodgeDefinition->Montage;
+    const float Cost = DodgeDefinition ? DodgeDefinition->StaminaCost : DashCost;
+    if (!StaminaComponent || StaminaComponent->GetCurrentStamina() < Cost) return;
 	if (!SelectedDashMontage)
 	{
 		SelectedDashMontage = DashMontage.Get();
@@ -515,10 +562,11 @@ void ATPCCharacter::Dash()
     ClearAttackRootMotionForDodge();
 	if (StartMotionMontage(SelectedDashMontage, ETPCMotionAction::Dodge))
 	{
-		if (!StaminaComponent->TryConsume(DashCost)) { CancelMotionAction(); return; }
+		if (!StaminaComponent->TryConsume(Cost)) { CancelMotionAction(); return; }
 		LastDashTime = CurrentTime;
 		StopGroundInputMomentum();
-		if (HealthComponent) { HealthComponent->SetInvulnerableFor(DashInvulnerabilityDuration); }
+		if (ActionComponent && !ActionComponent->GetActiveDefinition())
+            ActionComponent->SetFallbackInvulnerability(DashInvulnerabilityDuration);
 	}
 }
 void ATPCCharacter::Tick(float DeltaTime)
@@ -544,6 +592,8 @@ void ATPCCharacter::Tick(float DeltaTime)
 			CrouchCameraBlendSpeed);
 	}
 
+    if (bIsSprinting && LockedTarget && GetVelocity().SizeSquared2D() > 1.f &&
+        FVector::DotProduct(GetVelocity().GetSafeNormal2D(), GetActorForwardVector()) < .7f) StopSprint();
 	if (!bIsSprinting || !StaminaComponent)
 	{
 		return;
@@ -575,13 +625,31 @@ void ATPCCharacter::TogglePauseMenu()
 	}
 }
 
+void ATPCCharacter::SetDoubleJumpUnlocked(bool bUnlocked)
+{
+    bDoubleJumpUnlocked = bUnlocked;
+    JumpMaxCount = bUnlocked ? 2 : 1;
+}
+
+void ATPCCharacter::OnJumped_Implementation()
+{
+    Super::OnJumped_Implementation();
+    if (JumpCurrentCount < 2 || !ActionComponent) return;
+    const auto* Set = ActionComponent->GetActionSet();
+    if (Set && Set->DoubleJumpMontage) PlayAnimMontage(Set->DoubleJumpMontage);
+}
+
 void ATPCCharacter::StartJump()
 {
+    const auto* Set = ActionComponent ? ActionComponent->GetActionSet() : nullptr;
+    JumpMaxCount = bDoubleJumpUnlocked || (Set && Set->bAllowDoubleJump) ? 2 : 1;
+	if (ActionComponent && !ActionComponent->AuthorizeOrBuffer(ETPCActionIntent::Jump)) return;
 	if (IsMovementInputLocked())
 	{
 		return;
 	}
 	if (IsTurningInPlace()) { CancelMotionAction(); }
+	if (!CanJump()) { if (ActionComponent) ActionComponent->BufferIntent(ETPCActionIntent::Jump, true); return; }
 	Jump();
 }
 
@@ -636,8 +704,10 @@ void ATPCCharacter::StopCrouch()
 
 void ATPCCharacter::StartBlock()
 {
+    if (EquipmentComponent && !EquipmentComponent->IsWeaponDrawn()) return;
+	if (ActionComponent && !ActionComponent->CanRequest(ETPCActionIntent::Guard)) return;
 	if (!CombatComponent || bActionDead || bMovementLockedByHit || IsDashing() ||
-		CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()) { return; }
+		CombatComponent->IsRangedAttackInProgress()) { return; }
 	if (IsTurningInPlace()) { CancelMotionAction(); }
 	CombatComponent->StartBlock();
 	if (CombatComponent->IsBlocking()) { StopGroundInputMomentum(); }
@@ -655,6 +725,7 @@ void ATPCCharacter::StopBlock()
 
 void ATPCCharacter::HandlePrimaryAttack()
 {
+	if (ActionComponent && !ActionComponent->AuthorizeOrBuffer(ETPCActionIntent::PrimaryAttack)) return;
 	if (!CombatComponent || !GetCharacterMovement() || bActionDead || bMovementLockedByHit) { return; }
     if (IsDashing())
     {
@@ -662,12 +733,14 @@ void ATPCCharacter::HandlePrimaryAttack()
         return;
     }
 	if (IsTurningInPlace()) { CancelMotionAction(); }
+    if (EquipmentComponent && EquipmentComponent->GetEquippedWeaponDefinition() && !EquipmentComponent->IsWeaponDrawn())
+    { HandleToggleWeapon(); return; } // One press draws; it does not also queue an unseen attack.
 	if (CombatComponent->IsMeleeAttackInProgress())
 	{
 		CombatComponent->TryAttack();
 		return;
 	}
-	UpdateAttackWarpTarget();
+	if (CombatComponent->TryParryCounter()) { ApplyActionRotationPolicy(); return; }
     if (!GetCharacterMovement()->IsFalling() && !bCrouchInputHeld && !bIsCrouched && CombatComponent->TryResumeComboAfterDash())
     {
         ApplyActionRotationPolicy();
@@ -680,16 +753,35 @@ void ATPCCharacter::HandlePrimaryAttack()
 		UnCrouch();
 		CombatComponent->TryUppercutAttack();
 	}
-	else { CombatComponent->TryAttack(); }
+	else if (!bIsSprinting || !CombatComponent->TrySprintAttack()) { CombatComponent->TryAttack(); }
+    if (!CombatComponent->IsMeleeAttackInProgress() && GetCharacterMovement()->IsFalling() && ActionComponent)
+        ActionComponent->BufferIntent(ETPCActionIntent::PrimaryAttack, true);
 	if (CombatComponent->IsRangedAttackInProgress()) { StopGroundInputMomentum(); }
 	ApplyActionRotationPolicy();
 }
 
+void ATPCCharacter::HandleBuff()
+{
+    if (!CombatComponent || !ActionComponent || !ActionComponent->CanRequest(ETPCActionIntent::Buff)) return;
+    if (IsTurningInPlace()) CancelMotionAction();
+    if (CombatComponent->TryBuff()) { StopGroundInputMomentum(); ApplyActionRotationPolicy(); }
+}
+
+void ATPCCharacter::HandleToggleWeapon()
+{
+    if (!CombatComponent || !ActionComponent || !ActionComponent->CanRequest(ETPCActionIntent::ToggleWeapon)) return;
+    if (IsTurningInPlace()) CancelMotionAction();
+    if (CombatComponent->TryToggleWeapon()) { StopGroundInputMomentum(); ApplyActionRotationPolicy(); }
+}
+
 void ATPCCharacter::HandleAirDiveAttack()
 {
-	if (!CombatComponent || IsMovementInputLocked()) { return; }
-	if (IsTurningInPlace()) { CancelMotionAction(); }
-	CombatComponent->TryAirDiveAttack();
+    if (EquipmentComponent && !EquipmentComponent->IsWeaponDrawn()) return;
+	if (ActionComponent && !ActionComponent->CanRequest(ETPCActionIntent::Dive)) return;
+    if (!CombatComponent || bActionDead || bMovementLockedByHit || !GetCharacterMovement()->IsFalling()) return;
+    if (IsTurningInPlace()) CancelMotionAction();
+    CombatComponent->TryAirDiveAttack();
+    ApplyActionRotationPolicy();
 }
 
 void ATPCCharacter::Landed(const FHitResult& Hit)
@@ -738,12 +830,29 @@ void ATPCCharacter::UpdateAttackWarpTarget()
 		const float Distance = TargetToPlayer.Size();
 		if (Distance <= AttackMagnetismRange && TargetToPlayer.Normalize())
 		{
+			const float CapsuleGap = GetCapsuleComponent()->GetScaledCapsuleRadius() +
+				LockedTarget->GetCapsuleComponent()->GetScaledCapsuleRadius() + 8.f;
 			WarpLocation = LockedTarget->GetActorLocation() +
-				TargetToPlayer * AttackMagnetismStopDistance;
+				TargetToPlayer * FMath::Max(CapsuleGap, AttackMagnetismStopDistance);
 			WarpLocation.Z = GetActorLocation().Z;
 		}
 	}
 
+	// Capsule-centre convention, shared with all sword warp modifiers. Clamp and sweep
+	// before publishing a target so even large enemies and intervening walls keep a gap.
+	WarpLocation = GetActorLocation() + (WarpLocation - GetActorLocation()).GetClampedToMaxSize(MaxAttackWarpTranslation);
+	if (GetWorld() && GetCapsuleComponent())
+	{
+		FHitResult Hit;
+		FCollisionQueryParams Query(SCENE_QUERY_STAT(SwordWarpDestination), false, this);
+		const FVector Lift(0.f, 0.f, 2.f);
+		if (GetWorld()->SweepSingleByChannel(Hit, GetActorLocation() + Lift, WarpLocation + Lift, FQuat::Identity,
+			ECC_Pawn, GetCapsuleComponent()->GetCollisionShape(), Query))
+		{
+			WarpLocation = Hit.bStartPenetrating ? GetActorLocation() :
+				FMath::Lerp(GetActorLocation(), WarpLocation, FMath::Max(0.f, Hit.Time - 0.02f));
+		}
+	}
 	MotionWarpingComponent->AddOrUpdateWarpTargetFromLocationAndRotation(
 		AttackWarpTargetName,
 		WarpLocation,
@@ -776,6 +885,7 @@ void ATPCCharacter::UpdateAttackTargetAssist(float DeltaSeconds)
 		return;
 	}
 
+	if (ActionComponent && !ActionComponent->IsFacingWindowOpen()) { bAttackTargetAssistActive = false; return; }
 	UpdateAttackWarpTarget();
 
 	// A valid notify window owns rotation and translation through root motion.
@@ -795,7 +905,7 @@ void ATPCCharacter::UpdateAttackTargetAssist(float DeltaSeconds)
 
 bool ATPCCharacter::IsMovementInputLocked() const
 {
-	return TPCActionRules::LocksMovement(bActionDead, bMovementLockedByHit,
+	return (ActionComponent && ActionComponent->IsMovementLocked()) || TPCActionRules::LocksMovement(bActionDead, bMovementLockedByHit,
 		CombatComponent && CombatComponent->IsBlocking(),
 		CombatComponent && (CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()),
 		IsDashing());
@@ -808,6 +918,11 @@ void ATPCCharacter::LockMovementForHit(float AnimationDuration)
 	bAttackTargetAssistActive = false;
 	CancelMotionAction(0.05f);
 	if (CombatComponent) { CombatComponent->CancelActiveAttack(0.05f); }
+    const bool bGuardHit = HealthComponent && HealthComponent->GetLastCombatHitResult().bBlocked &&
+        !HealthComponent->GetLastCombatHitResult().bGuardBroken && CombatComponent && CombatComponent->IsBlocking();
+    if (ActionComponent && !bGuardHit) HitActionId = ActionComponent->BeginAction(ETPCActionState::HitReact);
+    if (CombatComponent && !bGuardHit) CombatComponent->CancelGuard();
+    if (ActionComponent) ActionComponent->ClearInputBuffers();
 	StopGroundInputMomentum();
 	ApplyActionRotationPolicy();
 	GetWorldTimerManager().SetTimer(
@@ -820,8 +935,16 @@ void ATPCCharacter::LockMovementForHit(float AnimationDuration)
 
 void ATPCCharacter::ClearHitMovementLock()
 {
-	bMovementLockedByHit = false;
+    bMovementLockedByHit = false;
+    if (ActionComponent) ActionComponent->EndAction(HitActionId);
+    HitActionId = 0;
 	ApplyActionRotationPolicy();
+}
+
+bool ATPCCharacter::IsGuardHitReactionActive() const
+{
+    return bMovementLockedByHit && HealthComponent && HealthComponent->GetLastCombatHitResult().bBlocked &&
+        !HealthComponent->GetLastCombatHitResult().bGuardBroken && CombatComponent && CombatComponent->IsBlocking();
 }
 
 void ATPCCharacter::ToggleLockOn()
@@ -1074,7 +1197,7 @@ void ATPCCharacter::ApplyActionRotationPolicy()
 {
 	UCharacterMovementComponent* Movement = GetCharacterMovement();
 	if (!Movement) { return; }
-	const bool bActionOwnsRotation = bActionDead || bMovementLockedByHit ||
+	const bool bActionOwnsRotation = (ActionComponent && ActionComponent->OwnsRotation()) || bActionDead || bMovementLockedByHit ||
 		MotionAction != ETPCMotionAction::None ||
 		(CombatComponent && (CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()));
 	// One rotation owner: root motion / attack assist during actions, CMC outside actions.
@@ -1106,12 +1229,19 @@ bool ATPCCharacter::StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction A
 {
 	UAnimInstance* Anim = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
 	if (!Anim || !Montage || !Montage->HasRootMotion() || bActionDead) { return false; }
-	++MotionGeneration;
-	MotionAction = Action;
+    ++MotionGeneration;
+    if (ActionComponent)
+    {
+        const UActionSet* Set = ActionComponent->GetActionSet();
+        MotionActionId = ActionComponent->BeginAction(Action == ETPCMotionAction::Dodge ? ETPCActionState::Dodge : ETPCActionState::Turn,
+            Set ? Set->FindByMontage(Montage) : nullptr);
+    }
+    MotionAction = Action;
 	ActiveMotionMontage = Montage;
 	ActiveMotionInstanceId = INDEX_NONE;
 	ApplyActionRotationPolicy();
-	if (PlayAnimMontage(Montage) <= 0.f)
+	const auto* Def = ActionComponent ? ActionComponent->GetActiveDefinition() : nullptr;
+    if (PlayAnimMontage(Montage, Def ? Def->PlayRate : 1.f, Def ? Def->EntrySection : NAME_None) <= 0.f)
 	{
 		CancelMotionAction();
 		return false;
@@ -1119,7 +1249,8 @@ bool ATPCCharacter::StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction A
 	if (FAnimMontageInstance* Instance = Anim->GetActiveInstanceForMontage(Montage))
 	{
 		ActiveMotionInstanceId = Instance->GetInstanceID();
-	}
+    }
+    if (ActionComponent) ActionComponent->BindMontage(MotionActionId, Montage, ActiveMotionInstanceId);
 	FOnMontageEnded End;
 	End.BindUObject(this, &ThisClass::HandleMotionMontageEnded, MotionGeneration);
 	Anim->Montage_SetEndDelegate(End, Montage);
@@ -1131,6 +1262,8 @@ bool ATPCCharacter::StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction A
 
 void ATPCCharacter::CancelMotionAction(float BlendOutTime, bool bInterrupted)
 {
+    if (ActionComponent) ActionComponent->EndAction(MotionActionId);
+    MotionActionId = 0;
 	UAnimMontage* Montage = ActiveMotionMontage.Get();
 	const bool bWasTurning = IsTurningInPlace();
 	const bool bWasDashing = IsDashing();
@@ -1195,6 +1328,12 @@ void ATPCCharacter::UpdateMotionAction()
 	{
 		Montage = DeltaYaw < 0.f ? TurnLeft90Montage.Get() : TurnRight90Montage.Get();
 	}
+    if (Montage && ActionComponent)
+    {
+        const auto* Set = ActionComponent->GetActionSet();
+        const int32 TurnIndex = FMath::Abs(DeltaYaw) >= Threshold180 ? (DeltaYaw < 0.f ? 2 : 3) : (DeltaYaw < 0.f ? 0 : 1);
+        if (Set && Set->Turns.IsValidIndex(TurnIndex) && Set->Turns[TurnIndex]) Montage = Set->Turns[TurnIndex]->Montage;
+    }
 	if (Montage && !StartMotionMontage(Montage, ETPCMotionAction::Turn))
 	{
 		NextTurnAllowedTime = GetWorld()->GetTimeSeconds() + 0.5f;

@@ -22,6 +22,9 @@ class THIRDPERSON_API UAttackWindowNotifyState
 	GENERATED_BODY()
 
 public:
+	/** Reopening the same group (including looping sections) never damages the same target twice. */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Attack")
+	FName HitGroup = TEXT("Primary");
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp,UAnimSequenceBase* Animation,float TotalDuration,const FAnimNotifyEventReference& EventReference) override;
 
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp,UAnimSequenceBase* Animation,const FAnimNotifyEventReference& EventReference) override;

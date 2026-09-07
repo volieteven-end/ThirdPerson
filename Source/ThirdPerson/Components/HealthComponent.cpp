@@ -3,6 +3,7 @@
 
 #include "HealthComponent.h"
 #include "CombatComponent.h"
+#include "ActionComponent.h"
 #include "../AI/EnemyCharacter.h"
 
 
@@ -33,6 +34,8 @@ void UHealthComponent::ApplyDamageFrom(float Damage, AActor* DamageSource)
 FCombatHitResult UHealthComponent::ApplyCombatHit(const FCombatHitSpec& Spec, AActor* DamageSource)
 {
  FCombatHitResult Result;
+ if (const UActionComponent* Actions = GetOwner() ? GetOwner()->FindComponentByClass<UActionComponent>() : nullptr)
+     if (Actions->IsInvulnerable()) return Result;
  if (bIsInvulnerable || bEncounterInvulnerable || !FMath::IsFinite(Spec.Damage) ||
      Spec.Damage <= 0.f || CurrentHealth <= 0.f || DamageSource == GetOwner()) return Result;
  if (IsValid(DamageSource) && DamageSource->IsA<AEnemyCharacter>() &&

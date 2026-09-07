@@ -1,6 +1,8 @@
 #include "EquipmentComponent.h"
 
 #include "../Weapons/WeaponActor.h"
+#include "CombatComponent.h"
+#include "ActionComponent.h"
 #include "../Weapons/WeaponDefinition.h"
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
@@ -35,6 +37,8 @@ bool UEquipmentComponent::EquipWeapon(UWeaponDefinition* NewWeaponDefinition)
 		return true;
 	}
 
+    if (const auto* Actions = OwnerCharacter->FindComponentByClass<UActionComponent>())
+        if (Actions->GetActionState() == ETPCActionState::Dead) return false;
 	UnequipWeapon();
 
 	AWeaponActor* NewWeaponActor = nullptr;
@@ -65,12 +69,29 @@ bool UEquipmentComponent::EquipWeapon(UWeaponDefinition* NewWeaponDefinition)
 
 	EquippedWeaponDefinition = NewWeaponDefinition;
 	EquippedWeaponActor = NewWeaponActor;
+    SetWeaponDrawn(true);
 	OnEquippedWeaponChanged.Broadcast(EquippedWeaponDefinition, EquippedWeaponActor);
 	return true;
 }
 
+void UEquipmentComponent::SetWeaponDrawn(bool bDrawn)
+{
+    bWeaponDrawn = bDrawn;
+    if (IsValid(EquippedWeaponActor))
+    {
+        if (!bDrawn) EquippedWeaponActor->SetAttackEffectActive(false);
+        EquippedWeaponActor->SetActorHiddenInGame(!bDrawn);
+    }
+}
+
 void UEquipmentComponent::UnequipWeapon()
 {
+    if (auto* Combat = GetOwner() ? GetOwner()->FindComponentByClass<UCombatComponent>() : nullptr)
+    {
+        Combat->CancelActiveAttack(); Combat->CancelGuard(); Combat->ClearSwordBuff();
+    }
+    if (auto* Actions = GetOwner() ? GetOwner()->FindComponentByClass<UActionComponent>() : nullptr) Actions->ClearInputBuffers();
+    bWeaponDrawn = true;
 	if (IsValid(EquippedWeaponActor))
 	{
 		EquippedWeaponActor->Destroy();

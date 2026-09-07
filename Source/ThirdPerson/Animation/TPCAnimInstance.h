@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "../Actions/ActionDefinition.h"
 #include "TPCAnimInstance.generated.h"
 
 class ATPCCharacter;
@@ -34,6 +35,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Movement") bool bIsCrouched = false;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bIsBlocking = false;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bIsParrying = false;
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") ETPCActionState ActionState = ETPCActionState::Free;
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bGuardHitActive = false;
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bGuardHoldReady = false;
+	UPROPERTY(BlueprintReadOnly, Transient, Category = "Movement") bool bWantJumpPose = false;
 	/** Controller yaw relative to the character while standing still. */
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Turn In Place") float AimYawDelta = 0.f;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Turn In Place")

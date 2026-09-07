@@ -2,6 +2,7 @@
 
 
 #include "CombatComponent.h"
+#include "ActionComponent.h"
 #include "../Components/HealthComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
@@ -22,6 +23,8 @@
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "../Animation/SwordBladeSampling.h"
 
 namespace
 {
@@ -35,6 +38,7 @@ namespace
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.TickGroup = TG_PostPhysics;
 	SetComponentTickEnabled(false);
 }
 
@@ -49,7 +53,7 @@ void UCombatComponent::TryAttack()
 	{
 		if (CanChainAttack() && (bAllowEarlyComboBuffer || bComboInputWindowOpen))
 		{
-			ComboBuffer.Queue();
+			GetComboBuffer().Queue();
 			TryCommitBufferedCombo(); // Late input after ChainPoint can still use recovery.
 		}
 		return;
@@ -67,7 +71,7 @@ void UCombatComponent::TryAttack()
 	}
 	ClearDashCombo(); // A fresh attack begins a new dash-continuation budget.
 	NextAttackIndex = 0;
-	if (!StartMeleeMontageAttack() && GetEffectiveAttackMontages().IsEmpty())
+	if (!StartMeleeMontageAttack() && !GetActionSet() && GetEffectiveAttackMontages().IsEmpty())
 	{
 		// Retain the original no-animation unarmed fallback, not broken configured attacks.
 		LastAttackTime = World->GetTimeSeconds();
@@ -86,7 +90,11 @@ void UCombatComponent::TryUppercutAttack()
 		return;
 	}
 	CancelBlock();
-	if (StartSpecialMontageAttack(UppercutMontage, UppercutDamageMultiplier, EActiveCombatAttackType::Uppercut))
+	if (const UActionSet* Set = GetActionSet())
+	{
+		StartDefinedAttack(Set->Rising, EActiveCombatAttackType::Uppercut);
+	}
+	else if (StartSpecialMontageAttack(UppercutMontage, UppercutDamageMultiplier, EActiveCombatAttackType::Uppercut))
 	{
 		Character->LaunchCharacter(FVector(0.f, 0.f, UppercutLaunchVelocity), false, true);
 	}
@@ -117,9 +125,10 @@ void UCombatComponent::TryAirAttack()
 void UCombatComponent::TryAirDiveAttack()
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (const UActionSet* Set = GetActionSet()) { AirDiveMontage = Set->Dive ? Set->Dive->Montage : nullptr; }
 	if (!bCombatEnabled || !Character || !GetWorld() || !Character->GetCharacterMovement()->IsFalling() ||
-		bMeleeAttackInProgress || bRangedAttackInProgress || !AirDiveMontage ||
-		GetWorld()->GetTimeSeconds() - LastAttackTime < GetEffectiveAttackCooldown()) { return; }
+		(bMeleeAttackInProgress && (!GetActions() || !GetActions()->CanRequest(ETPCActionIntent::Dive))) || bRangedAttackInProgress || !AirDiveMontage ||
+		(!GetActionSet() && GetWorld()->GetTimeSeconds() - LastAttackTime < GetEffectiveAttackCooldown())) { return; }
 	if (AirDiveMontage->GetSectionIndex(AirDiveStartSection) == INDEX_NONE ||
 		AirDiveMontage->GetSectionIndex(AirDiveLoopSection) == INDEX_NONE ||
 		AirDiveMontage->GetSectionIndex(AirDiveLandSection) == INDEX_NONE)
@@ -127,6 +136,10 @@ void UCombatComponent::TryAirDiveAttack()
 		UE_LOG(LogTemp, Warning, TEXT("Air Dive requires Start / Loop / Land sections: %s"), *GetNameSafe(AirDiveMontage));
 		return;
 	}
+    const auto* Set = GetActionSet();
+    const auto* Stamina = Character->FindComponentByClass<UStaminaComponent>();
+    if (Set && Set->Dive && Set->Dive->StaminaCost > 0.f && (!Stamina || Stamina->GetCurrentStamina() < Set->Dive->StaminaCost)) return;
+    if (bMeleeAttackInProgress) CancelActiveAttack(.08f);
 	CancelBlock();
 	if (StartSpecialMontageAttack(AirDiveMontage, AirDiveDamageMultiplier, EActiveCombatAttackType::AirDive))
 	{
@@ -135,7 +148,7 @@ void UCombatComponent::TryAirDiveAttack()
 		Anim->Montage_SetNextSection(AirDiveStartSection, AirDiveLoopSection, AirDiveMontage);
 		Anim->Montage_SetNextSection(AirDiveLoopSection, AirDiveLoopSection, AirDiveMontage);
 		Anim->Montage_SetNextSection(AirDiveLandSection, NAME_None, AirDiveMontage);
-		Character->LaunchCharacter(FVector(0.f, 0.f, -AirAttackDownwardVelocity), false, true);
+		if (!GetActiveDefinition()) { CommitSpecialMovement(); }
 	}
 }
 
@@ -148,10 +161,10 @@ void UCombatComponent::HandleOwnerLanded()
 		bAirDiveLanded = true;
 		EndAttackWindow();
 		StopAttackEffects();
-		ComboBuffer.Reset(AttackGeneration);
+		GetComboBuffer().Reset(GetComboGeneration());
 		ACharacter* Character = Cast<ACharacter>(GetOwner());
 		UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
-		if (Anim) { Anim->Montage_JumpToSection(AirDiveLandSection, ActiveAttackMontage.Get()); }
+		if (Anim) { Anim->Montage_Resume(ActiveAttackMontage.Get()); Anim->Montage_JumpToSection(AirDiveLandSection, ActiveAttackMontage.Get()); }
 		else { CancelActiveAttack(); }
 	}
 	else if (ActiveAttackType == EActiveCombatAttackType::Air)
@@ -163,15 +176,22 @@ void UCombatComponent::HandleOwnerLanded()
 
 void UCombatComponent::StartBlock()
 {
+	if (UActionComponent* Actions = GetActions())
+	{
+		if (!Actions->CanRequest(ETPCActionIntent::Guard)) return;
+		if (bMeleeAttackInProgress) CancelActiveAttack(0.08f);
+	}
 	if (!bCombatEnabled || bMeleeAttackInProgress || !GetWorld())
 	{
 		return;
 	}
+	if (bIsBlocking) { bBlockInputHeld = true; return; } // Held/repeated Started never refreshes the parry window.
 
 	ClearDashCombo();
 	bBlockInputHeld = true;
 	bIsBlocking = true;
 	bParryWindowActive = true;
+	if (UActionComponent* Actions = GetActions()) GuardActionId = Actions->BeginAction(ETPCActionState::Guard);
 	GetWorld()->GetTimerManager().SetTimer(
 		ParryWindowTimerHandle,
 		this,
@@ -186,6 +206,7 @@ void UCombatComponent::StopBlock()
 	if (!bParryWindowActive)
 	{
 		bIsBlocking = false;
+		if (UActionComponent* Actions = GetActions()) Actions->EndAction(GuardActionId);
 	}
 }
 
@@ -195,11 +216,14 @@ void UCombatComponent::EndParryWindow()
 	if (!bBlockInputHeld)
 	{
 		bIsBlocking = false;
+		if (UActionComponent* Actions = GetActions()) Actions->EndAction(GuardActionId);
 	}
 }
 
 void UCombatComponent::CancelBlock()
 {
+	if (UActionComponent* Actions = GetActions()) Actions->EndAction(GuardActionId);
+	GuardActionId = 0;
 	bBlockInputHeld = false;
 	bParryWindowActive = false;
 	bIsBlocking = false;
@@ -214,6 +238,10 @@ void UCombatComponent::SetCombatEnabled(bool bEnabled)
 	bCombatEnabled = bEnabled;
 	if (!bCombatEnabled)
 	{
+		ParryCounterExpiresAt = -1.f;
+        ClearSwordBuff();
+		NextAirAttackIndex = 0;
+		if (UActionComponent* Actions = GetActions()) Actions->ClearInputBuffers();
 		CancelBlock();
 		CancelActiveAttack();
 	}
@@ -247,6 +275,7 @@ float UCombatComponent::ResolveIncomingHit(const FCombatHitSpec& Spec, const AAc
 
 	if (Spec.bCanBeParried && bParryWindowActive)
 	{
+		ParryCounterExpiresAt = GetWorld() ? GetWorld()->GetTimeSeconds() + 1.f : -1.f;
 		bParryWindowActive = false;
 		if (UWorld* World = GetWorld())
 		{
@@ -255,6 +284,7 @@ float UCombatComponent::ResolveIncomingHit(const FCombatHitSpec& Spec, const AAc
 		if (!bBlockInputHeld)
 		{
 			bIsBlocking = false;
+			if (UActionComponent* Actions = GetActions()) Actions->EndAction(GuardActionId);
 		}
 		if (AEnemyCharacter* Enemy =
 			const_cast<AEnemyCharacter*>(Cast<AEnemyCharacter>(DamageSource)))
@@ -269,8 +299,15 @@ float UCombatComponent::ResolveIncomingHit(const FCombatHitSpec& Spec, const AAc
 		OwnerActor->FindComponentByClass<UStaminaComponent>();
 	if (Stamina && !Stamina->TryConsume(BlockStaminaCostPerHit))
 	{
+		Stamina->SetCurrentStamina(0.f);
+		Result.bGuardBroken = true;
 		CancelBlock();
 		return IncomingDamage;
+	}
+	if (Stamina && Stamina->GetCurrentStamina() <= KINDA_SMALL_NUMBER)
+	{
+		Result.bGuardBroken = true;
+		CancelBlock();
 	}
 
 	Result.bBlocked = true; Result.Outcome = ECombatHitOutcome::Blocked;
@@ -282,6 +319,13 @@ FCombatHitSpec UCombatComponent::MakeCurrentHitSpec(const FVector& ImpactPoint) 
  FCombatHitSpec Spec;
  Spec.Damage = GetEffectiveDamage() * ActiveDamageMultiplier;
  Spec.ImpactPoint = ImpactPoint;
+ Spec.WindowId = ActiveHitGroup;
+ Spec.ActionSerial = GetActions() ? GetActions()->GetActionInstanceId() : AttackGeneration;
+ if (const UActionDefinition* Def = GetActiveDefinition())
+ {
+     Spec.PoiseDamage = Def->PoiseDamage;
+     return Spec;
+ }
  switch (ActiveAttackType)
  {
  case EActiveCombatAttackType::Uppercut: Spec.PoiseDamage = 30.f; break;
@@ -294,6 +338,13 @@ FCombatHitSpec UCombatComponent::MakeCurrentHitSpec(const FVector& ImpactPoint) 
 
 bool UCombatComponent::StartMeleeMontageAttack()
 {
+	if (const UActionSet* Set = GetActionSet())
+	{
+		if (!Set->GroundCombo.IsValidIndex(NextAttackIndex) ||
+			!StartDefinedAttack(Set->GroundCombo[NextAttackIndex], EActiveCombatAttackType::Normal)) return false;
+		++NextAttackIndex;
+		return true;
+	}
 	const auto& Montages = GetEffectiveAttackMontages();
 	if (!Montages.IsValidIndex(NextAttackIndex)) { return false; }
 	if (!StartSpecialMontageAttack(Montages[NextAttackIndex], 1.f, EActiveCombatAttackType::Normal)) { return false; }
@@ -303,6 +354,13 @@ bool UCombatComponent::StartMeleeMontageAttack()
 
 bool UCombatComponent::StartAirMontageAttack()
 {
+	if (const UActionSet* Set = GetActionSet())
+	{
+		if (!Set->AirCombo.IsValidIndex(NextAirAttackIndex) ||
+			!StartDefinedAttack(Set->AirCombo[NextAirAttackIndex], EActiveCombatAttackType::Air)) return false;
+		++NextAirAttackIndex;
+		return true;
+	}
 	UAnimMontage* Montage = AirAttackMontages.IsEmpty()
 		? (NextAirAttackIndex == 0 ? AirAttackMontage.Get() : nullptr)
 		: (AirAttackMontages.IsValidIndex(NextAirAttackIndex) ? AirAttackMontages[NextAirAttackIndex].Get() : nullptr);
@@ -317,10 +375,30 @@ bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float Da
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
 	if (!bCombatEnabled || !Anim || !GetWorld() || !Montage) { return false; }
+	const UActionSet* Set = GetActionSet();
+	const UActionDefinition* Def = Set ? Set->FindByMontage(Montage) : nullptr;
+	UStaminaComponent* Stamina = Character->FindComponentByClass<UStaminaComponent>();
+	if (Def && Def->StaminaCost > 0.f && (!Stamina || Stamina->GetCurrentStamina() < Def->StaminaCost)) return false;
+    if (const UActionComponent* Actions = GetActions())
+        if (!Actions->CanRequest(ETPCActionIntent::PrimaryAttack)) return false;
 	UAnimMontage* PreviousMontage = ActiveAttackMontage.Get();
 	// Advance the generation BEFORE playing; old montage callbacks may fire during replacement.
 	++AttackGeneration;
-	ComboBuffer.Reset(AttackGeneration);
+	HitGroups.Reset();
+    if (UActionComponent* Actions = GetActions())
+    {
+        OwnedActionId = Actions->BeginAction(Def ? Def->State : ETPCActionState::Attack, Def);
+        if (!OwnedActionId) return false;
+    }
+    // Gameplay traces need posed sockets even when this combatant is outside the camera.
+    if (!bPosePolicySaved)
+    {
+        PreviousPosePolicy = static_cast<uint8>(Character->GetMesh()->VisibilityBasedAnimTickOption);
+        bPosePolicySaved = true;
+    }
+    Character->GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+    AddTickPrerequisiteComponent(Character->GetMesh());
+	GetComboBuffer().Reset(GetComboGeneration());
 	ActiveAttackMontage = Montage;
 	ActiveAttackInstanceId = INDEX_NONE;
 	bMeleeAttackInProgress = true;
@@ -328,7 +406,9 @@ bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float Da
 	bAirDiveLanded = false;
 	ActiveDamageMultiplier = FMath::Max(0.f, DamageScale);
 	ActiveAttackType = AttackType;
-	if (Character->PlayAnimMontage(Montage) <= 0.f)
+	bSpecialMovementCommitted = false;
+	bDiveApproachStarted = false;
+	if (Character->PlayAnimMontage(Montage, Def ? Def->PlayRate : 1.f, Def ? Def->EntrySection : NAME_None) <= 0.f)
 	{
 		ResetMeleeAction();
 		if (PreviousMontage) { Anim->Montage_Stop(0.1f, PreviousMontage); }
@@ -338,6 +418,8 @@ bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float Da
 	{
 		ActiveAttackInstanceId = Instance->GetInstanceID();
 	}
+	if (UActionComponent* Actions = GetActions()) Actions->BindMontage(OwnedActionId, Montage, ActiveAttackInstanceId);
+	if (Def && Stamina && Def->StaminaCost > 0.f) Stamina->TryConsume(Def->StaminaCost);
 	FOnMontageEnded End;
 	End.BindUObject(this, &ThisClass::HandleAttackMontageEnded, AttackGeneration);
 	Anim->Montage_SetEndDelegate(End, Montage);
@@ -345,7 +427,7 @@ bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float Da
 	Blend.BindUObject(this, &ThisClass::HandleAttackBlendingOut, AttackGeneration);
 	Anim->Montage_SetBlendingOutDelegate(Blend, Montage);
 	LastAttackTime = GetWorld()->GetTimeSeconds();
-	OnMeleeAttackStarted.Broadcast();
+	if (!Def || Def->State == ETPCActionState::Attack) OnMeleeAttackStarted.Broadcast();
 	return true;
 }
 
@@ -363,7 +445,7 @@ void UCombatComponent::CloseComboInputWindow()
 	bComboInputWindowOpen = false;
 	if (bChainOnLegacyComboWindowEnd && bMeleeAttackInProgress)
 	{
-		ComboBuffer.bChainPointReached = true;
+		GetComboBuffer().bChainPointReached = true;
 		TryCommitBufferedCombo();
 	}
 }
@@ -379,13 +461,24 @@ bool UCombatComponent::IsCurrentAttackNotify(const UAnimSequenceBase* Animation,
 void UCombatComponent::ReachComboChainPoint(UAnimSequenceBase* Animation, int32 MontageInstanceId)
 {
 	if (!IsCurrentAttackNotify(Animation, MontageInstanceId)) { return; }
-	ComboBuffer.bChainPointReached = true;
+	GetComboBuffer().bChainPointReached = true;
 	TryCommitBufferedCombo();
 }
 
 bool UCombatComponent::CanChainAttack() const
 {
 	if (!bCombatEnabled || !bMeleeAttackInProgress) { return false; }
+	if (const UActionSet* Set = GetActionSet())
+	{
+		const UActionDefinition* Def = GetActiveDefinition();
+		const bool bAirFollowUp = ActiveAttackType == EActiveCombatAttackType::Air || ActiveAttackType == EActiveCombatAttackType::Uppercut;
+        const auto& Moves = bAirFollowUp ? Set->AirCombo : Set->GroundCombo;
+		const int32 Index = bAirFollowUp ? NextAirAttackIndex : NextAttackIndex;
+		const ACharacter* Character = Cast<ACharacter>(GetOwner());
+		return (ActiveAttackType == EActiveCombatAttackType::Normal || bAirFollowUp) &&
+			(ActiveAttackType != EActiveCombatAttackType::Air || (Character && Character->GetCharacterMovement()->IsFalling())) &&
+			Def && Moves.IsValidIndex(Index) && Moves[Index] && Def->AllowedNextActions.Contains(Moves[Index]->ActionId);
+	}
 	if (ActiveAttackType == EActiveCombatAttackType::Normal)
 	{
 		return GetEffectiveAttackMontages().IsValidIndex(NextAttackIndex);
@@ -402,11 +495,13 @@ bool UCombatComponent::CanChainAttack() const
 
 bool UCombatComponent::TryCommitBufferedCombo()
 {
-	if (!ComboBuffer.Consume(AttackGeneration, CanChainAttack())) { return false; }
+    const auto* Character = Cast<ACharacter>(GetOwner());
+    if (ActiveAttackType == EActiveCombatAttackType::Uppercut && (!Character || !Character->GetCharacterMovement()->IsFalling())) return false;
+	if (!GetComboBuffer().Consume(GetComboGeneration(), CanChainAttack())) { return false; }
 	EndAttackWindow();
 	StopAttackEffects();
 	const EActiveCombatAttackType PreviousType = ActiveAttackType;
-	const bool bStarted = PreviousType == EActiveCombatAttackType::Air
+	const bool bStarted = (PreviousType == EActiveCombatAttackType::Air || PreviousType == EActiveCombatAttackType::Uppercut)
 		? StartAirMontageAttack() : StartMeleeMontageAttack();
 	if (!bStarted) { CancelActiveAttack(); }
 	return bStarted;
@@ -429,6 +524,13 @@ void UCombatComponent::HandleAttackBlendingOut(UAnimMontage* Montage, bool bInte
 
 void UCombatComponent::StopAttackEffects()
 {
+    if (const auto* Character = Cast<ACharacter>(GetOwner()))
+    {
+        TArray<USceneComponent*> Children;
+        Character->GetMesh()->GetChildrenComponents(true, Children);
+        for (auto* Child : Children)
+            if (auto* Trail = Cast<UParticleSystemComponent>(Child)) Trail->EndTrails();
+    }
 	UEquipmentComponent* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
 	if (AWeaponActor* Weapon = Equipment ? Equipment->GetEquippedWeaponActor() : nullptr)
 	{
@@ -438,9 +540,18 @@ void UCombatComponent::StopAttackEffects()
 
 void UCombatComponent::ResetMeleeAction()
 {
+    if (bPosePolicySaved)
+    {
+        if (auto* Character = Cast<ACharacter>(GetOwner()))
+            Character->GetMesh()->VisibilityBasedAnimTickOption = static_cast<EVisibilityBasedAnimTickOption>(PreviousPosePolicy);
+        bPosePolicySaved = false;
+    }
+	if (UActionComponent* Actions = GetActions()) Actions->EndAction(OwnedActionId);
+	OwnedActionId = 0;
+	HitGroups.Reset();
 	ClearDashCombo();
 	++AttackGeneration;
-	ComboBuffer.Reset(AttackGeneration);
+	GetComboBuffer().Reset(GetComboGeneration());
 	EndAttackWindow();
 	StopAttackEffects();
 	ActiveAttackMontage.Reset();
@@ -608,9 +719,9 @@ void UCombatComponent::PerformAttackHit()
 		if (UHealthComponent* Health =
 			HitActor->FindComponentByClass<UHealthComponent>())
 		{
-			Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerActor);
-			SpawnMeleeHitEffect(Hit);
-			ApplySpecialHitReaction(HitActor);
+            const FCombatHitResult Result = Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerActor);
+            if (Result.ActualDamage > 0.f) SpawnMeleeHitEffect(Hit);
+            if (Result.ActualDamage > 0.f && !Result.bBlocked && !Result.bParried && !Result.bKilled) ApplySpecialHitReaction(HitActor);
 			bHit = true;
 			break;
 		}
@@ -630,9 +741,10 @@ void UCombatComponent::PerformAttackHit()
 }
 void UCombatComponent::StartAttackWindow(
 	FName InAttackBoneName,
-	float InTraceRadius)
+	float InTraceRadius, FName HitGroup)
 {
 	if (!bCombatEnabled || !bMeleeAttackInProgress) { return; }
+    if (ActiveAttackType == EActiveCombatAttackType::AirDive && !bAirDiveLanded && HitGroup == TEXT("Landing")) return;
 	ACharacter* OwnerCharacter =Cast<ACharacter>(GetOwner());
 	if (!OwnerCharacter ||!OwnerCharacter->GetMesh())
 	{
@@ -664,6 +776,8 @@ void UCombatComponent::StartAttackWindow(
 			WeaponTraceMesh->GetSocketLocation(ActiveBladeBaseSocketName);
 		PreviousBladeTipLocation =
 			WeaponTraceMesh->GetSocketLocation(ActiveBladeTipSocketName);
+        PreviousTraceMeshTransform = Mesh->GetComponentTransform();
+        PreviousTraceMontagePosition = Mesh->GetAnimInstance()->Montage_GetPosition(ActiveAttackMontage.Get());
 	}
 
 	if (!bUseWeaponBladeTrace &&
@@ -675,17 +789,20 @@ void UCombatComponent::StartAttackWindow(
 
 	ActiveAttackBoneName = InAttackBoneName;
 	ActiveTraceRadius = InTraceRadius;
-	HitActors.Reset();
+	ActiveHitGroup = HitGroup;
+	HitActors = HitGroups.FindOrAdd(HitGroup);
 	if (!bUseWeaponBladeTrace)
 	{
 		PreviousAttackLocation =Mesh->GetBoneLocation(ActiveAttackBoneName);
 	}
 	bAttackWindowActive = true;
+	if (UActionComponent* Actions = GetActions()) Actions->SetDamageWindowActive(true);
 	SetComponentTickEnabled(true);
 }
 void UCombatComponent::EndAttackWindow()
 {
 	bAttackWindowActive = false;
+	if (UActionComponent* Actions = GetActions()) Actions->SetDamageWindowActive(false);
 	HitActors.Reset();
 	SetComponentTickEnabled(false);
 	ActiveAttackBoneName = NAME_None;
@@ -715,10 +832,13 @@ void UCombatComponent::TickComponent(
 	}
 
 	FCollisionQueryParams QueryParams(SCENE_QUERY_STAT(HandAttack),false,OwnerCharacter);
-	auto ApplyHits = [this, OwnerCharacter](const TArray<FHitResult>& Hits)
+    const uint64 TraceGeneration = AttackGeneration;
+	auto ApplyHits = [this, OwnerCharacter, TraceGeneration](const TArray<FHitResult>& Hits)
 	{
 		for (const FHitResult& Hit : Hits)
 		{
+            // Damage delegates can interrupt, kill or replace this action synchronously.
+            if (!bCombatEnabled || !bAttackWindowActive || AttackGeneration != TraceGeneration) break;
 			AActor* HitActor = Hit.GetActor();
 			if (!HitActor || HitActors.Contains(HitActor) ||
 				IsEnemyFriendlyFire(OwnerCharacter, HitActor))
@@ -727,12 +847,13 @@ void UCombatComponent::TickComponent(
 			}
 
 			HitActors.Add(HitActor);
+			HitGroups.FindOrAdd(ActiveHitGroup).Add(HitActor);
 			if (UHealthComponent* Health =
 				HitActor->FindComponentByClass<UHealthComponent>())
 			{
-				Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerCharacter);
-				SpawnMeleeHitEffect(Hit);
-				ApplySpecialHitReaction(HitActor);
+				const FCombatHitResult Result = Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerCharacter);
+				if (Result.ActualDamage > 0.f) SpawnMeleeHitEffect(Hit);
+				if (Result.ActualDamage > 0.f && !Result.bBlocked && !Result.bParried && !Result.bKilled) ApplySpecialHitReaction(HitActor);
 			}
 		}
 	};
@@ -751,27 +872,60 @@ void UCombatComponent::TickComponent(
 		const FVector CurrentBladeTipLocation =
 			WeaponTraceMesh->GetSocketLocation(ActiveBladeTipSocketName);
 
-		constexpr int32 BladeTraceSamples = 5;
-		for (int32 SampleIndex = 0; SampleIndex < BladeTraceSamples; ++SampleIndex)
-		{
-			const float Alpha = static_cast<float>(SampleIndex) /
-				static_cast<float>(BladeTraceSamples - 1);
-			const FVector PreviousSample = FMath::Lerp(
-				PreviousBladeBaseLocation, PreviousBladeTipLocation, Alpha);
-			const FVector CurrentSample = FMath::Lerp(
-				CurrentBladeBaseLocation, CurrentBladeTipLocation, Alpha);
-
-			TArray<FHitResult> Hits;
-			World->SweepMultiByChannel(
-				Hits,
-				PreviousSample,
-				CurrentSample,
-				FQuat::Identity,
-				ECC_Pawn,
-				FCollisionShape::MakeSphere(ActiveTraceRadius),
-				QueryParams);
-			ApplyHits(Hits);
-		}
+        auto SweepBlade = [&](const FVector& BeforeBase, const FVector& BeforeTip, const FVector& AfterBase, const FVector& AfterTip)
+        {
+            // Overlapping spheres cover the blade's full length, not just its tip.
+            const float Length = FMath::Max(FVector::Distance(BeforeBase, BeforeTip), FVector::Distance(AfterBase, AfterTip));
+            const int32 Samples = FMath::Clamp(FMath::CeilToInt(Length / FMath::Max(1.f, ActiveTraceRadius * 1.5f)) + 1, 5, 32);
+            for (int32 I = 0; I < Samples; ++I)
+            {
+                const float Alpha = static_cast<float>(I) / (Samples - 1);
+                TArray<FHitResult> Hits;
+                World->SweepMultiByChannel(Hits, FMath::Lerp(BeforeBase, BeforeTip, Alpha),
+                    FMath::Lerp(AfterBase, AfterTip, Alpha), FQuat::Identity, ECC_Pawn,
+                    FCollisionShape::MakeSphere(ActiveTraceRadius), QueryParams);
+                ApplyHits(Hits);
+                if (!bAttackWindowActive) break; // A parry can interrupt the attacker inside ApplyCombatHit.
+            }
+        };
+        const UWeaponDefinition* Weapon = GetEquippedWeaponDefinition();
+        auto* CharacterMesh = OwnerCharacter->GetMesh();
+        const float Position = CharacterMesh->GetAnimInstance()->Montage_GetPosition(ActiveAttackMontage.Get());
+        const float Span = Position - PreviousTraceMontagePosition;
+        const FTransform MeshWorld = CharacterMesh->GetComponentTransform();
+        FTransform CurrentAuthoredPose;
+        // A rapidly rotating blade follows an arc, NOT the straight chord between rendered poses.
+        // Sample real compressed bone tracks at <= 1/120 s, bounded to 16 substeps for hitches.
+        const bool bSampleArc = GetActionSet() && Weapon && Span > 1.f / 120.f + .0001f && Span < .15f &&
+            TPCBladeSampling::SampleEquipmentPose(ActiveAttackMontage.Get(), Position, CharacterMesh, Weapon->EquipSocketName, CurrentAuthoredPose);
+        const int32 Steps = bSampleArc ? FMath::Clamp(FMath::CeilToInt(Span * 120.f), 1, 16) : 1;
+        const FTransform ActualEquip = Weapon ? CharacterMesh->GetSocketTransform(Weapon->EquipSocketName, RTS_Component) : FTransform::Identity;
+        const FTransform EquipWorld = ActualEquip * MeshWorld;
+        const FTransform BladeBaseOffset = WeaponTraceMesh->GetSocketTransform(ActiveBladeBaseSocketName).GetRelativeTransform(EquipWorld);
+        const FTransform BladeTipOffset = WeaponTraceMesh->GetSocketTransform(ActiveBladeTipSocketName).GetRelativeTransform(EquipWorld);
+        FVector BeforeBase = PreviousBladeBaseLocation, BeforeTip = PreviousBladeTipLocation;
+        for (int32 Step = 1; Step <= Steps && bAttackWindowActive; ++Step)
+        {
+            FVector NextBase = CurrentBladeBaseLocation, NextTip = CurrentBladeTipLocation;
+            if (Step < Steps)
+            {
+                const float Alpha = static_cast<float>(Step) / Steps;
+                FTransform AuthoredPose;
+                if (TPCBladeSampling::SampleEquipmentPose(ActiveAttackMontage.Get(), FMath::Lerp(PreviousTraceMontagePosition, Position, Alpha),
+                    CharacterMesh, Weapon->EquipSocketName, AuthoredPose))
+                {
+                    FTransform InterpolatedWorld; InterpolatedWorld.Blend(PreviousTraceMeshTransform, MeshWorld, Alpha);
+                    // Anchor at the evaluated current pose so retargeting / montage blend offsets are retained.
+                    const FTransform EquipAtTime = AuthoredPose.GetRelativeTransform(CurrentAuthoredPose) * ActualEquip * InterpolatedWorld;
+                    NextBase = (BladeBaseOffset * EquipAtTime).GetTranslation();
+                    NextTip = (BladeTipOffset * EquipAtTime).GetTranslation();
+                }
+            }
+            SweepBlade(BeforeBase, BeforeTip, NextBase, NextTip);
+            BeforeBase = NextBase; BeforeTip = NextTip;
+        }
+        PreviousTraceMontagePosition = Position;
+        PreviousTraceMeshTransform = MeshWorld;
 
 		if (bDrawHandTraceDebug)
 		{
@@ -831,7 +985,9 @@ void UCombatComponent::SpawnMeleeHitEffect(const FHitResult& Hit) const
 
 void UCombatComponent::ApplySpecialHitReaction(AActor* HitActor) const
 {
-	if (ActiveAttackType == EActiveCombatAttackType::Uppercut)
+	const UActionDefinition* Def = GetActiveDefinition();
+	if ((Def && Def->HitReactionProfile == ETPCHitReactionProfile::Launch) ||
+		(!Def && ActiveAttackType == EActiveCombatAttackType::Uppercut))
 	{
 		if (AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(HitActor))
 		{
@@ -857,7 +1013,7 @@ float UCombatComponent::GetEffectiveDamage() const
 {
 	const UWeaponDefinition* Weapon = GetEquippedWeaponDefinition();
 	const float BaseDamage = Weapon ? Weapon->Damage : Damage;
-	return (BaseDamage + LevelDamageBonus) * DamageMultiplier;
+	return (BaseDamage + LevelDamageBonus) * DamageMultiplier * GetSwordBuffMultiplier();
 }
 
 float UCombatComponent::GetEffectiveAttackCooldown() const
@@ -917,6 +1073,12 @@ void UCombatComponent::MultiplyMeleeReach(float Multiplier)
 
 const TArray<TObjectPtr<UAnimMontage>>& UCombatComponent::GetEffectiveAttackMontages() const
 {
+	if (const UActionSet* Set = GetActionSet())
+	{
+		ResolvedGroundMontages.Reset();
+		for (const UActionDefinition* Def : Set->GroundCombo) ResolvedGroundMontages.Add(Def ? Def->Montage : nullptr);
+		return ResolvedGroundMontages;
+	}
 	const UWeaponDefinition* Weapon = GetEquippedWeaponDefinition();
 	return Weapon && !Weapon->AttackMontages.IsEmpty()
 		? Weapon->AttackMontages
@@ -1054,3 +1216,155 @@ void UCombatComponent::PerformRangedAttack(
     }
 }
 
+
+UActionComponent* UCombatComponent::GetActions() const
+{
+    return GetOwner() ? GetOwner()->FindComponentByClass<UActionComponent>() : nullptr;
+}
+
+const UActionSet* UCombatComponent::GetActionSet() const
+{
+    const UActionComponent* Actions = GetActions();
+    return Actions ? Actions->GetActionSet() : nullptr;
+}
+
+const UActionDefinition* UCombatComponent::GetActiveDefinition() const
+{
+    const UActionComponent* Actions = GetActions();
+    return Actions && Actions->GetActionInstanceId() == OwnedActionId ? Actions->GetActiveDefinition() : nullptr;
+}
+
+TPCActionRules::FComboBuffer& UCombatComponent::GetComboBuffer()
+{
+    UActionComponent* Actions = GetActions();
+    return Actions && Actions->GetActionState() == ETPCActionState::Attack
+        ? Actions->GetComboBuffer() : ComboBuffer;
+}
+
+uint64 UCombatComponent::GetComboGeneration() const
+{
+    const UActionComponent* Actions = GetActions();
+    return Actions && Actions->GetActionState() == ETPCActionState::Attack
+        ? Actions->GetActionInstanceId() : AttackGeneration;
+}
+
+bool UCombatComponent::HasBufferedComboInput() const
+{
+    return const_cast<UCombatComponent*>(this)->GetComboBuffer().bQueued;
+}
+
+bool UCombatComponent::StartDefinedAttack(const UActionDefinition* Def, EActiveCombatAttackType Type)
+{
+    return Def && StartSpecialMontageAttack(Def->Montage, Def->DamageMultiplier, Type);
+}
+
+bool UCombatComponent::TrySprintAttack()
+{
+    const UActionSet* Set = GetActionSet();
+    if (!bCombatEnabled || bMeleeAttackInProgress || bRangedAttackInProgress || !Set || !Set->SprintAttack) return false;
+    CancelBlock();
+    return StartDefinedAttack(Set->SprintAttack, EActiveCombatAttackType::Special);
+}
+
+bool UCombatComponent::TryParryCounter()
+{
+    const UActionSet* Set = GetActionSet();
+    if (!bCombatEnabled || !GetWorld() || GetWorld()->GetTimeSeconds() > ParryCounterExpiresAt ||
+        bMeleeAttackInProgress || bRangedAttackInProgress || !Set || !Set->ParryCounter) return false;
+    CancelBlock();
+    if (!StartDefinedAttack(Set->ParryCounter, EActiveCombatAttackType::Special)) return false;
+    ParryCounterExpiresAt = -1.f;
+    return true;
+}
+
+void UCombatComponent::CommitSpecialMovement()
+{
+    if (!bCombatEnabled || !bMeleeAttackInProgress || bSpecialMovementCommitted) return;
+    ACharacter* Character = Cast<ACharacter>(GetOwner());
+    if (!Character) return;
+    bSpecialMovementCommitted = true;
+    if (const auto* Set = GetActionSet())
+    {
+        if (ActiveAttackType == EActiveCombatAttackType::Buff)
+        {
+            SwordBuffExpiresAt = GetWorld()->GetTimeSeconds() + Set->BuffDuration;
+            SwordBuffMultiplier = Set->BuffDamageMultiplier; // Refresh duration, never multiply repeatedly.
+        }
+        else if (ActiveAttackType == EActiveCombatAttackType::DrawWeapon || ActiveAttackType == EActiveCombatAttackType::SheatheWeapon)
+            if (auto* Equipment = Character->FindComponentByClass<UEquipmentComponent>())
+                Equipment->SetWeaponDrawn(ActiveAttackType == EActiveCombatAttackType::DrawWeapon);
+    }
+    if (ActiveAttackType == EActiveCombatAttackType::Uppercut)
+        Character->LaunchCharacter(FVector(0.f, 0.f, UppercutLaunchVelocity), false, true);
+    else if (ActiveAttackType == EActiveCombatAttackType::AirDive && !bAirDiveLanded && Character->GetCharacterMovement()->IsFalling())
+        Character->LaunchCharacter(FVector(0.f, 0.f, -AirAttackDownwardVelocity), false, true);
+}
+
+void UCombatComponent::UpdateDiveApproach()
+{
+    if (!bCombatEnabled || !bMeleeAttackInProgress || ActiveAttackType != EActiveCombatAttackType::AirDive ||
+        bAirDiveLanded || !bSpecialMovementCommitted || !GetWorld()) return;
+    ACharacter* Character = Cast<ACharacter>(GetOwner());
+    UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
+    UAnimMontage* M = ActiveAttackMontage.Get();
+    if (!Character || !Anim || !M || M->GetSectionIndex(TEXT("Descent")) == INDEX_NONE || !Character->GetCharacterMovement()->IsFalling()) return;
+    if (bDiveApproachStarted)
+    {
+        const int32 LandIndex = M->GetSectionIndex(AirDiveLandSection);
+        const float Contact = LandIndex != INDEX_NONE ? M->CompositeSections[LandIndex].GetTime() : BIG_NUMBER;
+        const float Position = Anim->Montage_GetPosition(M);
+        if (Position + GetWorld()->GetDeltaSeconds() * 1.1f >= Contact)
+        {
+            Anim->Montage_SetPosition(M, Contact - 1.f / 60.f);
+            Anim->Montage_Pause(M); // Landed resumes, never a timer or an animation section.
+        }
+        return;
+    }
+    // Only a walkable floor directly below can begin the flip-out. Landed still owns impact/recovery.
+    FHitResult Hit;
+    const FVector Feet = Character->GetCharacterMovement()->GetActorFeetLocation();
+    FCollisionQueryParams Query(SCENE_QUERY_STAT(SwordDiveFloor), false, Character);
+    const float LeadDistance = FMath::Clamp(-Character->GetVelocity().Z * (17.f / 60.f), 80.f, 240.f);
+    if (GetWorld()->LineTraceSingleByChannel(Hit, Feet + FVector(0,0,5), Feet - FVector(0,0,LeadDistance), ECC_Visibility, Query) &&
+        Character->GetCharacterMovement()->IsWalkable(Hit))
+    {
+        bDiveApproachStarted = true;
+        Anim->Montage_JumpToSection(TEXT("Descent"), M);
+        // Root-motion animation can advance before this component's next pre-physics tick.
+        // Keep a section-level barrier too: even a hitch cannot enter Land without Landed.
+        const FName WaitSection = M->GetSectionIndex(TEXT("ContactWait")) != INDEX_NONE ? FName(TEXT("ContactWait")) : FName(TEXT("Descent"));
+        Anim->Montage_SetNextSection(TEXT("Descent"), WaitSection, M);
+        Anim->Montage_SetNextSection(WaitSection, WaitSection, M);
+    }
+}
+
+float UCombatComponent::GetSwordBuffMultiplier() const
+{
+    return GetWorld() && GetWorld()->GetTimeSeconds() < SwordBuffExpiresAt ? SwordBuffMultiplier : 1.f;
+}
+
+bool UCombatComponent::TryBuff()
+{
+    const auto* Set = GetActionSet(); const auto* Actions = GetActions();
+    const auto* Character = Cast<ACharacter>(GetOwner());
+    const auto* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
+    if (!Set || !Set->Buff || !Actions || !Actions->CanRequest(ETPCActionIntent::Buff) ||
+        !Character || Character->GetCharacterMovement()->IsFalling() || !Equipment || !Equipment->IsWeaponDrawn()) return false;
+    return StartDefinedAttack(Set->Buff, EActiveCombatAttackType::Buff);
+}
+
+bool UCombatComponent::TryToggleWeapon()
+{
+    const auto* Set = GetActionSet(); const auto* Actions = GetActions();
+    const auto* Character = Cast<ACharacter>(GetOwner());
+    const auto* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
+    if (!Set || !Actions || !Actions->CanRequest(ETPCActionIntent::ToggleWeapon) || !Equipment ||
+        !Character || Character->GetCharacterMovement()->IsFalling()) return false;
+    return StartDefinedAttack(Equipment->IsWeaponDrawn() ? Set->SheatheWeapon : Set->DrawWeapon,
+        Equipment->IsWeaponDrawn() ? EActiveCombatAttackType::SheatheWeapon : EActiveCombatAttackType::DrawWeapon);
+}
+
+void UCombatComponent::NotifyActionCommit(UAnimSequenceBase* Animation, int32 MontageInstanceId)
+{
+    if (IsCurrentAttackNotify(Animation, MontageInstanceId)) CommitSpecialMovement();
+}

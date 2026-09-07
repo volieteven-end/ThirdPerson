@@ -1,0 +1,253 @@
+{
+  "blueprint": "/Game/Third/Character/BP_TPCCharacter.BP_TPCCharacter",
+  "starting_weapon": "/Game/Third/DataAsset/DA_TestSword.DA_TestSword",
+  "action_set": "/Game/Third/Actions/Sword/DA_SwordActionSet.DA_SwordActionSet",
+  "bindings": [
+    {
+      "key": "E",
+      "action": "/Game/Third/Input/IA_Interact.IA_Interact"
+    },
+    {
+      "key": "LeftShift",
+      "action": "/Game/Third/Input/IA_Sprint.IA_Sprint"
+    },
+    {
+      "key": "W",
+      "action": "/Game/Third/Input/IA_Move.IA_Move"
+    },
+    {
+      "key": "A",
+      "action": "/Game/Third/Input/IA_Move.IA_Move"
+    },
+    {
+      "key": "D",
+      "action": "/Game/Third/Input/IA_Move.IA_Move"
+    },
+    {
+      "key": "S",
+      "action": "/Game/Third/Input/IA_Move.IA_Move"
+    },
+    {
+      "key": "Mouse2D",
+      "action": "/Game/Third/Input/IA_Look.IA_Look"
+    },
+    {
+      "key": "LeftMouseButton",
+      "action": "/Game/Third/Input/IA_Attack.IA_Attack"
+    },
+    {
+      "key": "Q",
+      "action": "/Game/Third/Input/IA_UseItem.IA_UseItem"
+    },
+    {
+      "key": "LeftAlt",
+      "action": "/Game/Third/Input/IA_Dash.IA_Dash"
+    },
+    {
+      "key": "Tab",
+      "action": "/Game/Third/Input/IA_Inventory.IA_Inventory"
+    },
+    {
+      "key": "Escape",
+      "action": "/Game/Third/Input/IA_Pause.IA_Pause"
+    },
+    {
+      "key": "MiddleMouseButton",
+      "action": "/Game/Third/Input/IA_LockOn.IA_LockOn"
+    },
+    {
+      "key": "SpaceBar",
+      "action": "/Game/Third/Input/IA_Jump.IA_Jump"
+    },
+    {
+      "key": "C",
+      "action": "/Game/Third/Input/IA_Crunch.IA_Crunch"
+    },
+    {
+      "key": "RightMouseButton",
+      "action": "/Game/Third/Input/IA_Block.IA_Block"
+    },
+    {
+      "key": "R",
+      "action": "/Game/Third/Actions/Sword/Input/IA_HeavyAttack.IA_HeavyAttack"
+    },
+    {
+      "key": "B",
+      "action": "/Game/Third/Actions/Sword/Input/IA_SwordBuff.IA_SwordBuff"
+    },
+    {
+      "key": "X",
+      "action": "/Game/Third/Actions/Sword/Input/IA_ToggleSword.IA_ToggleSword"
+    }
+  ],
+  "moves": [
+    {
+      "group": "ground_combo",
+      "id": "Sword.Light.1",
+      "montage": "/Game/Third/SwordAnimation/AM_Sword_Attack_01.AM_Sword_Attack_01",
+      "sp": 0.0,
+      "cancel_start": 0.41600000858306885,
+      "commit": -1.0
+    },
+    {
+      "group": "ground_combo",
+      "id": "Sword.Light.2",
+      "montage": "/Game/Third/SwordAnimation/AM_Sword_Attack_02.AM_Sword_Attack_02",
+      "sp": 0.0,
+      "cancel_start": 0.46799999475479126,
+      "commit": -1.0
+    },
+    {
+      "group": "ground_combo",
+      "id": "Sword.Light.3",
+      "montage": "/Game/Third/SwordAnimation/AM_Sword_Attack_03.AM_Sword_Attack_03",
+      "sp": 0.0,
+      "cancel_start": 0.5619999766349792,
+      "commit": -1.0
+    },
+    {
+      "group": "ground_combo",
+      "id": "Sword.Light.4",
+      "montage": "/Game/Third/SwordAnimation/AM_Sword_Attack_04.AM_Sword_Attack_04",
+      "sp": 0.0,
+      "cancel_start": 0.9200000166893005,
+      "commit": -1.0
+    },
+    {
+      "group": "air_combo",
+      "id": "Sword.Air.Light.1",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_AirLight_01.AM_Sword_AirLight_01",
+      "sp": 0.0,
+      "cancel_start": 0.46000000834465027,
+      "commit": -1.0
+    },
+    {
+      "group": "air_combo",
+      "id": "Sword.Air.Light.2",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_AirLight_02.AM_Sword_AirLight_02",
+      "sp": 0.0,
+      "cancel_start": 0.46000000834465027,
+      "commit": -1.0
+    },
+    {
+      "group": "dodges",
+      "id": "Sword.Dodge.F",
+      "montage": "/Game/Third/SwordAnimation/AM_Dodge_F_Anim_Montage.AM_Dodge_F_Anim_Montage",
+      "sp": 30.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "dodges",
+      "id": "Sword.Dodge.B",
+      "montage": "/Game/Third/SwordAnimation/AM_Dodge_B_Anim_Montage.AM_Dodge_B_Anim_Montage",
+      "sp": 30.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "dodges",
+      "id": "Sword.Dodge.L",
+      "montage": "/Game/Third/SwordAnimation/AM_Dodge_L_Anim_Montage.AM_Dodge_L_Anim_Montage",
+      "sp": 30.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "dodges",
+      "id": "Sword.Dodge.R",
+      "montage": "/Game/Third/SwordAnimation/AM_Dodge_R_Anim_Montage.AM_Dodge_R_Anim_Montage",
+      "sp": 30.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "turns",
+      "id": "Sword.Turn.L_90",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Turn_L_90.AM_Turn_L_90",
+      "sp": 0.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "turns",
+      "id": "Sword.Turn.R_90",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Turn_R_90.AM_Turn_R_90",
+      "sp": 0.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "turns",
+      "id": "Sword.Turn.L_180",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Turn_L_180.AM_Turn_L_180",
+      "sp": 0.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "turns",
+      "id": "Sword.Turn.R_180",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Turn_R_180.AM_Turn_R_180",
+      "sp": 0.0,
+      "cancel_start": -1.0,
+      "commit": -1.0
+    },
+    {
+      "group": "rising",
+      "id": "Sword.Rising",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_Rising.AM_Sword_Rising",
+      "sp": 15.0,
+      "cancel_start": 0.6200000047683716,
+      "commit": 0.18000000715255737
+    },
+    {
+      "group": "dive",
+      "id": "Sword.Air.Dive",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_Dive.AM_Sword_Dive",
+      "sp": 15.0,
+      "cancel_start": 1.4666666984558105,
+      "commit": 0.30000001192092896
+    },
+    {
+      "group": "sprint_attack",
+      "id": "Sword.Sprint",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_SprintAttack.AM_Sword_SprintAttack",
+      "sp": 15.0,
+      "cancel_start": 0.75,
+      "commit": -1.0
+    },
+    {
+      "group": "parry_counter",
+      "id": "Sword.ParryCounter",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_ParryCounter.AM_Sword_ParryCounter",
+      "sp": 0.0,
+      "cancel_start": 0.7200000286102295,
+      "commit": -1.0
+    },
+    {
+      "group": "buff",
+      "id": "Sword.Buff",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_Buff.AM_Sword_Buff",
+      "sp": 20.0,
+      "cancel_start": 0.5,
+      "commit": 0.3499999940395355
+    },
+    {
+      "group": "draw_weapon",
+      "id": "Sword.Draw",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_Draw.AM_Sword_Draw",
+      "sp": 0.0,
+      "cancel_start": 0.800000011920929,
+      "commit": 0.550000011920929
+    },
+    {
+      "group": "sheathe_weapon",
+      "id": "Sword.Sheathe",
+      "montage": "/Game/Third/Actions/Sword/Montages/AM_Sword_Sheathe.AM_Sword_Sheathe",
+      "sp": 0.0,
+      "cancel_start": 0.800000011920929,
+      "commit": 0.550000011920929
+    }
+  ]
+}

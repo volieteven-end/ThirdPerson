@@ -1,0 +1,1266 @@
+{
+  "source_report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\RHI\\index.json",
+  "succeeded": 19,
+  "succeededWithWarnings": 12,
+  "failed": 0,
+  "notRun": 0,
+  "inProcess": 0,
+  "tests": [
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.AirAndMovement",
+      "state": "Success",
+      "warnings": 1,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.CombatLifecycle",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.ComboBuffer",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.DashCancelGuards",
+      "state": "Success",
+      "warnings": 1,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.DashCancelLifecycle",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.DashComboWindow",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.DodgeRootMotionHandoff",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.MovementRules",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.RootTurnAndDeath",
+      "state": "Success",
+      "warnings": 1,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogTemp: Player died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.ActionSystem.SprintActionInterlock",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.PIE.EncounterMovementDeath",
+      "state": "Success",
+      "warnings": 5,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogConsoleManager: Console variable 'r.MotionVectorSimulation' used in the render thread. Rendering artifacts could happen. Use ECVF_RenderThreadSafe or don't use in render thread.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemy died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemies defeated: 1",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Exit unlocked! Go to the exit.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.PIE.NavigationLOSResetReentry",
+      "state": "Success",
+      "warnings": 2,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.PIE.SixActionsAt30_60_120",
+      "state": "Success",
+      "warnings": 2,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=0 Phase=1 FPS=30 Damage=34 Duration=3.133 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=1 Phase=1 FPS=30 Damage=30 Duration=2.633 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=2 Phase=1 FPS=30 Damage=22 Duration=2.300 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=3 Phase=1 FPS=30 Damage=24 Duration=2.500 Travel=377.31",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=4 Phase=1 FPS=30 Damage=20 Duration=2.300 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=5 Phase=2 FPS=30 Damage=38 Duration=5.067 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=6 Phase=2 FPS=30 Damage=56 Duration=4.400 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=7 Phase=2 FPS=30 Damage=42 Duration=3.767 Travel=377.31",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=0 Phase=1 FPS=60 Damage=34 Duration=3.100 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=1 Phase=1 FPS=60 Damage=30 Duration=2.600 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=2 Phase=1 FPS=60 Damage=22 Duration=2.267 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=3 Phase=1 FPS=60 Damage=24 Duration=2.483 Travel=372.83",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=4 Phase=1 FPS=60 Damage=20 Duration=2.267 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=5 Phase=2 FPS=60 Damage=38 Duration=5.067 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=6 Phase=2 FPS=60 Damage=56 Duration=4.350 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=7 Phase=2 FPS=60 Damage=42 Duration=3.733 Travel=372.83",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=0 Phase=1 FPS=120 Damage=34 Duration=3.100 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=1 Phase=1 FPS=120 Damage=30 Duration=2.600 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=2 Phase=1 FPS=120 Damage=22 Duration=2.267 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=3 Phase=1 FPS=120 Damage=24 Duration=2.483 Travel=367.01",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=4 Phase=1 FPS=120 Damage=20 Duration=2.267 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=5 Phase=2 FPS=120 Damage=38 Duration=5.067 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=6 Phase=2 FPS=120 Damage=56 Duration=4.350 Travel=0.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Action=7 Phase=2 FPS=120 Damage=42 Duration=3.733 Travel=367.01",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.AssetContract",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.CancellationAndPool",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.CrossedWindowsAt30_60_120",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.DefenseOutcomes",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.HitDedupAndActualLifesteal",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.NativeAnimationAndSavedBlueprint",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.PlayerHitContextsAndBackBlock",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.PoisePhaseOrdering",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Boss.SelectionAndReset",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Projectiles.CollisionInvariant",
+      "state": "Success",
+      "warnings": 1,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_18.Untitled:PersistentLevel.WeaponProjectile_0",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Projectiles.DamageOnceAndFriendlyFire",
+      "state": "Success",
+      "warnings": 2,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_19.Untitled:PersistentLevel.WeaponProjectile_0",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_19.Untitled:PersistentLevel.WeaponProjectile_1",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Projectiles.ReuseAndReset",
+      "state": "Success",
+      "warnings": 1,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_20.Untitled:PersistentLevel.WeaponProjectile_0",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.PIE.CoreAt30_60_120",
+      "state": "Success",
+      "warnings": 2,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 0: actual opponent damage 50.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 1: actual opponent damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 0: actual opponent damage 50.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 1: actual opponent damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 0: actual opponent damage 50.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 1: actual opponent damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.PIE.LifecycleAt30_60_120",
+      "state": "Success",
+      "warnings": 17,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS full aerial damage 100.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemy died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemies defeated: 1",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Exit unlocked! Go to the exit.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 11: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Player died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: New pawn: BP_TPCCharacter_C_1, Location: X=-650.000 Y=0.000 Z=110.000",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 12: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS multi-enemy 0 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS multi-enemy 1 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "30 FPS multi-enemy 2 damage 83.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 13: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 14: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 15: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 16: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 30 FPS case 17: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS full aerial damage 100.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemy died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemies defeated: 2",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Exit unlocked! Go to the exit.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 11: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Player died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: New pawn: BP_TPCCharacter_C_2, Location: X=-650.000 Y=0.000 Z=110.000",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 12: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS multi-enemy 0 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS multi-enemy 1 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "60 FPS multi-enemy 2 damage 83.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 13: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 14: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 15: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 16: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 60 FPS case 17: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS full aerial damage 100.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 0: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 1: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 2: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 3: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemy died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Enemies defeated: 3",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Exit unlocked! Go to the exit.",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 4: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 5: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 6: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 7: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 8: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 9: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 10: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 11: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: Player died",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogTemp: New pawn: BP_TPCCharacter_C_3, Location: X=-650.000 Y=0.000 Z=110.000",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 12: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS multi-enemy 0 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS multi-enemy 1 damage 108.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "120 FPS multi-enemy 2 damage 83.75",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 13: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 14: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 15: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 16: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Lifecycle 120 FPS case 17: completed",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.PIE.MainMapStartup",
+      "state": "Success",
+      "warnings": 2,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Default-map completion: state=0 montage=None position=0.000 melee=0 block=0 guardHit=0 hp=100.00",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Warning",
+          "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+          "context": "log",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.AssetContract",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": [
+        {
+          "type": "Info",
+          "message": "Sword.Light.1 warp rotation=0 enabled=1 subtractRemaining=0",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Sword.Light.2 warp rotation=0 enabled=1 subtractRemaining=0",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Sword.Light.3 warp rotation=0 enabled=1 subtractRemaining=0",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        },
+        {
+          "type": "Info",
+          "message": "Sword.Light.4 warp rotation=0 enabled=1 subtractRemaining=0",
+          "context": "",
+          "artifact": "00000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.AuthorityAndBuffers",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    },
+    {
+      "fullTestPath": "ThirdPerson.Sword.UtilityAndFailure",
+      "state": "Success",
+      "warnings": 0,
+      "errors": 0,
+      "events": []
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+[
+  {
+    "phase": "ThirdPersonEditor",
+    "executable": "D:\\Unreal5.8\\UE_5.8\\Engine\\Build\\BatchFiles\\Build.bat",
+    "arguments": [
+      "ThirdPersonEditor",
+      "Win64",
+      "Development",
+      "-Project=E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+      "-WaitMutex",
+      "-NoHotReloadFromIDE",
+      "-NoUBTMakefiles"
+    ],
+    "exit": 0,
+    "log": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\ThirdPersonEditor_Build.txt"
+  },
+  {
+    "phase": "ThirdPerson",
+    "executable": "D:\\Unreal5.8\\UE_5.8\\Engine\\Build\\BatchFiles\\Build.bat",
+    "arguments": [
+      "ThirdPerson",
+      "Win64",
+      "Development",
+      "-Project=E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+      "-WaitMutex",
+      "-NoHotReloadFromIDE",
+      "-NoUBTMakefiles"
+    ],
+    "exit": 0,
+    "log": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\ThirdPerson_Build.txt"
+  },
+  {
+    "phase": "NullRHI",
+    "executable": "D:\\Unreal5.8\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/SwordActionVerification_20260907_183916/NullRHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/SwordActionVerification_20260907_183916/NullRHI_Engine.txt",
+      "-NullRHI"
+    ],
+    "exit": 0,
+    "passed": 31,
+    "failed": 0,
+    "nonSuccess": 0,
+    "report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\NullRHI\\index.json",
+    "log": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\NullRHI_Engine.txt"
+  },
+  {
+    "phase": "RHI",
+    "executable": "D:\\Unreal5.8\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/SwordActionVerification_20260907_183916/RHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/SwordActionVerification_20260907_183916/RHI_Engine.txt",
+      "-RenderOffscreen",
+      "-SwordVisualAudit",
+      "-ResX=1280",
+      "-ResY=720"
+    ],
+    "exit": 0,
+    "passed": 31,
+    "failed": 0,
+    "nonSuccess": 0,
+    "report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\RHI\\index.json",
+    "log": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\SwordActionVerification_20260907_183916\\RHI_Engine.txt"
+  }
+]

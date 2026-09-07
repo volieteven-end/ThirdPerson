@@ -14,6 +14,9 @@ class UAnimSequenceBase;
 class UWeaponDefinition;
 class USkeletalMeshComponent;
 class UParticleSystem;
+class UActionComponent;
+class UActionDefinition;
+class UActionSet;
 
 DECLARE_MULTICAST_DELEGATE(FOnMeleeAttackStartedNative);
 
@@ -22,7 +25,11 @@ enum class EActiveCombatAttackType : uint8
 	Normal,
 	Uppercut,
 	Air,
-	AirDive
+	AirDive,
+	Special,
+    Buff,
+    DrawWeapon,
+    SheatheWeapon
 };
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UCombatComponent : public UActorComponent
@@ -41,6 +48,17 @@ public:
 	void ReleaseRangedProjectile();
 	bool IsRangedAttackInProgress() const { return bRangedAttackInProgress; }
 	void TryUppercutAttack();
+	bool TrySprintAttack();
+	bool TryParryCounter();
+    bool TryBuff();
+    bool TryToggleWeapon();
+    UFUNCTION(BlueprintPure, Category="Combat|Buff") float GetSwordBuffMultiplier() const;
+    void ClearSwordBuff() { SwordBuffExpiresAt = -1.f; SwordBuffMultiplier = 1.f; }
+    /** Call at the montage's commit notify; stale montage instances are discarded. */
+    void NotifyActionCommit(UAnimSequenceBase* Animation, int32 MontageInstanceId);
+	void CommitSpecialMovement();
+	void UpdateDiveApproach();
+	const UActionSet* GetActionSet() const;
 	void TryAirAttack();
 	/** A separate input action; normal air attacks never force a downward launch. */
 	void TryAirDiveAttack();
@@ -57,6 +75,7 @@ public:
 	bool IsCurrentAttackNotify(const UAnimSequenceBase* Animation, int32 MontageInstanceId) const;
 	void StartBlock();
 	void StopBlock();
+	void CancelGuard() { CancelBlock(); }
 	UFUNCTION(BlueprintPure, Category = "Combat|Block")
 	bool IsBlocking() const { return bIsBlocking; }
 	UFUNCTION(BlueprintPure, Category = "Combat|Block")
@@ -66,7 +85,7 @@ public:
 	float ResolveIncomingHit(const FCombatHitSpec& Spec, const AActor* Source, FCombatHitResult& Result);
 	FCombatHitSpec MakeCurrentHitSpec(const FVector& ImpactPoint) const;
 	void PerformAttackHit();
-	void StartAttackWindow(FName InAttackBoneName,float InTraceRadius);
+	void StartAttackWindow(FName InAttackBoneName,float InTraceRadius, FName HitGroup = TEXT("Primary"));
     void EndAttackWindow();
 	void OpenComboInputWindow();
 	void CloseComboInputWindow();
@@ -76,7 +95,7 @@ public:
 	void MultiplyMeleeReach(float Multiplier);
 	bool IsMeleeAttackInProgress() const { return bMeleeAttackInProgress; }
 	UFUNCTION(BlueprintPure, Category = "Combat|Combo")
-	bool HasBufferedComboInput() const { return ComboBuffer.bQueued; }
+	bool HasBufferedComboInput() const;
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	float Damage = 25.f;
@@ -139,6 +158,21 @@ protected:
 	bool bDrawHandTraceDebug = true;
 	
 private:
+	UActionComponent* GetActions() const;
+	TPCActionRules::FComboBuffer& GetComboBuffer();
+	uint64 GetComboGeneration() const;
+	bool StartDefinedAttack(const UActionDefinition* Definition, EActiveCombatAttackType Type);
+	const UActionDefinition* GetActiveDefinition() const;
+    float SwordBuffExpiresAt = -1.f;
+    float SwordBuffMultiplier = 1.f;
+    bool bPosePolicySaved = false;
+    uint8 PreviousPosePolicy = 0;
+	uint64 OwnedActionId = 0;
+	uint64 GuardActionId = 0;
+	float ParryCounterExpiresAt = -1.f;
+	bool bSpecialMovementCommitted = false;
+	bool bDiveApproachStarted = false;
+	mutable TArray<TObjectPtr<UAnimMontage>> ResolvedGroundMontages;
 	const UWeaponDefinition* GetEquippedWeaponDefinition() const;
 	float GetEffectiveDamage() const;
 	float GetEffectiveAttackCooldown() const;
@@ -181,12 +215,17 @@ private:
     bool IsDashComboContextValid() const;
 	bool bAirDiveLanded = false;
 	friend struct FTPActionTestAccess;
+    friend struct FTPCSwordPIETestAccess;
  friend struct FCountessBossTestAccess;
 	bool bAttackWindowActive = false;
 	FVector PreviousAttackLocation = FVector::ZeroVector;
 	FVector PreviousBladeBaseLocation = FVector::ZeroVector;
 	FVector PreviousBladeTipLocation = FVector::ZeroVector;
+    float PreviousTraceMontagePosition = 0.f;
+    FTransform PreviousTraceMeshTransform;
 	TSet<TObjectPtr<AActor>> HitActors;
+	TMap<FName, TSet<TObjectPtr<AActor>>> HitGroups;
+	FName ActiveHitGroup = TEXT("Primary");
 	virtual void TickComponent(float DeltaTime,ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 	FName ActiveAttackBoneName = NAME_None;
 	float ActiveTraceRadius = 18.f;

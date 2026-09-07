@@ -27,6 +27,7 @@ struct THIRDPERSON_API FCombatHitResult
  UPROPERTY(BlueprintReadOnly) ECombatHitOutcome Outcome = ECombatHitOutcome::Ignored;
  UPROPERTY(BlueprintReadOnly) float ActualDamage = 0.f;
  UPROPERTY(BlueprintReadOnly) bool bBlocked = false;
+ UPROPERTY(BlueprintReadOnly) bool bGuardBroken = false;
  UPROPERTY(BlueprintReadOnly) bool bParried = false;
  UPROPERTY(BlueprintReadOnly) bool bKilled = false;
 };

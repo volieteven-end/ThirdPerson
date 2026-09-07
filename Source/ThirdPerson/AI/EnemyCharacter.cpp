@@ -223,6 +223,8 @@ void AEnemyCharacter::HandleDeath()
 	GetWorldTimerManager().ClearTimer(UppercutRecoveryTimerHandle);
 	bParryStaggered = false;
 	bUppercutStunned = false;
+	LaunchPhase = EEnemyLaunchPhase::Dead;
+	LaunchesThisFlight = 0;
 	if (DropPickupClass &&FMath::FRand() <= DropChance)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -271,7 +273,17 @@ void AEnemyCharacter::HandleHealthChanged(
 {
 	const bool bTookDamage =CurrentHealth < PreviousHealth;
 
-	if (!bDead && bTookDamage &&CurrentHealth > 0.f &&HitReactMontage)
+	if (!bDead && bTookDamage && CurrentHealth > 0.f && bUppercutStunned)
+	{
+		if (LaunchPhase == EEnemyLaunchPhase::DownIdle || LaunchPhase == EEnemyLaunchPhase::DownHit)
+		{
+			LaunchPhase = EEnemyLaunchPhase::DownHit;
+			const float Length = UppercutDownHitMontage ? PlayAnimMontage(UppercutDownHitMontage) : .3f;
+			GetWorldTimerManager().SetTimer(UppercutRecoveryTimerHandle, this, &ThisClass::StartUppercutDownIdle, FMath::Max(.01f, Length), false);
+		}
+		// Air/landing/get-up reactions retain their paired pose and physical recovery gate.
+	}
+	else if (!bDead && bTookDamage &&CurrentHealth > 0.f &&HitReactMontage)
 	{
 		PlayAnimMontage(HitReactMontage);
 	}
@@ -301,7 +313,7 @@ void AEnemyCharacter::ApplyParryStagger(AActor* ParryingActor)
 	{
 		CombatComponent->SetCombatEnabled(false);
 	}
-	GetCharacterMovement()->DisableMovement();
+	if (!GetCharacterMovement()->IsFalling()) GetCharacterMovement()->DisableMovement();
 	StopAnimMontage();
 
 	float StaggerDuration = ParryStaggerFallbackDuration;
@@ -327,6 +339,13 @@ void AEnemyCharacter::ApplyUppercutHit(AActor* AttackingActor)
 	{
 		return;
 	}
+	if (LaunchPhase == EEnemyLaunchPhase::Airborne && LaunchesThisFlight >= MaxLaunchesPerFlight) return;
+	++LaunchesThisFlight;
+	LaunchPhase = EEnemyLaunchPhase::Airborne;
+	bReceivedUppercutLanding = false;
+	GetWorldTimerManager().ClearTimer(UppercutRecoveryTimerHandle);
+	GetWorldTimerManager().ClearTimer(ParryStaggerTimerHandle);
+	bParryStaggered = false;
 
 	bUppercutStunned = true;
 	bUppercutLandingRecovery = false;
@@ -340,6 +359,7 @@ void AEnemyCharacter::ApplyUppercutHit(AActor* AttackingActor)
 		CombatComponent->SetCombatEnabled(false);
 	}
 	StopAnimMontage();
+	GetCharacterMovement()->SetMovementMode(MOVE_Falling);
 
 	FVector AwayDirection = GetActorForwardVector();
 	if (AttackingActor)
@@ -375,6 +395,8 @@ void AEnemyCharacter::Landed(const FHitResult& Hit)
 	Super::Landed(Hit);
 	if (bUppercutStunned)
 	{
+		bReceivedUppercutLanding = true;
+		LaunchesThisFlight = 0;
 		TryEndUppercutStun();
 	}
 }
@@ -385,7 +407,7 @@ void AEnemyCharacter::TryEndUppercutStun()
 	{
 		return;
 	}
-	if (GetCharacterMovement() && GetCharacterMovement()->IsFalling())
+	if (!bReceivedUppercutLanding || (GetCharacterMovement() && GetCharacterMovement()->IsFalling()))
 	{
 		GetWorldTimerManager().SetTimer(
 			UppercutRecoveryTimerHandle,
@@ -399,6 +421,7 @@ void AEnemyCharacter::TryEndUppercutStun()
 	// The character has reached the ground. End the airborne pose, then keep
 	// AI/combat locked through the optional landing recovery animation.
 	bUppercutLandingRecovery = true;
+	LaunchPhase = EEnemyLaunchPhase::LandImpact;
 	if (UppercutHitMontage)
 	{
 		StopAnimMontage(UppercutHitMontage);
@@ -415,7 +438,7 @@ void AEnemyCharacter::TryEndUppercutStun()
 	GetWorldTimerManager().SetTimer(
 		UppercutRecoveryTimerHandle,
 		this,
-		&ThisClass::StartUppercutGetUp,
+		&ThisClass::StartUppercutDownIdle,
 		FMath::Max(0.01f, LandingDuration),
 		false);
 }
@@ -426,6 +449,8 @@ void AEnemyCharacter::StartUppercutGetUp()
 	{
 		return;
 	}
+	if (!bReceivedUppercutLanding || GetCharacterMovement()->IsFalling()) return;
+	LaunchPhase = EEnemyLaunchPhase::GetUp;
 
 	float GetUpDuration = UppercutGetUpFallbackDuration;
 	if (UppercutGetUpMontage)
@@ -444,12 +469,35 @@ void AEnemyCharacter::StartUppercutGetUp()
 		false);
 }
 
+void AEnemyCharacter::StartUppercutDownIdle()
+{
+    if (bDead || !bUppercutStunned || !bReceivedUppercutLanding || GetCharacterMovement()->IsFalling()) return;
+    LaunchPhase = EEnemyLaunchPhase::DownIdle;
+    if (UppercutDownIdleMontage) PlayAnimMontage(UppercutDownIdleMontage);
+    GetWorldTimerManager().SetTimer(UppercutRecoveryTimerHandle, this, &ThisClass::StartUppercutGetUp,
+        FMath::Max(.01f, UppercutDownDuration), false);
+}
+
+void AEnemyCharacter::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+    Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+    if (bDead || !bUppercutStunned || !GetCharacterMovement()->IsFalling() || LaunchPhase == EEnemyLaunchPhase::Airborne) return;
+    // A platform can disappear during landing/down/get-up. Keep the physical gate closed.
+    LaunchPhase = EEnemyLaunchPhase::Airborne;
+    bUppercutLandingRecovery = false;
+    bReceivedUppercutLanding = false;
+    if (UppercutHitMontage) PlayAnimMontage(UppercutHitMontage);
+    GetWorldTimerManager().SetTimer(UppercutRecoveryTimerHandle, this, &ThisClass::TryEndUppercutStun, .1f, false);
+}
+
 void AEnemyCharacter::FinishUppercutStun()
 {
 	if (bDead || !bUppercutStunned)
 	{
 		return;
 	}
+	if (!bReceivedUppercutLanding || GetCharacterMovement()->IsFalling()) return;
+	LaunchPhase = EEnemyLaunchPhase::None;
 	bUppercutStunned = false;
 	bUppercutLandingRecovery = false;
 	SetAIStunned(false);
@@ -472,12 +520,13 @@ void AEnemyCharacter::SetAIStunned(bool bStunned)
 
 void AEnemyCharacter::EndParryStagger()
 {
+	if (bUppercutStunned || bDead) return;
 	bParryStaggered = false;
 	if (!HealthComponent || HealthComponent->GetCurrentHealth() <= 0.f)
 	{
 		return;
 	}
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	if (GetCharacterMovement()->MovementMode == MOVE_None) GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	if (CombatComponent)
 	{
 		CombatComponent->SetCombatEnabled(true);

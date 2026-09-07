@@ -12,6 +12,8 @@ class UCombatComponent;
 class UEquipmentComponent;
 class AActor;
 class UAnimMontage;
+UENUM(BlueprintType)
+enum class EEnemyLaunchPhase : uint8 { None, Airborne, LandImpact, DownIdle, DownHit, GetUp, Dead };
 UCLASS()
 class THIRDPERSON_API AEnemyCharacter : public ACharacter
 {
@@ -28,6 +30,8 @@ public:
 	FVector GetLockOnAimPoint() const;
 	virtual void ApplyParryStagger(AActor* ParryingActor);
 	virtual void ApplyUppercutHit(AActor* AttackingActor);
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	EEnemyLaunchPhase GetLaunchPhase() const { return LaunchPhase; }
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	bool IsParryStaggered() const { return bParryStaggered; }
 
@@ -70,9 +74,15 @@ public:
 	TObjectPtr<UAnimMontage> UppercutGetUpMontage;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut", meta = (ClampMin = "0.0"))
 	float UppercutGetUpFallbackDuration = 0.65f;
+	/** This complete pair uses Down_01; never mix it with the reversed Down_02 pose. */
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut") TObjectPtr<UAnimMontage> UppercutDownIdleMontage;
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut") TObjectPtr<UAnimMontage> UppercutDownHitMontage;
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut", meta=(ClampMin="0")) float UppercutDownDuration = .6f;
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut", meta=(ClampMin="1",ClampMax="3")) int32 MaxLaunchesPerFlight = 2;
 protected:
 	virtual void BeginPlay() override;
 	virtual void Landed(const FHitResult& Hit) override;
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode = 0) override;
 	UFUNCTION()
 	virtual void HandleDeath();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
@@ -124,6 +134,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Lock On", meta = (ClampMin = "0.0"))
 	float LockOnCameraAimBelowIndicator = 70.f;
 private:
+    friend struct FTPCSwordPIETestAccess;
 	int32 CurrentPatrolIndex = 0;
 	void PositionLockOnIndicator();
 	FVector GetLockOnCameraReferencePoint() const;
@@ -132,11 +143,15 @@ private:
 	void EndParryStagger();
 	void TryEndUppercutStun();
 	void StartUppercutGetUp();
+	void StartUppercutDownIdle();
 	void FinishUppercutStun();
 	void SetAIStunned(bool bStunned);
 	bool bParryStaggered = false;
 	bool bUppercutStunned = false;
 	bool bUppercutLandingRecovery = false;
+	bool bReceivedUppercutLanding = false;
+	int32 LaunchesThisFlight = 0;
+	EEnemyLaunchPhase LaunchPhase = EEnemyLaunchPhase::None;
 	bool bDead = false;
 	FTimerHandle ParryStaggerTimerHandle;
 	FTimerHandle UppercutRecoveryTimerHandle;

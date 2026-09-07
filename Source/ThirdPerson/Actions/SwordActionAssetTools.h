@@ -1,0 +1,14 @@
+#pragma once
+#include "CoreMinimal.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
+#include "SwordActionAssetTools.generated.h"
+
+/** Deterministic editor authoring for the sword design; runtime never constructs project assets. */
+UCLASS()
+class THIRDPERSON_API USwordActionAssetTools : public UBlueprintFunctionLibrary
+{
+    GENERATED_BODY()
+public:
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool BuildSwordActionAssets();
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static FString InspectSwordGraphs();
+};

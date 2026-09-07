@@ -1,0 +1,38 @@
+[
+  {
+    "fps": 30,
+    "case": 0,
+    "damage": 50.0,
+    "max_abs_actor_yaw": 0.0
+  },
+  {
+    "fps": 30,
+    "case": 1,
+    "damage": 108.75,
+    "max_abs_actor_yaw": 0.0
+  },
+  {
+    "fps": 60,
+    "case": 0,
+    "damage": 50.0,
+    "max_abs_actor_yaw": 0.0
+  },
+  {
+    "fps": 60,
+    "case": 1,
+    "damage": 108.75,
+    "max_abs_actor_yaw": 0.0
+  },
+  {
+    "fps": 120,
+    "case": 0,
+    "damage": 50.0,
+    "max_abs_actor_yaw": 0.0
+  },
+  {
+    "fps": 120,
+    "case": 1,
+    "damage": 108.75,
+    "max_abs_actor_yaw": 0.0
+  }
+]

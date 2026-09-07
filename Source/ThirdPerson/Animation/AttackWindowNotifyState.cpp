@@ -32,7 +32,7 @@ void UAttackWindowNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	UCombatComponent* Combat = Owner ? Owner->FindComponentByClass<UCombatComponent>() : nullptr;
 	if (!Combat || !Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference))) { return; }
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->OpenComboInputWindow(); }
-	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->StartAttackWindow(AttackBoneName, TraceRadius); }
+	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->StartAttackWindow(AttackBoneName, TraceRadius, HitGroup); }
 	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, true); }
 }
 

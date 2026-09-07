@@ -3,6 +3,7 @@
 #include "../Character/TPCCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../Components/CombatComponent.h"
+#include "../Components/ActionComponent.h"
 
 void UTPCAnimInstance::NativeInitializeAnimation()
 {
@@ -36,6 +37,10 @@ void UTPCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsBlocking = Combat->IsBlocking();
 		bIsParrying = Combat->IsParryWindowActive();
 	}
+	ActionState = Character->ActionComponent ? Character->ActionComponent->GetActionState() : ETPCActionState::Free;
+	bGuardHitActive = Character->IsGuardHitReactionActive();
+	bGuardHoldReady = bIsBlocking && !bGuardHitActive;
+	bWantJumpPose = bIsInAir && !bIsBlocking;
 	const FVector LocalVelocity =
 		Character->GetActorTransform().InverseTransformVectorNoScale(Velocity);
 	Direction = GroundSpeed > KINDA_SMALL_NUMBER
