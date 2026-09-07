@@ -1,0 +1,3721 @@
+{
+  "reportCreatedOn": "2026.09.07-14.08.03",
+  "succeeded": 19,
+  "succeededWithWarnings": 16,
+  "failed": 0,
+  "notRun": 0,
+  "totalDuration": 293.76263427734375,
+  "tests": [
+    {
+      "testDisplayName": "AirAndMovement",
+      "fullTestPath": "ThirdPerson.ActionSystem.AirAndMovement",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.01133120059967041,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.09"
+        }
+      ],
+      "warnings": 1,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "CombatLifecycle",
+      "fullTestPath": "ThirdPerson.ActionSystem.CombatLifecycle",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.010511498898267746,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "ComboBuffer",
+      "fullTestPath": "ThirdPerson.ActionSystem.ComboBuffer",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.004237499088048935,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DashCancelGuards",
+      "fullTestPath": "ThirdPerson.ActionSystem.DashCancelGuards",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.010805699974298477,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.09"
+        }
+      ],
+      "warnings": 1,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DashCancelLifecycle",
+      "fullTestPath": "ThirdPerson.ActionSystem.DashCancelLifecycle",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.011920101940631866,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DashComboWindow",
+      "fullTestPath": "ThirdPerson.ActionSystem.DashComboWindow",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.0077860988676548,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DodgeRootMotionHandoff",
+      "fullTestPath": "ThirdPerson.ActionSystem.DodgeRootMotionHandoff",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.009259302169084549,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "MovementRules",
+      "fullTestPath": "ThirdPerson.ActionSystem.MovementRules",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.007068701088428497,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "RootTurnAndDeath",
+      "fullTestPath": "ThirdPerson.ActionSystem.RootTurnAndDeath",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.008974600583314896,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.09"
+        }
+      ],
+      "warnings": 1,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "SprintActionInterlock",
+      "fullTestPath": "ThirdPerson.ActionSystem.SprintActionInterlock",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.010084401816129684,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "EncounterMovementDeath",
+      "fullTestPath": "ThirdPerson.Boss.PIE.EncounterMovementDeath",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 16.8487548828125,
+      "dateTime": "2026.09.07-14.03.09",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogConsoleManager: Console variable 'r.MotionVectorSimulation' used in the render thread. Rendering artifacts could happen. Use ECVF_RenderThreadSafe or don't use in render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.11"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemy died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.21"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemies defeated: 1",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.21"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Exit unlocked! Go to the exit.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.21"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.26"
+        }
+      ],
+      "warnings": 5,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "NavigationLOSResetReentry",
+      "fullTestPath": "ThirdPerson.Boss.PIE.NavigationLOSResetReentry",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 5.313488960266113,
+      "dateTime": "2026.09.07-14.03.26",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.26"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.31"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "SixActionsAt30_60_120",
+      "fullTestPath": "ThirdPerson.Boss.PIE.SixActionsAt30_60_120",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 34.08205795288086,
+      "dateTime": "2026.09.07-14.03.32",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=0 Phase=1 FPS=30 Damage=34 Duration=3.133 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.34"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=1 Phase=1 FPS=30 Damage=30 Duration=2.633 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=2 Phase=1 FPS=30 Damage=22 Duration=2.300 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=3 Phase=1 FPS=30 Damage=24 Duration=2.500 Travel=377.31",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.36"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=4 Phase=1 FPS=30 Damage=20 Duration=2.300 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.36"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=5 Phase=2 FPS=30 Damage=38 Duration=5.067 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.37"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=6 Phase=2 FPS=30 Damage=56 Duration=4.400 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=7 Phase=2 FPS=30 Damage=42 Duration=3.767 Travel=377.31",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=0 Phase=1 FPS=60 Damage=34 Duration=3.100 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.40"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=1 Phase=1 FPS=60 Damage=30 Duration=2.600 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.40"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=2 Phase=1 FPS=60 Damage=22 Duration=2.267 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.41"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=3 Phase=1 FPS=60 Damage=24 Duration=2.483 Travel=372.83",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.42"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=4 Phase=1 FPS=60 Damage=20 Duration=2.267 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.43"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=5 Phase=2 FPS=60 Damage=38 Duration=5.067 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.45"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=6 Phase=2 FPS=60 Damage=56 Duration=4.350 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.46"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=7 Phase=2 FPS=60 Damage=42 Duration=3.733 Travel=372.83",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.48"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=0 Phase=1 FPS=120 Damage=34 Duration=3.100 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.50"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=1 Phase=1 FPS=120 Damage=30 Duration=2.600 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.52"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=2 Phase=1 FPS=120 Damage=22 Duration=2.267 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.53"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=3 Phase=1 FPS=120 Damage=24 Duration=2.483 Travel=367.01",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.55"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=4 Phase=1 FPS=120 Damage=20 Duration=2.267 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.03.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=5 Phase=2 FPS=120 Damage=38 Duration=5.067 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.00"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=6 Phase=2 FPS=120 Damage=56 Duration=4.350 Travel=0.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Action=7 Phase=2 FPS=120 Damage=42 Duration=3.733 Travel=367.01",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.06"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.06"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "AssetContract",
+      "fullTestPath": "ThirdPerson.Boss.AssetContract",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.007971499115228653,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "CancellationAndPool",
+      "fullTestPath": "ThirdPerson.Boss.CancellationAndPool",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.021664801985025406,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "CrossedWindowsAt30_60_120",
+      "fullTestPath": "ThirdPerson.Boss.CrossedWindowsAt30_60_120",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.024100400507450104,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DefenseOutcomes",
+      "fullTestPath": "ThirdPerson.Boss.DefenseOutcomes",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.0131617970764637,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "HitDedupAndActualLifesteal",
+      "fullTestPath": "ThirdPerson.Boss.HitDedupAndActualLifesteal",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.013963699340820312,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "NativeAnimationAndSavedBlueprint",
+      "fullTestPath": "ThirdPerson.Boss.NativeAnimationAndSavedBlueprint",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.020190298557281494,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "PlayerHitContextsAndBackBlock",
+      "fullTestPath": "ThirdPerson.Boss.PlayerHitContextsAndBackBlock",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.01123809814453125,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "PoisePhaseOrdering",
+      "fullTestPath": "ThirdPerson.Boss.PoisePhaseOrdering",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.014445800334215164,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "SelectionAndReset",
+      "fullTestPath": "ThirdPerson.Boss.SelectionAndReset",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.011987198144197464,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "BossRaisedHomeRestart",
+      "fullTestPath": "ThirdPerson.Feedback.PIE.BossRaisedHomeRestart",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 13.728105545043945,
+      "dateTime": "2026.09.07-14.04.06",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.06"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.08"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_1, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 1: state=2 controller=CountessBossAIController_1 target=BP_TPCCharacter_C_1 moved=853.99 home_distance=862.64",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.12"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.12"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_2, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 2: state=2 controller=CountessBossAIController_1 target=BP_TPCCharacter_C_2 moved=794.42 home_distance=880.50",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.15"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.16"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_3, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 3: state=2 controller=CountessBossAIController_1 target=BP_TPCCharacter_C_3 moved=800.15 home_distance=877.41",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.20"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.20"
+        }
+      ],
+      "warnings": 8,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "BossRepeatedDeathRestart",
+      "fullTestPath": "ThirdPerson.Feedback.PIE.BossRepeatedDeathRestart",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 48.50999450683594,
+      "dateTime": "2026.09.07-14.04.20",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.20"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.22"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_1, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.23"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 1: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_1 moved=860.42 home_distance=860.42",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.25"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.25"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_2, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 2: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_2 moved=819.62 home_distance=870.45",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.29"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.30"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_3, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.31"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 3: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_3 moved=805.15 home_distance=872.45",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.33"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.33"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_4, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 4: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_4 moved=820.70 home_distance=869.91",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.37"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.37"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_5, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.39"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 5: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_5 moved=810.97 home_distance=871.08",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.41"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.41"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_6, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.43"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 6: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_6 moved=804.66 home_distance=872.54",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.45"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.45"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_7, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 7: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_7 moved=820.63 home_distance=869.92",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.49"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.49"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_8, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.50"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 8: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_8 moved=810.96 home_distance=871.08",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.52"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.53"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_9, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.55"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 9: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_9 moved=804.66 home_distance=872.54",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.56"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.56"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_10, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.04.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 10: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_10 moved=820.63 home_distance=869.92",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.00"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.00"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_11, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.02"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 11: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_11 moved=810.96 home_distance=871.08",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.04"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.04"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_12, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Restart 12: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_12 moved=804.66 home_distance=872.54",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.08"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.08"
+        }
+      ],
+      "warnings": 26,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "InertiaAndArrow",
+      "fullTestPath": "ThirdPerson.Feedback.PIE.InertiaAndArrow",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 17.9322566986084,
+      "dateTime": "2026.09.07-14.05.08",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: contact speed=441.28 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: contact speed=441.28 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: contact speed=441.28 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: arrow shaft/velocity dot=1.0000 mesh rotation=P=0.000000 Y=-90.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.11"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.11"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: contact speed=441.40 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: contact speed=441.40 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: contact speed=441.40 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.16"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: arrow shaft/velocity dot=1.0000 mesh rotation=P=0.000000 Y=-90.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: contact speed=442.22 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.19"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.19"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: contact speed=442.22 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.21"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.21"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: contact speed=442.22 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.23"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.23"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.25"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: arrow shaft/velocity dot=1.0000 mesh rotation=P=0.000000 Y=-90.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.26"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.26"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.26"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "InputLocomotionAndParry",
+      "fullTestPath": "ThirdPerson.Feedback.PIE.InputLocomotionAndParry",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 29.368040084838867,
+      "dateTime": "2026.09.07-14.05.26",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.26"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.29"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.29"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.31"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.31"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.33"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.34"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.34"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.36"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.39"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.40"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.41"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.41"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.42"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.42"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.44"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.45"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.48"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.49"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "CollisionInvariant",
+      "fullTestPath": "ThirdPerson.Projectiles.CollisionInvariant",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.01078379899263382,
+      "dateTime": "2026.09.07-14.05.55",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_18.Untitled:PersistentLevel.WeaponProjectile_0",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        }
+      ],
+      "warnings": 1,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "DamageOnceAndFriendlyFire",
+      "fullTestPath": "ThirdPerson.Projectiles.DamageOnceAndFriendlyFire",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.014512099325656891,
+      "dateTime": "2026.09.07-14.05.55",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_19.Untitled:PersistentLevel.WeaponProjectile_0",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_19.Untitled:PersistentLevel.WeaponProjectile_1",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "ReuseAndReset",
+      "fullTestPath": "ThirdPerson.Projectiles.ReuseAndReset",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.011267799884080887,
+      "dateTime": "2026.09.07-14.05.55",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_20.Untitled:PersistentLevel.WeaponProjectile_0",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.55"
+        }
+      ],
+      "warnings": 1,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "CoreAt30_60_120",
+      "fullTestPath": "ThirdPerson.Sword.PIE.CoreAt30_60_120",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 31.324899673461914,
+      "dateTime": "2026.09.07-14.05.55",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.56"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: actual opponent damage 50.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: actual opponent damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.58"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.05.59"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.00"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.00"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.00"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: actual opponent damage 50.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.02"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.02"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: actual opponent damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.04"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.04"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.05"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.05"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.07"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogHttp: HTTP request timed out after 3.00 seconds URL=https://www.google.com/generate_204",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: actual opponent damage 50.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: actual opponent damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.16"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.18"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.19"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.20"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.23"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.24"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.25"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.27"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.27"
+        }
+      ],
+      "warnings": 3,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "LifecycleAt30_60_120",
+      "fullTestPath": "ThirdPerson.Sword.PIE.LifecycleAt30_60_120",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 93.53833770751953,
+      "dateTime": "2026.09.07-14.06.27",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.27"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS full aerial damage 100.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.29"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.30"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemy died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.30"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemies defeated: 1",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.30"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Exit unlocked! Go to the exit.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.30"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.30"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.31"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.33"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.33"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.34"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.34"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.35"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.35"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_1, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.37"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 12: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.37"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS multi-enemy 0 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS multi-enemy 1 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS multi-enemy 2 damage 83.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 13: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.38"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 14: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.39"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 15: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.40"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 16: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.40"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 30 FPS case 17: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.41"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS full aerial damage 100.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.43"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.43"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.44"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.44"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.46"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemy died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.48"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemies defeated: 2",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.48"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Exit unlocked! Go to the exit.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.48"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.48"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.48"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.51"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.52"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.53"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.54"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.55"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.57"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.57"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_2, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.59"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 12: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.06.59"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS multi-enemy 0 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.01"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS multi-enemy 1 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.01"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS multi-enemy 2 damage 83.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.01"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 13: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.01"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 14: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 15: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.05"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 16: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 60 FPS case 17: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS full aerial damage 100.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.19"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemy died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.21"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Enemies defeated: 3",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.21"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Exit unlocked! Go to the exit.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.21"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.21"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 5: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.22"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 6: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.28"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 7: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.30"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 8: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.32"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 9: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.33"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 10: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.35"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 11: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.40"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: Player died",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.40"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogTemp: New pawn: BP_TPCCharacter_C_3, Location: X=-650.000 Y=0.000 Z=110.000",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.44"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 12: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.44"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS multi-enemy 0 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS multi-enemy 1 damage 108.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS multi-enemy 2 damage 83.75",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 13: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.47"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 14: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.52"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 15: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.55"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 16: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.07.57"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Lifecycle 120 FPS case 17: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.00"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.00"
+        }
+      ],
+      "warnings": 17,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "MainMapStartup",
+      "fullTestPath": "ThirdPerson.Sword.PIE.MainMapStartup",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 2.815852165222168,
+      "dateTime": "2026.09.07-14.08.00",
+      "entries": [
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.00"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Default-map completion: state=0 montage=None position=0.000 melee=0 block=0 guardHit=0 hp=100.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        }
+      ],
+      "warnings": 2,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "AssetContract",
+      "fullTestPath": "ThirdPerson.Sword.AssetContract",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.0077698007225990295,
+      "dateTime": "2026.09.07-14.08.03",
+      "entries": [
+        {
+          "event": {
+            "type": "Info",
+            "message": "Sword.Light.1 warp rotation=0 enabled=1 subtractRemaining=0",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Sword.Light.2 warp rotation=0 enabled=1 subtractRemaining=0",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Sword.Light.3 warp rotation=0 enabled=1 subtractRemaining=0",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "Sword.Light.4 warp rotation=0 enabled=1 subtractRemaining=0",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-14.08.03"
+        }
+      ],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "AuthorityAndBuffers",
+      "fullTestPath": "ThirdPerson.Sword.AuthorityAndBuffers",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.01171870157122612,
+      "dateTime": "2026.09.07-14.08.03",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    },
+    {
+      "testDisplayName": "UtilityAndFailure",
+      "fullTestPath": "ThirdPerson.Sword.UtilityAndFailure",
+      "tags": [],
+      "state": "Success",
+      "deviceInstance": [
+        "5B208EA84735B3D9B1C2ED8C950724FE"
+      ],
+      "duration": 0.014055699110031128,
+      "dateTime": "2026.09.07-14.08.03",
+      "entries": [],
+      "warnings": 0,
+      "errors": 0,
+      "artifacts": []
+    }
+  ],
+  "source_report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\InertiaFeedbackVerification_20260907_220024\\RHI\\index.json"
+}

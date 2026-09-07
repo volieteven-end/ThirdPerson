@@ -1,0 +1,1182 @@
+{
+  "reportCreatedOn": "2026.09.07-13.31.24",
+  "succeeded": 0,
+  "succeededWithWarnings": 0,
+  "failed": 1,
+  "notRun": 0,
+  "totalDuration": 18.69061279296875,
+  "tests": [
+    {
+      "testDisplayName": "InertiaAndArrow",
+      "fullTestPath": "ThirdPerson.Feedback.PIE.InertiaAndArrow",
+      "tags": [],
+      "state": "Fail",
+      "deviceInstance": [
+        "AC1D59D04E71D7DAB7506497509ED091"
+      ],
+      "duration": 18.69061279296875,
+      "dateTime": "2026.09.07-13.31.05",
+      "entries": [
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogStreaming: FlushAsyncLoading(399): 1 QueuedPackages, 0 AsyncPackages",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.05"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogStreaming: FlushAsyncLoading(401): 1 QueuedPackages, 0 AsyncPackages",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogTextureFormatOodle: Oodle Texture loading DLL: oo2tex_win64_2.9.5.dll",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogViewport: Viewport MouseLockMode Changed, DoNotLock -> LockOnCapture",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogViewport: Viewport MouseCaptureMode Changed, CapturePermanently_IncludingInitialMouseDown -> CapturePermanently",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Synchronously lazy loading font file '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' with subface index 0 in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Took 0.000470 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' (160K) on Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Freetype font face in memory successfully created with synchronously loaded raw font file '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' subface 0 in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Font face '../../../Engine/Content/Slate/Fonts/Roboto-Bold.ttf' subface index 0 successfully added to font face map in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Font face '../../Content/Slate/Fonts/Roboto-Regular.ttf' subface index 0 successfully added to font face map in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Font face 'F:\\Perforce\\Releases\\4.24\\Engine\\Content\\Slate\\Fonts\\DroidSansFallback.ttf' subface index 0 successfully added to font face map in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Synchronously lazy loading font file '../../../Engine/Content/Slate/Fonts/DroidSansFallback.ttf' with subface index 0 in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Took 0.002414 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/DroidSansFallback.ttf' (3848K) on Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Freetype font face in memory successfully created with synchronously loaded raw font file '../../../Engine/Content/Slate/Fonts/DroidSansFallback.ttf' subface 0 in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Font face '../../../Engine/Content/Slate/Fonts/DroidSansFallback.ttf' subface index 0 successfully added to font face map in Game thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.06"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogConsoleManager: Console variable 'r.MotionVectorSimulation' used in the render thread. Rendering artifacts could happen. Use ECVF_RenderThreadSafe or don't use in render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Synchronously lazy loading font file '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' with subface index 0 in Render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Took 0.000082 seconds to synchronously load lazily loaded font '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' (155K) on Render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Freetype font face in memory successfully created with synchronously loaded raw font file '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' subface 0 in Render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSlate: Font face '../../../Engine/Content/Slate/Fonts/Roboto-Regular.ttf' subface index 0 successfully added to font face map in Render thread.",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 0: air inertia retained: before=450.00 min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 146,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: contact speed=0.00 precontact=310.61",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 0: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 0: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 0: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.07"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 1: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 1: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 1: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 2: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 2: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 2: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.08"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.09"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 3: sprint slash recovery finishes within one second' to be false.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 190,
+          "timestamp": "2026.09.07-13.31.09"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 3: held W is responsive after shortened recovery' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 191,
+          "timestamp": "2026.09.07-13.31.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogStreaming: FlushAsyncLoading(402): 1 QueuedPackages, 0 AsyncPackages",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.09"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogSkinnedAsset: Waiting for skinned assets to be ready 0/1 (SK_Mannequin) ...",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: arrow shaft/velocity dot=0.0000 mesh rotation=P=0.000000 Y=0.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '30 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "30 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 0: air inertia retained: before=450.00 min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 146,
+          "timestamp": "2026.09.07-13.31.10"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"AirAttack\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.11"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: contact speed=0.00 precontact=334.51",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.11"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 0: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.11"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 0: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.11"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 0: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.11"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 1: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Landing_00\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Landing_01\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Landing_02\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Landing_03\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.12"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 1: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 1: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 2: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 2: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 2: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.13"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Sprint_00\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Sprint_01\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"Sprint_02\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 3: sprint slash recovery finishes within one second' to be false.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 190,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 3: held W is responsive after shortened recovery' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 191,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.14"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: arrow shaft/velocity dot=0.0000 mesh rotation=P=0.000000 Y=0.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogCore: Tracing Screenshot \"ArrowFlight\" taken with size: 930 x 550",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '60 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "60 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.15"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 0: air inertia retained: before=450.00 min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 146,
+          "timestamp": "2026.09.07-13.31.16"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: contact speed=0.00 precontact=334.51",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.17"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 0: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.17"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 0: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.17"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 0: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 0: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.17"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.19"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 1: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.19"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 1: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.19"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 1: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.19"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 1: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.19"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: contact speed=0.00 precontact=450.00",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.20"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 2: landing preserves nonzero horizontal velocity on first grounded frame' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 156,
+          "timestamp": "2026.09.07-13.31.20"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 2: contact decelerates without stop: min=0.00' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 165,
+          "timestamp": "2026.09.07-13.31.21"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 2: physical carry-through during landing' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 166,
+          "timestamp": "2026.09.07-13.31.21"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 2: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.21"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 3: sprint slash recovery finishes within one second' to be false.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 190,
+          "timestamp": "2026.09.07-13.31.22"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 3: held W is responsive after shortened recovery' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 191,
+          "timestamp": "2026.09.07-13.31.22"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 3: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.22"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: arrow shaft/velocity dot=0.0000 mesh rotation=P=0.000000 Y=0.000000 R=0.000000",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Error",
+            "message": "Expected '120 FPS case 4: arrow shaft follows velocity, not sideways' to be true.",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Tests\\InertiaFeedbackPIETests.cpp",
+          "lineNumber": 212,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "120 FPS case 4: completed",
+            "context": "",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Warning",
+            "message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.24"
+        },
+        {
+          "event": {
+            "type": "Info",
+            "message": "LogPlayLevel: Shutting down PIE online subsystems",
+            "context": "log",
+            "artifact": "00000000000000000000000000000000"
+          },
+          "filename": "",
+          "lineNumber": -1,
+          "timestamp": "2026.09.07-13.31.24"
+        }
+      ],
+      "warnings": 2,
+      "errors": 45,
+      "artifacts": []
+    }
+  ],
+  "source_report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\InertiaBefore\\index.json"
+}

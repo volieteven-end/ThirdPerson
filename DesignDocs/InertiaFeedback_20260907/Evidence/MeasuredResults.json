@@ -1,0 +1,68 @@
+[
+  {
+    "mode": "NullRHI",
+    "fps": 30,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 441.276,
+    "contact_last_sample_horizontal_cm_s": 295.796,
+    "contact_sample_span_s": 0.1,
+    "sprint_inferred_start_s": 0.50003,
+    "sprint_first_free_s": 1.4,
+    "sprint_to_first_free_s": 0.89997
+  },
+  {
+    "mode": "NullRHI",
+    "fps": 60,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 441.404,
+    "contact_last_sample_horizontal_cm_s": 276.8,
+    "contact_sample_span_s": 0.11667,
+    "sprint_inferred_start_s": 0.49997,
+    "sprint_first_free_s": 1.4,
+    "sprint_to_first_free_s": 0.90003
+  },
+  {
+    "mode": "NullRHI",
+    "fps": 120,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 442.224,
+    "contact_last_sample_horizontal_cm_s": 277.314,
+    "contact_sample_span_s": 0.11667,
+    "sprint_inferred_start_s": 0.50003,
+    "sprint_first_free_s": 1.39167,
+    "sprint_to_first_free_s": 0.89164
+  },
+  {
+    "mode": "RHI",
+    "fps": 30,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 441.276,
+    "contact_last_sample_horizontal_cm_s": 295.796,
+    "contact_sample_span_s": 0.1,
+    "sprint_inferred_start_s": 0.50003,
+    "sprint_first_free_s": 1.4,
+    "sprint_to_first_free_s": 0.89997
+  },
+  {
+    "mode": "RHI",
+    "fps": 60,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 441.404,
+    "contact_last_sample_horizontal_cm_s": 276.8,
+    "contact_sample_span_s": 0.11667,
+    "sprint_inferred_start_s": 0.49997,
+    "sprint_first_free_s": 1.4,
+    "sprint_to_first_free_s": 0.90003
+  },
+  {
+    "mode": "RHI",
+    "fps": 120,
+    "air_min_horizontal_cm_s": 450.0,
+    "contact_first_horizontal_cm_s": 442.224,
+    "contact_last_sample_horizontal_cm_s": 277.314,
+    "contact_sample_span_s": 0.11667,
+    "sprint_inferred_start_s": 0.50003,
+    "sprint_first_free_s": 1.39167,
+    "sprint_to_first_free_s": 0.89164
+  }
+]

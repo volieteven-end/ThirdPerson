@@ -13,4 +13,6 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static FString InspectSwordGraphs();
     /** Re-author only the feedback-tuned graph, input context and recoil defaults. */
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyGameplayFeedbackAssets();
+    /** Tune sprint recovery, airborne pose extraction and the arrow visual component only. */
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyInertiaFeedbackAssets();
 };

@@ -1,0 +1,16 @@
+{
+  "source_mesh": "/Game/ArcherAnimsetPro/Meshes/Arrow/SM_Arrow",
+  "inspection_export": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\InertiaFeedback\\ArrowInspection.obj",
+  "export_axis_order": "UE OBJ exporter writes (X, Z, Y)",
+  "triangle_vertex_count": 300,
+  "pointed_tip_ue_xyz": [
+    0,
+    83.014099,
+    0
+  ],
+  "feather_card_y_range": [
+    -0.043988,
+    14.145863
+  ],
+  "flight_alignment": "local +Y -> projectile +X via yaw -90; offset X=-83.014103 places the tip at collision"
+}

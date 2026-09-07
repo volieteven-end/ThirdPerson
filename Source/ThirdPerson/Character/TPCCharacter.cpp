@@ -2,6 +2,7 @@
 
 
 #include "TPCCharacter.h"
+#include "TPCCharacterMovementComponent.h"
 #include "../Animation/TPCAnimInstance.h"
 #include "../Animation/CombatActionRules.h"
 #include "EnhancedInputComponent.h"
@@ -52,7 +53,8 @@ namespace
 	}
 }
 // Sets default values
-ATPCCharacter::ATPCCharacter()
+ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
+    : Super(ObjectInitializer.SetDefaultSubobjectClass<UTPCCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -366,6 +368,12 @@ bool ATPCCharacter::IsLocomotionInputPaused() const
         GetCharacterMovement()->IsMovingOnGround() && !IsMovementInputLocked();
 }
 
+bool ATPCCharacter::IsLandingInertiaActive() const
+{
+    return GetWorld() && GetWorld()->GetTimeSeconds() < LandingInertiaEndsAt &&
+        GetCharacterMovement()->IsMovingOnGround() && !IsMovementInputLocked();
+}
+
 bool ATPCCharacter::CanBlendOutOfLanding() const
 {
     return GetWorld() && GetWorld()->GetTimeSeconds() >= LandingBlendReadyAt;
@@ -628,7 +636,7 @@ void ATPCCharacter::Tick(float DeltaTime)
     if (IsLocomotionInputPaused())
     {
         ConsumeMovementInputVector();
-        GetCharacterMovement()->StopMovementImmediately();
+        if (!IsLandingInertiaActive()) GetCharacterMovement()->StopMovementImmediately();
     }
 	UpdateMotionAction();
 	ApplyActionRotationPolicy();
@@ -692,7 +700,7 @@ void ATPCCharacter::SetDoubleJumpUnlocked(bool bUnlocked)
 void ATPCCharacter::OnJumped_Implementation()
 {
     Super::OnJumped_Implementation();
-    LocomotionInputResumeAt = LandingBlendReadyAt = 0.;
+    LocomotionInputResumeAt = LandingBlendReadyAt = LandingInertiaEndsAt = 0.;
     if (JumpCurrentCount < 2 || !ActionComponent) return;
     const auto* Set = ActionComponent->GetActionSet();
     if (Set && Set->DoubleJumpMontage) PlayAnimMontage(Set->DoubleJumpMontage);
@@ -853,10 +861,9 @@ void ATPCCharacter::Landed(const FHitResult& Hit)
     if (GetWorld() && !IsMovementInputLocked())
     {
         const double Time = GetWorld()->GetTimeSeconds();
-        LocomotionInputResumeAt = Time + LandingContactTime;
+        LocomotionInputResumeAt = LandingInertiaEndsAt = Time + LandingContactTime;
         LandingBlendReadyAt = Time + FMath::Max(0.f, LandingContactTime - .06f);
-        ConsumeMovementInputVector();
-        GetCharacterMovement()->StopMovementImmediately();
+        ConsumeMovementInputVector(); // Contact braking retains horizontal momentum in the movement component.
     }
 }
 

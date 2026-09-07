@@ -193,11 +193,16 @@ public:
                     FScreenshotRequest::RequestScreenshot(FPaths::ProjectSavedDir()/TEXT("GameplayFeedback")/
                         FString::Printf(TEXT("LandingMove_%02d.png"),CaptureIndex),false,false); ++CaptureIndex;
                 }
-                if (Since<.05 && P->IsLocomotionInputPaused()) { SawHeldContact=true; Test->TestTrue(Label(TEXT("feet remain planted during contact buffer")),FVector::Dist2D(ContactPosition,L)<1.5f); }
+                if (Since<.05 && P->IsLocomotionInputPaused())
+                {
+                    SawHeldContact=true;
+                    if (Case==5) Test->TestTrue(Label(TEXT("moving landing retains momentum during contact blend")),M->Velocity.Size2D()>50.f);
+                    else Test->TestTrue(Label(TEXT("idle landing stays planted")),FVector::Dist2D(ContactPosition,L)<1.5f);
+                }
                 if (Case==5 && Since>.28)
                 {
                     Test->TestTrue(Label(TEXT("landing pose was actually evaluated")),SawLanding);
-                    Test->TestTrue(Label(TEXT("landing has brief contact, not instant slide")),SawHeldContact);
+                    Test->TestTrue(Label(TEXT("landing has a brief contact blend without a velocity snap")),SawHeldContact);
                     Test->TestEqual(Label(TEXT("held W blends to Ground well before the .867s clip ends")),State,FName(TEXT("Ground")));
                     Test->TestTrue(Label(TEXT("held W physically moves after short contact")),FVector::Dist2D(ContactPosition,L)>3.f); Next(W); return false;
                 }

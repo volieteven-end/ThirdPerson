@@ -1,6 +1,9 @@
 #include "SwordActionAssetTools.h"
 #if WITH_EDITOR
 #include "ActionDefinition.h"
+#include "Engine/SimpleConstructionScript.h"
+#include "Engine/SCS_Node.h"
+#include "Components/StaticMeshComponent.h"
 #include "../Character/TPCCharacter.h"
 #include "../AI/EnemyCharacter.h"
 #include "../Boss/BossDefinition.h"
@@ -241,7 +244,7 @@ bool USwordActionAssetTools::BuildSwordActionAssets()
     }
     for (int32 I = 0; I < 2; ++I)
     {
-        auto* M = Montage(FString::Printf(TEXT("AM_Sword_AirLight_%02d"), I + 1), Sequence(FString::Printf(TEXT("Air_Attack_%02d_Anim"), I + 1)));
+        auto* M = Montage(FString::Printf(TEXT("AM_Sword_AirLight_%02d"), I + 1), Sequence(FString::Printf(TEXT("Air_Attack_%02d_Anim"), I + 1), false));
         if (!M) return false;
         ClearProjectWindows(M); Damage(M, .16f, .34f); if (I == 0) Chain(M, .48f);
         if (!Save(M)) return false;
@@ -494,7 +497,7 @@ bool USwordActionAssetTools::BuildSwordActionAssets()
         Enemy->UppercutDownIdleMontage = Down; Enemy->UppercutDownHitMontage = DownHit; Enemy->UppercutGetUpMontage = GetUp;
         if (!Save(EnemyBP)) return false;
     }
-    if (!ApplyGameplayFeedbackAssets()) return false;
+    if (!ApplyGameplayFeedbackAssets() || !ApplyInertiaFeedbackAssets()) return false;
     UE_LOG(LogTemp, Display, TEXT("SWORD_ACTION_ASSETS_READY: 4 ground, 2 air, rising, dive, 4 dodge, 4 turn, sprint, counter, buff, draw/sheathe, optional double jump, styles 02/03."));
     return true;
 #else
@@ -531,6 +534,51 @@ bool USwordActionAssetTools::ApplyGameplayFeedbackAssets()
     if (!Boss) return false;
     Boss->ParryRecoil = .7f;
     return Save(Boss) && UpdateSwordAnimationGraphs();
+#else
+    return false;
+#endif
+}
+
+bool USwordActionAssetTools::ApplyInertiaFeedbackAssets()
+{
+#if WITH_EDITOR
+    using namespace SwordAssetAuthoring;
+    auto* Sprint = Load<UAnimMontage>(Root + TEXT("Montages/AM_Sword_SprintAttack"));
+    auto* Definition = Load<UActionDefinition>(Root + TEXT("Data/DA_Action_Sword_SprintAttack"));
+    auto* AirOne = Load<UAnimSequence>(Root + TEXT("Sequences/AS_Air_Attack_01_Anim"));
+    auto* AirTwo = Load<UAnimSequence>(Root + TEXT("Sequences/AS_Air_Attack_02_Anim"));
+    auto* Arrow = Load<UBlueprint>(TEXT("/Game/Third/Weapon/BP_ArrowProjectile"));
+    if (!Sprint || !Definition || !AirOne || !AirTwo || !Arrow || !Arrow->SimpleConstructionScript || Sprint->GetPlayLength() < .9f) return false;
+    // Keep the user's source sequence, playback speed and .28-.55 damage frames intact.
+    // Start the outgoing blend at .76; the .12 blend finishes near .88 instead of 1.58.
+    Sprint->BlendOutTriggerTime = Sprint->GetPlayLength() - .76f;
+    Sprint->BlendOut.SetBlendTime(.12f);
+    Sprint->PostEditChange();
+    Definition->CancelStart = .62f;
+    Definition->CancelEnd = .90f;
+    // Ordinary airborne slashes are poses over the normal jump trajectory, not motion sources.
+    // ForceRootLock keeps the mesh in-place without overriding capsule velocity or gravity.
+    for (UAnimSequence* Air : {AirOne, AirTwo})
+    {
+        Air->bEnableRootMotion = false;
+        Air->bForceRootLock = true;
+        Air->PostEditChange();
+    }
+    bool bArrowFound = false;
+    for (USCS_Node* Node : Arrow->SimpleConstructionScript->GetAllNodes())
+    {
+        auto* Mesh = Cast<UStaticMeshComponent>(Node->ComponentTemplate);
+        if (!Mesh || Node->GetVariableName() != TEXT("ArrowMesh")) continue;
+        // Native mesh geometry: feather cards occupy Y=0..14; its pointed tip is Y=83.014.
+        // Align +Y with flight +X and place that tip at the swept collision sphere.
+        FVector Min, Max; Mesh->GetLocalBounds(Min, Max);
+        Mesh->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+        Mesh->SetRelativeLocation(FVector(-Max.Y, 0.f, 0.f));
+        bArrowFound = true;
+    }
+    if (!bArrowFound) return false;
+    FKismetEditorUtilities::CompileBlueprint(Arrow);
+    return Save(Sprint) && Save(Definition) && Save(AirOne) && Save(AirTwo) && Save(Arrow);
 #else
     return false;
 #endif

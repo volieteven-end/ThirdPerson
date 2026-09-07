@@ -34,7 +34,7 @@ class THIRDPERSON_API ATPCCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ATPCCharacter();
+	ATPCCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
     UFUNCTION(BlueprintCallable, Category="Death") void RestartAfterDeath();
 	
 protected:
@@ -187,6 +187,10 @@ public:
     /** Brief foot contact only; attacks, dodge and re-jump can interrupt it. */
     UPROPERTY(EditDefaultsOnly, Category="Movement|Transitions", meta=(ClampMin="0.0", ClampMax="0.2", Units="s"))
     float LandingContactTime = .12f;
+    /** Exponential contact drag (per second); momentum decays rather than snapping to zero. */
+    UPROPERTY(EditDefaultsOnly, Category="Movement|Transitions", meta=(ClampMin="0.0", ClampMax="8.0"))
+    float LandingInertiaDrag = 4.f;
+    bool IsLandingInertiaActive() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float DashCooldown = 0.8f;
@@ -324,6 +328,7 @@ private:
     double SprintOrDodgePressedAt = 0.;
     double LocomotionInputResumeAt = 0.;
     double LandingBlendReadyAt = 0.;
+    double LandingInertiaEndsAt = 0.;
     void UpdateHeldSprint();
 	bool bActionDead = false;
 	void LockMovementForHit(float AnimationDuration);

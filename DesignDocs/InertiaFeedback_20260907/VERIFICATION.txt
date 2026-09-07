@@ -1,0 +1,49 @@
+惯性与箭矢修复 · 实测记录
+项目：E:\UNREAL\ue projects\ThirdPerson
+修改基线：cb777ee935a32fa5152bd7a85422b84504437163 / main
+字段：ArrowMesh Yaw=-90, X=-83.014103；Air01/02 EnableRootMotion=false, ForceRootLock=true；
+Sprint BlendOutTriggerTime=length-.76, BlendOut=.12, CancelStart=.62, CancelEnd=.90；LandingContactTime=.12, LandingInertiaDrag=4。
+来源：真实保存资产、Enhanced Input、PIE 物理和 RHI 渲染。帧率数字为固定逻辑时步，不是硬件性能指标。
+
+BASELINE
+COMMAND: & 'D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe' 'E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject' '/Engine/Maps/Entry' '-ExecCmds=Automation RunTests ThirdPerson.Feedback.PIE.InertiaAndArrow' '-TestExit=Automation Test Queue Empty' '-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/InertiaBefore' '-InertiaVisualAudit' '-RenderOffscreen' '-ResX=1280' '-ResY=720' '-windowed' '-nosound' '-unattended' '-nop4' '-stdout' '-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/InertiaBefore.txt'
+INPUT: ThirdPerson.uproject + 保存资产；测试输入见源码 InertiaFeedbackPIETests.cpp；不是状态位注入。
+EXIT: 0
+RESULT: Test Completed. Result={Fail} Name={InertiaAndArrow}
+LITERAL: Expected '60 FPS case 0: air inertia retained: before=450.00 min=0.00' to be true.
+LITERAL: 60 FPS case 1: contact speed=0.00 precontact=450.00
+LITERAL: 60 FPS case 4: arrow shaft/velocity dot=0.0000 mesh rotation=P=0.000000 Y=0.000000 R=0.000000
+
+ThirdPersonEditor
+COMMAND: & 'D:\Unreal5.8\UE_5.8\Engine\Build\BatchFiles\Build.bat' 'ThirdPersonEditor' 'Win64' 'Development' '-Project=E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject' '-WaitMutex' '-NoHotReloadFromIDE' '-NoUBTMakefiles'
+INPUT: ThirdPerson.uproject + 保存资产；测试输入见源码 InertiaFeedbackPIETests.cpp；不是状态位注入。
+EXIT: 0
+RESULT: Result: Succeeded
+
+ThirdPerson
+COMMAND: & 'D:\Unreal5.8\UE_5.8\Engine\Build\BatchFiles\Build.bat' 'ThirdPerson' 'Win64' 'Development' '-Project=E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject' '-WaitMutex' '-NoHotReloadFromIDE' '-NoUBTMakefiles'
+INPUT: ThirdPerson.uproject + 保存资产；测试输入见源码 InertiaFeedbackPIETests.cpp；不是状态位注入。
+EXIT: 0
+RESULT: Result: Succeeded
+
+NullRHI
+COMMAND: & 'D:\Unreal5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe' 'E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject' '/Engine/Maps/Entry' '-ExecCmds=r.MotionBlurQuality 0, Automation RunTests ThirdPerson' '-TestExit=Automation Test Queue Empty' '-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/InertiaFeedbackVerification_20260907_220024/NullRHI' '-nosound' '-unattended' '-nop4' '-stdout' '-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/InertiaFeedbackVerification_20260907_220024/NullRHI_Engine.txt' '-NullRHI'
+INPUT: ThirdPerson.uproject + 保存资产；测试输入见源码 InertiaFeedbackPIETests.cpp；不是状态位注入。
+EXIT: 0
+RESULT: TEST NullRHI PASS=35 FAIL=0 EXIT=0
+
+RHI
+COMMAND: & 'D:\Unreal5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe' 'E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject' '/Engine/Maps/Entry' '-ExecCmds=r.MotionBlurQuality 0, Automation RunTests ThirdPerson' '-TestExit=Automation Test Queue Empty' '-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/InertiaFeedbackVerification_20260907_220024/RHI' '-nosound' '-unattended' '-nop4' '-stdout' '-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/InertiaFeedbackVerification_20260907_220024/RHI_Engine.txt' '-RenderOffscreen' '-InertiaVisualAudit' '-ResX=1280' '-ResY=720'
+INPUT: ThirdPerson.uproject + 保存资产；测试输入见源码 InertiaFeedbackPIETests.cpp；不是状态位注入。
+EXIT: 0
+RESULT: TEST RHI PASS=35 FAIL=0 EXIT=0
+
+恢复状态：收招后正常走/跑；松开方向后落地减速至停止；连续跳跃可打断接触阶段；原有蹲入、闪避、弹反、Boss 死亡重开回归仍通过。
+原有严格空战命中一致性断言未放宽：30/60/120 FPS 完整空战伤害均为 100.00。
+用户原有 Content/Third/SwordAnimation/Attack_Sprint_Anim.uasset 改动保留，未覆盖、未暂存。
+
+说明：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\惯性与箭矢修复说明.md
+复跑：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\Verify-InertiaFeedback.ps1
+命令记录：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\Evidence\commands-and-results.json
+数值：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\Evidence\MeasuredResults.json
+完整逐测试结果：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\Evidence\NullRHI.json；E:\UNREAL\ue projects\ThirdPerson\DesignDocs\InertiaFeedback_20260907\Evidence\RHI.json

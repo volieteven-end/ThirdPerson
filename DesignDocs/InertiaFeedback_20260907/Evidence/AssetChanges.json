@@ -1,0 +1,102 @@
+{
+  "before": {
+    "/Game/Third/SwordAnimation/Attack_Sprint_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": false,
+      "length": 1.5833333730697632
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Attack_Sprint_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": true,
+      "length": 1.5833333730697632
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Air_Attack_01_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": true,
+      "length": 0.7833333611488342
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Air_Attack_02_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": true,
+      "length": 0.7833333611488342
+    },
+    "/Game/Third/Actions/Sword/Montages/AM_Sword_SprintAttack": {
+      "rate_scale": 1.0,
+      "blend_out_trigger_time": -1.0,
+      "length": 1.5833333730697632,
+      "tracks": "[{slot_name: \"DefaultSlot\", anim_track: {anim_segments: ((CachedPlayLength=1.583333,AnimReference=\"/Script/Engine.AnimSequence'/Game/Third/Actions/Sword/Sequences/AS_Attack_Sprint_Anim.AS_Attack_Sprint_Anim'\",AnimEndTime=1.583333))}}]"
+    },
+    "/Game/Third/Actions/Sword/Data/DA_Action_Sword_SprintAttack": {
+      "cancel_start": 0.75,
+      "cancel_end": 1.5833333730697632,
+      "play_rate": 1.0
+    },
+    "arrow_visual": {
+      "rotation": {
+        "pitch": 0.0,
+        "yaw": 0.0,
+        "roll": 0.0
+      },
+      "location": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "bounds": "(<Struct 'Vector' (0x0000023490C4E5E0) {x: -2.549432, y: -0.043987, z: -2.511045}>, <Struct 'Vector' (0x0000023490C4E630) {x: 2.549432, y: 83.014103, z: 2.511045}>)"
+    }
+  },
+  "after": {
+    "/Game/Third/SwordAnimation/Attack_Sprint_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": false,
+      "length": 1.5833333730697632
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Attack_Sprint_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": true,
+      "force_root_lock": true,
+      "length": 1.5833333730697632
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Air_Attack_01_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": false,
+      "force_root_lock": true,
+      "length": 0.7833333611488342
+    },
+    "/Game/Third/Actions/Sword/Sequences/AS_Air_Attack_02_Anim": {
+      "rate_scale": 1.0,
+      "enable_root_motion": false,
+      "force_root_lock": true,
+      "length": 0.7833333611488342
+    },
+    "/Game/Third/Actions/Sword/Montages/AM_Sword_SprintAttack": {
+      "rate_scale": 1.0,
+      "blend_out_trigger_time": 0.8233333826065063,
+      "length": 1.5833333730697632,
+      "tracks": "[{slot_name: \"DefaultSlot\", anim_track: {anim_segments: ((CachedPlayLength=1.583333,AnimReference=\"/Script/Engine.AnimSequence'/Game/Third/Actions/Sword/Sequences/AS_Attack_Sprint_Anim.AS_Attack_Sprint_Anim'\",AnimEndTime=1.583333))}}]"
+    },
+    "/Game/Third/Actions/Sword/Data/DA_Action_Sword_SprintAttack": {
+      "cancel_start": 0.6200000047683716,
+      "cancel_end": 0.8999999761581421,
+      "play_rate": 1.0
+    },
+    "arrow_visual": {
+      "rotation": {
+        "pitch": 0.0,
+        "yaw": -90.0,
+        "roll": 0.0
+      },
+      "location": {
+        "x": -83.014103,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "bounds": "(<Struct 'Vector' (0x000001D28E4961D0) {x: -2.549432, y: -0.043987, z: -2.511045}>, <Struct 'Vector' (0x000001D28E496220) {x: 2.549432, y: 83.014103, z: 2.511045}>)"
+    }
+  }
+}
