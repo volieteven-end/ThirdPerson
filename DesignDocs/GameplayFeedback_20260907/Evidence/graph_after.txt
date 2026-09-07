@@ -1,0 +1,376 @@
+BLUEPRINT ABP_TPCCharacter status=3
+GRAPH AnimGraph
+  NODE AnimGraphNode_Root_0 AnimGraphNode_Root: Output Pose
+  NODE AnimGraphNode_StateMachine_0 AnimGraphNode_StateMachine: Locomotion
+    Pose -> AnimGraphNode_Slot_0.Source
+  NODE AnimGraphNode_Slot_0 AnimGraphNode_Slot: Slot 'DefaultSlot'
+    Pose -> AnimGraphNode_Inertialization_0.Source
+  NODE AnimGraphNode_Inertialization_0 AnimGraphNode_Inertialization: Inertialization
+    Pose -> AnimGraphNode_Root_0.Result
+GRAPH Locomotion
+  NODE AnimStateEntryNode_0 AnimStateEntryNode: Locomotion
+    Entry -> AnimStateNode_0.In
+  NODE AnimStateNode_0 AnimStateNode: Ground
+    Out -> AnimStateTransitionNode_0.In
+    Out -> AnimStateTransitionNode_7.In
+    Out -> AnimStateTransitionNode_11.In
+    Out -> AnimStateTransitionNode_17.In
+  NODE AnimStateNode_1 AnimStateNode: JumpStart
+    Out -> AnimStateTransitionNode_1.In
+    Out -> AnimStateTransitionNode_21.In
+    Out -> AnimStateTransitionNode_31.In
+  NODE AnimStateTransitionNode_0 AnimStateTransitionNode: Ground to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateNode_2 AnimStateNode: JumpLoop
+    Out -> AnimStateTransitionNode_2.In
+    Out -> AnimStateTransitionNode_22.In
+  NODE AnimStateTransitionNode_1 AnimStateTransitionNode: JumpStart to JumpLoop
+    Out -> AnimStateNode_2.In
+  NODE AnimStateNode_3 AnimStateNode: JumpEnd
+    Out -> AnimStateTransitionNode_3.In
+    Out -> AnimStateTransitionNode_4.In
+    Out -> AnimStateTransitionNode_23.In
+  NODE AnimStateTransitionNode_2 AnimStateTransitionNode: JumpLoop to JumpEnd
+    Out -> AnimStateNode_3.In
+  NODE AnimStateTransitionNode_3 AnimStateTransitionNode: JumpEnd to Ground
+    Out -> AnimStateNode_0.In
+  NODE AnimStateTransitionNode_4 AnimStateTransitionNode: JumpEnd to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateNode_4 AnimStateNode: Crouch
+    Out -> AnimStateTransitionNode_9.In
+    Out -> AnimStateTransitionNode_24.In
+    Out -> AnimStateTransitionNode_27.In
+    Out -> AnimStateTransitionNode_18.In
+  NODE AnimStateNode_5 AnimStateNode: CrouchIn
+    Out -> AnimStateTransitionNode_8.In
+    Out -> AnimStateTransitionNode_25.In
+    Out -> AnimStateTransitionNode_28.In
+    Out -> AnimStateTransitionNode_32.In
+  NODE AnimStateTransitionNode_7 AnimStateTransitionNode: Ground to CrouchIn
+    Out -> AnimStateNode_5.In
+  NODE AnimStateTransitionNode_8 AnimStateTransitionNode: CrouchIn to Crouch
+    Out -> AnimStateNode_4.In
+  NODE AnimStateNode_6 AnimStateNode: CrouchOut
+    Out -> AnimStateTransitionNode_10.In
+    Out -> AnimStateTransitionNode_26.In
+    Out -> AnimStateTransitionNode_29.In
+    Out -> AnimStateTransitionNode_33.In
+  NODE AnimStateTransitionNode_9 AnimStateTransitionNode: Crouch to CrouchOut
+    Out -> AnimStateNode_6.In
+  NODE AnimStateTransitionNode_10 AnimStateTransitionNode: CrouchOut to Ground
+    Out -> AnimStateNode_0.In
+  NODE AnimStateNode_7 AnimStateNode: BlockIn
+    Out -> AnimStateTransitionNode_12.In
+    Out -> AnimStateTransitionNode_5.In
+    Out -> AnimStateTransitionNode_13.In
+  NODE AnimStateTransitionNode_11 AnimStateTransitionNode: Ground to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateNode_8 AnimStateNode: BlockHold
+    Out -> AnimStateTransitionNode_6.In
+    Out -> AnimStateTransitionNode_14.In
+  NODE AnimStateTransitionNode_12 AnimStateTransitionNode: BlockIn to BlockHold
+    Out -> AnimStateNode_8.In
+  NODE AnimStateNode_9 AnimStateNode: BlockOut
+    Out -> AnimStateTransitionNode_19.In
+    Out -> AnimStateTransitionNode_20.In
+    Out -> AnimStateTransitionNode_30.In
+  NODE AnimStateNode_10 AnimStateNode: BlockHit
+    Out -> AnimStateTransitionNode_15.In
+    Out -> AnimStateTransitionNode_16.In
+  NODE AnimStateTransitionNode_5 AnimStateTransitionNode: BlockIn to BlockOut
+    Out -> AnimStateNode_9.In
+  NODE AnimStateTransitionNode_6 AnimStateTransitionNode: BlockHold to BlockOut
+    Out -> AnimStateNode_9.In
+  NODE AnimStateTransitionNode_13 AnimStateTransitionNode: BlockIn to BlockHit
+    Out -> AnimStateNode_10.In
+  NODE AnimStateTransitionNode_14 AnimStateTransitionNode: BlockHold to BlockHit
+    Out -> AnimStateNode_10.In
+  NODE AnimStateTransitionNode_15 AnimStateTransitionNode: BlockHit to BlockHold
+    Out -> AnimStateNode_8.In
+  NODE AnimStateTransitionNode_16 AnimStateTransitionNode: BlockHit to BlockOut
+    Out -> AnimStateNode_9.In
+  NODE AnimStateTransitionNode_19 AnimStateTransitionNode: BlockOut to Ground
+    Out -> AnimStateNode_0.In
+  NODE AnimStateTransitionNode_20 AnimStateTransitionNode: BlockOut to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_21 AnimStateTransitionNode: JumpStart to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_22 AnimStateTransitionNode: JumpLoop to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_23 AnimStateTransitionNode: JumpEnd to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_24 AnimStateTransitionNode: Crouch to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_25 AnimStateTransitionNode: CrouchIn to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_26 AnimStateTransitionNode: CrouchOut to BlockIn
+    Out -> AnimStateNode_7.In
+  NODE AnimStateTransitionNode_27 AnimStateTransitionNode: Crouch to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateTransitionNode_28 AnimStateTransitionNode: CrouchIn to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateTransitionNode_29 AnimStateTransitionNode: CrouchOut to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateTransitionNode_30 AnimStateTransitionNode: BlockOut to JumpStart
+    Out -> AnimStateNode_1.In
+  NODE AnimStateTransitionNode_31 AnimStateTransitionNode: JumpStart to JumpEnd
+    Out -> AnimStateNode_3.In
+  NODE AnimStateTransitionNode_32 AnimStateTransitionNode: CrouchIn to CrouchOut
+    Out -> AnimStateNode_6.In
+  NODE AnimStateTransitionNode_33 AnimStateTransitionNode: CrouchOut to CrouchIn
+    Out -> AnimStateNode_5.In
+  NODE AnimStateTransitionNode_17 AnimStateTransitionNode: Ground to Crouch
+    Out -> AnimStateNode_4.In
+  NODE AnimStateTransitionNode_18 AnimStateTransitionNode: Crouch to Ground
+    Out -> AnimStateNode_0.In
+GRAPH Ground
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_BlendSpacePlayer_0 AnimGraphNode_BlendSpacePlayer: Blendspace Player 'BS_SwordLocomotion'
+    Pose -> AnimGraphNode_StateResult_0.Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get GroundSpeed
+    GroundSpeed -> AnimGraphNode_BlendSpacePlayer_0.Y
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get Direction
+    Direction -> AnimGraphNode_BlendSpacePlayer_0.X
+GRAPH JumpStart
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_0 AnimGraphNode_SequencePlayer: Sequence Player 'AS_Jump_In_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH JumpLoop
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_1 AnimGraphNode_SequencePlayer: Sequence Player 'AS_Jump_Loop_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_AnimGetter_0 K2Node_AnimGetter: Time Remaining (AS_Jump_In_Anim)
+    AssetPlayerIndex default=0 None
+    ReturnValue -> K2Node_PromotableOperator_0.A
+  NODE K2Node_PromotableOperator_0 K2Node_PromotableOperator: float <= float
+    B default=0.100000 None
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH JumpEnd
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_2 AnimGraphNode_SequencePlayer: Sequence Player 'AS_Jump_Out_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsInAir
+    bIsInAir -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bLandingCanExit
+    bLandingCanExit -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Crouch
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_BlendSpacePlayer_0 AnimGraphNode_BlendSpacePlayer: Blendspace Player 'BS_Crouch_Locomotion'
+    Pose -> AnimGraphNode_StateResult_0.Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get Direction
+    Direction -> AnimGraphNode_BlendSpacePlayer_0.X
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get GroundSpeed
+    GroundSpeed -> AnimGraphNode_BlendSpacePlayer_0.Y
+GRAPH CrouchIn
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_0 AnimGraphNode_SequencePlayer: Sequence Player 'Crouch_In_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bCrouchEntryRequested
+    bCrouchEntryRequested -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bCrouchEntryCanExit
+    bCrouchEntryCanExit -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH CrouchOut
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_1 AnimGraphNode_SequencePlayer: Sequence Player 'Crouch_Out_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bStandingExitRequested
+    bStandingExitRequested -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_1 K2Node_VariableGet: Get bCrouchExitCanExit
+    bCrouchExitCanExit -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH BlockIn
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_2 AnimGraphNode_SequencePlayer: Sequence Player 'Block_In_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH BlockHold
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_3 AnimGraphNode_SequencePlayer: Sequence Player 'Block_Hold_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+    bCanEnterTransition default=False None
+GRAPH BlockOut
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_0 AnimGraphNode_SequencePlayer: Sequence Player 'Block_Out_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH BlockHit
+  NODE AnimGraphNode_StateResult_0 AnimGraphNode_StateResult: Output Animation Pose
+  NODE AnimGraphNode_SequencePlayer_0 AnimGraphNode_SequencePlayer: Sequence Player 'Block_Hit_Anim'
+    Pose -> AnimGraphNode_StateResult_0.Result
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bGuardHitActive
+    bGuardHitActive -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bGuardHitActive
+    bGuardHitActive -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bGuardHoldReady
+    bGuardHoldReady -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+    bCanEnterTransition default=False None
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsBlocking
+    bIsBlocking -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bWantJumpPose
+    bWantJumpPose -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsInAir
+    bIsInAir -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsCrouched
+    bIsCrouched -> K2Node_CallFunction_0.A
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: NOT Boolean
+    self default= Default__KismetMathLibrary
+    ReturnValue -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bIsCrouched
+    bIsCrouched -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bCrouchMoveRequested
+    bCrouchMoveRequested -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH Transition
+  NODE AnimGraphNode_TransitionResult_0 AnimGraphNode_TransitionResult: Result
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get bStandingMoveRequested
+    bStandingMoveRequested -> AnimGraphNode_TransitionResult_0.bCanEnterTransition
+GRAPH EventGraph
+  NODE K2Node_Event_0 K2Node_Event: Event BlueprintUpdateAnimation
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: TryGetPawnOwner
+  NODE K2Node_Event_1 K2Node_Event: AnimNotify_CommitTurn
+    then -> K2Node_CallFunction_1.execute
+  NODE K2Node_CallFunction_1 K2Node_CallFunction: CommitTurnInPlace
+BLUEPRINT BP_TPCCharacter status=3
+GRAPH UserConstructionScript
+  NODE K2Node_FunctionEntry_0 K2Node_FunctionEntry: Construction Script
+GRAPH EventGraph
+  NODE K2Node_Event_0 K2Node_Event: Event BeginPlay
+  NODE K2Node_Event_1 K2Node_Event: Event ActorBeginOverlap
+  NODE K2Node_Event_2 K2Node_Event: Event Tick
+    then -> K2Node_CallFunction_0.execute
+  NODE K2Node_CallFunction_0 K2Node_CallFunction: PrintString
+    self default= Default__KismetSystemLibrary
+    bPrintToScreen default=true None
+    bPrintToLog default=true None
+    TextColor default=(R=0.000000,G=0.660000,B=1.000000,A=1.000000) None
+    Duration default=0.000000 None
+    Key default=None None
+  NODE K2Node_CallFunction_1 K2Node_CallFunction: GetMaxSpeed
+    ReturnValue -> K2Node_CallFunction_2.InDouble
+  NODE K2Node_VariableGet_0 K2Node_VariableGet: Get CharacterMovement
+    CharacterMovement -> K2Node_CallFunction_1.self
+  NODE K2Node_CallFunction_2 K2Node_CallFunction: To String (Float)
+    self default= Default__KismetStringLibrary
+    ReturnValue -> K2Node_CallFunction_0.InString
+  NODE K2Node_CallFunction_3 K2Node_CallFunction: PrintString
+    self default= Default__KismetSystemLibrary
+    InString default=Hello None
+    bPrintToScreen default=true None
+    bPrintToLog default=true None
+    TextColor default=(R=0.000000,G=0.660000,B=1.000000,A=1.000000) None
+    Duration default=2.000000 None
+    Key default=None None
+SOURCE_NOTIFY Air_Attack_01_Anim Trail 0.24901 0.36017
+SOURCE_NOTIFY Air_Attack_01_Anim PlayParticleEffect 0.29167 0.29167
+SOURCE_NOTIFY Air_Attack_02_Anim Trail 0.15726 0.32686
+SOURCE_NOTIFY Air_Attack_02_Anim PlayParticleEffect 0.21153 0.21153
+SOURCE_NOTIFY Air_Attack_05_Out_Anim Trail 0.00000 0.63642
+SOURCE_NOTIFY Air_Attack_05_Out_Anim PlayParticleEffect 0.11056 0.11056
+SOURCE_NOTIFY Air_Attack_05_Out_Anim PlayParticleEffect 0.25730 0.25730

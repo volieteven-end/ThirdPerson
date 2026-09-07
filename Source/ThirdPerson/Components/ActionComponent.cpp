@@ -168,6 +168,11 @@ void UActionComponent::SetInputSuppressed(bool bSuppressed)
 {
     bInputSuppressed = bSuppressed;
     ClearInputBuffers();
+    if (auto* Character = Cast<ATPCCharacter>(GetOwner()))
+    {
+        Character->CancelSprintOrDodgeInput();
+        Character->ClearMoveInput();
+    }
     if (auto* Combat = GetOwner() ? GetOwner()->FindComponentByClass<UCombatComponent>() : nullptr)
     {
         Combat->ClearDashCombo();

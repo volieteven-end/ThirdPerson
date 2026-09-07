@@ -219,9 +219,9 @@ void ATPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Input->BindAction(MoveAction, ETriggerEvent::Canceled, this, &ThisClass::ClearMoveInput);
 	Input->BindAction(LookAction, ETriggerEvent::Triggered, this, &ThisClass::Look);
 	Input->BindAction(LookAction, ETriggerEvent::Completed, this, &ThisClass::FinishLookInput);
-	Input->BindAction(SprintAction, ETriggerEvent::Started, this, &ThisClass::StartSprint);
-	Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &ThisClass::StopSprint);
-	Input->BindAction(SprintAction, ETriggerEvent::Canceled, this, &ThisClass::StopSprint);
+	Input->BindAction(SprintAction, ETriggerEvent::Started, this, &ThisClass::StartSprintOrDodgeInput);
+	Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &ThisClass::FinishSprintOrDodgeInput);
+	Input->BindAction(SprintAction, ETriggerEvent::Canceled, this, &ThisClass::CancelSprintOrDodgeInput);
 	Input->BindAction(DashAction,ETriggerEvent::Started,this,&ThisClass::Dash);
 	Input->BindAction(InventoryAction,ETriggerEvent::Started,this,&ThisClass::ToggleInventory);
 	Input->BindAction(PauseAction,ETriggerEvent::Started,this,&ThisClass::TogglePauseMenu);
@@ -269,9 +269,19 @@ void ATPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void ATPCCharacter::Move(const FInputActionValue& Value)
 {
 	const FVector2D Axis = Value.Get<FVector2D>();
+    const bool bStartingToMove = LastMoveInputAxis.IsNearlyZero() && !Axis.IsNearlyZero();
 	LastMoveInputAxis = Axis.GetSafeNormal();
+    // Give a stationary entry/out pose a few frames to blend to actual footwork.
+    // Moving crouch bypasses the stationary entry altogether in the AnimGraph.
+    if (bStartingToMove && GetWorld() && GetMesh() && GetMesh()->GetAnimInstance())
+    {
+        auto* Anim = GetMesh()->GetAnimInstance();
+        const FName State = Anim->GetCurrentStateName(Anim->GetStateMachineIndex(TEXT("Locomotion")));
+        if (State == TEXT("CrouchIn") || State == TEXT("CrouchOut") || State == TEXT("JumpEnd"))
+            LocomotionInputResumeAt = FMath::Max(LocomotionInputResumeAt, GetWorld()->GetTimeSeconds() + .06);
+    }
 	if (!LastMoveInputAxis.IsNearlyZero() && IsTurningInPlace()) { CancelMotionAction(); }
-	if (!Controller || IsMovementInputLocked())
+	if (!Controller || IsMovementInputLocked() || IsLocomotionInputPaused())
 	{
 		return;
 	}
@@ -319,6 +329,48 @@ void ATPCCharacter::FinishLookInput()
 	AccumulatedSwitchInput = 0.f;
 	bTargetSwitchLatched = false;
 }
+void ATPCCharacter::StartSprintOrDodgeInput()
+{
+    if (bActionDead || !GetWorld()) return;
+    bSprintOrDodgeHeld = true;
+    SprintOrDodgePressedAt = GetWorld()->GetTimeSeconds();
+}
+
+void ATPCCharacter::FinishSprintOrDodgeInput()
+{
+    const bool bTap = bSprintOrDodgeHeld && GetWorld() &&
+        GetWorld()->GetTimeSeconds() - SprintOrDodgePressedAt < SprintHoldThreshold;
+    CancelSprintOrDodgeInput();
+    if (bTap) Dash();
+}
+
+void ATPCCharacter::CancelSprintOrDodgeInput()
+{
+    bSprintOrDodgeHeld = false;
+    StopSprint();
+}
+
+void ATPCCharacter::UpdateHeldSprint()
+{
+    if (!bSprintOrDodgeHeld || !GetWorld()) return;
+    if (bActionDead) { CancelSprintOrDodgeInput(); return; }
+    if (GetWorld()->GetTimeSeconds() - SprintOrDodgePressedAt < SprintHoldThreshold) return;
+    if (!HasMovementIntent() || bIsCrouched || bCrouchInputHeld || GetCharacterMovement()->IsFalling() ||
+        IsMovementInputLocked() || IsLocomotionInputPaused()) { StopSprint(); return; }
+    StartSprint();
+}
+
+bool ATPCCharacter::IsLocomotionInputPaused() const
+{
+    return GetWorld() && GetWorld()->GetTimeSeconds() < LocomotionInputResumeAt &&
+        GetCharacterMovement()->IsMovingOnGround() && !IsMovementInputLocked();
+}
+
+bool ATPCCharacter::CanBlendOutOfLanding() const
+{
+    return GetWorld() && GetWorld()->GetTimeSeconds() >= LandingBlendReadyAt;
+}
+
 void ATPCCharacter::StartSprint()
 {
 	if (IsMovementInputLocked() || !StaminaComponent || StaminaComponent->GetCurrentStamina() <= 0.f) { StopSprint(); return; }
@@ -326,7 +378,7 @@ void ATPCCharacter::StartSprint()
     {
         const FRotationMatrix ViewYaw(FRotator(0.f,Controller->GetControlRotation().Yaw,0.f));
         const FVector Direction=(ViewYaw.GetUnitAxis(EAxis::X)*LastMoveInputAxis.X + ViewYaw.GetUnitAxis(EAxis::Y)*LastMoveInputAxis.Y).GetSafeNormal2D();
-        if (FVector::DotProduct(Direction,GetActorForwardVector())<.7f) return;
+        if (FVector::DotProduct(Direction,GetActorForwardVector())<.7f) { StopSprint(); return; }
     }
 	if (IsTurningInPlace()) { CancelMotionAction(); }
 	if (!bIsSprinting) { PreSprintMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed; }
@@ -351,7 +403,7 @@ void ATPCCharacter::HandleDeath()
 	GetWorldTimerManager().ClearTimer(HitMovementLockTimerHandle);
 	CancelMotionAction(0.05f);
 	if (CombatComponent) { CombatComponent->SetCombatEnabled(false); }
-	StopSprint();
+    CancelSprintOrDodgeInput();
 	ConsumeMovementInputVector();
 	ApplyActionRotationPolicy();
 	UE_LOG(LogTemp, Warning, TEXT("Player died"));
@@ -572,6 +624,12 @@ void ATPCCharacter::Dash()
 void ATPCCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+    UpdateHeldSprint();
+    if (IsLocomotionInputPaused())
+    {
+        ConsumeMovementInputVector();
+        GetCharacterMovement()->StopMovementImmediately();
+    }
 	UpdateMotionAction();
 	ApplyActionRotationPolicy();
 	if (IsMovementInputLocked()) { StopSprint(); ConsumeMovementInputVector(); }
@@ -634,6 +692,7 @@ void ATPCCharacter::SetDoubleJumpUnlocked(bool bUnlocked)
 void ATPCCharacter::OnJumped_Implementation()
 {
     Super::OnJumped_Implementation();
+    LocomotionInputResumeAt = LandingBlendReadyAt = 0.;
     if (JumpCurrentCount < 2 || !ActionComponent) return;
     const auto* Set = ActionComponent->GetActionSet();
     if (Set && Set->DoubleJumpMontage) PlayAnimMontage(Set->DoubleJumpMontage);
@@ -675,6 +734,9 @@ void ATPCCharacter::OnStartCrouch(
 {
 	Super::OnStartCrouch(HalfHeightAdjust, ScaledHalfHeightAdjust);
 	ActiveCrouchHeightAdjustment = ScaledHalfHeightAdjust;
+    StopSprint();
+    if (GetWorld() && GetVelocity().SizeSquared2D() < 9.f)
+        LocomotionInputResumeAt = GetWorld()->GetTimeSeconds() + .08;
 	if (CameraBoom)
 	{
 		// Crouch moves the capsule down immediately. Apply the inverse offset in
@@ -788,6 +850,14 @@ void ATPCCharacter::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
 	if (CombatComponent) { CombatComponent->HandleOwnerLanded(); }
+    if (GetWorld() && !IsMovementInputLocked())
+    {
+        const double Time = GetWorld()->GetTimeSeconds();
+        LocomotionInputResumeAt = Time + LandingContactTime;
+        LandingBlendReadyAt = Time + FMath::Max(0.f, LandingContactTime - .06f);
+        ConsumeMovementInputVector();
+        GetCharacterMovement()->StopMovementImmediately();
+    }
 }
 
 

@@ -1,0 +1,143 @@
+[
+  {
+    "phase": "ThirdPersonEditor",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat",
+    "arguments": [
+      "ThirdPersonEditor",
+      "Win64",
+      "Development",
+      "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "-WaitMutex",
+      "-NoHotReloadFromIDE"
+    ],
+    "exit": 0,
+    "result": "Result: Succeeded",
+    "log": "E:/UNREAL/ue projects/ThirdPerson/Saved/GameplayFeedback/modified_build4.txt"
+  },
+  {
+    "phase": "ThirdPerson",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat",
+    "arguments": [
+      "ThirdPerson",
+      "Win64",
+      "Development",
+      "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "-WaitMutex",
+      "-NoHotReloadFromIDE"
+    ],
+    "exit": 0,
+    "result": "Result: Succeeded",
+    "log": "E:/UNREAL/ue projects/ThirdPerson/Saved/GameplayFeedback/runtime_build.txt"
+  },
+  {
+    "phase": "BASELINE",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackBaseline",
+      "-NullRHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/GameplayFeedbackBaseline.txt"
+    ],
+    "exit": 0,
+    "passed": 31,
+    "failed": 0,
+    "report": "E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackBaseline/index.json"
+  },
+  {
+    "phase": "BOSS_DEFAULT_BEFORE",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson.Feedback.PIE.BossRepeatedDeathRestart",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackBossBefore",
+      "-NullRHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackBossBefore.txt"
+    ],
+    "exit": 0,
+    "passed": 1,
+    "failed": 0,
+    "report": "E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackBossBefore/index.json"
+  },
+  {
+    "phase": "BOSS_RAISED_BEFORE",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson.Feedback.PIE.BossRaisedHomeRestart",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackRaisedBefore",
+      "-NullRHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackRaisedBefore.txt"
+    ],
+    "exit": 0,
+    "passed": 0,
+    "failed": 1,
+    "report": "E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackRaisedBefore/index.json"
+  },
+  {
+    "phase": "MODIFIED_NULL",
+    "executable": "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackAllNull",
+      "-NullRHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackAllNull.txt"
+    ],
+    "exit": 0,
+    "passed": 34,
+    "failed": 0,
+    "report": "E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackAllNull/index.json"
+  },
+  {
+    "phase": "RHI",
+    "executable": "D:\\Unreal5.8\\UE_5.8\\Engine\\Binaries\\Win64\\UnrealEditor-Cmd.exe",
+    "arguments": [
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+      "/Engine/Maps/Entry",
+      "-ExecCmds=Automation RunTests ThirdPerson",
+      "-TestExit=Automation Test Queue Empty",
+      "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI",
+      "-nosound",
+      "-unattended",
+      "-nop4",
+      "-stdout",
+      "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI_Engine.txt",
+      "-RenderOffscreen",
+      "-FeedbackVisualAudit",
+      "-ResX=1280",
+      "-ResY=720"
+    ],
+    "exit": 0,
+    "passed": 34,
+    "failed": 0,
+    "nonSuccess": 0,
+    "report": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\GameplayFeedbackVerification_20260907_205935\\RHI\\index.json",
+    "log": "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\Automation\\GameplayFeedbackVerification_20260907_205935\\RHI_Engine.txt",
+    "engine_command_line": "/Engine/Maps/Entry -ExecCmds=\"Automation RunTests ThirdPerson\" -TestExit=\"Automation Test Queue Empty\" -ReportExportPath=\"E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI\" -nosound -unattended -nop4 -stdout -abslog=\"E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI_Engine.txt\" -RenderOffscreen -FeedbackVisualAudit -ResX=1280 -ResY=720"
+  }
+]

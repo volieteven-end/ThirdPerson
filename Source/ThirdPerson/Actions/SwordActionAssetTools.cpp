@@ -3,6 +3,7 @@
 #include "ActionDefinition.h"
 #include "../Character/TPCCharacter.h"
 #include "../AI/EnemyCharacter.h"
+#include "../Boss/BossDefinition.h"
 #include "../Components/CombatComponent.h"
 #include "../Components/EquipmentComponent.h"
 #include "../Weapons/WeaponDefinition.h"
@@ -493,9 +494,43 @@ bool USwordActionAssetTools::BuildSwordActionAssets()
         Enemy->UppercutDownIdleMontage = Down; Enemy->UppercutDownHitMontage = DownHit; Enemy->UppercutGetUpMontage = GetUp;
         if (!Save(EnemyBP)) return false;
     }
-    if (!UpdateSwordAnimationGraphs()) return false;
+    if (!ApplyGameplayFeedbackAssets()) return false;
     UE_LOG(LogTemp, Display, TEXT("SWORD_ACTION_ASSETS_READY: 4 ground, 2 air, rising, dive, 4 dodge, 4 turn, sprint, counter, buff, draw/sheathe, optional double jump, styles 02/03."));
     return true;
+#else
+    return false;
+#endif
+}
+
+bool USwordActionAssetTools::ApplyGameplayFeedbackAssets()
+{
+#if WITH_EDITOR
+    using namespace SwordAssetAuthoring;
+    auto* BP = Load<UBlueprint>(TEXT("/Game/Third/Character/BP_TPCCharacter"));
+    if (!BP) return false;
+    FKismetEditorUtilities::CompileBlueprint(BP);
+    auto* Player = Cast<ATPCCharacter>(BP->GeneratedClass->GetDefaultObject());
+    if (!Player || !Player->DefaultMappingContext || !Player->SprintAction) return false;
+    auto* Context = Player->DefaultMappingContext.Get();
+    Context->UnmapAllKeysFromAction(Player->DashAction);
+    Context->UnmapAllKeysFromAction(Player->SprintAction);
+    Context->MapKey(Player->SprintAction, EKeys::LeftShift);
+    Player->SprintHoldThreshold = .2f; Player->LandingContactTime = .12f;
+    if (!Save(Context) || !Save(BP)) return false;
+    for (const TCHAR* Name : {TEXT("BP_EnemyCharacter"), TEXT("BP_EnemyRangedCharacter")})
+    {
+        auto* EnemyBP = Load<UBlueprint>(FString(TEXT("/Game/Third/Character/"))+Name);
+        if (!EnemyBP) return false;
+        FKismetEditorUtilities::CompileBlueprint(EnemyBP);
+        auto* Enemy = Cast<AEnemyCharacter>(EnemyBP->GeneratedClass->GetDefaultObject());
+        if (!Enemy) return false;
+        Enemy->ParryStaggerMinimumDuration = Enemy->ParryStaggerFallbackDuration = 1.4f;
+        if (!Save(EnemyBP)) return false;
+    }
+    auto* Boss = Load<UBossDefinition>(TEXT("/Game/Third/Bosses/Countess/DA_CountessBoss"));
+    if (!Boss) return false;
+    Boss->ParryRecoil = .7f;
+    return Save(Boss) && UpdateSwordAnimationGraphs();
 #else
     return false;
 #endif

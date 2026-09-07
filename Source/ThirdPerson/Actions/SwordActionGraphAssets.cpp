@@ -134,6 +134,18 @@ bool UpdateSwordAnimationGraphs()
     Ok &= Rule(States[TEXT("JumpStart")], States[TEXT("JumpEnd")], TEXT("bIsInAir"), true, 0);
     Ok &= Rule(States[TEXT("CrouchIn")], States[TEXT("CrouchOut")], TEXT("bIsCrouched"), true, 0);
     Ok &= Rule(States[TEXT("CrouchOut")], States[TEXT("CrouchIn")], TEXT("bIsCrouched"), false, 0);
+    // Static entry clips remain available at rest; held input blends to footwork instead of skating.
+    Ok &= Rule(States[TEXT("Ground")], States[TEXT("Crouch")], TEXT("bCrouchMoveRequested"), false, 1);
+    Ok &= Rule(States[TEXT("Ground")], States[TEXT("CrouchIn")], TEXT("bCrouchEntryRequested"), false, 2);
+    Ok &= Rule(States[TEXT("Crouch")], States[TEXT("Ground")], TEXT("bStandingMoveRequested"), false, 1);
+    Ok &= Rule(States[TEXT("Crouch")], States[TEXT("CrouchOut")], TEXT("bStandingExitRequested"), false, 2);
+    Ok &= Rule(States[TEXT("CrouchIn")], States[TEXT("Crouch")], TEXT("bCrouchEntryCanExit"));
+    Ok &= Rule(States[TEXT("CrouchOut")], States[TEXT("Ground")], TEXT("bCrouchExitCanExit"));
+    Ok &= Rule(States[TEXT("JumpEnd")], States[TEXT("Ground")], TEXT("bLandingCanExit"));
+    for (const auto& Pair : { TPair<FString,FString>(TEXT("Ground"),TEXT("Crouch")),
+        TPair<FString,FString>(TEXT("Crouch"),TEXT("Ground")), TPair<FString,FString>(TEXT("CrouchIn"),TEXT("Crouch")),
+        TPair<FString,FString>(TEXT("CrouchOut"),TEXT("Ground")), TPair<FString,FString>(TEXT("JumpEnd"),TEXT("Ground")) })
+        if (auto* T = Transition(States[Pair.Key], States[Pair.Value])) T->CrossfadeDuration = .12f;
     if (!Ok) return false;
     FBlueprintEditorUtils::MarkBlueprintAsStructurallyModified(BP); FKismetEditorUtilities::CompileBlueprint(BP);
     if (BP->Status == BS_Error) return false;

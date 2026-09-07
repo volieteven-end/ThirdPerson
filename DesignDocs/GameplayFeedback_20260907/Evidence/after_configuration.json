@@ -1,0 +1,92 @@
+{
+  "BP_EnemyCharacter": {
+    "minimum_stagger": 1.399999976158142,
+    "fallback": 1.399999976158142
+  },
+  "BP_EnemyRangedCharacter": {
+    "minimum_stagger": 1.399999976158142,
+    "fallback": 1.399999976158142
+  },
+  "BP_TPCCharacter": {
+    "landing_contact": 0.11999999731779099,
+    "hold_threshold": 0.20000000298023224,
+    "mappings": [
+      {
+        "key": "E",
+        "action": "/Game/Third/Input/IA_Interact.IA_Interact"
+      },
+      {
+        "key": "B",
+        "action": "/Game/Third/Actions/Sword/Input/IA_SwordBuff.IA_SwordBuff"
+      },
+      {
+        "key": "W",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "A",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "D",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "S",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "Mouse2D",
+        "action": "/Game/Third/Input/IA_Look.IA_Look"
+      },
+      {
+        "key": "LeftMouseButton",
+        "action": "/Game/Third/Input/IA_Attack.IA_Attack"
+      },
+      {
+        "key": "Q",
+        "action": "/Game/Third/Input/IA_UseItem.IA_UseItem"
+      },
+      {
+        "key": "X",
+        "action": "/Game/Third/Actions/Sword/Input/IA_ToggleSword.IA_ToggleSword"
+      },
+      {
+        "key": "Tab",
+        "action": "/Game/Third/Input/IA_Inventory.IA_Inventory"
+      },
+      {
+        "key": "Escape",
+        "action": "/Game/Third/Input/IA_Pause.IA_Pause"
+      },
+      {
+        "key": "MiddleMouseButton",
+        "action": "/Game/Third/Input/IA_LockOn.IA_LockOn"
+      },
+      {
+        "key": "SpaceBar",
+        "action": "/Game/Third/Input/IA_Jump.IA_Jump"
+      },
+      {
+        "key": "C",
+        "action": "/Game/Third/Input/IA_Crunch.IA_Crunch"
+      },
+      {
+        "key": "RightMouseButton",
+        "action": "/Game/Third/Input/IA_Block.IA_Block"
+      },
+      {
+        "key": "R",
+        "action": "/Game/Third/Actions/Sword/Input/IA_HeavyAttack.IA_HeavyAttack"
+      },
+      {
+        "key": "LeftShift",
+        "action": "/Game/Third/Input/IA_Sprint.IA_Sprint"
+      }
+    ]
+  },
+  "boss": {
+    "parry_recoil": 0.699999988079071,
+    "break_duration": 2.4000000953674316
+  }
+}

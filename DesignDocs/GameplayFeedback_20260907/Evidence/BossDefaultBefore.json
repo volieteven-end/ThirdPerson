@@ -1,0 +1,489 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "GJS-20241104ECW",
+			"instance": "D52FA556419C947FE7CF2AA1693C81C4",
+			"instanceName": "GJS-20241104ECW-47980",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (25H2) [10.0.26200.8246] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 4070 SUPER",
+			"cPUModel": "AMD Ryzen 5 7500F 6-Core Processor             ",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.09.07-12.43.23",
+	"succeeded": 0,
+	"succeededWithWarnings": 1,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 16.232759475708008,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "BossRepeatedDeathRestart",
+			"fullTestPath": "ThirdPerson.Feedback.PIE.BossRepeatedDeathRestart",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"D52FA556419C947FE7CF2AA1693C81C4"
+			],
+			"duration": 16.232759475708008,
+			"dateTime": "2026.09.07-12.43.07",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.09"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_1, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.09"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 1: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_1 moved=860.42 home_distance=860.42",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.10"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.10"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_2, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.10"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 2: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_2 moved=796.34 home_distance=873.79",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.11"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.11"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_3, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.12"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 3: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_3 moved=796.21 home_distance=873.42",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.12"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.12"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_4, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.13"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 4: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_4 moved=796.52 home_distance=873.37",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.13"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.13"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_5, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.14"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 5: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_5 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.14"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.15"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_6, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.15"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 6: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_6 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.16"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.16"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_7, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.16"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 7: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_7 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.17"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.17"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_8, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.18"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 8: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_8 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.18"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.19"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_9, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.19"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 9: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_9 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.20"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.20"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_10, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.20"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 10: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_10 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.21"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.21"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_11, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.21"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 11: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_11 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.22"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.22"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: New pawn: BP_TPCCharacter_C_12, Location: X=-650.000 Y=0.000 Z=110.000",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.22"
+				},
+				{
+					"event":
+					{
+						"type": "Info",
+						"message": "Restart 12: state=2 controller=CountessBossAIController_0 target=BP_TPCCharacter_C_12 moved=796.56 home_distance=873.36",
+						"context": "",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.23"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogCrowdFollowing: Unable to find RecastNavMesh instance while trying to create UCrowdManager instance",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.07-12.43.23"
+				}
+			],
+			"warnings": 25,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

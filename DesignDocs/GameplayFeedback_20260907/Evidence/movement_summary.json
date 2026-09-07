@@ -1,0 +1,62 @@
+{
+  "30": {
+    "cases": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "landing_contact_at": 1.3667,
+    "walk_animation_at": 1.4333,
+    "first_move_after_contact": 0.1333,
+    "entry_crouch_walk_at": 0.2333
+  },
+  "60": {
+    "cases": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "landing_contact_at": 1.35,
+    "walk_animation_at": 1.4167,
+    "first_move_after_contact": 0.1333,
+    "entry_crouch_walk_at": 0.2
+  },
+  "120": {
+    "cases": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "landing_contact_at": 1.35,
+    "walk_animation_at": 1.4167,
+    "first_move_after_contact": 0.125,
+    "entry_crouch_walk_at": 0.1917
+  }
+}

@@ -1,4 +1,5 @@
 #include "TPCAnimInstance.h"
+#include "Animation/AnimNode_StateMachine.h"
 
 #include "../Character/TPCCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -41,6 +42,22 @@ void UTPCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	bGuardHitActive = Character->IsGuardHitReactionActive();
 	bGuardHoldReady = bIsBlocking && !bGuardHitActive;
 	bWantJumpPose = bIsInAir && !bIsBlocking;
+    const bool bMoveIntent = Character->HasMovementIntent() || bShouldMove;
+    bCrouchMoveRequested = bIsCrouched && bMoveIntent;
+    bCrouchEntryRequested = bIsCrouched && !bMoveIntent;
+    bStandingMoveRequested = !bIsCrouched && bMoveIntent;
+    bStandingExitRequested = !bIsCrouched && !bMoveIntent;
+    const int32 Machine = GetStateMachineIndex(TEXT("Locomotion"));
+    auto NearEnd = [this, Machine](FName Name)
+    {
+        const auto* StateMachine = GetStateMachineInstance(Machine);
+        return StateMachine && StateMachine->GetCurrentStateName() == Name &&
+            StateMachine->GetCurrentStateElapsedTime() > .05f &&
+            GetRelevantAnimTimeRemaining(Machine, StateMachine->GetCurrentState()) <= .10f;
+    };
+    bCrouchEntryCanExit = bMoveIntent || NearEnd(TEXT("CrouchIn"));
+    bCrouchExitCanExit = bMoveIntent || NearEnd(TEXT("CrouchOut"));
+    bLandingCanExit = (bMoveIntent && Character->CanBlendOutOfLanding()) || NearEnd(TEXT("JumpEnd"));
 	const FVector LocalVelocity =
 		Character->GetActorTransform().InverseTransformVectorNoScale(Velocity);
 	Direction = GroundSpeed > KINDA_SMALL_NUMBER

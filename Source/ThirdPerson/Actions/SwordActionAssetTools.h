@@ -11,4 +11,6 @@ class THIRDPERSON_API USwordActionAssetTools : public UBlueprintFunctionLibrary
 public:
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool BuildSwordActionAssets();
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static FString InspectSwordGraphs();
+    /** Re-author only the feedback-tuned graph, input context and recoil defaults. */
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyGameplayFeedbackAssets();
 };

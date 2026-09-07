@@ -181,7 +181,12 @@ void UBossActionComponent::OnParried(AActor* Player)
  if (!IsActionActive() || State!=EBossState::Action) return;
  CancelAction(); ReducePoise(GetDefinition()->ParryPoiseDamage);
  if (State!=EBossState::PoiseBroken)
- { RecoilUntil=Now()+GetDefinition()->ParryRecoil; LockMovement(); PlayUtility(GetDefinition()->StunStart,2.f); }
+ {
+  const float Recoil=GetDefinition()->ParryRecoil;
+  RecoilUntil=Now()+Recoil; LockMovement();
+  const auto* Animation=GetDefinition()->StunStart.Get();
+  PlayUtility(GetDefinition()->StunStart,Animation?Animation->GetPlayLength()/FMath::Max(.1f,Recoil):1.f);
+ }
 }
 void UBossActionComponent::StartPhaseTransition()
 {
@@ -538,6 +543,8 @@ void UBossActionComponent::MoveToGoal(const FVector& Goal,float Speed,bool bStra
  if (bStrafe && Target.IsValid()) AI->SetFocus(Target.Get()); else AI->ClearFocus(EAIFocusPriority::Gameplay);
  FAIMoveRequest Request; Request.SetGoalLocation(Goal); Request.SetAcceptanceRadius(35.f); Request.SetUsePathfinding(true);
  Request.SetProjectGoalLocation(true); Request.SetAllowPartialPath(false); Request.SetCanStrafe(bStrafe);
+ // Reset completion and navigation use capsule-center tolerances, also for scaled bosses.
+ if (State==EBossState::Resetting) { Request.SetAcceptanceRadius(55.f); Request.SetReachTestIncludesAgentRadius(false); }
  if (AI->MoveTo(Request).Code==EPathFollowingRequestResult::Failed) bReversingOrbit=!bReversingOrbit;
 }
 void UBossActionComponent::DriveDecision()
@@ -568,8 +575,24 @@ void UBossActionComponent::RequestReset()
 }
 void UBossActionComponent::TickReset()
 {
- if (FVector::DistSquared(Boss->GetActorLocation(),HomeLocation)<=FMath::Square(80.f)) { CompleteReset(); return; }
- MoveToGoal(HomeLocation,GetDefinition()->ChaseSpeed,false);
+ // Level placement records a capsule center which may still be above the floor.
+ // Nav MoveTo projects to the floor; compare against that same reachable center,
+ // not the unreachable spawn Z. Keep a vertical test so another floor is not "home".
+ FVector ResetLocation=HomeLocation;
+ if (auto* Nav=FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+ {
+  FNavLocation Ground;
+  if (Nav->ProjectPointToNavigation(HomeLocation,Ground,FVector(100,100,500)))
+   ResetLocation=Ground.Location+FVector(0,0,Boss->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()+2.f);
+ }
+ auto AtHome=[&]()
+ {
+  const FVector Position=Boss->GetActorLocation();
+  return FVector::DistSquared2D(Position,ResetLocation)<=FMath::Square(80.f) &&
+   FMath::Abs(Position.Z-ResetLocation.Z)<=FMath::Max(30.f,Boss->GetCharacterMovement()->MaxStepHeight);
+ };
+ if (AtHome()) { CompleteReset(); return; }
+ MoveToGoal(ResetLocation,GetDefinition()->ChaseSpeed,false);
  if (GetStateElapsed()<8.f) return;
  APlayerController* PC=UGameplayStatics::GetPlayerController(this,0);
  // Never visibly teleport: require both actor and home outside the player's actual view cone/LOS.
@@ -582,14 +605,14 @@ void UBossActionComponent::TickReset()
    FHitResult Hit; FCollisionQueryParams Q(SCENE_QUERY_STAT(BossResetView),false,PC->GetPawn()); Q.AddIgnoredActor(Boss);
    return !GetWorld()->LineTraceSingleByChannel(Hit,View,P,ECC_Visibility,Q);
   };
-  if (Visible(Boss->GetActorLocation()) || Visible(HomeLocation)) return;
+  if (Visible(Boss->GetActorLocation()) || Visible(ResetLocation)) return;
  }
  FCollisionQueryParams Q(SCENE_QUERY_STAT(BossResetHome),false,Boss);
- if (GetWorld()->OverlapBlockingTestByChannel(HomeLocation,FQuat::Identity,ECC_Pawn,
+ if (GetWorld()->OverlapBlockingTestByChannel(ResetLocation,FQuat::Identity,ECC_Pawn,
      FCollisionShape::MakeCapsule(Boss->GetCapsuleComponent()->GetScaledCapsuleRadius(),Boss->GetCapsuleComponent()->GetScaledCapsuleHalfHeight()-2),Q)) return;
  FHitResult Floor;
- if (!GetWorld()->LineTraceSingleByChannel(Floor,HomeLocation,HomeLocation-FVector(0,0,150),ECC_Visibility,Q) || Floor.ImpactNormal.Z<.65f) return;
- Boss->TeleportTo(HomeLocation,HomeRotation,false,false); if (FVector::DistSquared(Boss->GetActorLocation(),HomeLocation)<6400) CompleteReset();
+ if (!GetWorld()->LineTraceSingleByChannel(Floor,ResetLocation,ResetLocation-FVector(0,0,150),ECC_Visibility,Q) || Floor.ImpactNormal.Z<.65f) return;
+ if (Boss->TeleportTo(ResetLocation,HomeRotation,false,false) && AtHome()) CompleteReset();
 }
 void UBossActionComponent::CompleteReset()
 {

@@ -1,0 +1,250 @@
+{
+  "Null_boss_restart_trace": [
+    {
+      "cycle": 1,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_1",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 860.41
+    },
+    {
+      "cycle": 2,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_2",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 819.62
+    },
+    {
+      "cycle": 3,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_3",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 805.15
+    },
+    {
+      "cycle": 4,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_4",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.71
+    },
+    {
+      "cycle": 5,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_5",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.98
+    },
+    {
+      "cycle": 6,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_6",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    },
+    {
+      "cycle": 7,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_7",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.63
+    },
+    {
+      "cycle": 8,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_8",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.95
+    },
+    {
+      "cycle": 9,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_9",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    },
+    {
+      "cycle": 10,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_10",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.63
+    },
+    {
+      "cycle": 11,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_11",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.95
+    },
+    {
+      "cycle": 12,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_12",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    }
+  ],
+  "Null_boss_raised_restart_trace": [
+    {
+      "cycle": 1,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_1",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 853.99
+    },
+    {
+      "cycle": 2,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_2",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 794.42
+    },
+    {
+      "cycle": 3,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_3",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 800.15
+    }
+  ],
+  "RHI_boss_restart_trace": [
+    {
+      "cycle": 1,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_1",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 860.41
+    },
+    {
+      "cycle": 2,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_2",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 819.62
+    },
+    {
+      "cycle": 3,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_3",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 805.15
+    },
+    {
+      "cycle": 4,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_4",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.71
+    },
+    {
+      "cycle": 5,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_5",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.98
+    },
+    {
+      "cycle": 6,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_6",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    },
+    {
+      "cycle": 7,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_7",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.63
+    },
+    {
+      "cycle": 8,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_8",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.95
+    },
+    {
+      "cycle": 9,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_9",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    },
+    {
+      "cycle": 10,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_10",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 820.63
+    },
+    {
+      "cycle": 11,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_11",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 810.95
+    },
+    {
+      "cycle": 12,
+      "controller": "CountessBossAIController_0",
+      "target": "BP_TPCCharacter_C_12",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 804.66
+    }
+  ],
+  "RHI_boss_raised_restart_trace": [
+    {
+      "cycle": 1,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_1",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 853.99
+    },
+    {
+      "cycle": 2,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_2",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 794.42
+    },
+    {
+      "cycle": 3,
+      "controller": "CountessBossAIController_1",
+      "target": "BP_TPCCharacter_C_3",
+      "brain_running": true,
+      "state": "Combat",
+      "distance_moved": 800.15
+    }
+  ]
+}

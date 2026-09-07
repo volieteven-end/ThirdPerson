@@ -39,6 +39,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bGuardHitActive = false;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Combat") bool bGuardHoldReady = false;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Movement") bool bWantJumpPose = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bCrouchMoveRequested = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bCrouchEntryRequested = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bStandingMoveRequested = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bStandingExitRequested = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bCrouchEntryCanExit = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bCrouchExitCanExit = false;
+    UPROPERTY(BlueprintReadOnly, Transient, Category="Movement") bool bLandingCanExit = false;
 	/** Controller yaw relative to the character while standing still. */
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Turn In Place") float AimYawDelta = 0.f;
 	UPROPERTY(BlueprintReadOnly, Transient, Category = "Turn In Place")

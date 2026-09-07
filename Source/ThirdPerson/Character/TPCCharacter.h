@@ -182,6 +182,11 @@ public:
 	/** Sprint speed; StopSprint restores the pre-sprint CharacterMovement speed. */
 	UPROPERTY(EditDefaultsOnly, Category = "Movement", meta = (ClampMin = "0.0"))
 	float SprintMaxWalkSpeed = 650.f;
+    UPROPERTY(EditDefaultsOnly, Category="Movement|Input", meta=(ClampMin="0.1", ClampMax="0.35", Units="s"))
+    float SprintHoldThreshold = .2f;
+    /** Brief foot contact only; attacks, dodge and re-jump can interrupt it. */
+    UPROPERTY(EditDefaultsOnly, Category="Movement|Transitions", meta=(ClampMin="0.0", ClampMax="0.2", Units="s"))
+    float LandingContactTime = .12f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float DashCooldown = 0.8f;
@@ -263,6 +268,10 @@ public:
 	void Move(const FInputActionValue& Value);
 	void ClearMoveInput();
 	void Look(const FInputActionValue& Value);
+    /** Shared Shift: release a short press to dodge; hold to sprint, never both. */
+    void StartSprintOrDodgeInput();
+    void FinishSprintOrDodgeInput();
+    void CancelSprintOrDodgeInput();
 	void StartSprint();
 	void StopSprint();
 	void Dash();
@@ -289,6 +298,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Combat|Action")
 	bool IsTurningInPlace() const { return MotionAction == ETPCMotionAction::Turn; }
 	bool IsGuardHitReactionActive() const;
+    bool HasMovementIntent() const { return !LastMoveInputAxis.IsNearlyZero(); }
+    bool CanBlendOutOfLanding() const;
+    bool IsLocomotionInputPaused() const;
 private:
 	friend struct FTPActionTestAccess;
 	friend struct FTPCSwordPIETestAccess;
@@ -308,6 +320,11 @@ private:
 	uint64 HitActionId = 0;
 	float NextTurnAllowedTime = 0.f;
 	float PreSprintMaxWalkSpeed = 450.f;
+    bool bSprintOrDodgeHeld = false;
+    double SprintOrDodgePressedAt = 0.;
+    double LocomotionInputResumeAt = 0.;
+    double LandingBlendReadyAt = 0.;
+    void UpdateHeldSprint();
 	bool bActionDead = false;
 	void LockMovementForHit(float AnimationDuration);
 	void ClearHitMovementLock();

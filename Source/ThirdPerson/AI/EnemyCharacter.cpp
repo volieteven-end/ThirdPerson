@@ -316,15 +316,14 @@ void AEnemyCharacter::ApplyParryStagger(AActor* ParryingActor)
 	if (!GetCharacterMovement()->IsFalling()) GetCharacterMovement()->DisableMovement();
 	StopAnimMontage();
 
-	float StaggerDuration = ParryStaggerFallbackDuration;
-	if (ParryStaggerMontage)
-	{
-		const float MontageDuration = PlayAnimMontage(ParryStaggerMontage);
-		if (MontageDuration > 0.f)
-		{
-			StaggerDuration = MontageDuration;
-		}
-	}
+    float StaggerDuration = FMath::Max(ParryStaggerFallbackDuration, ParryStaggerMinimumDuration);
+    if (ParryStaggerMontage && GetMesh()->GetAnimInstance())
+    {
+        const float AuthoredDuration = ParryStaggerMontage->GetPlayLength() / FMath::Max(.01f, ParryStaggerMontage->RateScale);
+        const float PlayRate = FMath::Min(1.f, AuthoredDuration / FMath::Max(.1f, ParryStaggerMinimumDuration));
+        const float PlayedDuration = GetMesh()->GetAnimInstance()->Montage_Play(ParryStaggerMontage, PlayRate, EMontagePlayReturnType::Duration);
+        if (PlayedDuration > 0.f) StaggerDuration = FMath::Max(ParryStaggerMinimumDuration, PlayedDuration);
+    }
 	GetWorldTimerManager().SetTimer(
 		ParryStaggerTimerHandle,
 		this,

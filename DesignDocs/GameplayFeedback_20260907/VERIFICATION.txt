@@ -1,0 +1,80 @@
+Gameplay Feedback verification / 2026-09-07
+Project: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+Branch: main
+Baseline commit: fc8af04de9e2ada00107743c3048b3572dbaf86c
+
+Changed fields / branches:
+- EnemyCharacter: ParryStaggerMinimumDuration=1.4; montage playback uses EMontagePlayReturnType::Duration.
+- BossDefinition: ParryRecoil 0.3 -> 0.7; BreakDuration remains 2.4.
+- TPCCharacter: shared Shift tap/hold threshold 0.2; Alt unmapped; landing contact 0.12.
+- TPCAnimInstance / ABP_TPCCharacter: input-aware crouch entry/exit and landing exit; 0.12 transition blends.
+- BossActionComponent::TickReset: project home to navigation floor + capsule half-height; verify 2D radius and vertical tolerance.
+- Reset MoveTo: acceptance radius 55, exclude agent radius.
+
+Observed baseline failure:
+Restart 1: state=6 controller=CountessBossAIController_1 target=None moved=0.00 home_distance=121.85
+BOSS_RAISED_BEFORE: process exit=0; automation failed=1. No false pass from the process exit code.
+
+Final results:
+Editor target: Result: Succeeded / exit 0
+Game target: Result: Succeeded / exit 0
+BASELINE: PASS=31 FAIL=0 EXIT=0
+MODIFIED_NULL: PASS=34 FAIL=0 EXIT=0
+TEST RHI PASS=34 FAIL=0 EXIT=0
+Default placement: 12 real death-screen/restart cycles per run.
+Raised placement: 3 real death-screen/restart cycles per run.
+30/60/120 FPS: all 12 input, locomotion and parry cases executed.
+Actual landing-to-movement delay in NullRHI trace: 0.125-0.133 seconds.
+
+Verification runner: E:\UNREAL\ue projects\ThirdPerson\DesignDocs\GameplayFeedback_20260907\Verify-GameplayFeedback.ps1
+Readme: E:\UNREAL\ue projects\ThirdPerson\DesignDocs\GameplayFeedback_20260907\反馈修复说明.md
+Original/final reports, exact command arguments, trace summaries and raw frame captures: E:\UNREAL\ue projects\ThirdPerson\DesignDocs\GameplayFeedback_20260907\Evidence
+
+Commands and literal recorded results:
+
+ThirdPersonEditor
+D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat "ThirdPersonEditor" "Win64" "Development" "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "-WaitMutex" "-NoHotReloadFromIDE"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: Result: Succeeded / EXIT=0
+LOG: E:/UNREAL/ue projects/ThirdPerson/Saved/GameplayFeedback/modified_build4.txt
+
+ThirdPerson
+D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat "ThirdPerson" "Win64" "Development" "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "-WaitMutex" "-NoHotReloadFromIDE"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: Result: Succeeded / EXIT=0
+LOG: E:/UNREAL/ue projects/ThirdPerson/Saved/GameplayFeedback/runtime_build.txt
+
+BASELINE
+D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "/Engine/Maps/Entry" "-ExecCmds=Automation RunTests ThirdPerson" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackBaseline" "-NullRHI" "-nosound" "-unattended" "-nop4" "-stdout" "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/GameplayFeedbackBaseline.txt"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: PASS=31 FAIL=0 EXIT=0
+REPORT: E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackBaseline/index.json
+
+BOSS_DEFAULT_BEFORE
+D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "/Engine/Maps/Entry" "-ExecCmds=Automation RunTests ThirdPerson.Feedback.PIE.BossRepeatedDeathRestart" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackBossBefore" "-NullRHI" "-nosound" "-unattended" "-nop4" "-stdout" "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackBossBefore.txt"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: PASS=1 FAIL=0 EXIT=0
+REPORT: E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackBossBefore/index.json
+
+BOSS_RAISED_BEFORE
+D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "/Engine/Maps/Entry" "-ExecCmds=Automation RunTests ThirdPerson.Feedback.PIE.BossRaisedHomeRestart" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackRaisedBefore" "-NullRHI" "-nosound" "-unattended" "-nop4" "-stdout" "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackRaisedBefore.txt"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: PASS=0 FAIL=1 EXIT=0
+REPORT: E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackRaisedBefore/index.json
+
+MODIFIED_NULL
+D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "/Engine/Maps/Entry" "-ExecCmds=Automation RunTests ThirdPerson" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackAllNull" "-NullRHI" "-nosound" "-unattended" "-nop4" "-stdout" "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Logs/FeedbackAllNull.txt"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: PASS=34 FAIL=0 EXIT=0
+REPORT: E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/FeedbackAllNull/index.json
+
+RHI
+D:\Unreal5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor-Cmd.exe "E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject" "/Engine/Maps/Entry" "-ExecCmds=Automation RunTests ThirdPerson" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI" "-nosound" "-unattended" "-nop4" "-stdout" "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/Automation/GameplayFeedbackVerification_20260907_205935/RHI_Engine.txt" "-RenderOffscreen" "-FeedbackVisualAudit" "-ResX=1280" "-ResY=720"
+INPUT: E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+RESULT: PASS=34 FAIL=0 EXIT=0
+REPORT: E:\UNREAL\ue projects\ThirdPerson\Saved\Automation\GameplayFeedbackVerification_20260907_205935\RHI\index.json
+
+VISUAL_QA:
+LandingMove_00..04 and CrouchEntry_00..04 are actual UE RHI screenshots, not generated mockups.
+Animation state, speed, capsule position and both foot-bone positions were recorded alongside the frames.
+The original 31-test history and prior action/Boss implementation evidence remain separate.

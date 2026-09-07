@@ -74,7 +74,7 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float BreakDuration = 2.4f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float PostBreakPoiseImmunity = .8f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ParryPoiseDamage = 40.f;
- UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ParryRecoil = .3f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ParryRecoil = .7f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float EngageRadius = 900.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float HomeLeash = 1600.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float LostSightGrace = 5.f;

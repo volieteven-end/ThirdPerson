@@ -1,0 +1,108 @@
+{
+  "BP_EnemyCharacter": {
+    "montage": "/Game/Third/SwordAnimation/AM_EnemyParryStagger.AM_EnemyParryStagger",
+    "length": 1.0,
+    "rate": 1.0,
+    "fallback": 0.699999988079071
+  },
+  "BP_EnemyRangedCharacter": {
+    "montage": "/Game/Third/SwordAnimation/AM_EnemyParryStagger.AM_EnemyParryStagger",
+    "length": 1.0,
+    "rate": 1.0,
+    "fallback": 0.699999988079071
+  },
+  "BP_TPCCharacter": {
+    "mappings": [
+      {
+        "key": "E",
+        "action": "/Game/Third/Input/IA_Interact.IA_Interact"
+      },
+      {
+        "key": "LeftShift",
+        "action": "/Game/Third/Input/IA_Sprint.IA_Sprint"
+      },
+      {
+        "key": "W",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "A",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "D",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "S",
+        "action": "/Game/Third/Input/IA_Move.IA_Move"
+      },
+      {
+        "key": "Mouse2D",
+        "action": "/Game/Third/Input/IA_Look.IA_Look"
+      },
+      {
+        "key": "LeftMouseButton",
+        "action": "/Game/Third/Input/IA_Attack.IA_Attack"
+      },
+      {
+        "key": "Q",
+        "action": "/Game/Third/Input/IA_UseItem.IA_UseItem"
+      },
+      {
+        "key": "LeftAlt",
+        "action": "/Game/Third/Input/IA_Dash.IA_Dash"
+      },
+      {
+        "key": "Tab",
+        "action": "/Game/Third/Input/IA_Inventory.IA_Inventory"
+      },
+      {
+        "key": "Escape",
+        "action": "/Game/Third/Input/IA_Pause.IA_Pause"
+      },
+      {
+        "key": "MiddleMouseButton",
+        "action": "/Game/Third/Input/IA_LockOn.IA_LockOn"
+      },
+      {
+        "key": "SpaceBar",
+        "action": "/Game/Third/Input/IA_Jump.IA_Jump"
+      },
+      {
+        "key": "C",
+        "action": "/Game/Third/Input/IA_Crunch.IA_Crunch"
+      },
+      {
+        "key": "RightMouseButton",
+        "action": "/Game/Third/Input/IA_Block.IA_Block"
+      },
+      {
+        "key": "R",
+        "action": "/Game/Third/Actions/Sword/Input/IA_HeavyAttack.IA_HeavyAttack"
+      },
+      {
+        "key": "B",
+        "action": "/Game/Third/Actions/Sword/Input/IA_SwordBuff.IA_SwordBuff"
+      },
+      {
+        "key": "X",
+        "action": "/Game/Third/Actions/Sword/Input/IA_ToggleSword.IA_ToggleSword"
+      }
+    ]
+  },
+  "/Game/Third/SwordAnimation/Crouch_In_Anim": {
+    "length": 0.5,
+    "rate": 1.0
+  },
+  "/Game/Third/Actions/Sword/Sequences/AS_Jump_Out_Anim": {
+    "length": 0.8666666746139526,
+    "rate": 1.0
+  },
+  "/Game/Third/Bosses/Countess/DA_CountessBoss.DA_CountessBoss": {
+    "parry_recoil": 0.30000001192092896,
+    "break_duration": 2.4000000953674316,
+    "engage_radius": 900.0,
+    "home_leash": 1600.0
+  }
+}

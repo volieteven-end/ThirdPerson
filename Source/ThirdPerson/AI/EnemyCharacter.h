@@ -50,7 +50,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> ParryStaggerMontage;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (ClampMin = "0.1"))
-	float ParryStaggerFallbackDuration = 0.7f;
+	float ParryStaggerFallbackDuration = 1.4f;
+    /** Minimum punish window, including the authored recoil animation. */
+    UPROPERTY(EditDefaultsOnly, Category="Animation", meta=(ClampMin="0.1", Units="s"))
+    float ParryStaggerMinimumDuration = 1.4f;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation",meta = (ClampMin = "0.0"))
 	float DeathDestroyDelay = 0.5f;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation", meta = (ClampMin = "0.1"))
