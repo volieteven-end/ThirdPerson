@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "../Animation/CombatActionRules.h"
+#include "CombatHitTypes.h"
 #include "CombatComponent.generated.h"
 
 class UAnimMontage;
@@ -62,6 +63,8 @@ public:
 	bool IsParryWindowActive() const { return bParryWindowActive; }
 	void SetCombatEnabled(bool bEnabled);
 	float ModifyIncomingDamage(float IncomingDamage, const AActor* DamageSource);
+	float ResolveIncomingHit(const FCombatHitSpec& Spec, const AActor* Source, FCombatHitResult& Result);
+	FCombatHitSpec MakeCurrentHitSpec(const FVector& ImpactPoint) const;
 	void PerformAttackHit();
 	void StartAttackWindow(FName InAttackBoneName,float InTraceRadius);
     void EndAttackWindow();
@@ -178,6 +181,7 @@ private:
     bool IsDashComboContextValid() const;
 	bool bAirDiveLanded = false;
 	friend struct FTPActionTestAccess;
+ friend struct FCountessBossTestAccess;
 	bool bAttackWindowActive = false;
 	FVector PreviousAttackLocation = FVector::ZeroVector;
 	FVector PreviousBladeBaseLocation = FVector::ZeroVector;

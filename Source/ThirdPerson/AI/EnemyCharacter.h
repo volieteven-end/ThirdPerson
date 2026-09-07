@@ -26,8 +26,8 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Lock On")
 	FVector GetLockOnAimPoint() const;
-	void ApplyParryStagger(AActor* ParryingActor);
-	void ApplyUppercutHit(AActor* AttackingActor);
+	virtual void ApplyParryStagger(AActor* ParryingActor);
+	virtual void ApplyUppercutHit(AActor* AttackingActor);
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	bool IsParryStaggered() const { return bParryStaggered; }
 
@@ -37,7 +37,7 @@ public:
     AActor* GetCurrentPatrolPoint() const;
 	void AdvancePatrolPoint();
 	UFUNCTION()
-	void HandleHealthChanged(float CurrentHealth,float MaxHealth);
+	virtual void HandleHealthChanged(float CurrentHealth,float MaxHealth);
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 	float PreviousHealth = 0.f;
@@ -74,7 +74,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Landed(const FHitResult& Hit) override;
 	UFUNCTION()
-	void HandleDeath();
+	virtual void HandleDeath();
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	TObjectPtr<UHealthComponent> HealthComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

@@ -391,7 +391,7 @@ void ATPCCharacter::HandleHealthChanged(float CurrentHealth,float MaxHealth)
 	if (bTookDamage && CurrentHealth > 0.f)
 	{
 		UAnimSequenceBase* HitAnimation = HitReactFront;
-		if (CombatComponent && CombatComponent->IsBlocking() && BlockHitReact)
+		if (HealthComponent && HealthComponent->GetLastCombatHitResult().bBlocked && BlockHitReact)
 		{
 			HitAnimation = BlockHitReact;
 		}

@@ -52,12 +52,19 @@ void AWeaponProjectile::ConfigureCollision()
 }
 void AWeaponProjectile::InitializeProjectile(float InDamage, float InSpeed)
 {
+ FCombatHitSpec Spec; Spec.Damage = InDamage;
+ InitializeCombatProjectile(Spec, InSpeed);
+}
+void AWeaponProjectile::InitializeCombatProjectile(const FCombatHitSpec& Spec, float InSpeed)
+{
  GetWorldTimerManager().ClearTimer(RecycleTimer);
  SetLifeSpan(0.f);
  DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
  ConfigureCollision();
  CollisionSphere->ClearMoveIgnoreActors();
- Damage = FMath::Max(0.f, InDamage);
+ HitSpec = Spec;
+ Damage = FMath::Max(0.f, Spec.Damage);
+ HitSpec.Damage = Damage;
  bActive = true;
  bImpacted = false;
  const AActor* Source = GetInstigator() ? static_cast<AActor*>(GetInstigator()) : GetOwner();
@@ -93,6 +100,7 @@ void AWeaponProjectile::DeactivateProjectile()
  GetWorldTimerManager().ClearTimer(RecycleTimer);
  SetLifeSpan(0.f);
  bActive = false; bImpacted = false; bEnemyShot = false; Damage = 0.f;
+ HitSpec = FCombatHitSpec();
  SetActorEnableCollision(false);
  CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
  CollisionSphere->ClearMoveIgnoreActors();
@@ -134,9 +142,14 @@ void AWeaponProjectile::HandleProjectileHit(UPrimitiveComponent* HitComponent, A
  const bool bFriendly = bEnemyShot && IsValid(OtherActor) && OtherActor->IsA<AEnemyCharacter>();
  if (IsValid(OtherActor) && !bFriendly)
  {
-  if (UHealthComponent* Health = OtherActor->FindComponentByClass<UHealthComponent>()) Health->ApplyDamageFrom(Damage, IsValid(Source) ? Source : nullptr);
+  if (UHealthComponent* Health = OtherActor->FindComponentByClass<UHealthComponent>())
+  {
+   HitSpec.ImpactPoint = Hit.ImpactPoint;
+   Health->ApplyCombatHit(HitSpec, IsValid(Source) ? Source : nullptr);
+  }
  }
- if (!IsValid(this)) return;
+ if (!IsValid(this) || !bActive) return;
+ if (bReturnImmediatelyOnImpact) { ReturnToPool(); return; }
  // Attach to an animated bone rather than the capsule so embedded arrows follow the body.
  if (ACharacter* Character = Cast<ACharacter>(OtherActor); IsValid(Character) && Character->GetMesh())
  {

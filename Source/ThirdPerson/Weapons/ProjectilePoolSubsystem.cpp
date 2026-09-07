@@ -6,6 +6,12 @@
 AWeaponProjectile* UProjectilePoolSubsystem::Acquire(TSubclassOf<AWeaponProjectile> Class,
  const FTransform& Transform, AActor* Source, APawn* InstigatorPawn, float Damage, float Speed)
 {
+ FCombatHitSpec Spec; Spec.Damage = Damage;
+ return AcquireWithHitSpec(Class, Transform, Source, InstigatorPawn, Spec, Speed);
+}
+AWeaponProjectile* UProjectilePoolSubsystem::AcquireWithHitSpec(TSubclassOf<AWeaponProjectile> Class,
+ const FTransform& Transform, AActor* Source, APawn* InstigatorPawn, const FCombatHitSpec& Spec, float Speed)
+{
  if (!Class || !GetWorld() || !IsValid(Source)) return nullptr;
  Projectiles.RemoveAll([](const auto& P) { return !IsValid(P); });
  AWeaponProjectile* Result = nullptr;
@@ -35,7 +41,7 @@ AWeaponProjectile* UProjectilePoolSubsystem::Acquire(TSubclassOf<AWeaponProjecti
  Result->SetOwner(Source);
  Result->SetInstigator(InstigatorPawn);
  Result->SetActorTransform(Transform, false, nullptr, ETeleportType::TeleportPhysics);
- Result->InitializeProjectile(Damage, Speed);
+ Result->InitializeCombatProjectile(Spec, Speed);
  // Dynamic-world geometry can block arrows, but other arrows must not.
  for (AWeaponProjectile* P : Projectiles)
  {
@@ -53,6 +59,11 @@ void UProjectilePoolSubsystem::Release(AWeaponProjectile* Projectile)
  Projectile->DeactivateProjectile();
  // Also support manually spawned projectiles: they are not silently retained by the pool.
  if (!Projectiles.Contains(Projectile)) Projectile->Destroy();
+}
+void UProjectilePoolSubsystem::ReleaseForSource(AActor* Source)
+{
+ for (AWeaponProjectile* P : Projectiles)
+  if (IsValid(P) && P->IsProjectileActive() && (P->GetOwner() == Source || P->GetInstigator() == Source)) Release(P);
 }
 int32 UProjectilePoolSubsystem::GetActiveCount() const
 {

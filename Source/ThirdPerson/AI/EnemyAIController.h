@@ -27,7 +27,7 @@ protected:
 	virtual void OnUnPossess() override;
 
 	UFUNCTION()
-	void HandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
+	virtual void HandleTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus);
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Behavior Tree")
 	TObjectPtr<UBehaviorTree> BehaviorTreeAsset;

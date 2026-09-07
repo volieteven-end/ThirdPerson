@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CombatHitTypes.h"
 #include "HealthComponent.generated.h"
 
 
@@ -13,6 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	float, MaxHealth);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnCombatHitResolved, const FCombatHitSpec&, const FCombatHitResult&, AActor*);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UHealthComponent : public UActorComponent
@@ -25,6 +27,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	void ApplyDamage(float Damage);
 	void ApplyDamageFrom(float Damage, AActor* DamageSource);
+	UFUNCTION(BlueprintCallable, Category="Health")
+	FCombatHitResult ApplyCombatHit(const FCombatHitSpec& Spec, AActor* DamageSource);
+	const FCombatHitResult& GetLastCombatHitResult() const { return LastHitResult; }
+	FOnCombatHitResolved OnCombatHitResolved;
+	/** Separate encounter immunity; does not overwrite the player's timed dodge immunity. */
+	void SetEncounterInvulnerable(bool bEnabled) { bEncounterInvulnerable = bEnabled; }
 	AActor* GetLastDamageSource() const { return LastDamageSource.Get(); }
 
 	UFUNCTION(BlueprintCallable, Category = "Health")
@@ -53,6 +61,8 @@ protected:
 	
 private:
 	bool bIsInvulnerable = false;
+	bool bEncounterInvulnerable = false;
+	FCombatHitResult LastHitResult;
 
 	FTimerHandle InvulnerabilityTimerHandle;
 	float DamageReceivedMultiplier = 1.f;

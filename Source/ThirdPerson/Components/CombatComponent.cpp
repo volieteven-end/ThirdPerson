@@ -220,12 +220,17 @@ void UCombatComponent::SetCombatEnabled(bool bEnabled)
 }
 
 
-float UCombatComponent::ModifyIncomingDamage(
-	float IncomingDamage,
-	const AActor* DamageSource)
+float UCombatComponent::ModifyIncomingDamage(float IncomingDamage, const AActor* DamageSource)
 {
-	AActor* OwnerActor = GetOwner();
-	if (!bIsBlocking || !OwnerActor || !DamageSource || IncomingDamage <= 0.f)
+ FCombatHitSpec Spec; Spec.Damage = IncomingDamage;
+ FCombatHitResult Result;
+ return ResolveIncomingHit(Spec, DamageSource, Result);
+}
+float UCombatComponent::ResolveIncomingHit(const FCombatHitSpec& Spec, const AActor* DamageSource, FCombatHitResult& Result)
+{
+	const float IncomingDamage = Spec.Damage;
+ AActor* OwnerActor = GetOwner();
+	if (!Spec.bCanBeBlocked || !bIsBlocking || !OwnerActor || !DamageSource || IncomingDamage <= 0.f)
 	{
 		return IncomingDamage;
 	}
@@ -240,7 +245,7 @@ float UCombatComponent::ModifyIncomingDamage(
 		return IncomingDamage;
 	}
 
-	if (bParryWindowActive)
+	if (Spec.bCanBeParried && bParryWindowActive)
 	{
 		bParryWindowActive = false;
 		if (UWorld* World = GetWorld())
@@ -256,6 +261,7 @@ float UCombatComponent::ModifyIncomingDamage(
 		{
 			Enemy->ApplyParryStagger(OwnerActor);
 		}
+		Result.bParried = true; Result.Outcome = ECombatHitOutcome::Parried;
 		return 0.f;
 	}
 
@@ -267,7 +273,23 @@ float UCombatComponent::ModifyIncomingDamage(
 		return IncomingDamage;
 	}
 
+	Result.bBlocked = true; Result.Outcome = ECombatHitOutcome::Blocked;
 	return IncomingDamage * BlockDamageMultiplier;
+}
+
+FCombatHitSpec UCombatComponent::MakeCurrentHitSpec(const FVector& ImpactPoint) const
+{
+ FCombatHitSpec Spec;
+ Spec.Damage = GetEffectiveDamage() * ActiveDamageMultiplier;
+ Spec.ImpactPoint = ImpactPoint;
+ switch (ActiveAttackType)
+ {
+ case EActiveCombatAttackType::Uppercut: Spec.PoiseDamage = 30.f; break;
+ case EActiveCombatAttackType::Air: Spec.PoiseDamage = 12.f; break;
+ case EActiveCombatAttackType::AirDive: Spec.PoiseDamage = 25.f; break;
+ default: Spec.PoiseDamage = 10.f; break;
+ }
+ return Spec;
 }
 
 bool UCombatComponent::StartMeleeMontageAttack()
@@ -586,9 +608,7 @@ void UCombatComponent::PerformAttackHit()
 		if (UHealthComponent* Health =
 			HitActor->FindComponentByClass<UHealthComponent>())
 		{
-			Health->ApplyDamageFrom(
-				GetEffectiveDamage() * ActiveDamageMultiplier,
-				OwnerActor);
+			Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerActor);
 			SpawnMeleeHitEffect(Hit);
 			ApplySpecialHitReaction(HitActor);
 			bHit = true;
@@ -710,9 +730,7 @@ void UCombatComponent::TickComponent(
 			if (UHealthComponent* Health =
 				HitActor->FindComponentByClass<UHealthComponent>())
 			{
-				Health->ApplyDamageFrom(
-					GetEffectiveDamage() * ActiveDamageMultiplier,
-					OwnerCharacter);
+				Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerCharacter);
 				SpawnMeleeHitEffect(Hit);
 				ApplySpecialHitReaction(HitActor);
 			}

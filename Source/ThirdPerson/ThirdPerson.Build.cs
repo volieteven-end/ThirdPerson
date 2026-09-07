@@ -13,6 +13,7 @@ public class ThirdPerson : ModuleRules
 			"Core",
 			"CoreUObject",
 			"Engine",
+			"AnimGraphRuntime",
 			"InputCore",
 			"UMG",
 			"AIModule",
@@ -23,6 +24,10 @@ public class ThirdPerson : ModuleRules
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput" });
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "AnimGraph", "BlueprintGraph", "Kismet", "KismetCompiler", "BehaviorTreeEditor", "AIGraph", "UMGEditor", "AnimationBlueprintLibrary" });
+		}
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
