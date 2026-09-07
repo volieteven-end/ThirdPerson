@@ -1,0 +1,47 @@
+{
+  "project": "E:\\UNREAL\\ue projects\\ThirdPerson",
+  "entries": [
+    {
+      "path": "Content/Third/Widget/WBP_Inventory.uasset",
+      "original_sha256": "02A800D14FEFBFD5BC683BF721A9CD0973833CCDEF11AFAFD4EA12C413545077",
+      "action": "replace",
+      "modified_sha256": "FED11BCC5C47D788F8771949989CA9BFFCC150738522662C7D906F6E46252903"
+    },
+    {
+      "path": "Content/Third/Character/BP_EnemyCharacter.uasset",
+      "original_sha256": "6C174295B90C26779148577A42C0E29366F50876AB7125E300E3E75F08C9F73E",
+      "action": "replace",
+      "modified_sha256": "9CF9A057DA355DF2710F0C6442192C08DB9EE529EB4A4D2FA1714168931E632B"
+    },
+    {
+      "path": "Content/Third/Character/BP_EnemyRangedCharacter.uasset",
+      "original_sha256": "49B14E60C4FDAEFFF1244D4490EF4BB6D3EC1BF39A5FD7094ADA441B4EDE0691",
+      "action": "replace",
+      "modified_sha256": "F3FAF6C5C85979EC42DBE931D15897E56CE3038A07BB97B5D6CAA72D7D0F2188"
+    },
+    {
+      "path": "Source/ThirdPerson/UI/LockOnMarkerWidget.cpp",
+      "original_sha256": "789558BB14AA117A9053292806E7AC9246FD9039886FD61D0848F607D7C87881",
+      "action": "replace",
+      "modified_sha256": "583E1E907F74131FF003AC252E40C79B593801D56D0C41FE03711C4E568D9DA4"
+    },
+    {
+      "path": "Source/ThirdPerson/UI/LockOnMarkerWidget.h",
+      "original_sha256": "5801A07FE8688ADCE72986685EE4343FFCC20A678343AF0FF46DA0BCAD8AD838",
+      "action": "replace",
+      "modified_sha256": "E79E4D3B627B013ED35CB4217602BDBA80DD6ACA904458E155C7708205D11F34"
+    },
+    {
+      "path": "Source/ThirdPerson/AI/EnemyCharacter.cpp",
+      "original_sha256": "4084F8617D460CE144DBDDD7B9F7243EC408F3FBBC41B2AE28ABE99EA6FE206D",
+      "action": "replace",
+      "modified_sha256": "3B35CD48A57F0835D9D07D90B4090E19FC196D232A4BB134B62360B24CA4942A"
+    },
+    {
+      "path": "Source/ThirdPerson/AI/EnemyCharacter.h",
+      "original_sha256": "5AA4974023F16EC4E8353012EAB143A9950E3EFBB1EAE51B94DE9575AAD81095",
+      "action": "replace",
+      "modified_sha256": "9E686F903D562E22A4A363341A3AB2F9F2E91FF85AAA92A20AC67952127149D6"
+    }
+  ]
+}

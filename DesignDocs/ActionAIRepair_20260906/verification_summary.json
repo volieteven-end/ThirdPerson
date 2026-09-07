@@ -1,0 +1,20 @@
+{
+  "BASELINE": {
+    "command": "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\ActionAIRepair_20260906\\VERIFY.py\" BASELINE",
+    "input": "BASELINE",
+    "output": "BASELINE: nav=FAILED; attack-dash=BLOCKED; tests=5/5; exit=0",
+    "exit_status": 0
+  },
+  "MODIFIED": {
+    "command": "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\ActionAIRepair_20260906\\VERIFY.py\" MODIFIED",
+    "input": "MODIFIED",
+    "output": "MODIFIED: nav=PASS; cancel+chain=PASS; tests=8/8; PIE=13/13; exit=0",
+    "exit_status": 0
+  },
+  "ROLLBACK": {
+    "command": "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\ActionAIRepair_20260906\\VERIFY.py\" ROLLBACK",
+    "input": "ROLLBACK",
+    "output": "ROLLBACK: hashes=7/7; original-behavior=RESTORED; tests=5/5; exit=0",
+    "exit_status": 0
+  }
+}

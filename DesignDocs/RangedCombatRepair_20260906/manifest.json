@@ -1,0 +1,82 @@
+[
+  {
+    "path": "Source/ThirdPerson/AI/EnemyCharacter.h",
+    "original_sha256": "9e686f903d562e22a4a363341a3ab2f9f2e91ff85aaa92a20ac67952127149d6",
+    "modified_sha256": "54b522d7f09ec4207ca95dc0561e517f3ad73ab9e387cb57d6a3ea1ddee0c227"
+  },
+  {
+    "path": "Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp",
+    "original_sha256": "3bba0e69ff04ed298dd44677608e15c6c14e16fc14fb2dd52f6302b2a1b95339",
+    "modified_sha256": "af6b8556f5effdd8b713339c836df89a8ad9ae5d80745a43671db423b64a41ef"
+  },
+  {
+    "path": "Source/ThirdPerson/AI/RangedAIBehaviorNodes.h",
+    "original_sha256": "3d2df89f02a7e24aab56a392831e25c388d6a950c0d5e2c8050ab85676227ff4",
+    "modified_sha256": "69c5b3c6885124686b65d8183e3b5edd3b0d02b1e1ae2da7b6b6958025854b91"
+  },
+  {
+    "path": "Source/ThirdPerson/Character/TPCCharacter.cpp",
+    "original_sha256": "dd9a2ec0a5b31c264c3d25bb4c7e4e443ed2eb6aecedb5c02ce015b0a2ff04e7",
+    "modified_sha256": "13252df33b01d4f3bc50267fc3a39e006a8f0273c29b274ab52e61ec11fab42d"
+  },
+  {
+    "path": "Source/ThirdPerson/Character/TPCCharacter.h",
+    "original_sha256": "96d06c18cb87f3e206223f24a2d1e9b8fc68d4d1225cf6b6ff0f4ab34224c08b",
+    "modified_sha256": "1a2517a406b58e7884d58403bafa1207321437aea19bf10b7e3d87d5b61b40e3"
+  },
+  {
+    "path": "Source/ThirdPerson/Components/CombatComponent.cpp",
+    "original_sha256": "9198a5347891fb5029531864fe129210809cf927ed0c7f5a10b91acec78b9e07",
+    "modified_sha256": "9954b4f906a387533a2893d9305f66e8b0e183999c37f3f4809c7d24cff7b378"
+  },
+  {
+    "path": "Source/ThirdPerson/Tests/ActionSystemTests.cpp",
+    "original_sha256": "53237a631999178030ddf46f1cefc265cad494ac67023e7492a457201b17610f",
+    "modified_sha256": "1c32907ebdcda050b27c7ab87889c67088438321ee01dba1b83259286ee92cb9"
+  },
+  {
+    "path": "Source/ThirdPerson/Tests/ProjectileSystemTests.cpp",
+    "original_sha256": null,
+    "modified_sha256": "fe4e26ff961aba466c08a5bd166c1bec607344bc140982046cfd613989541e54"
+  },
+  {
+    "path": "Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.cpp",
+    "original_sha256": null,
+    "modified_sha256": "3ae7c5b1c4df561f6a78f57607c6b1ccd86664f89d8f1129f005ccc9eb6c7b0f"
+  },
+  {
+    "path": "Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.h",
+    "original_sha256": null,
+    "modified_sha256": "b5264a0c154370fbaa00358c6cc9a4560ff872117da7a8b4859954d4b9503d5a"
+  },
+  {
+    "path": "Source/ThirdPerson/Weapons/WeaponProjectile.cpp",
+    "original_sha256": "055d47594ff588aceea61fb0462a40860e27e4b4c1b50916d6b493f51e7640ad",
+    "modified_sha256": "e30808fed19879a939f93eca05ebfd48b7b4c00a95870240c13da76efc8e65de"
+  },
+  {
+    "path": "Source/ThirdPerson/Weapons/WeaponProjectile.h",
+    "original_sha256": "9143e1ff3931e912ac87f6b08206cb3e45a8b0b5627e7b81560b4e2aaf7d831b",
+    "modified_sha256": "685fc44af2b49f579557dac471aa9b2d7c4fb75426816ebb46b046a3b9347768"
+  },
+  {
+    "path": "Content/Third/AI/BB_RangedEnemy.uasset",
+    "original_sha256": "c7804dc496c9833909d7d3ac802d1a0bb7b5dc2ce146a1ac044c8e9ac76e423e",
+    "modified_sha256": "a66d0cc0abe3ed65da9b9b62394ce34861d365e23d208207b612a3a68ce13e36"
+  },
+  {
+    "path": "Content/Third/AI/BT_RangeEnemy.uasset",
+    "original_sha256": "f11f35c77535004c337888edd68e3a770504ab87bd929a581a10f141f31d8e28",
+    "modified_sha256": "7e3d6f27a26fcb01ed7917953b1a17c766aeca5fbcc16cf6ab7411ed7dc9a600"
+  },
+  {
+    "path": "Content/Third/Character/BP_TPCCharacter.uasset",
+    "original_sha256": "ebf12482488e713390c4a19a75e35868fbecc3e71b2056f57da6de6daf577c99",
+    "modified_sha256": "2c330e2c5a56b2f09095303d41254b46627f65f88cdd7750c6f6ad5953079ecc"
+  },
+  {
+    "path": "Content/Third/Weapon/BP_ArrowProjectile.uasset",
+    "original_sha256": "1e7d9bd98787efa57811de0ce7976dcfc0dfa8ea02fe8b5007a6e307a8320668",
+    "modified_sha256": "12eb9ace2acc5107521db6b3cd96644c100d076236d149cbda717bf76f804501"
+  }
+]

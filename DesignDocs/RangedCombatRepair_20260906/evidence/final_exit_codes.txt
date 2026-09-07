@@ -1,0 +1,5 @@
+AUTOMATION_EXIT=3
+test_runtime_final_EXIT=0
+test_legacy_combo_final_EXIT=0
+test_locked_modified_EXIT=0
+AUTOMATION_EXIT=0

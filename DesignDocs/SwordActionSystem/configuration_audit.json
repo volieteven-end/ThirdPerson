@@ -1,0 +1,200 @@
+{
+  "AM_Sword_Attack_01": [
+    {
+      "warp_target_name": "AttackTarget",
+      "warp_translation": true,
+      "warp_rotation": true,
+      "ignore_z_axis": true,
+      "warp_to_feet_location": true,
+      "rotation_type": "<MotionWarpRotationType.FACING: 1>",
+      "rotation_method": "<MotionWarpRotationMethod.SLERP: 0>",
+      "warp_rotation_time_multiplier": 1.0,
+      "warp_max_rotation_rate": 0.0
+    }
+  ],
+  "AM_Sword_Attack_02": [
+    {
+      "warp_target_name": "AttackTarget",
+      "warp_translation": true,
+      "warp_rotation": true,
+      "ignore_z_axis": true,
+      "warp_to_feet_location": true,
+      "rotation_type": "<MotionWarpRotationType.FACING: 1>",
+      "rotation_method": "<MotionWarpRotationMethod.SLERP: 0>",
+      "warp_rotation_time_multiplier": 1.0,
+      "warp_max_rotation_rate": 0.0
+    }
+  ],
+  "AM_Sword_Attack_03": [
+    {
+      "warp_target_name": "AttackTarget",
+      "warp_translation": true,
+      "warp_rotation": true,
+      "ignore_z_axis": true,
+      "warp_to_feet_location": true,
+      "rotation_type": "<MotionWarpRotationType.FACING: 1>",
+      "rotation_method": "<MotionWarpRotationMethod.SLERP: 0>",
+      "warp_rotation_time_multiplier": 1.0,
+      "warp_max_rotation_rate": 0.0
+    }
+  ],
+  "AM_Sword_Attack_04": [
+    {
+      "warp_target_name": "None",
+      "warp_translation": true,
+      "warp_rotation": true,
+      "ignore_z_axis": true,
+      "warp_to_feet_location": true,
+      "rotation_type": "<MotionWarpRotationType.DEFAULT: 0>",
+      "rotation_method": "<MotionWarpRotationMethod.SLERP: 0>",
+      "warp_rotation_time_multiplier": 1.0,
+      "warp_max_rotation_rate": 0.0
+    }
+  ],
+  "BP_TPCCharacter": {
+    "attack_warp_target_name": "AttackTarget",
+    "attack_facing_duration": 0.3499999940395355,
+    "attack_magnetism_range": 600.0,
+    "attack_magnetism_stop_distance": 120.0,
+    "free_attack_warp_distance": 100.0,
+    "dash_forward_montage": "/Game/Third/SwordAnimation/AM_Dodge_F_Anim_Montage.AM_Dodge_F_Anim_Montage",
+    "dash_backward_montage": "/Game/Third/SwordAnimation/AM_Dodge_B_Anim_Montage.AM_Dodge_B_Anim_Montage",
+    "dash_left_montage": "/Game/Third/SwordAnimation/AM_Dodge_L_Anim_Montage.AM_Dodge_L_Anim_Montage",
+    "dash_right_montage": "/Game/Third/SwordAnimation/AM_Dodge_R_Anim_Montage.AM_Dodge_R_Anim_Montage",
+    "death_montage": "/Game/Characters/Mannequins/Anims/Death/AM_EnemyDeath.AM_EnemyDeath",
+    "hit_front_animation": null,
+    "hit_back_animation": null,
+    "hit_left_animation": null,
+    "hit_right_animation": null
+  },
+  "combat_component": {
+    "attack_montages": [
+      "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_01_Montage.MM_Attack_01_Montage",
+      "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_02_Montage.MM_Attack_02_Montage",
+      "/Game/Characters/Mannequins/Anims/Unarmed/Attack/MM_Attack_03_Montage.MM_Attack_03_Montage"
+    ],
+    "uppercut_montage": "/Game/Third/SwordAnimation/AM_Sword_Rising.AM_Sword_Rising",
+    "air_attack_montage": "/Game/Third/SwordAnimation/AM_Sword_AirAttack.AM_Sword_AirAttack",
+    "starting_weapon": null,
+    "anim_class": null,
+    "relative_rotation": null,
+    "relative_scale3d": null,
+    "max_walk_speed": null,
+    "max_walk_speed_crouched": null
+  },
+  "equipment_component": {
+    "attack_montages": null,
+    "uppercut_montage": null,
+    "air_attack_montage": null,
+    "starting_weapon": "/Game/Third/DataAsset/DA_TestSword.DA_TestSword",
+    "anim_class": null,
+    "relative_rotation": null,
+    "relative_scale3d": null,
+    "max_walk_speed": null,
+    "max_walk_speed_crouched": null
+  },
+  "mesh": {
+    "attack_montages": null,
+    "uppercut_montage": null,
+    "air_attack_montage": null,
+    "starting_weapon": null,
+    "anim_class": "/Game/Third/Character/ABP_TPCCharacter.ABP_TPCCharacter_C",
+    "relative_rotation": "(Pitch=0.000000,Yaw=-90.000000,Roll=0.000000)",
+    "relative_scale3d": "(X=1.000000,Y=1.000000,Z=1.000000)",
+    "max_walk_speed": null,
+    "max_walk_speed_crouched": null
+  },
+  "character_movement": {
+    "attack_montages": null,
+    "uppercut_montage": null,
+    "air_attack_montage": null,
+    "starting_weapon": null,
+    "anim_class": null,
+    "relative_rotation": null,
+    "relative_scale3d": null,
+    "max_walk_speed": 450.0,
+    "max_walk_speed_crouched": 300.0
+  },
+  "ABP_TPCCharacter": {
+    "skeleton": "/Game/Characters/Mannequins/Meshes/SK_Mannequin.SK_Mannequin",
+    "parent_class": null,
+    "root_motion_mode": "<RootMotionMode.ROOT_MOTION_FROM_MONTAGES_ONLY: 3>"
+  },
+  "BS_SwordLocomotion": {
+    "blend_parameters": [
+      "(DisplayName=\"Direction\",Min=-180.000000,Max=180.000000,GridNum=8,bSnapToGrid=False,bWrapInput=True)",
+      "(DisplayName=\"Speed\",Min=0.000000,Max=650.000000,GridNum=6,bSnapToGrid=False,bWrapInput=False)",
+      "(DisplayName=\"None\",Min=0.000000,Max=100.000000,GridNum=4,bSnapToGrid=False,bWrapInput=False)"
+    ],
+    "sample_data": [
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Idle_Anim.Idle_Anim'\",SampleValue=(X=0.000000,Y=0.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_F_Anim.Walk_F_Anim'\",SampleValue=(X=0.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_F_R_Anim.Walk_F_R_Anim'\",SampleValue=(X=45.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_F_L_Anim.Walk_F_L_Anim'\",SampleValue=(X=-45.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_R_Anim.Walk_R_Anim'\",SampleValue=(X=90.000000,Y=203.602479,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_B_R_Anim.Walk_B_R_Anim'\",SampleValue=(X=135.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_B_Anim.Walk_B_Anim'\",SampleValue=(X=180.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_B_Anim.Walk_B_Anim'\",SampleValue=(X=-180.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_B_L_Anim.Walk_B_L_Anim'\",SampleValue=(X=-135.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Walk_L_Anim.Walk_L_Anim'\",SampleValue=(X=-90.000000,Y=200.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_F_Anim.Run_F_Anim'\",SampleValue=(X=0.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_B_Anim.Run_B_Anim'\",SampleValue=(X=180.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_B_Anim.Run_B_Anim'\",SampleValue=(X=-180.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_B_L_Anim.Run_B_L_Anim'\",SampleValue=(X=-135.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_B_R_Anim.Run_B_R_Anim'\",SampleValue=(X=135.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_F_L_Anim.Run_F_L_Anim'\",SampleValue=(X=-45.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_F_R_Anim.Run_F_R_Anim'\",SampleValue=(X=45.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_L_Anim.Run_L_Anim'\",SampleValue=(X=-90.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Run_R_Anim.Run_R_Anim'\",SampleValue=(X=90.000000,Y=400.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Sprint_Anim.Sprint_Anim'\",SampleValue=(X=0.000000,Y=650.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)"
+    ],
+    "axis_to_scale_animation": "<BlendSpaceAxis.BSA_NONE: 0>",
+    "interpolation_param": [
+      "(InterpolationTime=0.100000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_SpringDamper)",
+      "(InterpolationTime=0.200000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_EaseInOut)",
+      "(InterpolationTime=0.000000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_SpringDamper)"
+    ],
+    "target_weight_interpolation_speed_per_sec": 0.0
+  },
+  "BS_Crouch_Locomotion": {
+    "blend_parameters": [
+      "(DisplayName=\"Direction\",Min=-180.000000,Max=180.000000,GridNum=8,bSnapToGrid=False,bWrapInput=False)",
+      "(DisplayName=\"Speed\",Min=0.000000,Max=300.000000,GridNum=4,bSnapToGrid=False,bWrapInput=False)",
+      "(DisplayName=\"None\",Min=0.000000,Max=100.000000,GridNum=4,bSnapToGrid=False,bWrapInput=False)"
+    ],
+    "sample_data": [
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Idle_Anim.Crouch_Idle_Anim'\",SampleValue=(X=0.000000,Y=0.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_F_Anim.Crouch_Walk_F_Anim'\",SampleValue=(X=0.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_F_R_Anim.Crouch_Walk_F_R_Anim'\",SampleValue=(X=45.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_F_L_Anim.Crouch_Walk_F_L_Anim'\",SampleValue=(X=-45.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_R_Anim.Crouch_Walk_R_Anim'\",SampleValue=(X=90.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_B_R_Anim.Crouch_Walk_B_R_Anim'\",SampleValue=(X=135.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_B_L_Anim.Crouch_Walk_B_L_Anim'\",SampleValue=(X=-135.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_L_Anim.Crouch_Walk_L_Anim'\",SampleValue=(X=-90.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_B_Anim.Crouch_Walk_B_Anim'\",SampleValue=(X=180.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)",
+      "(Animation=\"/Script/Engine.AnimSequence'/Game/Third/SwordAnimation/Crouch_Walk_B_Anim.Crouch_Walk_B_Anim'\",SampleValue=(X=-180.000000,Y=300.000000,Z=0.000000),RateScale=1.000000,bMirror=False,bUseSingleFrameForBlending=False,FrameIndexToSample=0,bIncludeInAnalyseAll=True)"
+    ],
+    "axis_to_scale_animation": "<BlendSpaceAxis.BSA_NONE: 0>",
+    "interpolation_param": [
+      "(InterpolationTime=0.000000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_SpringDamper)",
+      "(InterpolationTime=0.000000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_SpringDamper)",
+      "(InterpolationTime=0.000000,DampingRatio=1.000000,MaxSpeed=0.000000,InterpolationType=BSIT_SpringDamper)"
+    ],
+    "target_weight_interpolation_speed_per_sec": 0.0
+  },
+  "DA_TestSword": {
+    "damage": 25.0,
+    "attack_cooldown": 0.550000011920929,
+    "attack_montages": [
+      "/Game/Third/SwordAnimation/AM_Sword_Attack_01.AM_Sword_Attack_01",
+      "/Game/Third/SwordAnimation/AM_Sword_Attack_02.AM_Sword_Attack_02",
+      "/Game/Third/SwordAnimation/AM_Sword_Attack_03.AM_Sword_Attack_03",
+      "/Game/Third/SwordAnimation/AM_Sword_Attack_04.AM_Sword_Attack_04"
+    ],
+    "blade_base_socket_name": "BladeBase",
+    "blade_tip_socket_name": "BladeTip",
+    "melee_hit_effect": "/Game/SwordAnimsetPro/Demo/FX/Particles/P_HitPoint.P_HitPoint",
+    "weapon_actor_class": "/Game/Third/Weapon/BP_SwordWeapon.BP_SwordWeapon_C",
+    "equip_socket_name": "weapon_r"
+  }
+}

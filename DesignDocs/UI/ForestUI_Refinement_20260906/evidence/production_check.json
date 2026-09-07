@@ -1,0 +1,38 @@
+{
+  "ForestStatusPanel": {
+    "alpha": 0.35,
+    "size": [
+      480.0,
+      162.0
+    ]
+  },
+  "ForestObjectivePanel": {
+    "alpha": 0.32,
+    "size": [
+      280.0,
+      112.0
+    ]
+  },
+  "WBP_Inventory": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+  "BP_EnemyCharacter": {
+    "status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+    "socket": "spine_03",
+    "size": 24,
+    "camera_reference_offset": [
+      0.0,
+      0.0,
+      -70.0
+    ]
+  },
+  "BP_EnemyRangedCharacter": {
+    "status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+    "socket": "spine_03",
+    "size": 24,
+    "camera_reference_offset": [
+      0.0,
+      0.0,
+      28.0
+    ]
+  },
+  "pass": true
+}

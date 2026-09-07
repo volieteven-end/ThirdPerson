@@ -1,0 +1,9 @@
+{
+  "stage": "baseline",
+  "world": "/Game/RoyalCapital/Maps/L_RoyalCapital.L_RoyalCapital",
+  "actors": 0,
+  "instances": 0,
+  "markers": 0,
+  "original_unchanged": true,
+  "literal_output": "BASELINE PASS | instances=0 | markers=0 | original_map=unchanged"
+}

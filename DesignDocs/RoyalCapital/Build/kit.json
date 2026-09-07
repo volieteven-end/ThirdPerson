@@ -1,0 +1,27 @@
+{
+  "meshes": {
+    "SM_RC_Cylinder": "/Game/RoyalCapital/Meshes/SM_RC_Cylinder",
+    "SM_RC_Cone": "/Game/RoyalCapital/Meshes/SM_RC_Cone",
+    "SM_RC_Gate": "/Game/RoyalCapital/Meshes/SM_RC_Gate",
+    "SM_RC_Arcade": "/Game/RoyalCapital/Meshes/SM_RC_Arcade",
+    "SM_RC_WindowBay": "/Game/RoyalCapital/Meshes/SM_RC_WindowBay",
+    "SM_RC_Ring": "/Game/RoyalCapital/Meshes/SM_RC_Ring"
+  },
+  "materials": {
+    "Stone": "/Game/RoyalCapital/Materials/M_RC_Stone.M_RC_Stone",
+    "DarkStone": "/Game/RoyalCapital/Materials/M_RC_DarkStone.M_RC_DarkStone",
+    "Paving": "/Game/RoyalCapital/Materials/M_RC_Paving.M_RC_Paving",
+    "Roof": "/Game/RoyalCapital/Materials/M_RC_Roof.M_RC_Roof",
+    "Trim": "/Game/RoyalCapital/Materials/M_RC_Trim.M_RC_Trim",
+    "Metal": "/Game/RoyalCapital/Materials/M_RC_Metal.M_RC_Metal",
+    "Wood": "/Game/RoyalCapital/Materials/M_RC_Wood.M_RC_Wood",
+    "Banner": "/Game/RoyalCapital/Materials/M_RC_Banner.M_RC_Banner",
+    "Window": "/Game/RoyalCapital/Materials/M_RC_Window.M_RC_Window",
+    "Gold": "/Game/RoyalCapital/Materials/M_RC_Gold.M_RC_Gold",
+    "Red": "/Game/RoyalCapital/Materials/M_RC_Red.M_RC_Red",
+    "Purple": "/Game/RoyalCapital/Materials/M_RC_Purple.M_RC_Purple",
+    "Cyan": "/Game/RoyalCapital/Materials/M_RC_Cyan.M_RC_Cyan",
+    "Flame": "/Game/RoyalCapital/Materials/M_RC_Flame.M_RC_Flame",
+    "Water": "/Game/RoyalCapital/Materials/M_RC_Water.M_RC_Water"
+  }
+}

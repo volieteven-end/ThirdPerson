@@ -1,0 +1,45 @@
+SwordAnimation 资源检查与设计验证 / 2026-09-06
+
+检查目标：E:\UNREAL\ue projects\ThirdPerson\Content\Third\SwordAnimation
+用途：读取保存的资产配置与骨骼数据，输出动作设计；游戏业务代码和原动画资产没有修改。
+
+1. 动画资产原生读取
+命令：& "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -run=pythonscript "-script=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/inspect_animations.py" -nullrhi -nosound -unattended -nop4 -nosplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/audit_engine2.log"
+输入：目标文件夹 140 个 .uasset。
+Python 脚本完成，输出 animation_audit.json、pose_samples.json；122 个 Sequence 均提取 9 个姿态。
+UE 进程退出码：1。
+原因：TPCAnimInstance.uasset 加载时引擎自动编译报告 skeleton missing；不是声称全项目编译通过。
+另外加载警告：AM_Sword_Attack_04 doesn't specify a valid Warp Target Name。
+首次命令使用反斜杠 -script 参数被 Python 转义，退出码 -1；已改用上列正斜杠命令完成读取。原始日志均保留。
+
+2. 关联配置读取
+命令：& "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -run=pythonscript "-script=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/inspect_configuration.py" -nullrhi -nosound -unattended -nop4 -nosplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/config_engine.log"
+输入：BP_TPCCharacter、ABP_TPCCharacter、两个 BlendSpace、DA_TestSword、4 个剑攻击 Montage。
+输出：CONFIGURATION_AUDIT_COMPLETE；configuration_audit.json。
+UE 进程退出码：0，仍保留上述第四段 WarpTarget 警告。
+
+3. 数值关键帧绘图
+命令：& "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/render_keyposes.py"
+输入：pose_samples.json，24 个重点动画，每个展示 6 个样本。
+输出：KEYPOSE_SHEETS=3；进程退出码：0。三张 PNG 已重新打开检查。
+绘图是实际骨骼数据的投影，不是完整蒙皮 / 剑刃渲染或实机录像。
+
+4. 清单、引用与原件验证
+命令：& "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionSystemAudit/20260906/package_report.py"
+输入：审计 JSON、原始 SHA256 清单、设计文档。
+输出：REPORT_VERIFIED（下列 JSON）；进程退出码：0。脚本断言覆盖资产数、姿态数、CSV 唯一条目、窗口顺序、文档链接、原文件哈希。
+本次不修改游戏资源，因此无游戏行为差异补丁，也未进行战斗实机验收。
+需要回到本次之前的游戏行为时，直接继续使用原资源；它们的哈希已验证保持不变。
+
+{
+  "assets": 140,
+  "sequences": 122,
+  "montages": 17,
+  "extra_anim_blueprints": 1,
+  "pose_samples": 1098,
+  "keypose_sheets": 3,
+  "montage_notify_rows": 14,
+  "original_files_hash_verified": 243,
+  "original_files_changed": 0,
+  "design_document_links": "PASS"
+}

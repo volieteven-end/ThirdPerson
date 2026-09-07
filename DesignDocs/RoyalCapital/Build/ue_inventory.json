@@ -1,0 +1,1959 @@
+{
+  "world": "/Game/ThirdPerson/Lvl_ThirdPerson.Lvl_ThirdPerson",
+  "actor_count": 74,
+  "dirty_maps": [],
+  "dirty_content": [
+    "/Game/Third/Character/BP_TPCCharacter",
+    "/Game/Third/SwordAnimation/Walk_B_Anim",
+    "/Game/Third/SwordAnimation/Walk_B_L_Anim",
+    "/Game/Characters/Mannequins/Anims/Unarmed/BS_Idle_Walk_Run"
+  ],
+  "meshes": [
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_a.SM_column_a",
+      "min": [
+        -59.318145751953125,
+        -57.56127166748047,
+        -0.2370758056640625
+      ],
+      "max": [
+        59.272369384765625,
+        59.27576446533203,
+        399.58045959472656
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_a_Inst.MI_column_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_a_top.SM_column_a_top",
+      "min": [
+        -62.56914520263672,
+        -61.499977111816406,
+        -0.2016143798828125
+      ],
+      "max": [
+        59.041770935058594,
+        60.530975341796875,
+        282.3069305419922
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_a_top_Inst.MI_column_a_top_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_b.SM_column_b",
+      "min": [
+        -95.91763305664062,
+        -95.25887298583984,
+        -0.1232147216796875
+      ],
+      "max": [
+        97.45272827148438,
+        95.80655670166016,
+        400.43006896972656
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_b_Inst.MI_column_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_b_top_A.SM_column_b_top_A",
+      "min": [
+        -136.0865020751953,
+        -136.02137756347656,
+        -0.0002899169921875
+      ],
+      "max": [
+        136.0256805419922,
+        136.05775451660156,
+        269.98512268066406
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_b_top_A_B_Inst.MI_column_b_top_A_B_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_b_top_B.SM_column_b_top_B",
+      "min": [
+        -124.02845764160156,
+        -123.99047088623047,
+        -0.0009307861328125
+      ],
+      "max": [
+        124.02847290039062,
+        123.99048614501953,
+        316.02317810058594
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_b_top_A_B_Inst.MI_column_b_top_A_B_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_c.SM_column_c",
+      "min": [
+        -134.98402404785156,
+        -135.61097717285156,
+        0.0
+      ],
+      "max": [
+        135.4795379638672,
+        135.61097717285156,
+        400.0
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_c_Inst.MI_column_c_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_c_broken.SM_column_c_broken",
+      "min": [
+        -134.98402404785156,
+        -135.61097717285156,
+        0.0
+      ],
+      "max": [
+        135.4795379638672,
+        135.61097717285156,
+        353.7171630859375
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_c_broken_Inst.MI_column_c_broken_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_column_ring.SM_column_ring",
+      "min": [
+        -149.6304168701172,
+        -151.14947509765625,
+        -47.25390625
+      ],
+      "max": [
+        149.6304168701172,
+        151.14947509765625,
+        47.253875732421875
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_column_ring_Inst.MI_column_ring_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_floor_tile.SM_floor_tile",
+      "min": [
+        -200.0,
+        -199.99996948242188,
+        -10.000008583068848
+      ],
+      "max": [
+        200.0,
+        200.00003051757812,
+        10.000008583068848
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_floor_tile_Inst.MI_floor_tile_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ornament.SM_ornament",
+      "min": [
+        -263.69488525390625,
+        -23.253616333007812,
+        -82.77056121826172
+      ],
+      "max": [
+        265.49957275390625,
+        15.041313171386719,
+        72.32373809814453
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ornament_Inst.MI_ornament_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_roof.SM_roof",
+      "min": [
+        -1200.0001220703125,
+        -600.0001220703125,
+        -0.000579833984375
+      ],
+      "max": [
+        1200.0008544921875,
+        600.0003662109375,
+        626.1133117675781
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_roof_Inst.MI_roof_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_a.SM_ruins_a",
+      "min": [
+        -80.4954833984375,
+        -51.37883758544922,
+        -50.00838851928711
+      ],
+      "max": [
+        80.49551391601562,
+        51.37883758544922,
+        50.00838851928711
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_a_b_c_d_Inst.MI_ruins_a_b_c_d_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_b.SM_ruins_b",
+      "min": [
+        -200.00347900390625,
+        -50.003929138183594,
+        -50.007225036621094
+      ],
+      "max": [
+        200.00347900390625,
+        50.003929138183594,
+        50.007225036621094
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_a_b_c_d_Inst.MI_ruins_a_b_c_d_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_c.SM_ruins_c",
+      "min": [
+        -50.010162353515625,
+        -50.025047302246094,
+        -50.00049591064453
+      ],
+      "max": [
+        50.010154724121094,
+        50.02503967285156,
+        50.00078582763672
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_a_b_c_d_Inst.MI_ruins_a_b_c_d_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_d.SM_ruins_d",
+      "min": [
+        -50.019683837890625,
+        -50.004478454589844,
+        -50.02229690551758
+      ],
+      "max": [
+        50.019683837890625,
+        50.00447082519531,
+        50.02229690551758
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_a_b_c_d_Inst.MI_ruins_a_b_c_d_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_e.SM_ruins_e",
+      "min": [
+        -39.91688919067383,
+        -19.96808624267578,
+        0.027933120727539062
+      ],
+      "max": [
+        39.88862228393555,
+        19.907142639160156,
+        30.001379013061523
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_f.SM_ruins_f",
+      "min": [
+        -34.22514343261719,
+        -19.982704162597656,
+        -0.2885589599609375
+      ],
+      "max": [
+        34.22515106201172,
+        19.982704162597656,
+        29.77867889404297
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_g.SM_ruins_g",
+      "min": [
+        -39.99867248535156,
+        -38.99259948730469,
+        -0.036644935607910156
+      ],
+      "max": [
+        39.99867248535156,
+        38.992591857910156,
+        29.957146644592285
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_h.SM_ruins_h",
+      "min": [
+        -39.98487854003906,
+        -39.028167724609375,
+        -0.122711181640625
+      ],
+      "max": [
+        39.98487854003906,
+        39.02818298339844,
+        29.862102508544922
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_i.SM_ruins_i",
+      "min": [
+        -15.128387451171875,
+        -19.999130249023438,
+        -0.17972373962402344
+      ],
+      "max": [
+        15.128379821777344,
+        19.999130249023438,
+        29.79563331604004
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_ruins_j.SM_ruins_j",
+      "min": [
+        -15.509151458740234,
+        -13.932113647460938,
+        -0.31351280212402344
+      ],
+      "max": [
+        15.509162902832031,
+        13.932113647460938,
+        29.815473556518555
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_ruins_e_f_g_h_i_j_Inst.MI_ruins_e_f_g_h_i_j_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_stairs_a.SM_stairs_a",
+      "min": [
+        -200.22979736328125,
+        -200.3571014404297,
+        -102.26876831054688
+      ],
+      "max": [
+        200.22979736328125,
+        200.3571014404297,
+        102.26876831054688
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_stairs_a_Inst.MI_stairs_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_stairs_border_a.SM_stairs_border_a",
+      "min": [
+        -200.0,
+        -13.264976501464844,
+        -3.0517578125e-05
+      ],
+      "max": [
+        200.0,
+        13.265010833740234,
+        50.01997375488281
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_stairs_border_a_Inst.MI_stairs_border_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_stairs_wall_a.SM_stairs_wall_a",
+      "min": [
+        -200.0,
+        -13.264976501464844,
+        -2.288818359375e-05
+      ],
+      "max": [
+        200.0,
+        13.265010833740234,
+        249.99120330810547
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_stairs_wall_a_Inst.MI_stairs_wall_a_Inst",
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_tile_Inst.MI_wall_tile_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_stairs_wall_b.SM_stairs_wall_b",
+      "min": [
+        -200.0,
+        -9.99997329711914,
+        0.0
+      ],
+      "max": [
+        200.0,
+        10.00002670288086,
+        400.0
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_tile_Inst.MI_wall_tile_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_stairs_wall_c.SM_stairs_wall_c",
+      "min": [
+        -200.0,
+        -9.99997329711914,
+        0.0
+      ],
+      "max": [
+        200.0,
+        10.00002670288086,
+        200.0
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_tile_Inst.MI_wall_tile_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_a.SM_wall_a",
+      "min": [
+        -400.0,
+        -20.0,
+        0.0
+      ],
+      "max": [
+        400.0,
+        20.0,
+        800.0
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_Inst.MI_wall_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_angle.SM_wall_angle",
+      "min": [
+        -53.604454040527344,
+        -54.15571975708008,
+        -0.19244384765625
+      ],
+      "max": [
+        50.034706115722656,
+        50.03287124633789,
+        800.0180053710938
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_angle_Inst.MI_wall_angle_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_arch.SM_wall_arch",
+      "min": [
+        -600.8096923828125,
+        -45.79765319824219,
+        -1.56768798828125
+      ],
+      "max": [
+        601.3472900390625,
+        45.78898620605469,
+        800.5211181640625
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_arch_Inst.MI_wall_arch_Inst",
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_Inst.MI_wall_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_border_a.SM_wall_border_a",
+      "min": [
+        -200.0,
+        -40.0,
+        0.0
+      ],
+      "max": [
+        200.0,
+        40.0,
+        94.44044494628906
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_border_a_Inst.MI_wall_border_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_border_angle.SM_wall_border_angle",
+      "min": [
+        -160.0,
+        -160.0,
+        0.0
+      ],
+      "max": [
+        100.0,
+        100.0,
+        94.44044494628906
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_border_angle_Inst.MI_wall_border_angle_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_border_b.SM_wall_border_b",
+      "min": [
+        -300.0,
+        -40.0,
+        0.0
+      ],
+      "max": [
+        300.0,
+        40.0,
+        94.44044494628906
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_border_b_Inst.MI_wall_border_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/construction_props/SM_wall_border_c.SM_wall_border_c",
+      "min": [
+        -79.99999237060547,
+        -40.0,
+        0.0
+      ],
+      "max": [
+        79.99999237060547,
+        40.0,
+        94.44044494628906
+      ],
+      "materials": [
+        "/Game/green_Island/materials/construction_props_materials/MI_wall_border_c_Inst.MI_wall_border_c_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_bush_a.SM_bush_a",
+      "min": [
+        -96.29253387451172,
+        -93.8847427368164,
+        -5.3330078125
+      ],
+      "max": [
+        95.1586685180664,
+        97.56645965576172,
+        148.5130615234375
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_bush_a_Inst.MI_bush_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_bush_b.SM_bush_b",
+      "min": [
+        -48.2913703918457,
+        -47.23236846923828,
+        -1.690877914428711
+      ],
+      "max": [
+        60.20060348510742,
+        65.08231353759766,
+        42.89261436462402
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_bush_b_c_Inst.MI_bush_b_c_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_flower_a.SM_flower_a",
+      "min": [
+        -29.08429718017578,
+        -34.392311096191406,
+        -0.18280935287475586
+      ],
+      "max": [
+        24.91632080078125,
+        34.76543426513672,
+        6.906457901000977
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_flower_Inst.MI_flower_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_flower_b.SM_flower_b",
+      "min": [
+        -20.745447158813477,
+        -19.839231491088867,
+        0.019816875457763672
+      ],
+      "max": [
+        22.011259078979492,
+        22.02827262878418,
+        6.94720458984375
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_flower_Inst.MI_flower_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_flower_c.SM_flower_c",
+      "min": [
+        -20.745447158813477,
+        -17.465686798095703,
+        0.17440032958984375
+      ],
+      "max": [
+        16.865339279174805,
+        19.437427520751953,
+        7.10178804397583
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_flower_Inst.MI_flower_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_flower_d.SM_flower_d",
+      "min": [
+        -21.520034790039062,
+        -31.912782669067383,
+        -0.7559585571289062
+      ],
+      "max": [
+        21.520034790039062,
+        31.912782669067383,
+        48.02979278564453
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_flower_Inst.MI_flower_Inst",
+        "/Game/green_Island/materials/plants_materials/MI_flower_Inst.MI_flower_Inst",
+        "/Game/green_Island/materials/plants_materials/MI_grass_a_Inst.MI_grass_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_grass_a.SM_grass_a",
+      "min": [
+        -44.96031951904297,
+        -21.4414005279541,
+        -1.0471839904785156
+      ],
+      "max": [
+        39.945335388183594,
+        39.05692100524902,
+        77.39746475219727
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_grass_a_Inst.MI_grass_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_vines_a.SM_vines_a",
+      "min": [
+        -271.51190185546875,
+        -169.98838806152344,
+        -562.8873901367188
+      ],
+      "max": [
+        269.57720947265625,
+        84.57527160644531,
+        72.52154541015625
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_vines_a_Inst.MI_vines_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/plants/SM_vines_b.SM_vines_b",
+      "min": [
+        -75.95796203613281,
+        -54.32246398925781,
+        -562.5510864257812
+      ],
+      "max": [
+        69.31996154785156,
+        51.94319152832031,
+        48.073486328125
+      ],
+      "materials": [
+        "/Game/green_Island/materials/plants_materials/MI_vines_b_Inst.MI_vines_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_small_stone_a.SM_small_stone_a",
+      "min": [
+        -28.20981788635254,
+        -41.96101379394531,
+        -5.805735111236572
+      ],
+      "max": [
+        28.209821701049805,
+        41.96101379394531,
+        18.083098888397217
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_small_stones_Inst.MI_small_stones_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_small_stone_b.SM_small_stone_b",
+      "min": [
+        -26.459388732910156,
+        -33.43141174316406,
+        -5.77600622177124
+      ],
+      "max": [
+        26.459388732910156,
+        33.43141174316406,
+        18.576706409454346
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_small_stones_Inst.MI_small_stones_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_small_stone_c.SM_small_stone_c",
+      "min": [
+        -17.281944274902344,
+        -15.268487930297852,
+        -5.007894992828369
+      ],
+      "max": [
+        17.281944274902344,
+        15.268486022949219,
+        12.961886882781982
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_small_stones_Inst.MI_small_stones_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_a.SM_stone_a",
+      "min": [
+        -120.51262664794922,
+        -115.40042114257812,
+        -138.29043579101562
+      ],
+      "max": [
+        117.78144073486328,
+        116.78887939453125,
+        138.87774658203125
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_a_Inst.MI_stone_a_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_b.SM_stone_b",
+      "min": [
+        -123.96214294433594,
+        -119.01268768310547,
+        -124.60515594482422
+      ],
+      "max": [
+        123.96214294433594,
+        119.01268768310547,
+        124.60515594482422
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_b_Inst.MI_stone_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_c.SM_stone_c",
+      "min": [
+        -154.9305419921875,
+        -150.9755096435547,
+        -64.16429138183594
+      ],
+      "max": [
+        154.9305419921875,
+        150.9755096435547,
+        64.16429138183594
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_c_Inst.MI_stone_c_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_d.SM_stone_d",
+      "min": [
+        -83.43547058105469,
+        -94.86306762695312,
+        -31.046783447265625
+      ],
+      "max": [
+        83.43547058105469,
+        94.86306762695312,
+        106.4471435546875
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_d_Inst.MI_stone_d_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_e.SM_stone_e",
+      "min": [
+        -122.86601257324219,
+        -120.26974487304688,
+        -222.59230041503906
+      ],
+      "max": [
+        140.38987731933594,
+        116.88104248046875,
+        202.04026794433594
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_e_Inst.MI_stone_e_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_f.SM_stone_f",
+      "min": [
+        -112.24503326416016,
+        -117.87843322753906,
+        -199.51983642578125
+      ],
+      "max": [
+        118.85985565185547,
+        116.20338439941406,
+        210.65457153320312
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_f_Inst.MI_stone_f_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/stones/SM_stone_g.SM_stone_g",
+      "min": [
+        -226.62705993652344,
+        -198.70018005371094,
+        -273.09454345703125
+      ],
+      "max": [
+        186.16017150878906,
+        205.5132598876953,
+        273.07635498046875
+      ],
+      "materials": [
+        "/Game/green_Island/materials/stones_materials/MI_stone_g_Inst.MI_stone_g_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_a.SM_tree_a",
+      "min": [
+        -393.68487548828125,
+        -303.87139892578125,
+        -27.4197998046875
+      ],
+      "max": [
+        385.11090087890625,
+        468.71563720703125,
+        1249.260498046875
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_bark_a_Inst.MI_bark_a_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_a_A_Inst.MI_foliage_a_A_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_b.SM_tree_b",
+      "min": [
+        -431.9468994140625,
+        -472.2333679199219,
+        -32.08856201171875
+      ],
+      "max": [
+        509.94000244140625,
+        490.1437683105469,
+        1938.3861694335938
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_bark_b_Inst.MI_bark_b_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_a_B_Inst.MI_foliage_a_B_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_a_A_Inst.MI_foliage_a_A_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_c.SM_tree_c",
+      "min": [
+        -322.4184875488281,
+        -432.7127990722656,
+        -30.633697509765625
+      ],
+      "max": [
+        353.4701843261719,
+        241.83541870117188,
+        1051.6762390136719
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_bark_c_Inst.MI_bark_c_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_a_A_Inst.MI_foliage_a_A_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_d.SM_tree_d",
+      "min": [
+        -149.36972045898438,
+        -117.66071319580078,
+        -7.03759765625
+      ],
+      "max": [
+        152.52169799804688,
+        127.91577911376953,
+        189.0735626220703
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_base_bark_tree_Inst.MI_base_bark_tree_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_tree_bush_Inst.MI_foliage_tree_bush_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_e.SM_tree_e",
+      "min": [
+        -703.081298828125,
+        -660.33642578125,
+        -39.35797119140625
+      ],
+      "max": [
+        576.158935546875,
+        634.2125244140625,
+        1688.7890014648438
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_base_bark_tree_Inst.MI_base_bark_tree_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_b_Inst.MI_foliage_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_f.SM_tree_f",
+      "min": [
+        -845.5654296875,
+        -804.98193359375,
+        -40.8702392578125
+      ],
+      "max": [
+        649.4906005859375,
+        748.4498291015625,
+        1717.4552001953125
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_base_bark_tree_Inst.MI_base_bark_tree_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_b_Inst.MI_foliage_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/trees/SM_tree_g.SM_tree_g",
+      "min": [
+        -495.53765869140625,
+        -402.5651550292969,
+        -21.09149169921875
+      ],
+      "max": [
+        307.73828125,
+        416.7964172363281,
+        1082.8936157226562
+      ],
+      "materials": [
+        "/Game/green_Island/materials/trees_materials/MI_base_bark_tree_Inst.MI_base_bark_tree_Inst",
+        "/Game/green_Island/materials/trees_materials/MI_foliage_b_Inst.MI_foliage_b_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/water/SM_waterfall_flow_mesh.SM_waterfall_flow_mesh",
+      "min": [
+        -254.64785766601562,
+        -254.64797973632812,
+        -400.0
+      ],
+      "max": [
+        254.64785766601562,
+        -0.5937042236328125,
+        400.00006103515625
+      ],
+      "materials": [
+        "/Game/green_Island/materials/water_materials/MI_water_flow_Inst.MI_water_flow_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/water/SM_water_noise_mesh.SM_water_noise_mesh",
+      "min": [
+        -505.71209716796875,
+        -507.73370361328125,
+        2.15875244140625
+      ],
+      "max": [
+        517.3458862304688,
+        505.50531005859375,
+        183.12342834472656
+      ],
+      "materials": [
+        "/Game/green_Island/materials/water_materials/MI_water_noise_Inst.MI_water_noise_Inst"
+      ]
+    },
+    {
+      "path": "/Game/green_Island/meshes/water/SM_water_spline.SM_water_spline",
+      "min": [
+        -92.01416015625,
+        -400.0,
+        -199.66163635253906
+      ],
+      "max": [
+        92.01416015625,
+        400.0,
+        199.6616668701172
+      ],
+      "materials": [
+        "/Game/green_Island/materials/water_materials/MI_water_river_Inst.MI_water_river_Inst"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_Cube.SM_Cube",
+      "min": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_PrototypeGrid_Gray.MI_PrototypeGrid_Gray"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_Ramp.SM_Ramp",
+      "min": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max": [
+        100.0,
+        100.0,
+        100.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_PrototypeGrid_Gray.MI_PrototypeGrid_Gray"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_Cylinder.SM_Cylinder",
+      "min": [
+        -50.0,
+        -50.0,
+        0.0
+      ],
+      "max": [
+        50.0,
+        50.0,
+        100.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_PrototypeGrid_Gray.MI_PrototypeGrid_Gray"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_QuarterCylinder.SM_QuarterCylinder",
+      "min": [
+        -2.9802324661432067e-06,
+        -3.7748950489913113e-06,
+        0.0
+      ],
+      "max": [
+        50.0,
+        50.0,
+        100.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_PrototypeGrid_Gray.MI_PrototypeGrid_Gray"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_ChamferCube.SM_ChamferCube",
+      "min": [
+        -50.00000762939453,
+        -50.00000762939453,
+        -50.0
+      ],
+      "max": [
+        50.00000762939453,
+        50.00000762939453,
+        50.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_DefaultColorway.MI_DefaultColorway"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_Plane.SM_Plane",
+      "min": [
+        -50.0,
+        -50.0,
+        0.0
+      ],
+      "max": [
+        50.0,
+        50.0,
+        0.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_DefaultColorway.MI_DefaultColorway"
+      ]
+    },
+    {
+      "path": "/Game/LevelPrototyping/Meshes/SM_QuarterCylinderOuter.SM_QuarterCylinderOuter",
+      "min": [
+        1.3216094885137863e-12,
+        -99.99998474121094,
+        0.0
+      ],
+      "max": [
+        100.00000762939453,
+        1.6292065993184224e-05,
+        100.0
+      ],
+      "materials": [
+        "/Game/LevelPrototyping/Materials/MI_PrototypeGrid_Gray.MI_PrototypeGrid_Gray"
+      ]
+    },
+    {
+      "path": "/Game/Fab/Wooden_Door/Door.Door",
+      "min": [
+        0.0,
+        -10.56427001953125,
+        0.0
+      ],
+      "max": [
+        228.60000610351562,
+        21.289852142333984,
+        549.0142211914062
+      ],
+      "materials": [
+        "/Game/Fab/Wooden_Door/02_-_Default.02_-_Default"
+      ]
+    },
+    {
+      "path": "/Game/Fab/Magic_Potion/day_4_potion_bottle/StaticMeshes/day_4_potion_bottle.day_4_potion_bottle",
+      "min": [
+        -100.62510681152344,
+        -98.40619659423828,
+        -13.228384017944336
+      ],
+      "max": [
+        98.40618896484375,
+        98.40615844726562,
+        350.482666015625
+      ],
+      "materials": [
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Glass.Glass",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Cork-Material.Cork-Material",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Metal-heart.Metal-heart",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Brass.Brass",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Diamond.Diamond",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/bubble.bubble",
+        "/Game/Fab/Magic_Potion/day_4_potion_bottle/Materials/Liquid.Liquid"
+      ]
+    },
+    {
+      "path": "/Game/Fab/Low_Poly_Stylized_Rustic_Chest_\u2013_Hand-Painted_Game-Ready_3D_Asset/Stylized_Rustic_Chest/StaticMeshes/Stylized_Rustic_Chest.Stylized_Rustic_Chest",
+      "min": [
+        -62.5833740234375,
+        -46.35208511352539,
+        -5.9604644775390625e-06
+      ],
+      "max": [
+        62.5833740234375,
+        46.35208511352539,
+        79.98552703857422
+      ],
+      "materials": [
+        "/Game/Fab/Low_Poly_Stylized_Rustic_Chest_\u2013_Hand-Painted_Game-Ready_3D_Asset/Stylized_Rustic_Chest/Materials/Chest_Mat.Chest_Mat"
+      ]
+    },
+    {
+      "path": "/Game/Fab/Potion_Bottle/scene/StaticMeshes/scene.scene",
+      "min": [
+        -23711.259765625,
+        -23711.259765625,
+        589.9752807617188
+      ],
+      "max": [
+        23711.26953125,
+        23711.26953125,
+        73439.828125
+      ],
+      "materials": [
+        "/Game/Fab/Potion_Bottle/scene/Materials/Potion_Bottle_Mat_1001.Potion_Bottle_Mat_1001"
+      ]
+    },
+    {
+      "path": "/Game/Fab/Wooden_Door/DoorFrame.DoorFrame",
+      "min": [
+        -144.61062622070312,
+        -10.377706527709961,
+        -0.6220901608467102
+      ],
+      "max": [
+        144.61062622070312,
+        10.377754211425781,
+        580.2125854492188
+      ],
+      "materials": [
+        "/Game/Fab/Wooden_Door/02_-_Default.02_-_Default"
+      ]
+    }
+  ],
+  "EditorLevelLibrary": [
+    "acquire_editor_element_handle",
+    "call_method",
+    "cast",
+    "clear_actor_selection_set",
+    "convert_actors",
+    "create_proxy_mesh_actor",
+    "destroy_actor",
+    "editor_end_play",
+    "editor_invalidate_viewports",
+    "editor_play_simulate",
+    "editor_set_game_view",
+    "eject_pilot_level_actor",
+    "get_actor_reference",
+    "get_all_level_actors",
+    "get_all_level_actors_components",
+    "get_class",
+    "get_default_object",
+    "get_editor_property",
+    "get_editor_world",
+    "get_fname",
+    "get_full_name",
+    "get_game_world",
+    "get_level_viewport_camera_info",
+    "get_name",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_pie_worlds",
+    "get_selected_level_actors",
+    "get_typed_outer",
+    "get_world",
+    "is_editor_property_overridden",
+    "is_package_external",
+    "join_static_mesh_actors",
+    "load_level",
+    "merge_static_mesh_actors",
+    "modify",
+    "new_level",
+    "new_level_from_template",
+    "pilot_level_actor",
+    "rename",
+    "replace_mesh_components_materials",
+    "replace_mesh_components_materials_on_actors",
+    "replace_mesh_components_meshes",
+    "replace_mesh_components_meshes_on_actors",
+    "replace_selected_actors",
+    "reset_editor_property",
+    "save_all_dirty_levels",
+    "save_current_level",
+    "select_nothing",
+    "set_actor_selection_state",
+    "set_current_level_by_name",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_level_viewport_camera_info",
+    "set_selected_level_actors",
+    "spawn_actor_from_class",
+    "spawn_actor_from_object",
+    "static_class"
+  ],
+  "EditorLevelSubsystem": null,
+  "EditorActorSubsystem": [
+    "acquire_editor_element_handle",
+    "call_method",
+    "cast",
+    "clear_actor_selection_set",
+    "convert_actors",
+    "delete_selected_actors",
+    "destroy_actor",
+    "destroy_actors",
+    "duplicate_actor",
+    "duplicate_actors",
+    "duplicate_selected_actors",
+    "get_actor_reference",
+    "get_all_level_actors",
+    "get_all_level_actors_components",
+    "get_class",
+    "get_default_object",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_name",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_selected_level_actors",
+    "get_typed_outer",
+    "get_world",
+    "invert_selection",
+    "is_editor_property_overridden",
+    "is_package_external",
+    "modify",
+    "on_actor_label_changed",
+    "on_delete_actors_begin",
+    "on_delete_actors_end",
+    "on_duplicate_actors_begin",
+    "on_duplicate_actors_end",
+    "on_edit_copy_actors_begin",
+    "on_edit_copy_actors_end",
+    "on_edit_cut_actors_begin",
+    "on_edit_cut_actors_end",
+    "on_edit_paste_actors_begin",
+    "on_edit_paste_actors_end",
+    "on_new_actors_dropped",
+    "on_new_actors_placed",
+    "rename",
+    "reset_editor_property",
+    "select_all",
+    "select_all_children",
+    "select_nothing",
+    "set_actor_selection_state",
+    "set_actor_transform",
+    "set_component_transform",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_selected_level_actors",
+    "spawn_actor_from_class",
+    "spawn_actor_from_object",
+    "static_class"
+  ],
+  "StaticMeshEditorSubsystem": [
+    "acquire_editor_element_handle",
+    "add_simple_collisions",
+    "add_simple_collisions_with_notification",
+    "add_uv_channel",
+    "bulk_set_convex_decomposition_collisions",
+    "bulk_set_convex_decomposition_collisions_with_notification",
+    "call_method",
+    "cast",
+    "create_proxy_mesh_actor",
+    "enable_section_affect_distance_field_lighting",
+    "enable_section_cast_shadow",
+    "enable_section_collision",
+    "enable_section_force_opaque",
+    "enable_section_visible_in_ray_tracing",
+    "generate_box_uv_channel",
+    "generate_cylindrical_uv_channel",
+    "generate_planar_uv_channel",
+    "get_class",
+    "get_collision_complexity",
+    "get_convex_collision_count",
+    "get_default_object",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_lod_build_settings",
+    "get_lod_count",
+    "get_lod_group",
+    "get_lod_material_slot",
+    "get_lod_reduction_settings",
+    "get_lod_screen_sizes",
+    "get_name",
+    "get_nanite_settings",
+    "get_nanite_source_filename",
+    "get_num_uv_channels",
+    "get_number_materials",
+    "get_number_verts",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_simple_collision_count",
+    "get_typed_outer",
+    "get_world",
+    "has_instance_vertex_colors",
+    "has_vertex_colors",
+    "import_lod",
+    "import_nanite_hi_res_mesh",
+    "insert_uv_channel",
+    "is_editor_property_overridden",
+    "is_package_external",
+    "is_section_affect_distance_field_lighting_enabled",
+    "is_section_cast_shadow_enabled",
+    "is_section_collision_enabled",
+    "is_section_force_opaque_enabled",
+    "is_section_visible_in_ray_tracing_enabled",
+    "join_static_mesh_actors",
+    "merge_static_mesh_actors",
+    "modify",
+    "reimport_all_custom_lo_ds",
+    "reimport_all_custom_lods",
+    "remove_collisions",
+    "remove_collisions_with_notification",
+    "remove_lods",
+    "remove_uv_channel",
+    "rename",
+    "replace_mesh_components_materials",
+    "replace_mesh_components_materials_on_actors",
+    "replace_mesh_components_meshes",
+    "replace_mesh_components_meshes_on_actors",
+    "reset_editor_property",
+    "set_allow_cpu_access",
+    "set_convex_decomposition_collisions",
+    "set_convex_decomposition_collisions_with_notification",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_generate_lightmap_uv",
+    "set_lod_build_settings",
+    "set_lod_from_static_mesh",
+    "set_lod_group",
+    "set_lod_material_slot",
+    "set_lod_reduction_settings",
+    "set_lod_screen_sizes",
+    "set_lods",
+    "set_lods_with_notification",
+    "set_nanite_settings",
+    "static_class",
+    "update_nanite_source_filename"
+  ],
+  "GeometryScriptLibrary_MeshPrimitiveFunctions": null,
+  "GeometryScriptLibrary_StaticMeshFunctions": null,
+  "GeometryScriptLibrary_MeshBooleanFunctions": null,
+  "DynamicMesh": [
+    "acquire_editor_element_handle",
+    "add_named_polygroup_layer",
+    "add_triangle_to_mesh",
+    "add_triangles_to_mesh",
+    "add_uv_element_to_mesh",
+    "add_vertex_to_mesh",
+    "add_vertices_to_mesh",
+    "append_bounding_box",
+    "append_bounding_box_with_collision",
+    "append_box",
+    "append_box_with_collision",
+    "append_buffers_to_mesh",
+    "append_capsule",
+    "append_capsule_with_collision",
+    "append_cone",
+    "append_curved_stairs",
+    "append_cylinder",
+    "append_delaunay_triangulation2d",
+    "append_disc",
+    "append_linear_stairs",
+    "append_mesh",
+    "append_mesh_repeated",
+    "append_mesh_repeated_with_materials",
+    "append_mesh_transformed",
+    "append_mesh_transformed_with_materials",
+    "append_mesh_with_materials",
+    "append_oriented_box",
+    "append_oriented_box_with_collision",
+    "append_rectangle",
+    "append_rectangle_compatibility_5_0",
+    "append_rectangle_xy",
+    "append_revolve_path",
+    "append_revolve_polygon",
+    "append_round_rectangle",
+    "append_round_rectangle_compatibility_5_0",
+    "append_round_rectangle_xy",
+    "append_simple_extrude_polygon",
+    "append_simple_swept_polygon",
+    "append_sphere_box",
+    "append_sphere_box_with_collision",
+    "append_sphere_lat_long",
+    "append_sphere_lat_long_with_collision",
+    "append_spiral_revolve_polygon",
+    "append_sweep_polygon",
+    "append_sweep_polyline",
+    "append_torus",
+    "append_triangulated_polygon",
+    "append_triangulated_polygon3d",
+    "append_voronoi_diagram2d",
+    "apply_adaptive_remesh",
+    "apply_bend_warp_to_mesh",
+    "apply_cluster_simplify_to_edge_length",
+    "apply_displace_from_per_vertex_vectors",
+    "apply_displace_from_texture_map",
+    "apply_editor_simplify_to_triangle_count",
+    "apply_editor_simplify_to_vertex_count",
+    "apply_flare_warp_to_mesh",
+    "apply_iterative_smoothing_to_mesh",
+    "apply_math_warp_to_mesh",
+    "apply_mesh_bevel_edge_selection",
+    "apply_mesh_bevel_selection",
+    "apply_mesh_boolean",
+    "apply_mesh_disconnect_faces",
+    "apply_mesh_disconnect_faces_along_edges",
+    "apply_mesh_duplicate_faces",
+    "apply_mesh_extrude",
+    "apply_mesh_extrude_compatibility_5p0",
+    "apply_mesh_inset_outset_faces",
+    "apply_mesh_iso_curves",
+    "apply_mesh_linear_extrude_faces",
+    "apply_mesh_mirror",
+    "apply_mesh_morphology",
+    "apply_mesh_offset",
+    "apply_mesh_offset_faces",
+    "apply_mesh_plane_cut",
+    "apply_mesh_plane_slice",
+    "apply_mesh_polygroup_bevel",
+    "apply_mesh_self_union",
+    "apply_mesh_shell",
+    "apply_mesh_solidify",
+    "apply_perlin_noise_to_mesh",
+    "apply_perlin_noise_to_mesh2",
+    "apply_pn_tessellation",
+    "apply_polygroup_catmull_clark_sub_d",
+    "apply_selective_tessellation",
+    "apply_simplify_to_edge_length",
+    "apply_simplify_to_planar",
+    "apply_simplify_to_polygroup_topology",
+    "apply_simplify_to_tolerance",
+    "apply_simplify_to_triangle_count",
+    "apply_simplify_to_vertex_count",
+    "apply_texel_density_uv_scaling",
+    "apply_triangle_loop_sub_d",
+    "apply_twist_warp_to_mesh",
+    "apply_uniform_remesh",
+    "apply_uniform_tessellation",
+    "auto_generate_patch_builder_mesh_u_vs",
+    "auto_generate_x_atlas_mesh_u_vs",
+    "auto_repair_normals",
+    "blur_mesh_vertex_colors",
+    "build_bvh_for_mesh",
+    "call_method",
+    "cast",
+    "clear_material_i_ds",
+    "clear_polygroups",
+    "clear_uv_channel",
+    "compact_material_i_ds",
+    "compact_mesh",
+    "compute_mesh_convex_decomposition",
+    "compute_mesh_convex_hull",
+    "compute_mesh_local_uv_param",
+    "compute_mesh_oriented_box",
+    "compute_mesh_swept_hull",
+    "compute_non_uniform_point_sampling",
+    "compute_point_sampling",
+    "compute_polygroups_from_angle_threshold",
+    "compute_polygroups_from_polygon_detection",
+    "compute_smooth_bone_weights",
+    "compute_split_normals",
+    "compute_tangents",
+    "compute_triangle_barycentric_coords",
+    "compute_uniform_random_point_sampling",
+    "compute_vertex_weighted_point_sampling",
+    "convert_components_to_polygroups",
+    "convert_index_array_to_mesh_selection",
+    "convert_index_list_to_mesh_selection",
+    "convert_index_set_to_mesh_selection",
+    "convert_mesh_selection",
+    "convert_mesh_selection_to_index_array",
+    "convert_mesh_selection_to_index_list",
+    "convert_mesh_vertex_colors_linear_to_srgb",
+    "convert_mesh_vertex_colors_srgb_to_linear",
+    "convert_uv_islands_to_polygroups",
+    "copy_bones_from_mesh",
+    "copy_mesh_selection_to_mesh",
+    "copy_mesh_to_mesh",
+    "copy_mesh_to_mesh_uv_layer",
+    "copy_mesh_uv_layer_to_mesh",
+    "copy_polygroups_layer",
+    "copy_uv_set",
+    "create_select_all_mesh_selection",
+    "create_surface_path",
+    "delete_selected_triangles_from_mesh",
+    "delete_triangle_from_mesh",
+    "delete_triangles_by_material_id",
+    "delete_triangles_from_mesh",
+    "delete_triangles_in_polygroup",
+    "delete_vertex_from_mesh",
+    "delete_vertices_from_mesh",
+    "discard_bones_from_mesh",
+    "discard_mesh_attributes",
+    "discard_sculpt_layers",
+    "discard_tangents",
+    "enable_material_i_ds",
+    "enable_polygroups",
+    "enable_sculpt_layers",
+    "expand_contract_mesh_selection",
+    "expand_mesh_selection_to_connected",
+    "fill_all_mesh_holes",
+    "find_extended_polygroup_layer_by_name",
+    "find_nearest_point_on_mesh",
+    "find_nearest_ray_intersection_with_mesh",
+    "find_or_add_mesh_weight_map",
+    "flip_normals",
+    "flip_triangle_selection_normals",
+    "get_all_bones_info",
+    "get_all_split_u_vs_at_vertex",
+    "get_all_triangle_i_ds",
+    "get_all_triangle_indices",
+    "get_all_triangle_material_i_ds",
+    "get_all_triangle_polygroup_i_ds",
+    "get_all_uv_seam_edges",
+    "get_all_vertex_i_ds",
+    "get_all_vertex_positions",
+    "get_all_vertex_positions_at_edges",
+    "get_bone_children",
+    "get_bone_index",
+    "get_bone_info",
+    "get_class",
+    "get_default_object",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_has_material_i_ds",
+    "get_has_polygroups",
+    "get_has_triangle_id_gaps",
+    "get_has_triangle_normals",
+    "get_has_vertex_colors",
+    "get_has_vertex_id_gaps",
+    "get_interpolated_triangle_normal",
+    "get_interpolated_triangle_normal_tangents",
+    "get_interpolated_triangle_position",
+    "get_interpolated_triangle_uv",
+    "get_interpolated_triangle_vertex_color",
+    "get_is_closed_mesh",
+    "get_is_dense_mesh",
+    "get_largest_vertex_bone_weight",
+    "get_material_i_ds_of_triangles",
+    "get_max_bone_weight_index",
+    "get_max_material_id",
+    "get_mesh_bounding_box",
+    "get_mesh_has_attribute_set",
+    "get_mesh_has_tangents",
+    "get_mesh_info_string",
+    "get_mesh_per_vertex_colors",
+    "get_mesh_per_vertex_normals",
+    "get_mesh_per_vertex_tangents",
+    "get_mesh_per_vertex_u_vs",
+    "get_mesh_selection_boundary_loops",
+    "get_mesh_selection_bounding_box",
+    "get_mesh_triangle_uv_element_i_ds",
+    "get_mesh_unique_selection_info",
+    "get_mesh_uv_area",
+    "get_mesh_uv_element_position",
+    "get_mesh_uv_size_info",
+    "get_mesh_volume_area",
+    "get_mesh_volume_area_center",
+    "get_mesh_weight_map_values",
+    "get_name",
+    "get_num_connected_components",
+    "get_num_extended_polygroup_layers",
+    "get_num_open_border_edges",
+    "get_num_open_border_loops",
+    "get_num_triangle_i_ds",
+    "get_num_uv_islands",
+    "get_num_uv_sets",
+    "get_num_vertex_i_ds",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_poly_group_bounding_box",
+    "get_poly_group_uv_bounding_box",
+    "get_poly_group_uv_centroid",
+    "get_polygroup_i_ds_in_mesh",
+    "get_root_bone_name",
+    "get_sculpt_layer_weights_array",
+    "get_shortest_surface_path",
+    "get_shortest_vertex_path",
+    "get_sub_mesh_from_mesh",
+    "get_triangle_count",
+    "get_triangle_face_normal",
+    "get_triangle_indices",
+    "get_triangle_material_id",
+    "get_triangle_normal_tangents",
+    "get_triangle_normals",
+    "get_triangle_polygroup_id",
+    "get_triangle_positions",
+    "get_triangle_u_vs",
+    "get_triangle_vertex_colors",
+    "get_triangles_by_material_id",
+    "get_triangles_in_polygroup",
+    "get_typed_outer",
+    "get_uv_set_bounding_box",
+    "get_vertex_bone_weights",
+    "get_vertex_connected_triangles",
+    "get_vertex_connected_vertices",
+    "get_vertex_count",
+    "get_vertex_position",
+    "get_weight_map_handle",
+    "get_world",
+    "inverse_transform_mesh",
+    "inverse_transform_mesh_selection",
+    "invert_mesh_selection",
+    "is_bvh_valid_for_mesh",
+    "is_editor_property_overridden",
+    "is_empty",
+    "is_intersecting_mesh",
+    "is_package_external",
+    "is_point_inside_mesh",
+    "is_same_mesh_as",
+    "is_valid_triangle_id",
+    "is_valid_vertex_id",
+    "layout_mesh_u_vs",
+    "measure_distances_between_meshes",
+    "merge_mesh_vertex_pair",
+    "merge_mesh_vertices_in_selections",
+    "merge_sculpt_layers",
+    "mesh_copy_bone_weights",
+    "mesh_create_bone_weights",
+    "mesh_has_bone_weights",
+    "mesh_modified_bp_event",
+    "modify",
+    "prune_bone_weights",
+    "rebuild_bvh_for_mesh",
+    "recompute_mesh_u_vs",
+    "recompute_normals",
+    "recompute_normals_for_mesh_selection",
+    "remap_and_combine_materials",
+    "remap_material_i_ds",
+    "remap_to_new_material_i_ds_by_material",
+    "remove_hidden_triangles",
+    "remove_mesh_weight_map",
+    "remove_small_components",
+    "remove_unused_vertices",
+    "rename",
+    "repack_mesh_u_vs",
+    "repair_mesh_degenerate_geometry",
+    "reset",
+    "reset_editor_property",
+    "reset_to_cube",
+    "resolve_mesh_t_junctions",
+    "rotate_mesh",
+    "rotate_mesh_selection",
+    "rotate_mesh_u_vs",
+    "scale_mesh",
+    "scale_mesh_selection",
+    "scale_mesh_u_vs",
+    "select_hidden_triangles_from_outside",
+    "select_mesh_boundary_edges",
+    "select_mesh_elements_by_material_id",
+    "select_mesh_elements_by_normal_angle",
+    "select_mesh_elements_by_polygroup",
+    "select_mesh_elements_in_box",
+    "select_mesh_elements_in_box_with_bvh",
+    "select_mesh_elements_in_sphere",
+    "select_mesh_elements_inside_mesh",
+    "select_mesh_elements_with_plane",
+    "select_mesh_poly_group_boundary_edges",
+    "select_mesh_sharp_edges",
+    "select_mesh_split_normal_edges",
+    "select_mesh_uv_seam_edges",
+    "select_selection_boundary_edges",
+    "set_active_sculpt_layer",
+    "set_all_mesh_vertex_positions",
+    "set_all_triangle_material_i_ds",
+    "set_all_vertex_bone_weights",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_material_id_for_mesh_selection",
+    "set_material_id_on_triangles",
+    "set_mesh_constant_vertex_color",
+    "set_mesh_constant_weight_map_value",
+    "set_mesh_per_vertex_colors",
+    "set_mesh_per_vertex_normals",
+    "set_mesh_per_vertex_tangents",
+    "set_mesh_selection_vertex_color",
+    "set_mesh_selection_weight_map_value",
+    "set_mesh_triangle_normals",
+    "set_mesh_triangle_u_vs",
+    "set_mesh_triangle_uv_element_i_ds",
+    "set_mesh_u_vs_from_box_projection",
+    "set_mesh_u_vs_from_cylinder_projection",
+    "set_mesh_u_vs_from_planar_projection",
+    "set_mesh_uv_element_position",
+    "set_mesh_weight_map_values",
+    "set_num_extended_polygroup_layers",
+    "set_num_uv_sets",
+    "set_per_face_normals",
+    "set_per_vertex_normals",
+    "set_polygroup_for_mesh_selection",
+    "set_polygroup_material_id",
+    "set_sculpt_layer_weight",
+    "set_sculpt_layer_weights_array",
+    "set_split_normals_along_selected_edges",
+    "set_triangle_material_id",
+    "set_uv_seams_along_selected_edges",
+    "set_vertex_bone_weights",
+    "set_vertex_position",
+    "snap_mesh_open_boundaries",
+    "split_mesh_bowties",
+    "split_mesh_by_components",
+    "split_mesh_by_material_i_ds",
+    "split_mesh_by_polygroups",
+    "split_mesh_by_vertex_overlap",
+    "static_class",
+    "transfer_bone_weights_from_mesh",
+    "transfer_mesh_u_vs_by_projection",
+    "transfer_vertex_colors_from_mesh",
+    "transform_mesh",
+    "transform_mesh_selection",
+    "translate_mesh",
+    "translate_mesh_selection",
+    "translate_mesh_u_vs",
+    "translate_pivot_to_location",
+    "update_vertex_normal",
+    "weld_mesh_edges"
+  ],
+  "AutomationLibrary": [
+    "acquire_editor_element_handle",
+    "add_expected_log_error",
+    "add_expected_log_message",
+    "add_expected_plain_log_error",
+    "add_expected_plain_log_message",
+    "add_test_error",
+    "add_test_info",
+    "add_test_telemetry_data",
+    "add_test_warning",
+    "are_automated_tests_running",
+    "automation_wait_for_loading",
+    "call_method",
+    "cast",
+    "compare_image_against_reference",
+    "disable_stat_group",
+    "enable_stat_group",
+    "finish_loading_before_screenshot",
+    "get_class",
+    "get_default_object",
+    "get_default_screenshot_options_for_gameplay",
+    "get_default_screenshot_options_for_rendering",
+    "get_editor_active_viewport_view_mode",
+    "get_editor_active_viewport_wireframe_opacity",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_name",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_stat_call_count",
+    "get_stat_exc_average",
+    "get_stat_exc_max",
+    "get_stat_inc_average",
+    "get_stat_inc_max",
+    "get_typed_outer",
+    "get_world",
+    "is_editor_property_overridden",
+    "is_package_external",
+    "modify",
+    "rename",
+    "reset_editor_property",
+    "set_editor_active_viewport_view_mode",
+    "set_editor_active_viewport_wireframe_opacity",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_editor_viewport_view_mode",
+    "set_editor_viewport_visualize_buffer",
+    "set_scalability_quality_level_relative_to_max",
+    "set_scalability_quality_to_epic",
+    "set_scalability_quality_to_low",
+    "set_test_telemetry_storage",
+    "static_class",
+    "take_automation_screenshot",
+    "take_automation_screenshot_at_camera",
+    "take_automation_screenshot_of_ui",
+    "take_high_res_screenshot"
+  ],
+  "EditorLoadingAndSavingUtils": [
+    "acquire_editor_element_handle",
+    "call_method",
+    "cast",
+    "export_scene",
+    "fully_load_assets",
+    "fully_load_packages",
+    "get_class",
+    "get_default_object",
+    "get_dirty_content_packages",
+    "get_dirty_map_packages",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_name",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_name",
+    "get_typed_outer",
+    "get_world",
+    "import_scene",
+    "is_editor_property_overridden",
+    "is_package_external",
+    "load_map",
+    "load_map_with_dialog",
+    "modify",
+    "new_blank_map",
+    "new_map_from_template",
+    "reload_packages",
+    "rename",
+    "reset_editor_property",
+    "save_current_level",
+    "save_dirty_packages",
+    "save_dirty_packages_with_dialog",
+    "save_map",
+    "save_packages",
+    "save_packages_with_dialog",
+    "set_editor_properties",
+    "set_editor_property",
+    "static_class",
+    "unload_packages"
+  ],
+  "NavigationSystemV1": [
+    "acquire_editor_element_handle",
+    "call_method",
+    "cast",
+    "crowd_manager_class",
+    "default_agent_name",
+    "find_path_to_actor_synchronously",
+    "find_path_to_location_synchronously",
+    "get_class",
+    "get_default_object",
+    "get_editor_property",
+    "get_fname",
+    "get_full_name",
+    "get_name",
+    "get_navigation_system",
+    "get_outer",
+    "get_outermost",
+    "get_package",
+    "get_path_cost",
+    "get_path_length",
+    "get_path_name",
+    "get_random_location_in_navigable_radius",
+    "get_random_point_in_navigable_radius",
+    "get_random_reachable_point_in_radius",
+    "get_typed_outer",
+    "get_world",
+    "is_editor_property_overridden",
+    "is_navigation_being_built",
+    "is_navigation_being_built_or_locked",
+    "is_package_external",
+    "k2_replace_area_in_octree_data",
+    "modify",
+    "navigation_raycast",
+    "on_navigation_bounds_updated",
+    "on_navigation_generation_finished_delegate",
+    "project_point_to_navigation",
+    "register_navigation_invoker",
+    "rename",
+    "reset_editor_property",
+    "reset_max_simultaneous_tile_generation_jobs_count",
+    "set_editor_properties",
+    "set_editor_property",
+    "set_geometry_gathering_mode",
+    "set_max_simultaneous_tile_generation_jobs_count",
+    "static_class",
+    "unregister_navigation_invoker"
+  ]
+}

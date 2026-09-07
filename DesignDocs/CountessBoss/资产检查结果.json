@@ -1,0 +1,4889 @@
+{
+  "summary": {
+    "date": "2026-09-07",
+    "scope": "Design and read-only asset/pose inspection; runtime implementation not performed",
+    "ue_project": "E:\\UNREAL\\ue projects\\ThirdPerson\\ThirdPerson.uproject",
+    "animation_asset_count": 249,
+    "classes": {
+      "AnimSequence": 234,
+      "AimOffsetBlendSpace": 2,
+      "BlendSpace": 8,
+      "BlendSpace1D": 1,
+      "AnimMontage": 4
+    },
+    "pose_assets": 9,
+    "pose_samples": 81,
+    "effect_assets": 9,
+    "confirmed_user_choices": [
+      "双阶段近战决斗",
+      "韧性与破防"
+    ],
+    "unanswered_defaults": [
+      "行为树+C++节点",
+      "放入关卡靠近开战"
+    ],
+    "source_header_checks": [
+      {
+        "path": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\AI\\EnemyCharacter.h",
+        "sha256": "54b522d7f09ec4207ca95dc0561e517f3ad73ab9e387cb57d6a3ea1ddee0c227",
+        "unchanged_since_design_write": true
+      },
+      {
+        "path": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\AI\\EnemyAIController.h",
+        "sha256": "7ae55cc4a7a93ca56798a1f2c8cb6e4149d2f2149c408ae9a3e9c46582aeb93b",
+        "unchanged_since_design_write": true
+      },
+      {
+        "path": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Components\\CombatComponent.h",
+        "sha256": "0e1a98d8ea3c7fbd0d222dafdb7f9b975d2d41c68594120ef2d5c89969d7cf14",
+        "unchanged_since_design_write": true
+      },
+      {
+        "path": "E:\\UNREAL\\ue projects\\ThirdPerson\\Source\\ThirdPerson\\Components\\HealthComponent.h",
+        "sha256": "8390386ac29782810734ff3c685f273e02ead95be728d448822455b212fbf71d",
+        "unchanged_since_design_write": true
+      }
+    ],
+    "inspection_logs": [
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\CountessBossDesignAudit\\asset_inspection.log",
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\CountessBossDesignAudit\\pose_inspection.log",
+      "E:\\UNREAL\\ue projects\\ThirdPerson\\Saved\\CountessBossDesignAudit\\effect_inspection.log"
+    ]
+  },
+  "animations": [
+    {
+      "name": "Ability_E",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E.Ability_E",
+      "class": "AnimSequence",
+      "length": 1.1667,
+      "frames": 35,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_Jog_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_Jog_Fwd.Ability_E_Jog_Fwd",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_Jog_Fwd_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_Jog_Fwd_MSA.Ability_E_Jog_Fwd_MSA",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_MSA.Ability_E_MSA",
+      "class": "AnimSequence",
+      "length": 1.1667,
+      "frames": 35,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_target",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_target.Ability_E_target",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_target_additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_target_additive.Ability_E_target_additive",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_target_transition",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_target_transition.Ability_E_target_transition",
+      "class": "AnimSequence",
+      "length": 0.8,
+      "frames": 24,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_E_target_transition_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_E_target_transition_MSA.Ability_E_target_transition_MSA",
+      "class": "AnimSequence",
+      "length": 0.8,
+      "frames": 24,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q.Ability_Q",
+      "class": "AnimSequence",
+      "length": 0.9667,
+      "frames": 29,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_Jog_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_Jog_Fwd.Ability_Q_Jog_Fwd",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_Jog_Fwd_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_Jog_Fwd_MSA.Ability_Q_Jog_Fwd_MSA",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_MSA.Ability_Q_MSA",
+      "class": "AnimSequence",
+      "length": 0.9667,
+      "frames": 29,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_target",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_target.Ability_Q_target",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_target_additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_target_additive.Ability_Q_target_additive",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_target_transition",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_target_transition.Ability_Q_target_transition",
+      "class": "AnimSequence",
+      "length": 0.8333,
+      "frames": 25,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Q_target_transition_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Q_target_transition_MSA.Ability_Q_target_transition_MSA",
+      "class": "AnimSequence",
+      "length": 0.8333,
+      "frames": 25,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_Jog_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_Jog_Fwd.Ability_R_Jog_Fwd",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_Jog_Fwd_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_Jog_Fwd_MSA.Ability_R_Jog_Fwd_MSA",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_target",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_target.Ability_R_target",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_target_additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_target_additive.Ability_R_target_additive",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_target_transition",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_target_transition.Ability_R_target_transition",
+      "class": "AnimSequence",
+      "length": 0.8,
+      "frames": 24,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_R_target_transition_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_R_target_transition_MSA.Ability_R_target_transition_MSA",
+      "class": "AnimSequence",
+      "length": 0.8,
+      "frames": 24,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_RMB",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_RMB.Ability_RMB",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_RMB_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_RMB_InMotion.Ability_RMB_InMotion",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_RMB_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_RMB_InMotion_MSA.Ability_RMB_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Ultimate",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Ultimate.Ability_Ultimate",
+      "class": "AnimSequence",
+      "length": 3.1667,
+      "frames": 95,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Ultimate_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Ultimate_InMotion.Ability_Ultimate_InMotion",
+      "class": "AnimSequence",
+      "length": 3.1667,
+      "frames": 95,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Ability_Ultimate_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Ability_Ultimate_MSA.Ability_Ultimate_MSA",
+      "class": "AnimSequence",
+      "length": 3.1667,
+      "frames": 95,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO.Idle_AO",
+      "class": "AimOffsetBlendSpace"
+    },
+    {
+      "name": "AimOffsets/Idle_AO_CC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_CC.Idle_AO_CC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_CD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_CD.Idle_AO_CD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_CU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_CU.Idle_AO_CU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LBC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LBC.Idle_AO_LBC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LBD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LBD.Idle_AO_LBD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LBU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LBU.Idle_AO_LBU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LC.Idle_AO_LC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LD.Idle_AO_LD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_LU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_LU.Idle_AO_LU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RBC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RBC.Idle_AO_RBC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RBD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RBD.Idle_AO_RBD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RBU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RBU.Idle_AO_RBU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RC.Idle_AO_RC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RD.Idle_AO_RD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/Idle_AO_RU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/Idle_AO_RU.Idle_AO_RU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO.TravelMode_AO",
+      "class": "AimOffsetBlendSpace"
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_CC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_CC.TravelMode_AO_CC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_CD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_CD.TravelMode_AO_CD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_CU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_CU.TravelMode_AO_CU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LBC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LBC.TravelMode_AO_LBC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LBD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LBD.TravelMode_AO_LBD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LBU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LBU.TravelMode_AO_LBU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LC.TravelMode_AO_LC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LD.TravelMode_AO_LD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_LU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_LU.TravelMode_AO_LU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RBC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RBC.TravelMode_AO_RBC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RBD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RBD.TravelMode_AO_RBD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RBU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RBU.TravelMode_AO_RBU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RC",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RC.TravelMode_AO_RC",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RD",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RD.TravelMode_AO_RD",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "AimOffsets/TravelMode_AO_RU",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/AimOffsets/TravelMode_AO_RU.TravelMode_AO_RU",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Attack_Melee_Air",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Attack_Melee_Air.Attack_Melee_Air",
+      "class": "AnimSequence",
+      "length": 1.0333,
+      "frames": 31,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Attack_Melee_Air_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Attack_Melee_Air_MSA.Attack_Melee_Air_MSA",
+      "class": "AnimSequence",
+      "length": 1.0333,
+      "frames": 31,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Blendspaces/JogBwdSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/JogBwdSlopeLean.JogBwdSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/JogFwdSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/JogFwdSlopeLean.JogFwdSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/JogLeftSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/JogLeftSlopeLean.JogLeftSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/JogRightSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/JogRightSlopeLean.JogRightSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/SprintBwdSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/SprintBwdSlopeLean.SprintBwdSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/SprintFwdSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/SprintFwdSlopeLean.SprintFwdSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/SprintLeftSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/SprintLeftSlopeLean.SprintLeftSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/SprintRightSlopeLean",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/SprintRightSlopeLean.SprintRightSlopeLean",
+      "class": "BlendSpace"
+    },
+    {
+      "name": "Blendspaces/TurnInPlace",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Blendspaces/TurnInPlace.TurnInPlace",
+      "class": "BlendSpace1D"
+    },
+    {
+      "name": "Bound",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Bound.Bound",
+      "class": "AnimSequence",
+      "length": 0.0333,
+      "frames": 1,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Cast",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Cast.Cast",
+      "class": "AnimSequence",
+      "length": 1.1333,
+      "frames": 34,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Cast_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Cast_MSA.Cast_MSA",
+      "class": "AnimSequence",
+      "length": 1.1333,
+      "frames": 34,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Death",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Death.Death",
+      "class": "AnimSequence",
+      "length": 1.6667,
+      "frames": 50,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_70sDance",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_70sDance.Emote_70sDance",
+      "class": "AnimSequence",
+      "length": 6.3,
+      "frames": 189,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_70sDance_Intro",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_70sDance_Intro.Emote_70sDance_Intro",
+      "class": "AnimSequence",
+      "length": 1.8667,
+      "frames": 56,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_70sDance_Loop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_70sDance_Loop.Emote_70sDance_Loop",
+      "class": "AnimSequence",
+      "length": 2.4,
+      "frames": 72,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_70sDance_Outro",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_70sDance_Outro.Emote_70sDance_Outro",
+      "class": "AnimSequence",
+      "length": 2.0333,
+      "frames": 61,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_Laugh",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_Laugh.Emote_Laugh",
+      "class": "AnimSequence",
+      "length": 7.5333,
+      "frames": 226,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Emote_Taunt_Nope",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Emote_Taunt_Nope.Emote_Taunt_Nope",
+      "class": "AnimSequence",
+      "length": 8.7,
+      "frames": 261,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "EmoteALT_Master_SeductiveScare_T3",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/EmoteALT_Master_SeductiveScare_T3.EmoteALT_Master_SeductiveScare_T3",
+      "class": "AnimSequence",
+      "length": 11.6667,
+      "frames": 350,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "FrontEndPose",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/FrontEndPose.FrontEndPose",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 0.8999999761581421,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Hitreact_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Hitreact_Bwd.Hitreact_Bwd",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Hitreact_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Hitreact_Fwd.Hitreact_Fwd",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Hitreact_Left",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Hitreact_Left.Hitreact_Left",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Hitreact_Right",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Hitreact_Right.Hitreact_Right",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_Additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_Additive.Idle_Additive",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_Facial",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_Facial.Idle_Facial",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_Pose",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_Pose.Idle_Pose",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_Relaxed",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_Relaxed.Idle_Relaxed",
+      "class": "AnimSequence",
+      "length": 42.3333,
+      "frames": 1270,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_Straight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_Straight.Idle_Straight",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_TravelMode_Additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_TravelMode_Additive.Idle_TravelMode_Additive",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Idle_TravelMode_Pose",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Idle_TravelMode_Pose.Idle_TravelMode_Pose",
+      "class": "AnimSequence",
+      "length": 7.5,
+      "frames": 225,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd.Jog_Bwd",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_CircleLeft.Jog_Bwd_CircleLeft",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_CircleRight.Jog_Bwd_CircleRight",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_Combat",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_Combat.Jog_Bwd_Combat",
+      "class": "AnimSequence",
+      "length": 0.6667,
+      "frames": 20,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_Pivot",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_Pivot.Jog_Bwd_Pivot",
+      "class": "AnimSequence",
+      "length": 3.0667,
+      "frames": 92,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_Start.Jog_Bwd_Start",
+      "class": "AnimSequence",
+      "length": 0.7333,
+      "frames": 22,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Bwd_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Bwd_Stop.Jog_Bwd_Stop",
+      "class": "AnimSequence",
+      "length": 2.1,
+      "frames": 63,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_BwdToFwd_SpinCCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_BwdToFwd_SpinCCW.Jog_BwdToFwd_SpinCCW",
+      "class": "AnimSequence",
+      "length": 1.6667,
+      "frames": 50,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_BwdToFwd_SpinCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_BwdToFwd_SpinCW.Jog_BwdToFwd_SpinCW",
+      "class": "AnimSequence",
+      "length": 1.7667,
+      "frames": 53,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Downhill_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Downhill_Bwd.Jog_Downhill_Bwd",
+      "class": "AnimSequence",
+      "length": 0.5667,
+      "frames": 17,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Downhill_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Downhill_Fwd.Jog_Downhill_Fwd",
+      "class": "AnimSequence",
+      "length": 1.6333,
+      "frames": 49,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Downhill_Left",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Downhill_Left.Jog_Downhill_Left",
+      "class": "AnimSequence",
+      "length": 0.5667,
+      "frames": 17,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd.Jog_Fwd",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_CircleLeft.Jog_Fwd_CircleLeft",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_CircleRight.Jog_Fwd_CircleRight",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_Combat",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_Combat.Jog_Fwd_Combat",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_Pivot",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_Pivot.Jog_Fwd_Pivot",
+      "class": "AnimSequence",
+      "length": 2.6199,
+      "frames": 78,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_Start.Jog_Fwd_Start",
+      "class": "AnimSequence",
+      "length": 1.2667,
+      "frames": 38,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Fwd_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Fwd_Stop.Jog_Fwd_Stop",
+      "class": "AnimSequence",
+      "length": 2.1,
+      "frames": 63,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_FwdToBwd_SpinCCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_FwdToBwd_SpinCCW.Jog_FwdToBwd_SpinCCW",
+      "class": "AnimSequence",
+      "length": 2.3,
+      "frames": 69,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_FwdToBwd_SpinCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_FwdToBwd_SpinCW.Jog_FwdToBwd_SpinCW",
+      "class": "AnimSequence",
+      "length": 1.5667,
+      "frames": 47,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left.Jog_Left",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_CircleLeft.Jog_Left_CircleLeft",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_CircleRight.Jog_Left_CircleRight",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_Combat",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_Combat.Jog_Left_Combat",
+      "class": "AnimSequence",
+      "length": 2.0333,
+      "frames": 61,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_Pivot",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_Pivot.Jog_Left_Pivot",
+      "class": "AnimSequence",
+      "length": 2.7667,
+      "frames": 83,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_Start.Jog_Left_Start",
+      "class": "AnimSequence",
+      "length": 0.7333,
+      "frames": 22,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Left_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Left_Stop.Jog_Left_Stop",
+      "class": "AnimSequence",
+      "length": 2.2667,
+      "frames": 68,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right.Jog_Right",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_CircleLeft.Jog_Right_CircleLeft",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_CircleRight.Jog_Right_CircleRight",
+      "class": "AnimSequence",
+      "length": 1.8,
+      "frames": 54,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Combat",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Combat.Jog_Right_Combat",
+      "class": "AnimSequence",
+      "length": 2.0333,
+      "frames": 61,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Downhill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Downhill.Jog_Right_Downhill",
+      "class": "AnimSequence",
+      "length": 1.6667,
+      "frames": 50,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Pivot",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Pivot.Jog_Right_Pivot",
+      "class": "AnimSequence",
+      "length": 3.4667,
+      "frames": 104,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Start.Jog_Right_Start",
+      "class": "AnimSequence",
+      "length": 1.4667,
+      "frames": 44,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Stop.Jog_Right_Stop",
+      "class": "AnimSequence",
+      "length": 2.2333,
+      "frames": 67,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Right_Uphill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Right_Uphill.Jog_Right_Uphill",
+      "class": "AnimSequence",
+      "length": 0.5667,
+      "frames": 17,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Uphill_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Uphill_Bwd.Jog_Uphill_Bwd",
+      "class": "AnimSequence",
+      "length": 0.5667,
+      "frames": 17,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Uphill_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Uphill_Fwd.Jog_Uphill_Fwd",
+      "class": "AnimSequence",
+      "length": 1.6333,
+      "frames": 49,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jog_Uphill_Left",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jog_Uphill_Left.Jog_Uphill_Left",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Apex",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Apex.Jump_Apex",
+      "class": "AnimSequence",
+      "length": 0.2667,
+      "frames": 8,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Land",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Land.Jump_Land",
+      "class": "AnimSequence",
+      "length": 0.1667,
+      "frames": 5,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Pad",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Pad.Jump_Pad",
+      "class": "AnimSequence",
+      "length": 2.0,
+      "frames": 60,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Recovery.Jump_Recovery",
+      "class": "AnimSequence",
+      "length": 1.6,
+      "frames": 48,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Recovery_Additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Recovery_Additive.Jump_Recovery_Additive",
+      "class": "AnimSequence",
+      "length": 1.6,
+      "frames": 48,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Jump_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Jump_Start.Jump_Start",
+      "class": "AnimSequence",
+      "length": 0.2667,
+      "frames": 8,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Knock_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Knock_Bwd.Knock_Bwd",
+      "class": "AnimSequence",
+      "length": 2.0,
+      "frames": 60,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Knock_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Knock_Fwd.Knock_Fwd",
+      "class": "AnimSequence",
+      "length": 2.0,
+      "frames": 60,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "LevelStart",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/LevelStart.LevelStart",
+      "class": "AnimSequence",
+      "length": 4.9667,
+      "frames": 596,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "LevelStart_Montage",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/LevelStart_Montage.LevelStart_Montage",
+      "class": "AnimMontage",
+      "length": 4.9667,
+      "frames": 595,
+      "rate": 1.0,
+      "notifies": [
+        "P_Mudang_LevelStart_Heart"
+      ],
+      "slots": [
+        "UpperBody"
+      ]
+    },
+    {
+      "name": "Primary_Attack_A_Fast_V1",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Fast_V1.Primary_Attack_A_Fast_V1",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Fast_V1_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Fast_V1_MSA.Primary_Attack_A_Fast_V1_MSA",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Normal",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Normal.Primary_Attack_A_Normal",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Normal_Montage",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Normal_Montage.Primary_Attack_A_Normal_Montage",
+      "class": "AnimMontage",
+      "length": 0.9,
+      "frames": 26,
+      "rate": 1.0,
+      "notifies": [
+        "SaveAttack",
+        "ResetCombo"
+      ],
+      "slots": [
+        "UpperBody"
+      ]
+    },
+    {
+      "name": "Primary_Attack_A_Normal_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Normal_MSA.Primary_Attack_A_Normal_MSA",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow.Primary_Attack_A_Slow",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 180,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow_InMotion_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow_InMotion_Recovery.Primary_Attack_A_Slow_InMotion_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow_InMotion_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow_InMotion_Recovery_MSA.Primary_Attack_A_Slow_InMotion_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow_MSA.Primary_Attack_A_Slow_MSA",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 180,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow_Recovery.Primary_Attack_A_Slow_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_A_Slow_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_A_Slow_Recovery_MSA.Primary_Attack_A_Slow_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Fast_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Fast_InMotion.Primary_Attack_B_Fast_InMotion",
+      "class": "AnimSequence",
+      "length": 0.4,
+      "frames": 12,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Fast_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Fast_InMotion_MSA.Primary_Attack_B_Fast_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 0.4,
+      "frames": 12,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Normal",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Normal.Primary_Attack_B_Normal",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Normal_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Normal_InMotion.Primary_Attack_B_Normal_InMotion",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Normal_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Normal_InMotion_MSA.Primary_Attack_B_Normal_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Normal_Montage",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Normal_Montage.Primary_Attack_B_Normal_Montage",
+      "class": "AnimMontage",
+      "length": 0.9,
+      "frames": 26,
+      "rate": 1.0,
+      "notifies": [
+        "SaveAttack",
+        "ResetCombo"
+      ],
+      "slots": [
+        "UpperBody"
+      ]
+    },
+    {
+      "name": "Primary_Attack_B_Normal_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Normal_MSA.Primary_Attack_B_Normal_MSA",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow.Primary_Attack_B_Slow",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_InMotion.Primary_Attack_B_Slow_InMotion",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_InMotion_MSA.Primary_Attack_B_Slow_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_InMotion_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_InMotion_Recovery.Primary_Attack_B_Slow_InMotion_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_InMotion_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_InMotion_Recovery_MSA.Primary_Attack_B_Slow_InMotion_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_MSA.Primary_Attack_B_Slow_MSA",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_Recovery.Primary_Attack_B_Slow_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_B_Slow_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_B_Slow_Recovery_MSA.Primary_Attack_B_Slow_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Fast_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Fast_InMotion.Primary_Attack_Fast_InMotion",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Fast_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Fast_InMotion_MSA.Primary_Attack_Fast_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Fast_V1",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Fast_V1.Primary_Attack_Fast_V1",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Fast_V1_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Fast_V1_MSA.Primary_Attack_Fast_V1_MSA",
+      "class": "AnimSequence",
+      "length": 0.6,
+      "frames": 18,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Normal",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Normal.Primary_Attack_Normal",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Normal_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Normal_InMotion.Primary_Attack_Normal_InMotion",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Normal_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Normal_InMotion_MSA.Primary_Attack_Normal_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Normal_Montage",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Normal_Montage.Primary_Attack_Normal_Montage",
+      "class": "AnimMontage",
+      "length": 0.9,
+      "frames": 26,
+      "rate": 1.0,
+      "notifies": [
+        "SaveAttack",
+        "ResetCombo"
+      ],
+      "slots": [
+        "UpperBody"
+      ]
+    },
+    {
+      "name": "Primary_Attack_Normal_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Normal_MSA.Primary_Attack_Normal_MSA",
+      "class": "AnimSequence",
+      "length": 0.9,
+      "frames": 27,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow.Primary_Attack_Slow",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 180,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_InMotion",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_InMotion.Primary_Attack_Slow_InMotion",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_InMotion_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_InMotion_MSA.Primary_Attack_Slow_InMotion_MSA",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 45,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_InMotion_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_InMotion_Recovery.Primary_Attack_Slow_InMotion_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_InMotion_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_InMotion_Recovery_MSA.Primary_Attack_Slow_InMotion_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_MSA.Primary_Attack_Slow_MSA",
+      "class": "AnimSequence",
+      "length": 1.5,
+      "frames": 180,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_Recovery.Primary_Attack_Slow_Recovery",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Primary_Attack_Slow_Recovery_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Primary_Attack_Slow_Recovery_MSA.Primary_Attack_Slow_Recovery_MSA",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_LOCAL_SPACE_BASE: 1>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Recall",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Recall.Recall",
+      "class": "AnimSequence",
+      "length": 10.0,
+      "frames": 300,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Respawn",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Respawn.Respawn",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Select_Screen",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Select_Screen.Select_Screen",
+      "class": "AnimSequence",
+      "length": 0.1998,
+      "frames": 5,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd.Sprint_Bwd",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_CircleLeft.Sprint_Bwd_CircleLeft",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_CircleRight.Sprint_Bwd_CircleRight",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_Downhill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_Downhill.Sprint_Bwd_Downhill",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_Pivot180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_Pivot180.Sprint_Bwd_Pivot180",
+      "class": "AnimSequence",
+      "length": 4.1333,
+      "frames": 124,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_Start.Sprint_Bwd_Start",
+      "class": "AnimSequence",
+      "length": 0.7333,
+      "frames": 22,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_Stop.Sprint_Bwd_Stop",
+      "class": "AnimSequence",
+      "length": 2.1,
+      "frames": 63,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Bwd_Uphill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Bwd_Uphill.Sprint_Bwd_Uphill",
+      "class": "AnimSequence",
+      "length": 0.6333,
+      "frames": 19,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_BwdToFwd_SpinCCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_BwdToFwd_SpinCCW.Sprint_BwdToFwd_SpinCCW",
+      "class": "AnimSequence",
+      "length": 1.6667,
+      "frames": 50,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_BwdToFwd_SpinCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_BwdToFwd_SpinCW.Sprint_BwdToFwd_SpinCW",
+      "class": "AnimSequence",
+      "length": 1.6667,
+      "frames": 50,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd.Sprint_Fwd",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_CircleLeft.Sprint_Fwd_CircleLeft",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_CircleRight.Sprint_Fwd_CircleRight",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_Downhill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_Downhill.Sprint_Fwd_Downhill",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_Pivot180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_Pivot180.Sprint_Fwd_Pivot180",
+      "class": "AnimSequence",
+      "length": 2.6333,
+      "frames": 79,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_Start.Sprint_Fwd_Start",
+      "class": "AnimSequence",
+      "length": 1.4,
+      "frames": 42,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_Stop.Sprint_Fwd_Stop",
+      "class": "AnimSequence",
+      "length": 2.1,
+      "frames": 63,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Fwd_Uphill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Fwd_Uphill.Sprint_Fwd_Uphill",
+      "class": "AnimSequence",
+      "length": 1.1333,
+      "frames": 34,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_FwdToBwd_SpinCCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_FwdToBwd_SpinCCW.Sprint_FwdToBwd_SpinCCW",
+      "class": "AnimSequence",
+      "length": 2.3,
+      "frames": 69,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_FwdToBwd_SpinCW",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_FwdToBwd_SpinCW.Sprint_FwdToBwd_SpinCW",
+      "class": "AnimSequence",
+      "length": 1.5692,
+      "frames": 47,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left.Sprint_Left",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_CircleLeft.Sprint_Left_CircleLeft",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_CircleRight.Sprint_Left_CircleRight",
+      "class": "AnimSequence",
+      "length": 0.7,
+      "frames": 21,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_Downhill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_Downhill.Sprint_Left_Downhill",
+      "class": "AnimSequence",
+      "length": 0.6333,
+      "frames": 19,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_Pivot180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_Pivot180.Sprint_Left_Pivot180",
+      "class": "AnimSequence",
+      "length": 3.4,
+      "frames": 102,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_Start.Sprint_Left_Start",
+      "class": "AnimSequence",
+      "length": 0.7667,
+      "frames": 23,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_Stop.Sprint_Left_Stop",
+      "class": "AnimSequence",
+      "length": 2.2667,
+      "frames": 68,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Left_Uphill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Left_Uphill.Sprint_Left_Uphill",
+      "class": "AnimSequence",
+      "length": 0.6333,
+      "frames": 19,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right.Sprint_Right",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_CircleLeft",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_CircleLeft.Sprint_Right_CircleLeft",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_CircleRight",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_CircleRight.Sprint_Right_CircleRight",
+      "class": "AnimSequence",
+      "length": 1.2333,
+      "frames": 37,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_Downhill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_Downhill.Sprint_Right_Downhill",
+      "class": "AnimSequence",
+      "length": 1.1333,
+      "frames": 34,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_Pivot180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_Pivot180.Sprint_Right_Pivot180",
+      "class": "AnimSequence",
+      "length": 3.2667,
+      "frames": 98,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_Start.Sprint_Right_Start",
+      "class": "AnimSequence",
+      "length": 1.4,
+      "frames": 42,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_Stop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_Stop.Sprint_Right_Stop",
+      "class": "AnimSequence",
+      "length": 2.2333,
+      "frames": 67,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Sprint_Right_Uphill",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Sprint_Right_Uphill.Sprint_Right_Uphill",
+      "class": "AnimSequence",
+      "length": 1.1333,
+      "frames": 34,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Stun_Loop",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Stun_Loop.Stun_Loop",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Stun_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Stun_Start.Stun_Start",
+      "class": "AnimSequence",
+      "length": 1.3333,
+      "frames": 40,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Jump_Apex",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Jump_Apex.TravelMode_Jump_Apex",
+      "class": "AnimSequence",
+      "length": 0.2667,
+      "frames": 8,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Jump_Land",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Jump_Land.TravelMode_Jump_Land",
+      "class": "AnimSequence",
+      "length": 0.1667,
+      "frames": 5,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Jump_Recovery",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Jump_Recovery.TravelMode_Jump_Recovery",
+      "class": "AnimSequence",
+      "length": 1.6,
+      "frames": 48,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Jump_Recovery_Additive",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Jump_Recovery_Additive.TravelMode_Jump_Recovery_Additive",
+      "class": "AnimSequence",
+      "length": 1.6,
+      "frames": 48,
+      "rate": 1.0,
+      "notifies": [
+        "OrionLanded"
+      ],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Jump_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Jump_Start.TravelMode_Jump_Start",
+      "class": "AnimSequence",
+      "length": 0.2667,
+      "frames": 8,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Start",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Start.TravelMode_Start",
+      "class": "AnimSequence",
+      "length": 2.3333,
+      "frames": 70,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Start_Angled",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Start_Angled.TravelMode_Start_Angled",
+      "class": "AnimSequence",
+      "length": 2.4667,
+      "frames": 74,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Start_Angled_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Start_Angled_MSA.TravelMode_Start_Angled_MSA",
+      "class": "AnimSequence",
+      "length": 2.4667,
+      "frames": 74,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TravelMode_Start_MSA",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TravelMode_Start_MSA.TravelMode_Start_MSA",
+      "class": "AnimSequence",
+      "length": 2.3333,
+      "frames": 70,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_ROTATION_OFFSET_MESH_SPACE: 2>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Left_180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Left_180.Turn_Left_180",
+      "class": "AnimSequence",
+      "length": 2.1333,
+      "frames": 64,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Left_180_TravelMode",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Left_180_TravelMode.Turn_Left_180_TravelMode",
+      "class": "AnimSequence",
+      "length": 2.1333,
+      "frames": 64,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Left_90",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Left_90.Turn_Left_90",
+      "class": "AnimSequence",
+      "length": 1.5333,
+      "frames": 46,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Left_90_TravelMode",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Left_90_TravelMode.Turn_Left_90_TravelMode",
+      "class": "AnimSequence",
+      "length": 1.5333,
+      "frames": 46,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Right_180",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Right_180.Turn_Right_180",
+      "class": "AnimSequence",
+      "length": 3.3667,
+      "frames": 101,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Right_180_TravelMode",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Right_180_TravelMode.Turn_Right_180_TravelMode",
+      "class": "AnimSequence",
+      "length": 3.3667,
+      "frames": 101,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Right_90",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Right_90.Turn_Right_90",
+      "class": "AnimSequence",
+      "length": 2.2,
+      "frames": 66,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Turn_Right_90_TravelMode",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Turn_Right_90_TravelMode.Turn_Right_90_TravelMode",
+      "class": "AnimSequence",
+      "length": 2.2,
+      "frames": 66,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TurnInPlace_Fast",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TurnInPlace_Fast.TurnInPlace_Fast",
+      "class": "AnimSequence",
+      "length": 4.0,
+      "frames": 120,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "TurnInPlace_Zero",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/TurnInPlace_Zero.TurnInPlace_Zero",
+      "class": "AnimSequence",
+      "length": 1.0,
+      "frames": 30,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Vamp_Cloth_Test_Clip",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Vamp_Cloth_Test_Clip.Vamp_Cloth_Test_Clip",
+      "class": "AnimSequence",
+      "length": 6.5601,
+      "frames": 196,
+      "rate": 0.3330000042915344,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    },
+    {
+      "name": "Vamp_Weighting_work",
+      "path": "/Game/ParagonCountess/Characters/Heroes/Countess/Animations/Vamp_Weighting_work.Vamp_Weighting_work",
+      "class": "AnimSequence",
+      "length": 33.3333,
+      "frames": 1000,
+      "rate": 1.0,
+      "notifies": [],
+      "skeleton": "/Game/ParagonCountess/Characters/Heroes/Countess/Meshes/S_Countess_Skeleton.S_Countess_Skeleton",
+      "additive": "<AdditiveAnimationType.AAT_NONE: 0>",
+      "root_enabled": false,
+      "force_lock": false,
+      "root_delta": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "root_path_xy": 0.0,
+      "root_yaw": 0.0
+    }
+  ],
+  "effects": [
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/p_CountessMeleeTrail",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/BladeSiphon/FX/P_Countess_BladeSiphon_RingFX",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/BlinkStrike/FX/P_Countess_BlinkStrike_HitFX",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/BlinkStrike/FX/P_Countess_TeleportArrive",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/BlinkStrike/FX/P_Countess_TeleportBegin",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/Primary/FX/p_CountessImpact",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/RollingDark/FX/P_Countess_RD_CastBurst",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/Ultimate/FX/p_CountessUlt_CastFX",
+      "class": "ParticleSystem"
+    },
+    {
+      "path": "/Game/ParagonCountess/FX/Particles/Abilities/Ultimate/FX/p_CountessUlt_GroundImpactFX",
+      "class": "ParticleSystem"
+    }
+  ]
+}

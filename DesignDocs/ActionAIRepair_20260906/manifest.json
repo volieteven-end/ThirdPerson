@@ -1,0 +1,51 @@
+[
+  {
+    "path": "Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/8/QD/9W1U2X0C6GGAWJXDWIFM0Z.uasset",
+    "original_sha256": "8e91a05bffe95fc24eff43af7bd14a842fd3a45c4d993b62dcb6090d2f1efa1f",
+    "modified_sha256": "b590c05152e8eac60f166aa6fab1fa2a3704e75ab30b62d48bb7c6c50d4e7a2c",
+    "original_size": 37761,
+    "modified_size": 25257
+  },
+  {
+    "path": "Source/ThirdPerson/Animation/CombatActionRules.h",
+    "original_sha256": "2ec71298df9f8ebd32790c381c2005bf2f01b20870c5eaff42ecbdab70fb162c",
+    "modified_sha256": "37ea40be88d59038667adf52263e72d1b3da7478b74ac8fc34fdcdb51ac2c7d3",
+    "original_size": 1100,
+    "modified_size": 2380
+  },
+  {
+    "path": "Source/ThirdPerson/Character/TPCCharacter.cpp",
+    "original_sha256": "23df046b69d1c78a5aa5b7456aa0df37f32e1891f8c729f88f792bc17cba64e3",
+    "modified_sha256": "dd9a2ec0a5b31c264c3d25bb4c7e4e443ed2eb6aecedb5c02ce015b0a2ff04e7",
+    "original_size": 35974,
+    "modified_size": 37157
+  },
+  {
+    "path": "Source/ThirdPerson/Character/TPCCharacter.h",
+    "original_sha256": "e478460453ff0ca48ac98ccaac2d9accb45c1cef29212c1a16801619cbd72bfa",
+    "modified_sha256": "96d06c18cb87f3e206223f24a2d1e9b8fc68d4d1225cf6b6ff0f4ab34224c08b",
+    "original_size": 13180,
+    "modified_size": 13640
+  },
+  {
+    "path": "Source/ThirdPerson/Components/CombatComponent.cpp",
+    "original_sha256": "65d5d35364a9ec40f450ee1aeadc87e99a817de35d9548e1d3a9b39945232973",
+    "modified_sha256": "9198a5347891fb5029531864fe129210809cf927ed0c7f5a10b91acec78b9e07",
+    "original_size": 29029,
+    "modified_size": 32880
+  },
+  {
+    "path": "Source/ThirdPerson/Components/CombatComponent.h",
+    "original_sha256": "c9f7ce186430502592dcc88f0aac0a8cf492bb0cbc3b72b47723ba63d1e44c65",
+    "modified_sha256": "0e1a98d8ea3c7fbd0d222dafdb7f9b975d2d41c68594120ef2d5c89969d7cf14",
+    "original_size": 8984,
+    "modified_size": 9624
+  },
+  {
+    "path": "Source/ThirdPerson/Tests/ActionSystemTests.cpp",
+    "original_sha256": "4b57a7e18690261fe0d789ef0de5f0a4c7dd68b1302efaabd39c75fd79731383",
+    "modified_sha256": "53237a631999178030ddf46f1cefc265cad494ac67023e7492a457201b17610f",
+    "original_size": 11007,
+    "modified_size": 18389
+  }
+]

@@ -1,0 +1,51 @@
+#include "AttackWindowNotifyState.h"
+#include "CombatNotifyContext.h"
+#include "Engine/World.h"
+#include "../Components/CombatComponent.h"
+#include "../Components/EquipmentComponent.h"
+#include "../Weapons/WeaponActor.h"
+#include "Components/SkeletalMeshComponent.h"
+
+namespace
+{
+	void SetEquippedWeaponEffect(USkeletalMeshComponent* MeshComp, bool bActive)
+	{
+		AActor* OwnerActor = MeshComp ? MeshComp->GetOwner() : nullptr;
+		UEquipmentComponent* Equipment = OwnerActor
+			? OwnerActor->FindComponentByClass<UEquipmentComponent>()
+			: nullptr;
+		if (AWeaponActor* WeaponActor =
+			Equipment ? Equipment->GetEquippedWeaponActor() : nullptr)
+		{
+			WeaponActor->SetAttackEffectActive(bActive);
+		}
+	}
+}
+
+
+void UAttackWindowNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+	float TotalDuration, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+	if (!MeshComp || !MeshComp->GetWorld() || !MeshComp->GetWorld()->IsGameWorld()) { return; }
+	AActor* Owner = MeshComp->GetOwner();
+	UCombatComponent* Combat = Owner ? Owner->FindComponentByClass<UCombatComponent>() : nullptr;
+	if (!Combat || !Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference))) { return; }
+	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->OpenComboInputWindow(); }
+	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->StartAttackWindow(AttackBoneName, TraceRadius); }
+	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, true); }
+}
+
+void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+	const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyEnd(MeshComp, Animation, EventReference);
+	if (!MeshComp || !MeshComp->GetWorld() || !MeshComp->GetWorld()->IsGameWorld()) { return; }
+	AActor* Owner = MeshComp->GetOwner();
+	UCombatComponent* Combat = Owner ? Owner->FindComponentByClass<UCombatComponent>() : nullptr;
+	// Outgoing NotifyEnd cannot close the next attack's damage / FX window.
+	if (!Combat || !Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference))) { return; }
+	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->CloseComboInputWindow(); }
+	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->EndAttackWindow(); }
+	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, false); }
+}

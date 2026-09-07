@@ -1,0 +1,87 @@
+{
+  "GeometryScript_Primitives": {
+    "append_box": "X.append_box(target_mesh, primitive_options, transform, dimension_x=100.000000, dimension_y=100.000000, dimension_z=100.000000, steps_x=0, steps_y=0, steps_z=0, origin=GeometryScriptPrimitiveOriginMode.BASE, debug=None) -> DynamicMesh\r\nAppends a 3D box to the Target Mesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): \r\n    primitive_options (GeometryScriptPrimitiveOptions): \r\n    transform (Transform): \r\n    dimension_x (float): \r\n    dimension_y (float): \r\n    dimension_z (float): \r\n    steps_x (int32): \r\n    steps_y (int32): \r\n    steps_z (int32): \r\n    origin (GeometryScriptPrimitiveOriginMode): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:",
+    "append_cylinder": "X.append_cylinder(target_mesh, primitive_options, transform, radius=50.000000, height=100.000000, radial_steps=12, height_steps=0, capped=True, origin=GeometryScriptPrimitiveOriginMode.BASE, debug=None) -> DynamicMesh\r\nAppends a 3D Cylinder (with optional end caps) to the Target Mesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): \r\n    primitive_options (GeometryScriptPrimitiveOptions): \r\n    transform (Transform): \r\n    radius (float): \r\n    height (float): \r\n    radial_steps (int32): \r\n    height_steps (int32): \r\n    capped (bool): \r\n    origin (GeometryScriptPrimitiveOriginMode): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:",
+    "append_cone": "X.append_cone(target_mesh, primitive_options, transform, base_radius=50.000000, top_radius=5.000000, height=100.000000, radial_steps=12, height_steps=4, capped=True, origin=GeometryScriptPrimitiveOriginMode.BASE, debug=None) -> DynamicMesh\r\nAppends a 3D cone to the Target Mesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): \r\n    primitive_options (GeometryScriptPrimitiveOptions): \r\n    transform (Transform): \r\n    base_radius (float): \r\n    top_radius (float): \r\n    height (float): \r\n    radial_steps (int32): \r\n    height_steps (int32): \r\n    capped (bool): \r\n    origin (GeometryScriptPrimitiveOriginMode): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:",
+    "append_torus": "X.append_torus(target_mesh, primitive_options, transform, revolve_options, major_radius=50.000000, minor_radius=25.000000, major_steps=16, minor_steps=8, origin=GeometryScriptPrimitiveOriginMode.BASE, debug=None) -> DynamicMesh\r\nAppends a 3D torus (donut) or partial torus to the Target Mesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): \r\n    primitive_options (GeometryScriptPrimitiveOptions): \r\n    transform (Transform): \r\n    revolve_options (GeometryScriptRevolveOptions): \r\n    major_radius (float): \r\n    minor_radius (float): \r\n    major_steps (int32): \r\n    minor_steps (int32): \r\n    origin (GeometryScriptPrimitiveOriginMode): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:",
+    "append_simple_extrude_polygon": "X.append_simple_extrude_polygon(target_mesh, primitive_options, transform, polygon_vertices, height=100.000000, height_steps=0, capped=True, origin=GeometryScriptPrimitiveOriginMode.BASE, debug=None) -> DynamicMesh\r\nPolygon should be oriented counter-clockwise to produce a correctly-oriented shape, otherwise it will be inside-out\nPolygon endpoint is not repeated.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): \r\n    primitive_options (GeometryScriptPrimitiveOptions): \r\n    transform (Transform): \r\n    polygon_vertices (Array[Vector2D]): \r\n    height (float): \r\n    height_steps (int32): \r\n    capped (bool): \r\n    origin (GeometryScriptPrimitiveOriginMode): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:"
+  },
+  "GeometryScript_NewAssetUtils": {
+    "create_new_static_mesh_asset_from_mesh": "X.create_new_static_mesh_asset_from_mesh(from_dynamic_mesh, asset_path_and_name, options, debug=None) -> (StaticMesh, outcome=GeometryScriptOutcomePins)\r\nCreate a new StaticMesh asset from a DynamicMesh. Save the asset at the AssetPathAndName location.\r\n\r\nArgs:\r\n    from_dynamic_mesh (DynamicMesh): \r\n    asset_path_and_name (str): \r\n    options (GeometryScriptCreateNewStaticMeshAssetOptions): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    GeometryScriptOutcomePins: \r\n\r\n    outcome (GeometryScriptOutcomePins):",
+    "create_new_volume_from_mesh": "X.create_new_volume_from_mesh(from_dynamic_mesh, create_in_world, actor_transform, base_actor_name, options, debug=None) -> (Volume, create_in_world=World, outcome=GeometryScriptOutcomePins)\r\nCreate a new Volume from a Dynamic Mesh, in the specified world.\r\n\r\nArgs:\r\n    from_dynamic_mesh (DynamicMesh): \r\n    create_in_world (World): \r\n    actor_transform (Transform): \r\n    base_actor_name (str): \r\n    options (GeometryScriptCreateNewVolumeFromMeshOptions): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    tuple: \r\n\r\n    create_in_world (World): \r\n\r\n    outcome (GeometryScriptOutcomePins):"
+  },
+  "GeometryScript_MeshBooleans": {
+    "apply_mesh_boolean": "X.apply_mesh_boolean(target_mesh, target_transform, tool_mesh, tool_transform, operation, options, debug=None) -> DynamicMesh\r\nApplies a Boolean operation (such as, Union, Intersect, and Subtract) to the Target Dynamic Mesh based on a Tool Dynamic Mesh.\r\n\r\nArgs:\r\n    target_mesh (DynamicMesh): Dynamic Mesh to be acted upon\r\n    target_transform (Transform): used to position the TargetMesh\r\n    tool_mesh (DynamicMesh): Dynamic Mesh that acts as the cutting tool\r\n    tool_transform (Transform): used to position the ToolMesh\r\n    operation (GeometryScriptBooleanOperation): selects the specific boolean operation\r\n    options (GeometryScriptMeshBooleanOptions): selects additional options that are applied to the result\r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:"
+  },
+  "SubobjectDataSubsystem": {
+    "k2_gather_subobject_data_for_blueprint": "x.k2_gather_subobject_data_for_blueprint(context) -> Array[SubobjectDataHandle]\r\nGather all subobjects that the given Blueprint context has. Populates an array of\nhandles that will have the given context and all it's subobjects.\r\n\r\nArgs:\r\n    context (Blueprint): Object to gather subobjects for\r\n\r\nReturns:\r\n    Array[SubobjectDataHandle]: \r\n\r\n    out_array (Array[SubobjectDataHandle]): Array to populate (will be emptied first)",
+    "add_new_subobject": "x.add_new_subobject(params) -> (SubobjectDataHandle, fail_reason=Text)\r\nAdd a new subobject as a child to the given parent object\r\n\r\nArgs:\r\n    params (AddNewSubobjectParams): Options to consider when adding this subobject\r\n\r\nReturns:\r\n    Text: FSubobjectDataHandle          Handle to the newly created subobject, Invalid handle if creation failed\r\n\r\n    fail_reason (Text):"
+  },
+  "SubobjectDataBlueprintFunctionLibrary": {
+    "get_data": "X.get_data(data_handle) -> SubobjectData\r\nGet Data\r\n\r\nArgs:\r\n    data_handle (SubobjectDataHandle): \r\n\r\nReturns:\r\n    SubobjectData: \r\n\r\n    out_data (SubobjectData):",
+    "get_object": "X.get_object(data, even_if_pending_kill=False) -> Object\r\nGet Object\r\ndeprecated: Use GetAssociatedObject - it will not return template objects for instances\r\n\r\nArgs:\r\n    data (SubobjectData): \r\n    even_if_pending_kill (bool): \r\n\r\nReturns:\r\n    Object:"
+  },
+  "BlueprintEditorLibrary": {
+    "compile_blueprint": "X.compile_blueprint(blueprint) -> bool\r\nCompiles the given blueprint.\r\n\r\nArgs:\r\n    blueprint (Blueprint): Blueprint to compile\r\n\r\nReturns:\r\n    bool: True if compilation succeeded with no errors"
+  },
+  "GeometryScript_MeshModeling": {
+    "apply_mesh_bevel": "None"
+  },
+  "GeometryScript_Collision": {
+    "set_static_mesh_collision_from_mesh": "X.set_static_mesh_collision_from_mesh(from_dynamic_mesh, to_static_mesh_asset, options, static_mesh_collision_options=[True], debug=None) -> DynamicMesh\r\nGenerates Simple Collision shapes for a Static Mesh Asset based on the input Dynamic Mesh.\r\n\r\nArgs:\r\n    from_dynamic_mesh (DynamicMesh): \r\n    to_static_mesh_asset (StaticMesh): \r\n    options (GeometryScriptCollisionFromMeshOptions): \r\n    static_mesh_collision_options (GeometryScriptSetStaticMeshCollisionOptions): \r\n    debug (GeometryScriptDebug): \r\n\r\nReturns:\r\n    DynamicMesh:"
+  },
+  "MaterialEditingLibrary": {
+    "get_material_function_input_names": "None",
+    "get_vector_parameter_names": "X.get_vector_parameter_names(material) -> Array[Name]\r\nGets all vector parameter names\r\n\r\nArgs:\r\n    material (MaterialInterface): \r\n\r\nReturns:\r\n    Array[Name]: \r\n\r\n    parameter_names (Array[Name]):",
+    "get_scalar_parameter_names": "X.get_scalar_parameter_names(material) -> Array[Name]\r\nGets all scalar parameter names\r\n\r\nArgs:\r\n    material (MaterialInterface): \r\n\r\nReturns:\r\n    Array[Name]: \r\n\r\n    parameter_names (Array[Name]):",
+    "get_texture_parameter_names": "X.get_texture_parameter_names(material) -> Array[Name]\r\nGets all texture parameter names\r\n\r\nArgs:\r\n    material (MaterialInterface): \r\n\r\nReturns:\r\n    Array[Name]: \r\n\r\n    parameter_names (Array[Name]):"
+  },
+  "HierarchicalInstancedStaticMeshComponent": {
+    "add_instances": "x.add_instances(instance_transforms, should_return_indices, world_space=False, update_navigation=True) -> Array[int32]\r\nAdd multiple instances to this component. Transform is given in local space of this component unless bWorldSpace is set.\r\n\r\nArgs:\r\n    instance_transforms (Array[Transform]): \r\n    should_return_indices (bool): \r\n    world_space (bool): \r\n    update_navigation (bool): \r\n\r\nReturns:\r\n    Array[int32]:"
+  },
+  "EditorActorSubsystem": {
+    "spawn_actor_from_class": "x.spawn_actor_from_class(actor_class, location, rotation=[0.000000, 0.000000, 0.000000], transient=False) -> Actor\r\nCreate an actor and place it in the world editor. Can be created from a Blueprint or a Class.\nThe actor will be created in the current level and will be selected.\r\n\r\nArgs:\r\n    actor_class (type(Class)): Asset to attempt to use for an actor to place.\r\n    location (Vector): Location of the new actor.\r\n    rotation (Rotator): \r\n    transient (bool): \r\n\r\nReturns:\r\n    Actor: The created actor."
+  },
+  "GeometryScriptCreateNewStaticMeshAssetOptions": "Geometry Script Create New Static Mesh Asset Options\r\n\r\n**C++ Source:**\r\n\r\n- **Plugin**: GeometryScripting\r\n- **Module**: GeometryScriptingEditor\r\n- **File**: CreateNewAssetUtilityFunctions.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``collision_mode`` (CollisionTraceFlag):  [Read-Write]\r\n- ``enable_collision`` (bool):  [Read-Write]\r\n- ``enable_nanite`` (bool):  [Read-Write]\r\n- ``enable_recompute_normals`` (bool):  [Read-Write]\r\n- ``enable_recompute_tangents`` (bool):  [Read-Write]\r\n- ``nanite_proxy_triangle_percent`` (float):  [Read-Write] Replaced NaniteProxyTrianglePercent with usage of Engine FMeshNaniteSettings, use NaniteSettings property instead\r\n- ``nanite_settings`` (MeshNaniteSettings):  [Read-Write] Nanite settings to set on new StaticMesh Asset\r\n- ``use_original_vertex_order`` (bool):  [Read-Write] Use the original vertex order found in the source data. This is useful if the inbound mesh was originally non-manifold, and needs to keep\r\n  the non-manifold structure when re-created.",
+  "GeometryScriptCollisionFromMeshOptions": "Geometry Script Collision from Mesh Options\r\n\r\n**C++ Source:**\r\n\r\n- **Plugin**: GeometryScripting\r\n- **Module**: GeometryScriptingCore\r\n- **File**: CollisionFunctions.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``auto_detect_boxes`` (bool):  [Read-Write]\r\n- ``auto_detect_capsules`` (bool):  [Read-Write]\r\n- ``auto_detect_spheres`` (bool):  [Read-Write]\r\n- ``convex_decomposition_error_tolerance`` (float):  [Read-Write]\r\n- ``convex_decomposition_min_part_thickness`` (float):  [Read-Write]\r\n- ``convex_decomposition_search_factor`` (float):  [Read-Write]\r\n- ``convex_hull_geometric_tolerance`` (float):  [Read-Write]\r\n- ``convex_hull_target_face_count`` (int32):  [Read-Write]\r\n- ``emit_transaction`` (bool):  [Read-Write]\r\n- ``max_convex_hulls_per_mesh`` (int32):  [Read-Write]\r\n- ``max_shape_count`` (int32):  [Read-Write]\r\n- ``method`` (GeometryScriptCollisionGenerationMethod):  [Read-Write]\r\n- ``min_thickness`` (float):  [Read-Write]\r\n- ``remove_fully_contained_shapes`` (bool):  [Read-Write]\r\n- ``simplify_hulls`` (bool):  [Read-Write]\r\n- ``swept_hull_axis`` (GeometryScriptSweptHullAxis):  [Read-Write]\r\n- ``swept_hull_simplify_tolerance`` (float):  [Read-Write]",
+  "AddNewSubobjectParams": "Options when adding a new subobject\r\n\r\n**C++ Source:**\r\n\r\n- **Module**: SubobjectDataInterface\r\n- **File**: SubobjectDataSubsystem.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``blueprint_context`` (Blueprint):  [Read-Write] Pointer to the blueprint context that this subobject is in. If this is null, it is assumed that\r\n  this subobject is being added to an instance.\r\n- ``conform_transform_to_parent`` (bool):  [Read-Write] Whether the newly created component should keep its transform, or conform it to its parent\r\n- ``new_class`` (type(Class)):  [Read-Write] The class of the new subobject that will be added\r\n- ``parent_handle`` (SubobjectDataHandle):  [Read-Write]\r\n- ``skip_mark_blueprint_modified`` (bool):  [Read-Write] Optionally skip marking this blueprint as modified (e.g. if we're handling that externally",
+  "GeometryScriptPrimitiveOptions": "Geometry Script Primitive Options\r\n\r\n**C++ Source:**\r\n\r\n- **Plugin**: GeometryScripting\r\n- **Module**: GeometryScriptingCore\r\n- **File**: MeshPrimitiveFunctions.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``flip_orientation`` (bool):  [Read-Write]\r\n- ``material_id`` (int32):  [Read-Write] Material ID to set on primitive mesh triangles\r\n- ``polygroup_mode`` (GeometryScriptPrimitivePolygroupMode):  [Read-Write]\r\n- ``uv_mode`` (GeometryScriptPrimitiveUVMode):  [Read-Write]",
+  "MaterialExpressionCustom": "Material Expression Custom\r\n\r\n**C++ Source:**\r\n\r\n- **Module**: Engine\r\n- **File**: MaterialExpressionCustom.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``additional_defines`` (Array[CustomDefine]):  [Read-Write]\r\n- ``additional_outputs`` (Array[CustomOutput]):  [Read-Write]\r\n- ``code`` (str):  [Read-Write]\r\n- ``contains_clip_instruction`` (CustomMaterialClipInstruction):  [Read-Write] Controls whether this expression is considered to contain a clip() or discard instruction that may conditionally discard pixels.\r\n- ``desc`` (str):  [Read-Write] A description that level designers can add (shows in the material editor UI).\r\n- ``description`` (str):  [Read-Write]\r\n- ``include_file_paths`` (Array[str]):  [Read-Write]\r\n- ``inputs`` (Array[CustomInput]):  [Read-Write]\r\n- ``material_expression_editor_x`` (int32):  [Read-Write]\r\n- ``material_expression_editor_y`` (int32):  [Read-Write]\r\n- ``output_type`` (CustomMaterialOutputType):  [Read-Write]\r\n- ``show_code`` (bool):  [Read-Only]",
+  "CustomInput": "Custom Input\r\n\r\n**C++ Source:**\r\n\r\n- **Module**: Engine\r\n- **File**: MaterialExpressionCustom.h\r\n\r\n**Editor Properties:** (see get_editor_property/set_editor_property)\r\n\r\n- ``input_name`` (Name):  [Read-Write]",
+  "mat_wall_tile": {
+    "vectors": [],
+    "scalars": [
+      "roughness",
+      "scale_UV_wall",
+      "scale_UV_putty"
+    ],
+    "textures": []
+  },
+  "mat_wall": {
+    "vectors": [],
+    "scalars": [
+      "roughness",
+      "scale_UV_wall",
+      "scale_UV_putty"
+    ],
+    "textures": []
+  },
+  "mat_floor_tile": {
+    "vectors": [],
+    "scalars": [
+      "roughness",
+      "scale_UV_wall"
+    ],
+    "textures": []
+  },
+  "mat_roof": {
+    "vectors": [],
+    "scalars": [
+      "roughness"
+    ],
+    "textures": [
+      "basecolor",
+      "normal"
+    ]
+  }
+}

@@ -1,0 +1,872 @@
+diff --git a/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/8/QD/9W1U2X0C6GGAWJXDWIFM0Z.uasset b/Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/8/QD/9W1U2X0C6GGAWJXDWIFM0Z.uasset
+index bf20bfd0c8a3b3f17d41bf7a75eddf41fafe478c..939151b0de7c9a41d848500668d77099febef377 100644
+GIT binary patch
+literal 25257
+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
+EA8~M3;s5{u
+
+literal 37761
+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
+SeRs`0&Hwnj3zr87>HjzQ(<jLQ
+
+diff --git a/Source/ThirdPerson/Animation/CombatActionRules.h b/Source/ThirdPerson/Animation/CombatActionRules.h
+index 23ca531..16d9bf7 100644
+--- a/Source/ThirdPerson/Animation/CombatActionRules.h
++++ b/Source/ThirdPerson/Animation/CombatActionRules.h
+@@ -8,6 +8,44 @@ inline bool LocksMovement(bool Dead, bool Hit, bool Guard, bool Attack, bool Dod
+     return Dead || Hit || Guard || Attack || Dodge;
+ }
+ 
++// Attacks lock WASD, but may be interrupted by a dodge. Hits/guard/death/dodges may not.
++inline bool BlocksDodge(bool Dead, bool Hit, bool Guard, bool Dodge)
++{
++    return Dead || Hit || Guard || Dodge;
++}
++
++// The window starts at the natural end of the FIRST dodge, not at input time.
++struct FDashComboWindow
++{
++    int NextIndex = -1;
++    bool bDashing = false;
++    bool bQueued = false;
++    double ExpiresAt = 0.0;
++    void Reset() { NextIndex = -1; bDashing = bQueued = false; ExpiresAt = 0.0; }
++    void Arm(int Index) { Reset(); NextIndex = Index; bDashing = true; }
++    bool IsOpen(double Now) const { return NextIndex >= 0 && (bDashing || Now <= ExpiresAt); }
++    bool Queue(double Now)
++    {
++        if (!bDashing || !IsOpen(Now)) { return false; }
++        bQueued = true;
++        return true;
++    }
++    void Finish(double Now, double Duration)
++    {
++        if (NextIndex < 0 || !bDashing) { return; }
++        if (Duration <= 0.0) { Reset(); return; }
++        bDashing = false;
++        ExpiresAt = Now + Duration;
++    }
++    int Consume(double Now)
++    {
++        if (bDashing) { return -1; }
++        const int Index = IsOpen(Now) ? NextIndex : -1;
++        Reset();
++        return Index;
++    }
++};
++
+ // A single intent belongs to exactly one action generation. Early clicks are
+ // retained until its chain point; interruption never carries them to a new action.
+ struct FComboBuffer
+diff --git a/Source/ThirdPerson/Character/TPCCharacter.cpp b/Source/ThirdPerson/Character/TPCCharacter.cpp
+index a673fa6..7ce2360 100644
+--- a/Source/ThirdPerson/Character/TPCCharacter.cpp
++++ b/Source/ThirdPerson/Character/TPCCharacter.cpp
+@@ -438,7 +438,9 @@ void ATPCCharacter::HandleHealthChanged(float CurrentHealth,float MaxHealth)
+ }
+ void ATPCCharacter::Dash()
+ {
+-	if (IsMovementInputLocked())
++    // Attacks still lock WASD, but no longer lock the dedicated dash action.
++    if (TPCActionRules::BlocksDodge(bActionDead, bMovementLockedByHit,
++        CombatComponent && CombatComponent->IsBlocking(), IsDashing()))
+ 	{
+ 		return;
+ 	}
+@@ -505,7 +507,12 @@ void ATPCCharacter::Dash()
+ 		UE_LOG(LogTemp, Warning, TEXT("Dash needs a root-motion montage in BP_TPCCharacter."));
+ 		return;
+ 	}
+-	if (IsTurningInPlace()) { CancelMotionAction(); }
++    // A rejected dash (cooldown, stamina, missing montage/AnimInstance) must not cancel a valid attack.
++    if (!GetMesh() || !GetMesh()->GetAnimInstance()) { return; }
++    if (IsTurningInPlace()) { CancelMotionAction(); }
++    bAttackTargetAssistActive = false;
++    if (MotionWarpingComponent) { MotionWarpingComponent->RemoveWarpTarget(AttackWarpTargetName); }
++    if (CombatComponent) { CombatComponent->CancelAttackForDash(AttackDashCancelBlendOut); }
+ 	if (StartMotionMontage(SelectedDashMontage, ETPCMotionAction::Dodge))
+ 	{
+ 		if (!StaminaComponent->TryConsume(DashCost)) { CancelMotionAction(); return; }
+@@ -648,15 +655,25 @@ void ATPCCharacter::StopBlock()
+ 
+ void ATPCCharacter::HandlePrimaryAttack()
+ {
+-	if (!CombatComponent || !GetCharacterMovement() || bActionDead || bMovementLockedByHit || IsDashing()) { return; }
++	if (!CombatComponent || !GetCharacterMovement() || bActionDead || bMovementLockedByHit) { return; }
++    if (IsDashing())
++    {
++        CombatComponent->QueueAttackDuringDash();
++        return;
++    }
+ 	if (IsTurningInPlace()) { CancelMotionAction(); }
+-	// Already attacking must route to the current combo BEFORE selecting by falling/crouch.
+ 	if (CombatComponent->IsMeleeAttackInProgress())
+ 	{
+ 		CombatComponent->TryAttack();
+ 		return;
+ 	}
+ 	UpdateAttackWarpTarget();
++    if (!GetCharacterMovement()->IsFalling() && !bCrouchInputHeld && !bIsCrouched && CombatComponent->TryResumeComboAfterDash())
++    {
++        ApplyActionRotationPolicy();
++        return;
++    }
++    CombatComponent->ClearDashCombo();
+ 	if (GetCharacterMovement()->IsFalling()) { CombatComponent->TryAirAttack(); }
+ 	else if (bCrouchInputHeld || bIsCrouched)
+ 	{
+@@ -1094,10 +1111,11 @@ bool ATPCCharacter::StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction A
+ 	return true;
+ }
+ 
+-void ATPCCharacter::CancelMotionAction(float BlendOutTime)
++void ATPCCharacter::CancelMotionAction(float BlendOutTime, bool bInterrupted)
+ {
+ 	UAnimMontage* Montage = ActiveMotionMontage.Get();
+ 	const bool bWasTurning = IsTurningInPlace();
++	const bool bWasDashing = IsDashing();
+ 	++MotionGeneration;
+ 	MotionAction = ETPCMotionAction::None;
+ 	ActiveMotionMontage.Reset();
+@@ -1112,13 +1130,18 @@ void ATPCCharacter::CancelMotionAction(float BlendOutTime)
+ 		GetMesh()->GetAnimInstance()->Montage_Stop(FMath::Max(0.f, BlendOutTime), Montage);
+ 	}
+ 	ApplyActionRotationPolicy();
++    if (bWasDashing && CombatComponent && CombatComponent->FinishDashForCombo(bInterrupted, DashComboContinueWindow))
++    {
++        // The montage/generation has been cleared above: one buffered click now starts one next stage.
++        HandlePrimaryAttack();
++    }
+ }
+ 
+ void ATPCCharacter::HandleMotionMontageEnded(UAnimMontage* Montage, bool bInterrupted, uint64 Generation)
+ {
+ 	if (Generation != MotionGeneration || Montage != ActiveMotionMontage.Get()) { return; }
+ 	// Rotation is already extracted from the montage. Do not add 90/180 or snap to view yaw.
+-	CancelMotionAction(0.f);
++	CancelMotionAction(0.f, bInterrupted);
+ }
+ 
+ void ATPCCharacter::HandleMotionBlendingOut(UAnimMontage* Montage, bool bInterrupted, uint64 Generation)
+diff --git a/Source/ThirdPerson/Character/TPCCharacter.h b/Source/ThirdPerson/Character/TPCCharacter.h
+index bbcb09f..f6460c5 100644
+--- a/Source/ThirdPerson/Character/TPCCharacter.h
++++ b/Source/ThirdPerson/Character/TPCCharacter.h
+@@ -170,6 +170,11 @@ public:
+ 
+ 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+ 	float DashCooldown = 0.8f;
++    /** Ground combo may resume its next stage after its first dodge. Timed from dodge end. */
++    UPROPERTY(EditDefaultsOnly, Category = "Combat|Dash Cancel", meta = (ClampMin = "0.0", ClampMax = "2.0", Units = "s"))
++    float DashComboContinueWindow = 0.65f;
++    UPROPERTY(EditDefaultsOnly, Category = "Combat|Dash Cancel", meta = (ClampMin = "0.0", ClampMax = "0.25", Units = "s"))
++    float AttackDashCancelBlendOut = 0.08f;
+ 	UPROPERTY(EditDefaultsOnly, Category = "Movement",meta = (ClampMin = "0.0"))
+ 	float DashCost = 30.f;
+ 	UPROPERTY(EditDefaultsOnly, Category = "Movement",meta = (ClampMin = "0.0"))
+@@ -269,7 +274,7 @@ public:
+ private:
+ 	friend struct FTPActionTestAccess;
+ 	bool StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction Action);
+-	void CancelMotionAction(float BlendOutTime = 0.1f);
++	void CancelMotionAction(float BlendOutTime = 0.1f, bool bInterrupted = true);
+ 	void HandleMotionMontageEnded(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
+ 	void HandleMotionBlendingOut(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
+ 	void UpdateMotionAction();
+diff --git a/Source/ThirdPerson/Components/CombatComponent.cpp b/Source/ThirdPerson/Components/CombatComponent.cpp
+index fd735bc..f49530d 100644
+--- a/Source/ThirdPerson/Components/CombatComponent.cpp
++++ b/Source/ThirdPerson/Components/CombatComponent.cpp
+@@ -64,6 +64,7 @@ void UCombatComponent::TryAttack()
+ 		TryRangedAttackAt(nullptr);
+ 		return;
+ 	}
++	ClearDashCombo(); // A fresh attack begins a new dash-continuation budget.
+ 	NextAttackIndex = 0;
+ 	if (!StartMeleeMontageAttack() && GetEffectiveAttackMontages().IsEmpty())
+ 	{
+@@ -166,6 +167,7 @@ void UCombatComponent::StartBlock()
+ 		return;
+ 	}
+ 
++	ClearDashCombo();
+ 	bBlockInputHeld = true;
+ 	bIsBlocking = true;
+ 	bParryWindowActive = true;
+@@ -413,6 +415,7 @@ void UCombatComponent::StopAttackEffects()
+ 
+ void UCombatComponent::ResetMeleeAction()
+ {
++	ClearDashCombo();
+ 	++AttackGeneration;
+ 	ComboBuffer.Reset(AttackGeneration);
+ 	EndAttackWindow();
+@@ -427,6 +430,93 @@ void UCombatComponent::ResetMeleeAction()
+ 	ActiveAttackType = EActiveCombatAttackType::Normal;
+ }
+ 
++void UCombatComponent::ClearDashCombo()
++{
++    DashComboWindow.Reset();
++    DashComboWeapon.Reset();
++    DashComboWeaponActor.Reset();
++    DashComboMontages.Reset();
++    bDashUsedInCombo = false;
++}
++
++bool UCombatComponent::IsDashComboContextValid() const
++{
++    const UEquipmentComponent* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
++    if (DashComboWeapon.Get() != GetEquippedWeaponDefinition() ||
++        DashComboWeaponActor.Get() != (Equipment ? Equipment->GetEquippedWeaponActor() : nullptr)) { return false; }
++    const auto& Montages = GetEffectiveAttackMontages();
++    if (Montages.Num() != DashComboMontages.Num()) { return false; }
++    for (int32 Index = 0; Index < Montages.Num(); ++Index)
++    {
++        if (!Montages[Index] || Montages[Index] != DashComboMontages[Index].Get()) { return false; }
++    }
++    return true;
++}
++
++void UCombatComponent::CancelAttackForDash(float BlendOutTime)
++{
++    const ACharacter* Character = Cast<ACharacter>(GetOwner());
++    const bool bPreserve = !bDashUsedInCombo && ActiveAttackType == EActiveCombatAttackType::Normal &&
++        Character && Character->GetCharacterMovement()->IsMovingOnGround() && CanChainAttack();
++    const int32 SavedNextIndex = NextAttackIndex;
++    TArray<TWeakObjectPtr<UAnimMontage>> SavedMontages;
++    if (bPreserve)
++    {
++        for (UAnimMontage* Montage : GetEffectiveAttackMontages()) { SavedMontages.Add(Montage); }
++    }
++    const UWeaponDefinition* SavedWeapon = GetEquippedWeaponDefinition();
++    UEquipmentComponent* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
++    AWeaponActor* SavedWeaponActor = Equipment ? Equipment->GetEquippedWeaponActor() : nullptr;
++    // Advance attack generation and close damage/effects BEFORE stopping its montage.
++    CancelActiveAttack(BlendOutTime);
++    if (bPreserve)
++    {
++        bDashUsedInCombo = true;
++        DashComboWindow.Arm(SavedNextIndex);
++        DashComboWeapon = SavedWeapon;
++        DashComboWeaponActor = SavedWeaponActor;
++        DashComboMontages = MoveTemp(SavedMontages);
++    }
++}
++
++bool UCombatComponent::QueueAttackDuringDash()
++{
++    if (!bCombatEnabled || !GetWorld() || !IsDashComboContextValid()) { ClearDashCombo(); return false; }
++    return DashComboWindow.Queue(GetWorld()->GetTimeSeconds());
++}
++
++bool UCombatComponent::FinishDashForCombo(bool bInterrupted, float ContinueWindow)
++{
++    if (bInterrupted || !bCombatEnabled || !GetWorld() || !IsDashComboContextValid())
++    {
++        ClearDashCombo();
++        return false;
++    }
++    DashComboWindow.Finish(GetWorld()->GetTimeSeconds(), FMath::Max(0.f, ContinueWindow));
++    return DashComboWindow.bQueued && DashComboWindow.IsOpen(GetWorld()->GetTimeSeconds());
++}
++
++bool UCombatComponent::TryResumeComboAfterDash()
++{
++    const ACharacter* Character = Cast<ACharacter>(GetOwner());
++    if (!bCombatEnabled || bMeleeAttackInProgress || bRangedAttackInProgress || bIsBlocking || !GetWorld() ||
++        !Character || !Character->GetCharacterMovement()->IsMovingOnGround() || !IsDashComboContextValid())
++    {
++        ClearDashCombo();
++        return false;
++    }
++    const int32 ResumeIndex = DashComboWindow.Consume(GetWorld()->GetTimeSeconds());
++    if (ResumeIndex == INDEX_NONE) { ClearDashCombo(); return false; }
++    NextAttackIndex = ResumeIndex;
++    DashComboWeapon.Reset();
++    DashComboWeaponActor.Reset();
++    DashComboMontages.Reset();
++    // This is a continuation, not a new cooldown-gated first attack. Keep the used-dash budget.
++    const bool bStarted = StartMeleeMontageAttack();
++    if (!bStarted) { ClearDashCombo(); }
++    return bStarted;
++}
++
+ void UCombatComponent::CancelActiveAttack(float BlendOutTime)
+ {
+ 	UAnimMontage* Melee = ActiveAttackMontage.Get();
+diff --git a/Source/ThirdPerson/Components/CombatComponent.h b/Source/ThirdPerson/Components/CombatComponent.h
+index 75d3acf..ff125cb 100644
+--- a/Source/ThirdPerson/Components/CombatComponent.h
++++ b/Source/ThirdPerson/Components/CombatComponent.h
+@@ -8,6 +8,7 @@
+ #include "CombatComponent.generated.h"
+ 
+ class UAnimMontage;
++class AWeaponActor;
+ class UAnimSequenceBase;
+ class UWeaponDefinition;
+ class USkeletalMeshComponent;
+@@ -44,6 +45,13 @@ public:
+ 	void TryAirDiveAttack();
+ 	void HandleOwnerLanded();
+ 	void CancelActiveAttack(float BlendOutTime = 0.1f);
++
++    // Only the first dash of a normal ground combo may preserve its next stage.
++    void CancelAttackForDash(float BlendOutTime);
++    bool FinishDashForCombo(bool bInterrupted, float ContinueWindow);
++    bool QueueAttackDuringDash();
++    bool TryResumeComboAfterDash();
++    void ClearDashCombo();
+ 	void ReachComboChainPoint(UAnimSequenceBase* Animation, int32 MontageInstanceId = INDEX_NONE);
+ 	bool IsCurrentAttackNotify(const UAnimSequenceBase* Animation, int32 MontageInstanceId) const;
+ 	void StartBlock();
+@@ -162,6 +170,12 @@ private:
+ 	int32 ActiveAttackInstanceId = INDEX_NONE;
+ 	uint64 AttackGeneration = 0;
+ 	TPCActionRules::FComboBuffer ComboBuffer;
++    TPCActionRules::FDashComboWindow DashComboWindow;
++    bool bDashUsedInCombo = false;
++    TWeakObjectPtr<const UWeaponDefinition> DashComboWeapon;
++    TWeakObjectPtr<AWeaponActor> DashComboWeaponActor;
++    TArray<TWeakObjectPtr<UAnimMontage>> DashComboMontages;
++    bool IsDashComboContextValid() const;
+ 	bool bAirDiveLanded = false;
+ 	friend struct FTPActionTestAccess;
+ 	bool bAttackWindowActive = false;
+diff --git a/Source/ThirdPerson/Tests/ActionSystemTests.cpp b/Source/ThirdPerson/Tests/ActionSystemTests.cpp
+index f465c27..3d5f8d1 100644
+--- a/Source/ThirdPerson/Tests/ActionSystemTests.cpp
++++ b/Source/ThirdPerson/Tests/ActionSystemTests.cpp
+@@ -45,6 +45,13 @@ struct FTPActionTestAccess
+ 	static void AnimOwner(UTPCAnimInstance& A, ATPCCharacter* C) { A.Character = C; }
+ 	static void SetAirBudget(UCombatComponent& C, int32 N) { C.NextAirAttackIndex = N; }
+ 	static int32 AirBudget(const UCombatComponent& C) { return C.NextAirAttackIndex; }
++    static int32 DashNext(const UCombatComponent& C) { return C.DashComboWindow.NextIndex; }
++    static bool DashWaiting(const UCombatComponent& C) { return C.DashComboWindow.bDashing; }
++    static bool DamageWindow(const UCombatComponent& C) { return C.bAttackWindowActive; }
++    static void MarkDamageWindow(UCombatComponent& C) { C.bAttackWindowActive = true; }
++    static void MarkDashUsed(UCombatComponent& C) { C.bDashUsedInCombo = true; }
++    static void ChangeMontages(UCombatComponent& C) { C.AttackMontages.RemoveAt(1); }
++    static void NaturalDashEnd(ATPCCharacter& C) { C.CancelMotionAction(0.f, false); }
+ };
+ 
+ namespace
+@@ -223,4 +230,114 @@ bool FTPRootTurnAndDeathTest::RunTest(const FString& Parameters)
+ 	return true;
+ }
+ 
++
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPDashWindowTest, "ThirdPerson.ActionSystem.DashComboWindow",
++    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
++bool FTPDashWindowTest::RunTest(const FString& Parameters)
++{
++    TPCActionRules::FDashComboWindow W;
++    TestFalse(TEXT("Free dash does not queue an old combo"), W.Queue(0));
++    W.Arm(1);
++    TestTrue(TEXT("Early left click during first dash is queued"), W.Queue(10));
++    TestEqual(TEXT("Dash input must wait for montage end"), W.Consume(10), -1);
++    W.Finish(12, 0.65);
++    TestTrue(TEXT("Queue retained through natural dash end"), W.bQueued);
++    TestEqual(TEXT("Next stage resumes before deadline"), W.Consume(12.64), 1);
++    TestEqual(TEXT("One click cannot resume twice"), W.Consume(12.64), -1);
++    W.Arm(2); W.Finish(20, 0.65);
++    TestEqual(TEXT("Expired continuation is discarded"), W.Consume(20.66), -1);
++    W.Arm(1); W.Finish(30, 0);
++    TestFalse(TEXT("Zero duration disables preservation"), W.IsOpen(30));
++    W.Arm(1); W.Queue(0); W.Reset();
++    TestFalse(TEXT("An interruption clears the pending click"), W.bQueued);
++    TestFalse(TEXT("An interruption clears continuation"), W.IsOpen(0));
++    TestFalse(TEXT("Attacking is not a dash prohibition"), TPCActionRules::BlocksDodge(false,false,false,false));
++    for (int32 I=1; I<16; ++I)
++        TestTrue(TEXT("Death/hit/guard/active dash still prohibit another dash"),
++            TPCActionRules::BlocksDodge((I&1)!=0,(I&2)!=0,(I&4)!=0,(I&8)!=0));
++    return true;
++}
++
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPDashCancelTest, "ThirdPerson.ActionSystem.DashCancelLifecycle",
++    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
++bool FTPDashCancelTest::RunTest(const FString& Parameters)
++{
++    FActionTestWorld F;
++    ATPCCharacter* P=F.Character;
++    if(!TestNotNull(TEXT("Character"),P)) return false;
++    UCombatComponent& C=*P->CombatComponent;
++    P->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
++    UAnimMontage* M=NewObject<UAnimMontage>();
++    FTPActionTestAccess::Attack(C,M);
++    FTPActionTestAccess::MarkDamageWindow(C);
++    C.TryAttack();
++    C.CancelAttackForDash(0.08f);
++    TestFalse(TEXT("Dash cancel closes active attack"),C.IsMeleeAttackInProgress());
++    TestFalse(TEXT("Dash cancel closes damage trace"),FTPActionTestAccess::DamageWindow(C));
++    TestFalse(TEXT("Pre-dash attack input is not reused"),C.HasBufferedComboInput());
++    TestFalse(TEXT("Old damage notifies are rejected"),C.IsCurrentAttackNotify(M,7));
++    TestEqual(TEXT("First dash preserves next stage"),FTPActionTestAccess::DashNext(C),1);
++    TestTrue(TEXT("Wait for dash end"),FTPActionTestAccess::DashWaiting(C));
++    FTPActionTestAccess::StaleEnd(C,M);
++    TestEqual(TEXT("Stale attack end cannot clear dash continuation"),FTPActionTestAccess::DashNext(C),1);
++    TestTrue(TEXT("A new click during dash is accepted"),C.QueueAttackDuringDash());
++    TestTrue(TEXT("Natural dash end requests queued continuation"),C.FinishDashForCombo(false,0.65f));
++    TestFalse(TEXT("Natural end opens timed window"),FTPActionTestAccess::DashWaiting(C));
++    C.CancelAttackForDash(0.08f);
++    TestEqual(TEXT("Second consecutive dash resets combo"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    TestFalse(TEXT("Second dash does not queue continuation"),C.QueueAttackDuringDash());
++    FTPActionTestAccess::Attack(C,M); FTPActionTestAccess::MarkDashUsed(C);
++    C.CancelAttackForDash(0.08f);
++    TestEqual(TEXT("Already resumed chain gets no second preservation"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    FTPActionTestAccess::Attack(C,M); C.CancelAttackForDash(0.08f);
++    FTPActionTestAccess::ChangeMontages(C);
++    TestFalse(TEXT("Changing weapon montage list invalidates continuation"),C.FinishDashForCombo(false,0.65f));
++    TestEqual(TEXT("Changed montage list clears stored stage"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    FTPActionTestAccess::Attack(C,M); C.CancelAttackForDash(0.08f);
++    C.SetCombatEnabled(false);
++    TestEqual(TEXT("Death/combat disable clears stored stage"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    TestFalse(TEXT("Disabled combat rejects buffered dash input"),C.QueueAttackDuringDash());
++    return true;
++}
++
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPDashCancelGuardsTest, "ThirdPerson.ActionSystem.DashCancelGuards",
++    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
++bool FTPDashCancelGuardsTest::RunTest(const FString& Parameters)
++{
++    FActionTestWorld F;
++    ATPCCharacter* P=F.Character;
++    if(!TestNotNull(TEXT("Character"),P)) return false;
++    UCombatComponent& C=*P->CombatComponent;
++    UAnimMontage* M=NewObject<UAnimMontage>();
++    P->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
++    FTPActionTestAccess::Attack(C,M);
++    P->StaminaComponent->SetCurrentStamina(0.f);
++    P->Dash();
++    TestTrue(TEXT("Insufficient stamina preserves current attack"),C.IsMeleeAttackInProgress());
++    P->StaminaComponent->SetCurrentStamina(100.f);
++    P->Dash();
++    TestTrue(TEXT("Missing dash montage preserves current attack"),C.IsMeleeAttackInProgress());
++    TestEqual(TEXT("Rejected dash spends no stamina"),P->StaminaComponent->GetCurrentStamina(),100.f);
++    P->LastDashTime=P->GetWorld()->GetTimeSeconds();
++    P->Dash();
++    TestTrue(TEXT("Cooldown rejection preserves current attack"),C.IsMeleeAttackInProgress());
++    C.CancelAttackForDash(0.08f); FTPActionTestAccess::Dodge(*P);
++    P->HandlePrimaryAttack();
++    FTPActionTestAccess::Hit(*P);
++    TestFalse(TEXT("Hit interrupts dash"),P->IsDashing());
++    TestEqual(TEXT("Hit clears dash combo and its input"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    FTPActionTestAccess::EndHit(*P);
++    FTPActionTestAccess::Attack(C,M); C.CancelAttackForDash(0.08f);
++    C.StartBlock();
++    TestEqual(TEXT("Entering guard drops continuation"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    C.SetCombatEnabled(false); C.SetCombatEnabled(true);
++    FTPActionTestAccess::Attack(C,M); FTPActionTestAccess::FinalStage(C);
++    C.CancelAttackForDash(0.08f);
++    TestEqual(TEXT("Final attack never wraps to first through dash"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    FTPActionTestAccess::Attack(C,M); P->GetCharacterMovement()->SetMovementMode(MOVE_Falling);
++    C.CancelAttackForDash(0.08f);
++    TestEqual(TEXT("Airborne attacks do not preserve a ground combo"),FTPActionTestAccess::DashNext(C),INDEX_NONE);
++    return true;
++}
++
+ #endif

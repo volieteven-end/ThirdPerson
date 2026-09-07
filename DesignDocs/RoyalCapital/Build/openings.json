@@ -1,0 +1,212 @@
+[
+  {
+    "id": "Bridge_Arch_113",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      -113,
+      0,
+      -22
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 6.8999999999999995,
+    "clear_height_m": 11.5,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Bridge_Arch_93",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      -93,
+      0,
+      -22
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 6.8999999999999995,
+    "clear_height_m": 11.5,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Bridge_Arch_73",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      -73,
+      0,
+      -22
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 6.8999999999999995,
+    "clear_height_m": 11.5,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Main_Gate",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      -53,
+      0,
+      0
+    ],
+    "yaw_deg": 0,
+    "clear_width_m": 7.800000000000001,
+    "clear_height_m": 13.0,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Chapel_Entrance",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      0,
+      -69,
+      7
+    ],
+    "yaw_deg": 0,
+    "clear_width_m": 6.8999999999999995,
+    "clear_height_m": 11.5,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_-4",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      -4,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_2",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      2,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_8",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      8,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_14",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      14,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_20",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      20,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Cloister_Bay_26",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      26,
+      65,
+      0
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 3.444,
+    "clear_height_m": 5.904,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Palace_Recess",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      136,
+      -15,
+      30
+    ],
+    "yaw_deg": 0,
+    "clear_width_m": 9.600000000000001,
+    "clear_height_m": 16.0,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Boss_Entrance",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Gate.SM_RC_Gate",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      123,
+      35.4,
+      30.2
+    ],
+    "yaw_deg": 90,
+    "clear_width_m": 5.04,
+    "clear_height_m": 8.4,
+    "destination": "continuous path / visible courtyard"
+  },
+  {
+    "id": "Boss_Exit",
+    "type": "door",
+    "geometry": "/Game/RoyalCapital/Meshes/SM_RC_Arcade.SM_RC_Arcade",
+    "boolean": "evaluated native GeometryScript SUBTRACT",
+    "position_m": [
+      151.5,
+      64,
+      30.2
+    ],
+    "yaw_deg": 0,
+    "clear_width_m": 2.3100000000000005,
+    "clear_height_m": 3.9600000000000004,
+    "destination": "continuous path / visible courtyard"
+  }
+]

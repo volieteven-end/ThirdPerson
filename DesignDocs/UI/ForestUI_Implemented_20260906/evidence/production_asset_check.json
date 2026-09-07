@@ -1,0 +1,19 @@
+{
+  "WBP_InventorySlot": {
+    "status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+    "class": "/Game/Third/Widget/WBP_InventorySlot.WBP_InventorySlot_C"
+  },
+  "WBP_Inventory": {
+    "status": "<BlueprintStatus.BS_UP_TO_DATE: 3>",
+    "class": "/Game/Third/Widget/WBP_Inventory.WBP_Inventory_C"
+  },
+  "T_ForestPanel": {
+    "source": "E:/UNREAL/ue projects/ThirdPerson/Content/Third/UIArt/ForestUI/T_ForestPanel.png",
+    "max_texture_size": 256
+  },
+  "T_ForestSlot": {
+    "source": "E:/UNREAL/ue projects/ThirdPerson/Content/Third/UIArt/ForestUI/T_ForestSlot.png",
+    "max_texture_size": 256
+  },
+  "reopened": true
+}

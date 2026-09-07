@@ -1,0 +1,9 @@
+{
+  "stage": "modified",
+  "world": "/Game/RoyalCapital/Maps/L_RoyalCapital.L_RoyalCapital",
+  "actors": 179,
+  "instances": 3361,
+  "markers": 11,
+  "original_unchanged": true,
+  "literal_output": "MODIFIED PASS | instances=3361 | treasure=4 | enemy=6 | boss=1 | original_map=unchanged"
+}

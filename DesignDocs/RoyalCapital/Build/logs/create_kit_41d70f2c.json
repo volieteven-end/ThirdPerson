@@ -1,0 +1,7 @@
+{
+  "id": "create_kit_41d70f2c",
+  "success": false,
+  "output": "",
+  "error": "Traceback (most recent call last):\n  File \"E:/UNREAL/ue projects/ThirdPerson/DesignDocs/RoyalCapital/Build/ue_bridge.py\", line 46, in _rc_tick\n    exec(compile(script.read_text(encoding='utf-8-sig'), str(script), 'exec'), {'__name__':'__main__', '__file__':str(script), 'JOB':job})\n  File \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\RoyalCapital\\Build\\create_kit.py\", line 45, in <module>\n    'Stone':material('M_RC_Stone',(.70,.67,.61),tex+'wall/T_wall_basecolor',350),\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\RoyalCapital\\Build\\create_kit.py\", line 24, in material\n    code.set_editor_property('inputs',[unreal.CustomInput(input_name=n) for n in ['Tex','P','N','Tint']])\n                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\RoyalCapital\\Build\\create_kit.py\", line 24, in <listcomp>\n    code.set_editor_property('inputs',[unreal.CustomInput(input_name=n) for n in ['Tex','P','N','Tint']])\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: call() takes at most 0 arguments (1 given)\n",
+  "seconds": 0.079
+}

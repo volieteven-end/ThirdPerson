@@ -1,0 +1,188 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "GJS-20241104ECW",
+			"instance": "11C487034F4ED3FD20769FAFEB7E8CBB",
+			"instanceName": "GJS-20241104ECW-49024",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (25H2) [10.0.26200.8246] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 4070 SUPER",
+			"cPUModel": "AMD Ryzen 5 7500F 6-Core Processor             ",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.09.06-12.46.11",
+	"succeeded": 5,
+	"succeededWithWarnings": 3,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.066808298230171204,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "AirAndMovement",
+			"fullTestPath": "ThirdPerson.ActionSystem.AirAndMovement",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.009306199848651886,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-12.46.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "CombatLifecycle",
+			"fullTestPath": "ThirdPerson.ActionSystem.CombatLifecycle",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.0067722015082836151,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ComboBuffer",
+			"fullTestPath": "ThirdPerson.ActionSystem.ComboBuffer",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.0041172020137310028,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashCancelGuards",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashCancelGuards",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.01025800034403801,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-12.46.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashCancelLifecycle",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashCancelLifecycle",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.0099342986941337585,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashComboWindow",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashComboWindow",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.0081798024475574493,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "MovementRules",
+			"fullTestPath": "ThirdPerson.ActionSystem.MovementRules",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.008257698267698288,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "RootTurnAndDeath",
+			"fullTestPath": "ThirdPerson.ActionSystem.RootTurnAndDeath",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"11C487034F4ED3FD20769FAFEB7E8CBB"
+			],
+			"duration": 0.0099828988313674927,
+			"dateTime": "2026.09.06-12.46.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-12.46.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

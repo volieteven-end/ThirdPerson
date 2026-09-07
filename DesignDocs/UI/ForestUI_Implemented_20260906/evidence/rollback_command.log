@@ -1,0 +1,84 @@
+Active code page: 65001
+Using bundled DotNet SDK version: 10.0 win-x64
+Running UnrealBuildTool: dotnet "..\..\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" ThirdPersonEditor Win64 Development "-Project=E:\UNREAL\ue projects\ThirdPerson\Saved\ForestUIBuild\20260906_v1\rollback_test\ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+Log file: C:\Users\Windows11\AppData\Local\UnrealBuildTool\Log.txt
+Determining max actions to execute in parallel (6 physical cores, 12 logical cores)
+  Executing up to 6 processes, one per physical core
+Creating makefile for ThirdPersonEditor (no existing makefile)
+UbaServer - Listening on 0.0.0.0:1345
+UHT compiled-in object format Default
+Building ThirdPersonEditor...
+===== Toolchain Information =====
+Using ISPC compiler (D:\Unreal5.8\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.44.35228 toolchain (E:\Visual Studio2026\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+[Adaptive Build] Excluded from ForestUIEditor unity file: ForestUIEditorLibrary.cpp
+[Adaptive Build] Excluded from ThirdPerson unity file: ThirdPerson.cpp, EnemyAIController.cpp, EnemyCharacter.cpp, EnemySpawner.cpp, MeleeAIBehaviorNodes.cpp, MeleeAICombatSubsystem.cpp, RangedAIBehaviorNodes.cpp, AttackHitNotify.cpp, AttackWindowNotifyState.cpp, ComboChainPointNotify.cpp, RangedAttackReleaseNotify.cpp, TPCAnimInstance.cpp, TPCCharacter.cpp, TPCPlayerController.cpp, CombatComponent.cpp, EquipmentComponent.cpp, HealthComponent.cpp, InteractionComponent.cpp, InventoryComponent.cpp, LevelComponent.cpp, StaminaComponent.cpp, TPCGameMode.cpp, Interactable.cpp, ItemDefinition.cpp, PickupActor.cpp, StarterWeaponNPC.cpp, CheckpointActor.cpp, TPCSaveGame.cpp, ActionSystemTests.cpp, EnemyHealthWidget.cpp, InventorySlotWidget.cpp, InventroyWidget.cpp, LockOnMarkerWidget.cpp, PauseMenuWidget.cpp, StarterWeaponWidget.cpp, WeaponActor.cpp, WeaponDefinition.cpp, WeaponProjectile.cpp, DoorActor.cpp, LevelExitActor.cpp, TreasureChestActor.cpp
+=================================
+Using Unreal Build Accelerator local executor to run 52 action(s)
+  CPU 6 physical cores, 12 logical cores
+  Memory 31.72 GB physical, 48.75 GB/79.72 GB committed
+  UBA Storage capacity 40 GB
+[1/52] Compile Resource [x64] Default.rc2
+[2/52] Compile Resource [x64] Default.rc2
+[3/52] Compile [x64] SharedPCH.UnrealEd.Project.ValApi.ValExpApi.Cpp20.cpp
+[4/52] Compile [x64] ComboChainPointNotify.cpp
+[5/52] Compile [x64] AttackHitNotify.cpp
+[6/52] Compile [x64] AttackWindowNotifyState.cpp
+[7/52] Compile [x64] ActionSystemTests.cpp
+[8/52] Compile [x64] CombatComponent.cpp
+[9/52] Compile [x64] CheckpointActor.cpp
+[10/52] Compile [x64] DoorActor.cpp
+[11/52] Compile [x64] EquipmentComponent.cpp
+[12/52] Compile [x64] EnemySpawner.cpp
+[13/52] Compile [x64] EnemyHealthWidget.cpp
+[14/52] Compile [x64] EnemyAIController.cpp
+[15/52] Compile [x64] EnemyCharacter.cpp
+[16/52] Compile [x64] HealthComponent.cpp
+[17/52] Compile [x64] Interactable.cpp
+[18/52] Compile [x64] InventoryComponent.cpp
+[19/52] Compile [x64] InteractionComponent.cpp
+[20/52] Compile [x64] ItemDefinition.cpp
+[21/52] Compile [x64] InventorySlotWidget.cpp
+[22/52] Compile [x64] LevelComponent.cpp
+[23/52] Compile [x64] InventroyWidget.cpp
+[24/52] Compile [x64] LevelExitActor.cpp
+[25/52] Compile [x64] LockOnMarkerWidget.cpp
+[26/52] Compile [x64] MeleeAICombatSubsystem.cpp
+[27/52] Compile [x64] PickupActor.cpp
+[28/52] Compile [x64] MeleeAIBehaviorNodes.cpp
+[29/52] Compile [x64] PauseMenuWidget.cpp
+[30/52] Compile [x64] RangedAttackReleaseNotify.cpp
+[31/52] Compile [x64] RangedAIBehaviorNodes.cpp
+[32/52] Compile [x64] StaminaComponent.cpp
+[33/52] Compile [x64] Module.ThirdPerson.cpp
+[34/52] Compile [x64] StarterWeaponNPC.cpp
+[35/52] Compile [x64] TPCAnimInstance.cpp
+[36/52] Compile [x64] StarterWeaponWidget.cpp
+[37/52] Compile [x64] TPCGameMode.cpp
+[38/52] Compile [x64] TPCSaveGame.cpp
+[39/52] Compile [x64] ThirdPerson.cpp
+[40/52] Compile [x64] TPCPlayerController.cpp
+[41/52] Compile [x64] TreasureChestActor.cpp
+[42/52] Compile [x64] WeaponActor.cpp
+[43/52] Compile [x64] TPCCharacter.cpp
+[44/52] Compile [x64] WeaponDefinition.cpp
+[45/52] Compile [x64] Module.ForestUIEditor.cpp
+[46/52] Compile [x64] WeaponProjectile.cpp
+[47/52] Link [x64] UnrealEditor-ThirdPerson.lib
+  正在创建库 E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/rollback_test/ThirdPerson/Intermediate/Build/Win64/x64/UnrealEditor/Development/ThirdPerson/UnrealEditor-ThirdPerson.lib 和对象 E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/rollback_test/ThirdPerson/Intermediate/Build/Win64/x64/UnrealEditor/Development/ThirdPerson/UnrealEditor-ThirdPerson.exp
+[48/52] Link [x64] UnrealEditor-ThirdPerson.dll
+[49/52] Compile [x64] ForestUIEditorLibrary.cpp
+E:\UNREAL\ue projects\ThirdPerson\Saved\ForestUIBuild\20260906_v1\rollback_test\ThirdPerson\Plugins\ForestUIEditor\Source\ForestUIEditor\ForestUIEditorLibrary.cpp(120): warning C4996: Rename will no longer call ResetLoaders making this flag no longer needed. Prefer REN_AllowPackageLinkerMismatch if you wish to intentionally allow the linker to contain references to objects whose names no longer match what was loaded from disk. - Please update your code to the new API before upgrading to the next release, otherwise your project will no longer compile.
+[50/52] Link [x64] UnrealEditor-ForestUIEditor.lib
+  正在创建库 E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/rollback_test/ThirdPerson/Plugins/ForestUIEditor/Intermediate/Build/Win64/x64/UnrealEditor/Development/ForestUIEditor/UnrealEditor-ForestUIEditor.lib 和对象 E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/rollback_test/ThirdPerson/Plugins/ForestUIEditor/Intermediate/Build/Win64/x64/UnrealEditor/Development/ForestUIEditor/UnrealEditor-ForestUIEditor.exp
+[51/52] Link [x64] UnrealEditor-ForestUIEditor.dll
+[52/52] WriteMetadata ThirdPersonEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 58.95 seconds
+Output binary: D:\Unreal5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 65.66 seconds
+Trace written to file C:\Users\Windows11\AppData\Local\UnrealBuildTool\Trace.uba with size 24.1kb
+ROLLBACK files=PASS restored=4 removed=9 build=PASS

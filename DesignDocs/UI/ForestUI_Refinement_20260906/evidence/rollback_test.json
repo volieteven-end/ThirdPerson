@@ -1,0 +1,131 @@
+{
+  "phase": "rollback",
+  "status": {
+    "background_alpha": 1.0,
+    "render_opacity": 1.0,
+    "size": [
+      480.0,
+      162.0
+    ]
+  },
+  "objective": {
+    "background_alpha": 1.0,
+    "render_opacity": 1.0,
+    "size": [
+      340.0,
+      152.0
+    ]
+  },
+  "objective_font": 20.0,
+  "health_text_opacity": 1.0,
+  "enemy_defaults": {
+    "BP_EnemyCharacter": {
+      "lock_on_indicator_socket_name": "None",
+      "lock_on_indicator_offset": [
+        0.0,
+        0.0,
+        -70.0
+      ],
+      "lock_on_indicator_size": 48.0,
+      "lock_on_indicator_pulse_amount": 4.0,
+      "lock_on_indicator_pulse_speed": 5.0,
+      "lock_on_camera_aim_below_indicator": 30.0
+    },
+    "BP_EnemyRangedCharacter": {
+      "lock_on_indicator_socket_name": "None",
+      "lock_on_indicator_offset": [
+        0.0,
+        0.0,
+        28.0
+      ],
+      "lock_on_indicator_size": 48.0,
+      "lock_on_indicator_pulse_amount": 4.0,
+      "lock_on_indicator_pulse_speed": 5.0,
+      "lock_on_camera_aim_below_indicator": 70.0
+    }
+  },
+  "inventory": {
+    "owning_player": "PlayerController_0",
+    "native_InventoryGrid": "/Temp/Untitled_1.ForestPreview_3039:WBP_Inventory_C_0.WidgetTree_0.InventoryGrid",
+    "native_InventorySlotWidgetClass": "/Game/Third/Widget/WBP_InventorySlot.WBP_InventorySlot_C",
+    "native_InventoryComponent": "/Temp/Untitled_1.ForestPreview_3039:PersistentLevel.Pawn_0.InventoryComponent_0",
+    "grid_exists": true,
+    "grid_count": 20,
+    "widget_class": "/Game/Third/Widget/WBP_Inventory.WBP_Inventory_C",
+    "grid_20": true,
+    "hp_percent_matches_50": true,
+    "selection_callback": true,
+    "use_heals_and_decrements": true,
+    "empty_slot_no_use": true,
+    "inventory_open": true,
+    "inventory_close": true,
+    "detail_image_present": true,
+    "eight_buttons_bound": true,
+    "zero_max_health_guard": true,
+    "health_percent_clamped": true,
+    "pass": true
+  },
+  "lock": {
+    "cases": [
+      {
+        "class": "/Script/ThirdPerson.EnemyCharacter",
+        "initial_hidden": true,
+        "lock_shows": true,
+        "aim_world": "X=600.000 Y=0.000 Z=178.000",
+        "marker_world": "X=600.000 Y=0.000 Z=248.000",
+        "aim_z": 178,
+        "marker_z": 248,
+        "socket": "None",
+        "size": 48,
+        "camera_independent": false,
+        "body_anchor": false,
+        "small_marker": false,
+        "follows_enemy": true,
+        "unlock_hides": true,
+        "death_hides": true,
+        "dead_stays_hidden": false
+      },
+      {
+        "class": "/Game/Third/Character/BP_EnemyCharacter.BP_EnemyCharacter_C",
+        "initial_hidden": true,
+        "lock_shows": true,
+        "aim_world": "X=600.000 Y=250.000 Z=120.000",
+        "marker_world": "X=600.000 Y=250.000 Z=150.000",
+        "aim_z": 120,
+        "marker_z": 150,
+        "socket": "None",
+        "size": 48,
+        "camera_independent": false,
+        "body_anchor": true,
+        "small_marker": false,
+        "follows_enemy": true,
+        "unlock_hides": true,
+        "death_hides": true,
+        "dead_stays_hidden": false
+      },
+      {
+        "class": "/Game/Third/Character/BP_EnemyRangedCharacter.BP_EnemyRangedCharacter_C",
+        "initial_hidden": true,
+        "lock_shows": true,
+        "aim_world": "X=600.000 Y=493.915 Z=178.000",
+        "marker_world": "X=600.000 Y=493.915 Z=248.000",
+        "aim_z": 178,
+        "marker_z": 248,
+        "socket": "None",
+        "size": 48,
+        "camera_independent": false,
+        "body_anchor": false,
+        "small_marker": false,
+        "follows_enemy": true,
+        "unlock_hides": true,
+        "death_hides": true,
+        "dead_stays_hidden": false
+      }
+    ],
+    "core": true,
+    "refined": false,
+    "pass": true
+  },
+  "hud_refined": false,
+  "pass": true
+}

@@ -1,0 +1,314 @@
+﻿{
+	"devices": [
+		{
+			"deviceName": "GJS-20241104ECW",
+			"instance": "EB96F43949A1725DB8494085C1D7B5E0",
+			"instanceName": "GJS-20241104ECW-27688",
+			"platform": "WindowsEditor",
+			"oSVersion": "Windows 11 (25H2) [10.0.26200.8246] ",
+			"model": "Default",
+			"gPU": "NVIDIA GeForce RTX 4070 SUPER",
+			"cPUModel": "AMD Ryzen 5 7500F 6-Core Processor             ",
+			"rAMInGB": 32,
+			"renderMode": "SM6",
+			"rHI": "",
+			"appInstanceLog": ""
+		}
+	],
+	"reportCreatedOn": "2026.09.06-13.17.11",
+	"succeeded": 7,
+	"succeededWithWarnings": 6,
+	"failed": 0,
+	"notRun": 0,
+	"inProcess": 0,
+	"totalDuration": 0.12851880490779877,
+	"comparisonExported": false,
+	"comparisonExportDirectory": "",
+	"tests": [
+		{
+			"testDisplayName": "AirAndMovement",
+			"fullTestPath": "ThirdPerson.ActionSystem.AirAndMovement",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.010807100683450699,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "CombatLifecycle",
+			"fullTestPath": "ThirdPerson.ActionSystem.CombatLifecycle",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0059526972472667694,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ComboBuffer",
+			"fullTestPath": "ThirdPerson.ActionSystem.ComboBuffer",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0036437995731830597,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashCancelGuards",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashCancelGuards",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.010145101696252823,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Dash needs a root-motion montage in BP_TPCCharacter.",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashCancelLifecycle",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashCancelLifecycle",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.022815302014350891,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DashComboWindow",
+			"fullTestPath": "ThirdPerson.ActionSystem.DashComboWindow",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0081533007323741913,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DodgeRootMotionHandoff",
+			"fullTestPath": "ThirdPerson.ActionSystem.DodgeRootMotionHandoff",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0093720033764839172,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "MovementRules",
+			"fullTestPath": "ThirdPerson.ActionSystem.MovementRules",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.01413629949092865,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "RootTurnAndDeath",
+			"fullTestPath": "ThirdPerson.ActionSystem.RootTurnAndDeath",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0090662986040115356,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogTemp: Player died",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "SprintActionInterlock",
+			"fullTestPath": "ThirdPerson.ActionSystem.SprintActionInterlock",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0090902000665664673,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [],
+			"warnings": 0,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "CollisionInvariant",
+			"fullTestPath": "ThirdPerson.Projectiles.CollisionInvariant",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.009773600846529007,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_8.Untitled:PersistentLevel.WeaponProjectile_0",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "DamageOnceAndFriendlyFire",
+			"fullTestPath": "ThirdPerson.Projectiles.DamageOnceAndFriendlyFire",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0083673000335693359,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_9.Untitled:PersistentLevel.WeaponProjectile_0",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				},
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_9.Untitled:PersistentLevel.WeaponProjectile_1",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 2,
+			"errors": 0,
+			"artifacts": []
+		},
+		{
+			"testDisplayName": "ReuseAndReset",
+			"fullTestPath": "ThirdPerson.Projectiles.ReuseAndReset",
+			"tags": [],
+			"state": "Success",
+			"deviceInstance": [
+				"EB96F43949A1725DB8494085C1D7B5E0"
+			],
+			"duration": 0.0071958005428314209,
+			"dateTime": "2026.09.06-13.17.11",
+			"entries": [
+				{
+					"event":
+					{
+						"type": "Warning",
+						"message": "LogSpawn: UWorld::DestroyActor: World has no context! World: Untitled, Actor: /Temp/Untitled_10.Untitled:PersistentLevel.WeaponProjectile_0",
+						"context": "log",
+						"artifact": "00000000000000000000000000000000"
+					},
+					"filename": "",
+					"lineNumber": -1,
+					"timestamp": "2026.09.06-13.17.11"
+				}
+			],
+			"warnings": 1,
+			"errors": 0,
+			"artifacts": []
+		}
+	]
+}

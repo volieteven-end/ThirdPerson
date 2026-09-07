@@ -1,0 +1,15 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Forest UI Build Verification",
+  "CanContainContent": false,
+  "EnabledByDefault": true,
+  "Modules": [
+    {
+      "Name": "ForestUIEditor",
+      "Type": "Editor",
+      "LoadingPhase": "Default"
+    }
+  ]
+}

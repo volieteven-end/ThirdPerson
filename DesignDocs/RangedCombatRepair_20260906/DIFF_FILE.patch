@@ -1,0 +1,1626 @@
+diff --git a/Source/ThirdPerson/AI/EnemyCharacter.h b/Source/ThirdPerson/AI/EnemyCharacter.h
+index 8600297..3be7b69 100644
+--- a/Source/ThirdPerson/AI/EnemyCharacter.h
++++ b/Source/ThirdPerson/AI/EnemyCharacter.h
+@@ -1,4 +1,4 @@
+-﻿// Fill out your copyright notice in the Description page of Project Settings.
++// Fill out your copyright notice in the Description page of Project Settings.
+ 
+ #pragma once
+ #include "CoreMinimal.h"
+@@ -31,7 +31,10 @@ public:
+ 	UFUNCTION(BlueprintPure, Category = "Combat")
+ 	bool IsParryStaggered() const { return bParryStaggered; }
+ 
+-	AActor* GetCurrentPatrolPoint() const;
++    /** Ranged patrol samples reachable points around the spawn/HomeLocation when PatrolPoints is empty. */
++    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AI|Patrol", meta=(ClampMin="100.0"))
++    float RangedPatrolRadius = 800.f;
++    AActor* GetCurrentPatrolPoint() const;
+ 	void AdvancePatrolPoint();
+ 	UFUNCTION()
+ 	void HandleHealthChanged(float CurrentHealth,float MaxHealth);
+diff --git a/Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp b/Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp
+index 63b56ed..e3e871f 100644
+--- a/Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp
++++ b/Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp
+@@ -4,6 +4,10 @@
+ #include "AIController.h"
+ #include "BehaviorTree/BlackboardComponent.h"
+ #include "NavigationSystem.h"
++#include "NavigationPath.h"
++#include "EnemyCharacter.h"
++#include "../Components/HealthComponent.h"
++#include "GameFramework/CharacterMovementComponent.h"
+ 
+ namespace RangedAIKeys
+ {
+@@ -18,6 +22,9 @@ namespace RangedAIKeys
+ UBTService_UpdateRangedCombat::UBTService_UpdateRangedCombat()
+ {
+ 	NodeName = TEXT("Update Ranged Combat Context");
++    bCreateNodeInstance = true;
++    bNotifyCeaseRelevant = true;
++    bCallTickOnSearchStart = true;
+ 	Interval = 0.15f;
+ 	RandomDeviation = 0.03f;
+ 	TargetActorKey.SelectedKeyName = RangedAIKeys::TargetActor;
+@@ -39,26 +46,72 @@ void UBTService_UpdateRangedCombat::TickNode(
+ 	AActor* TargetActor = Blackboard
+ 		? Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKey.SelectedKeyName))
+ 		: nullptr;
+-	if (!Blackboard || !EnemyPawn || !TargetActor)
+-	{
+-		if (Blackboard)
+-		{
+-			Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName, false);
+-			Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, false);
+-		}
+-		return;
+-	}
++    if (IsValid(TargetActor))
++    {
++        const UHealthComponent* Health = TargetActor->FindComponentByClass<UHealthComponent>();
++        if (Health && Health->CurrentHealth <= 0.f)
++        {
++            Blackboard->ClearValue(TargetActorKey.SelectedKeyName);
++            TargetActor = nullptr;
++        }
++    }
++    const bool bDisabled = Blackboard && (Blackboard->GetValueAsBool(TEXT("bIsDead")) || Blackboard->GetValueAsBool(TEXT("bIsStunned")));
++    if (!Blackboard || !EnemyPawn || !IsValid(TargetActor) || bDisabled)
++    {
++        RestoreFacing();
++        if (Blackboard)
++        {
++            Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName, false);
++            Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, false);
++            Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, false);
++            Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, 0.f);
++        }
++        return;
++    }
++    if (ACharacter* Character = Cast<ACharacter>(EnemyPawn))
++    {
++        if (FacingPawn.Get() != Character)
++        {
++            RestoreFacing();
++            FacingPawn = Character; FacingController = Controller;
++            bSavedOrient = Character->GetCharacterMovement()->bOrientRotationToMovement;
++            bSavedDesired = Character->GetCharacterMovement()->bUseControllerDesiredRotation;
++            bSavedControllerYaw = Character->bUseControllerRotationYaw;
++        }
++        Character->bUseControllerRotationYaw = false;
++        Character->GetCharacterMovement()->bOrientRotationToMovement = false;
++        Character->GetCharacterMovement()->bUseControllerDesiredRotation = true;
++        FacingTarget = TargetActor;
++        Controller->SetFocus(TargetActor, EAIFocusPriority::Gameplay);
++    }
++    const float Distance = FVector::Dist2D(EnemyPawn->GetActorLocation(), TargetActor->GetActorLocation());
++    const bool bSight = Controller->LineOfSightTo(TargetActor);
++    const float Enter = FMath::Max(MinimumAttackDistance, RetreatTriggerDistance);
++    const float Exit = FMath::Max(Enter + 50.f, RetreatStopDistance);
++    const bool bRetreat = Distance < (Blackboard->GetValueAsBool(IsTooCloseKey.SelectedKeyName) ? Exit : Enter);
++    Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, Distance);
++    Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, bSight);
++    Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, bRetreat);
++    Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName,
++        !bRetreat && bSight && Distance >= MinimumAttackDistance && Distance <= MaximumAttackDistance);
++}
+ 
+-	const float Distance = FVector::Dist2D(
+-		EnemyPawn->GetActorLocation(), TargetActor->GetActorLocation());
+-	const bool bHasLineOfSight = Controller->LineOfSightTo(TargetActor);
+-	Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, Distance);
+-	Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, bHasLineOfSight);
+-	Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName,
+-		bHasLineOfSight && Distance >= MinimumAttackDistance &&
+-		Distance <= MaximumAttackDistance);
+-	Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName,
+-		Distance < RetreatTriggerDistance);
++void UBTService_UpdateRangedCombat::RestoreFacing()
++{
++    if (FacingController.IsValid() && FacingController->GetFocusActor() == FacingTarget.Get())
++        FacingController->ClearFocus(EAIFocusPriority::Gameplay);
++    if (FacingPawn.IsValid())
++    {
++        FacingPawn->bUseControllerRotationYaw = bSavedControllerYaw;
++        FacingPawn->GetCharacterMovement()->bOrientRotationToMovement = bSavedOrient;
++        FacingPawn->GetCharacterMovement()->bUseControllerDesiredRotation = bSavedDesired;
++    }
++    FacingPawn.Reset(); FacingController.Reset(); FacingTarget.Reset();
++}
++void UBTService_UpdateRangedCombat::OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
++{
++    RestoreFacing();
++    Super::OnCeaseRelevant(OwnerComp, NodeMemory);
+ }
+ 
+ UBTTask_SelectRangedRetreatPosition::UBTTask_SelectRangedRetreatPosition()
+@@ -89,25 +142,28 @@ EBTNodeResult::Type UBTTask_SelectRangedRetreatPosition::ExecuteTask(
+ 	{
+ 		Away = -TargetActor->GetActorForwardVector().GetSafeNormal2D();
+ 	}
+-	const FVector Side(-Away.Y, Away.X, 0.f);
+-	const float SideSign = FMath::RandBool() ? 1.f : -1.f;
+-	const FVector RetreatDirection =
+-		(Away + Side * SideSign * SideStepAmount).GetSafeNormal2D();
+-	const FVector DesiredLocation = EnemyPawn->GetActorLocation() +
+-		RetreatDirection * RetreatDistance;
+-
+-	FNavLocation ProjectedLocation;
+-	UNavigationSystemV1* Navigation =
+-		FNavigationSystem::GetCurrent<UNavigationSystemV1>(EnemyPawn->GetWorld());
+-	if (!Navigation || !Navigation->ProjectPointToNavigation(
+-		DesiredLocation, ProjectedLocation))
+-	{
+-		return EBTNodeResult::Failed;
+-	}
+-
+-	Blackboard->SetValueAsVector(
+-		RetreatLocationKey.SelectedKeyName, ProjectedLocation.Location);
+-	return EBTNodeResult::Succeeded;
++    UNavigationSystemV1* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(EnemyPawn->GetWorld());
++    const FVector Start = EnemyPawn->GetActorLocation();
++    const float OriginalDistance = FVector::Dist2D(Start, TargetActor->GetActorLocation());
++    const float SideAngle = FMath::RadiansToDegrees(FMath::Atan(SideStepAmount));
++    const float Sign = FMath::RandBool() ? 1.f : -1.f;
++    // Try shorter / side-stepped paths near walls instead of retreating through geometry.
++    if (Nav) for (float Scale : {1.f, .5f, .25f}) for (float Angle : {0.f, Sign*SideAngle, -Sign*SideAngle, 55.f, -55.f, 80.f, -80.f})
++    {
++        FNavLocation Point;
++        const FVector Goal = Start + Away.RotateAngleAxis(Angle, FVector::UpVector) * RetreatDistance * Scale;
++        if (!Nav->ProjectPointToNavigation(Goal, Point, FVector(80,80,200))) continue;
++        if (FVector::Dist2D(Point.Location, TargetActor->GetActorLocation()) < OriginalDistance + 50.f) continue;
++        UNavigationPath* Path = UNavigationSystemV1::FindPathToLocationSynchronously(EnemyPawn, Start, Point.Location, EnemyPawn);
++        if (Path && Path->IsValid() && !Path->IsPartial())
++        {
++            Blackboard->SetValueAsVector(RetreatLocationKey.SelectedKeyName, Point.Location);
++            return EBTNodeResult::Succeeded;
++        }
++    }
++    // Cornered: stand facing the player and retry after the branch's Wait, never fall through to Chase.
++    Blackboard->SetValueAsVector(RetreatLocationKey.SelectedKeyName, Start);
++    return EBTNodeResult::Succeeded;
+ }
+ 
+ UBTTask_PerformRangedAttack::UBTTask_PerformRangedAttack()
+@@ -138,12 +194,11 @@ EBTNodeResult::Type UBTTask_PerformRangedAttack::ExecuteTask(
+ 	}
+ 
+ 	Controller->StopMovement();
+-	Controller->SetFocus(TargetActor, EAIFocusPriority::Gameplay);
++	// UpdateRangedCombat owns facing, including movement and cooldowns.
+ 	ActiveCombatComponent = EnemyPawn->FindComponentByClass<UCombatComponent>();
+ 	if (!ActiveCombatComponent.IsValid() ||
+ 		!ActiveCombatComponent->TryRangedAttackAt(TargetActor))
+ 	{
+-		Controller->ClearFocus(EAIFocusPriority::Gameplay);
+ 		return EBTNodeResult::Failed;
+ 	}
+ 
+@@ -160,22 +215,54 @@ void UBTTask_PerformRangedAttack::TickTask(
+ 	if (!ActiveCombatComponent.IsValid() ||
+ 		!ActiveCombatComponent->IsRangedAttackInProgress())
+ 	{
+-		if (AAIController* Controller = OwnerComp.GetAIOwner())
+-		{
+-			Controller->ClearFocus(EAIFocusPriority::Gameplay);
+-		}
+ 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+ 	}
+ }
+ 
+-EBTNodeResult::Type UBTTask_PerformRangedAttack::AbortTask(
+-	UBehaviorTreeComponent& OwnerComp,
+-	uint8* NodeMemory)
++EBTNodeResult::Type UBTTask_PerformRangedAttack::AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+ {
+-	if (AAIController* Controller = OwnerComp.GetAIOwner())
+-	{
+-		Controller->ClearFocus(EAIFocusPriority::Gameplay);
+-	}
+-	ActiveCombatComponent.Reset();
+-	return Super::AbortTask(OwnerComp, NodeMemory);
++    // A retreat / stun / death must not leave a pending release notify behind.
++    if (ActiveCombatComponent.IsValid()) ActiveCombatComponent->CancelActiveAttack(.1f);
++    ActiveCombatComponent.Reset();
++    return EBTNodeResult::Aborted;
++}
++
++UBTTask_SelectRangedPatrolLocation::UBTTask_SelectRangedPatrolLocation()
++{
++    NodeName = TEXT("Select Ranged Patrol Location");
++    HomeLocationKey.SelectedKeyName = TEXT("HomeLocation");
++    PatrolLocationKey.SelectedKeyName = TEXT("PatrolLocation");
+ }
++EBTNodeResult::Type UBTTask_SelectRangedPatrolLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
++{
++    auto* Controller = OwnerComp.GetAIOwner();
++    auto* Enemy = Controller ? Cast<AEnemyCharacter>(Controller->GetPawn()) : nullptr;
++    auto* BB = OwnerComp.GetBlackboardComponent();
++    if (!Enemy || !BB) return EBTNodeResult::Failed;
++    auto* Nav = FNavigationSystem::GetCurrent<UNavigationSystemV1>(Enemy->GetWorld());
++    if (!Nav) return EBTNodeResult::Failed;
++    FNavLocation Point;
++    if (AActor* Patrol = Enemy->GetCurrentPatrolPoint())
++    {
++        Enemy->AdvancePatrolPoint();
++        if (!Nav->ProjectPointToNavigation(Patrol->GetActorLocation(), Point, FVector(100,100,300))) return EBTNodeResult::Failed;
++    }
++    else
++    {
++        const FVector Home = BB->GetValueAsVector(HomeLocationKey.SelectedKeyName);
++        FNavLocation Center;
++        if (!Nav->ProjectPointToNavigation(Home, Center, FVector(150,150,400))) return EBTNodeResult::Failed;
++        bool Found = false;
++        for (int32 Attempt=0; Attempt<12; ++Attempt)
++        {
++            if (!Nav->GetRandomReachablePointInRadius(Center.Location, FMath::Max(100.f,Enemy->RangedPatrolRadius), Point)) continue;
++            if (FVector::Dist2D(Enemy->GetActorLocation(),Point.Location) < 100.f) continue;
++            auto* Path = UNavigationSystemV1::FindPathToLocationSynchronously(Enemy, Enemy->GetActorLocation(), Point.Location, Enemy);
++            if (Path && Path->IsValid() && !Path->IsPartial()) {Found=true;break;}
++        }
++        if (!Found) return EBTNodeResult::Failed;
++    }
++    BB->SetValueAsVector(PatrolLocationKey.SelectedKeyName, Point.Location);
++    return EBTNodeResult::Succeeded;
++}
++
+diff --git a/Source/ThirdPerson/AI/RangedAIBehaviorNodes.h b/Source/ThirdPerson/AI/RangedAIBehaviorNodes.h
+index f63bf5e..3e950f5 100644
+--- a/Source/ThirdPerson/AI/RangedAIBehaviorNodes.h
++++ b/Source/ThirdPerson/AI/RangedAIBehaviorNodes.h
+@@ -8,6 +8,8 @@
+ #include "RangedAIBehaviorNodes.generated.h"
+ 
+ class UCombatComponent;
++class ACharacter;
++class AAIController;
+ 
+ /** Updates the distance bands used by a ranged-enemy Behavior Tree. */
+ UCLASS()
+@@ -19,6 +21,14 @@ public:
+ 	UBTService_UpdateRangedCombat();
+ 
+ protected:
++    virtual void OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
++    void RestoreFacing();
++    TWeakObjectPtr<ACharacter> FacingPawn;
++    TWeakObjectPtr<AAIController> FacingController;
++    TWeakObjectPtr<AActor> FacingTarget;
++    bool bSavedOrient = false;
++    bool bSavedDesired = false;
++    bool bSavedControllerYaw = false;
+ 	virtual void TickNode(
+ 		UBehaviorTreeComponent& OwnerComp,
+ 		uint8* NodeMemory,
+@@ -31,7 +41,9 @@ protected:
+ 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector IsTooCloseKey;
+ 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float MinimumAttackDistance = 450.f;
+ 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float MaximumAttackDistance = 950.f;
+-	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatTriggerDistance = 350.f;
++	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatTriggerDistance = 450.f;
++    /** Hysteresis: remain in retreat until outside this distance; avoids stepping back and forth. */
++    UPROPERTY(EditAnywhere, Category="Combat", meta=(ClampMin="0.0")) float RetreatStopDistance = 550.f;
+ };
+ 
+ /** Selects a navigable point away from the player with a small side-step. */
+@@ -82,3 +94,16 @@ protected:
+ private:
+ 	TWeakObjectPtr<UCombatComponent> ActiveCombatComponent;
+ };
++
++/** PatrolPoints takes precedence; otherwise choose a reachable point inside the home radius. */
++UCLASS()
++class THIRDPERSON_API UBTTask_SelectRangedPatrolLocation : public UBTTaskNode
++{
++ GENERATED_BODY()
++public:
++ UBTTask_SelectRangedPatrolLocation();
++protected:
++ virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
++ UPROPERTY(EditAnywhere, Category="Blackboard") FBlackboardKeySelector HomeLocationKey;
++ UPROPERTY(EditAnywhere, Category="Blackboard") FBlackboardKeySelector PatrolLocationKey;
++};
+diff --git a/Source/ThirdPerson/Character/TPCCharacter.cpp b/Source/ThirdPerson/Character/TPCCharacter.cpp
+index 7ce2360..439492f 100644
+--- a/Source/ThirdPerson/Character/TPCCharacter.cpp
++++ b/Source/ThirdPerson/Character/TPCCharacter.cpp
+@@ -218,6 +218,7 @@ void ATPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
+ 	Input->BindAction(LookAction, ETriggerEvent::Completed, this, &ThisClass::FinishLookInput);
+ 	Input->BindAction(SprintAction, ETriggerEvent::Started, this, &ThisClass::StartSprint);
+ 	Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &ThisClass::StopSprint);
++	Input->BindAction(SprintAction, ETriggerEvent::Canceled, this, &ThisClass::StopSprint);
+ 	Input->BindAction(DashAction,ETriggerEvent::Started,this,&ThisClass::Dash);
+ 	Input->BindAction(InventoryAction,ETriggerEvent::Started,this,&ThisClass::ToggleInventory);
+ 	Input->BindAction(PauseAction,ETriggerEvent::Started,this,&ThisClass::TogglePauseMenu);
+@@ -315,7 +316,7 @@ void ATPCCharacter::FinishLookInput()
+ }
+ void ATPCCharacter::StartSprint()
+ {
+-	if (IsMovementInputLocked() || !StaminaComponent || StaminaComponent->GetCurrentStamina() <= 0.f) { return; }
++	if (IsMovementInputLocked() || !StaminaComponent || StaminaComponent->GetCurrentStamina() <= 0.f) { StopSprint(); return; }
+ 	if (IsTurningInPlace()) { CancelMotionAction(); }
+ 	if (!bIsSprinting) { PreSprintMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed; }
+ 	bIsSprinting = true;
+@@ -510,9 +511,8 @@ void ATPCCharacter::Dash()
+     // A rejected dash (cooldown, stamina, missing montage/AnimInstance) must not cancel a valid attack.
+     if (!GetMesh() || !GetMesh()->GetAnimInstance()) { return; }
+     if (IsTurningInPlace()) { CancelMotionAction(); }
+-    bAttackTargetAssistActive = false;
+-    if (MotionWarpingComponent) { MotionWarpingComponent->RemoveWarpTarget(AttackWarpTargetName); }
+     if (CombatComponent) { CombatComponent->CancelAttackForDash(AttackDashCancelBlendOut); }
++    ClearAttackRootMotionForDodge();
+ 	if (StartMotionMontage(SelectedDashMontage, ETPCMotionAction::Dodge))
+ 	{
+ 		if (!StaminaComponent->TryConsume(DashCost)) { CancelMotionAction(); return; }
+@@ -526,7 +526,7 @@ void ATPCCharacter::Tick(float DeltaTime)
+ 	Super::Tick(DeltaTime);
+ 	UpdateMotionAction();
+ 	ApplyActionRotationPolicy();
+-	if (IsMovementInputLocked()) { ConsumeMovementInputVector(); }
++	if (IsMovementInputLocked()) { StopSprint(); ConsumeMovementInputVector(); }
+ 	UpdateLockOn(DeltaTime);
+ 	UpdateAttackTargetAssist(DeltaTime);
+ 	if (CameraBoom)
+@@ -1084,6 +1084,24 @@ void ATPCCharacter::ApplyActionRotationPolicy()
+ 	Movement->bOrientRotationToMovement = !bActionOwnsRotation && LockedTarget == nullptr;
+ }
+ 
++void ATPCCharacter::ClearAttackRootMotionForDodge()
++{
++    // Accepted full-body dodge takes over from the canceled attack. Removing only the
++    // target leaves an already-active warp modifier / this frame's extracted delta alive.
++    // Run after cancel callbacks and BEFORE the new montage extracts any root motion.
++    bAttackTargetAssistActive = false;
++    if (MotionWarpingComponent)
++    {
++        MotionWarpingComponent->DisableAllRootMotionModifiers();
++        MotionWarpingComponent->RemoveWarpTarget(AttackWarpTargetName);
++    }
++    if (GetMesh()) { GetMesh()->ConsumeRootMotion(); }
++    if (UCharacterMovementComponent* Movement = GetCharacterMovement())
++    {
++        Movement->RootMotionParams.Clear();
++    }
++}
++
+ bool ATPCCharacter::StartMotionMontage(UAnimMontage* Montage, ETPCMotionAction Action)
+ {
+ 	UAnimInstance* Anim = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
+diff --git a/Source/ThirdPerson/Character/TPCCharacter.h b/Source/ThirdPerson/Character/TPCCharacter.h
+index f6460c5..3fad6d0 100644
+--- a/Source/ThirdPerson/Character/TPCCharacter.h
++++ b/Source/ThirdPerson/Character/TPCCharacter.h
+@@ -280,6 +280,7 @@ private:
+ 	void UpdateMotionAction();
+ 	void ApplyActionRotationPolicy();
+ 	void StopGroundInputMomentum();
++	void ClearAttackRootMotionForDodge();
+ 	ETPCMotionAction MotionAction = ETPCMotionAction::None;
+ 	TWeakObjectPtr<UAnimMontage> ActiveMotionMontage;
+ 	int32 ActiveMotionInstanceId = INDEX_NONE;
+diff --git a/Source/ThirdPerson/Components/CombatComponent.cpp b/Source/ThirdPerson/Components/CombatComponent.cpp
+index f49530d..247575c 100644
+--- a/Source/ThirdPerson/Components/CombatComponent.cpp
++++ b/Source/ThirdPerson/Components/CombatComponent.cpp
+@@ -14,6 +14,7 @@
+ #include "../Weapons/WeaponActor.h"
+ #include "../Weapons/WeaponDefinition.h"
+ #include "../Weapons/WeaponProjectile.h"
++#include "../Weapons/ProjectilePoolSubsystem.h"
+ #include "GameFramework/PlayerController.h"
+ #include "GameFramework/CharacterMovementComponent.h"
+ #include "StaminaComponent.h"
+@@ -1026,21 +1027,12 @@ void UCombatComponent::PerformRangedAttack(
+ 		OwnerActor->GetActorLocation() + AimDirection * 100.f + FVector(0.f, 0.f, 50.f);
+ 	const FRotator SpawnRotation = AimDirection.Rotation();
+ 
+-	FActorSpawnParameters SpawnParams;
+-	SpawnParams.Owner = OwnerActor;
+-	SpawnParams.Instigator = Cast<APawn>(OwnerActor);
+-	SpawnParams.SpawnCollisionHandlingOverride =
+-		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+-
+-	UClass* ProjectileClass = WeaponDefinition.ProjectileClass
+-		? WeaponDefinition.ProjectileClass.Get()
+-		: AWeaponProjectile::StaticClass();
+-
+-	if (AWeaponProjectile* Projectile = World->SpawnActor<AWeaponProjectile>(
+-		ProjectileClass, SpawnLocation, SpawnRotation, SpawnParams))
+-	{
+-		Projectile->InitializeProjectile(
+-			WeaponDefinition.Damage,
+-			WeaponDefinition.ProjectileSpeed);
+-	}
++	const TSubclassOf<AWeaponProjectile> ProjectileClass = WeaponDefinition.ProjectileClass
++        ? WeaponDefinition.ProjectileClass.Get() : AWeaponProjectile::StaticClass();
++    if (UProjectilePoolSubsystem* Pool = GetWorld()->GetSubsystem<UProjectilePoolSubsystem>())
++    {
++        Pool->Acquire(ProjectileClass, FTransform(SpawnRotation, SpawnLocation), OwnerActor,
++            Cast<APawn>(OwnerActor), GetEffectiveDamage(), WeaponDefinition.ProjectileSpeed);
++    }
+ }
++
+diff --git a/Source/ThirdPerson/Tests/ActionSystemTests.cpp b/Source/ThirdPerson/Tests/ActionSystemTests.cpp
+index 3d5f8d1..2cb9b1c 100644
+--- a/Source/ThirdPerson/Tests/ActionSystemTests.cpp
++++ b/Source/ThirdPerson/Tests/ActionSystemTests.cpp
+@@ -10,11 +10,15 @@
+ #include "../Character/TPCCharacter.h"
+ #include "../Components/CombatComponent.h"
+ #include "../Components/StaminaComponent.h"
++#include "../Components/HealthComponent.h"
+ #include "GameFramework/CharacterMovementComponent.h"
++#include "MotionWarpingComponent.h"
++#include "RootMotionModifier_SkewWarp.h"
+ 
+ // These tests exercise C++ state transitions in a transient world, not project assets / PIE visuals.
+ struct FTPActionTestAccess
+ {
++    static void ClearAttackRootMotion(ATPCCharacter& C) { C.ClearAttackRootMotionForDodge(); }
+ 	static void Attack(UCombatComponent& C, UAnimMontage* M, int32 Id = 7)
+ 	{
+ 		C.ResetMeleeAction();
+@@ -340,4 +344,52 @@ bool FTPDashCancelGuardsTest::RunTest(const FString& Parameters)
+     return true;
+ }
+ 
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPSprintActionInterlockTest, "ThirdPerson.ActionSystem.SprintActionInterlock",
++    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
++bool FTPSprintActionInterlockTest::RunTest(const FString& Parameters)
++{
++    FActionTestWorld F;
++    F.Character->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
++    F.Character->StaminaComponent->SetCurrentStamina(100.f);
++    F.Character->HealthComponent->CurrentHealth = 100.f;
++    F.Character->StartSprint();
++    TestEqual(TEXT("Free sprint speed"), F.Character->GetCharacterMovement()->MaxWalkSpeed, F.Character->SprintMaxWalkSpeed);
++    UAnimMontage* M = NewObject<UAnimMontage>();
++    FTPActionTestAccess::Attack(*F.Character->CombatComponent, M);
++    F.Character->Tick(.016f);
++    TestEqual(TEXT("New attack state cancels stale sprint speed"), F.Character->GetCharacterMovement()->MaxWalkSpeed, 450.f);
++    F.Character->StartSprint();
++    TestEqual(TEXT("Shift cannot override active attack movement lock"), F.Character->GetCharacterMovement()->MaxWalkSpeed, 450.f);
++    F.Character->CombatComponent->CancelActiveAttack();
++    F.Character->StartSprint();F.Character->StartSprint();F.Character->StopSprint();F.Character->StopSprint();
++    TestEqual(TEXT("Repeated starts and canceled/released stops restore walk speed"), F.Character->GetCharacterMovement()->MaxWalkSpeed, 450.f);
++    return true;
++}
++
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPDodgeRootMotionHandoffTest, "ThirdPerson.ActionSystem.DodgeRootMotionHandoff",
++    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
++bool FTPDodgeRootMotionHandoffTest::RunTest(const FString& Parameters)
++{
++    FActionTestWorld W;
++    ATPCCharacter* P = W.Character;
++    auto* Warp = P->MotionWarpingComponent.Get();
++    if (!Warp->HasBeenInitialized()) { Warp->InitializeComponent(); }
++    auto* Modifier = NewObject<URootMotionModifier_SkewWarp>(Warp);
++    Warp->AddModifier(Modifier);
++    Modifier->SetState(ERootMotionModifierState::Active);
++    Warp->AddOrUpdateWarpTargetFromLocationAndRotation(P->AttackWarpTargetName, FVector(600,0,0), FRotator::ZeroRotator);
++    P->GetCharacterMovement()->RootMotionParams.Set(FTransform(FVector(120,0,0)));
++    const FVector Before = P->GetActorLocation();
++    FTPActionTestAccess::ClearAttackRootMotion(*P);
++    TestTrue(TEXT("Old attack warp is disabled before dodge playback"), Modifier->GetState() == ERootMotionModifierState::Disabled);
++    TestNull(TEXT("Attack target is removed"), Warp->FindWarpTarget(P->AttackWarpTargetName));
++    TestFalse(TEXT("Previous extracted attack delta cannot move the new dodge"), P->GetCharacterMovement()->RootMotionParams.bHasRootMotion);
++    TestEqual(TEXT("Handoff does not teleport the capsule"), P->GetActorLocation(), Before);
++    Warp->AddOrUpdateWarpTargetFromLocationAndRotation(P->AttackWarpTargetName, FVector(200,0,0), FRotator::ZeroRotator);
++    TestNotNull(TEXT("The next attack can install a new target"), Warp->FindWarpTarget(P->AttackWarpTargetName));
++    return true;
++}
++
+ #endif
++
++
+diff --git a/Source/ThirdPerson/Tests/ProjectileSystemTests.cpp b/Source/ThirdPerson/Tests/ProjectileSystemTests.cpp
+new file mode 100644
+index 0000000..73ebb3d
+--- /dev/null
++++ b/Source/ThirdPerson/Tests/ProjectileSystemTests.cpp
+@@ -0,0 +1,62 @@
++#if WITH_DEV_AUTOMATION_TESTS
++#include "Misc/AutomationTest.h"
++#include "Engine/Engine.h"
++#include "Engine/World.h"
++#include "TimerManager.h"
++#include "../Weapons/WeaponProjectile.h"
++#include "../Weapons/ProjectilePoolSubsystem.h"
++#include "../AI/EnemyCharacter.h"
++#include "../Character/TPCCharacter.h"
++#include "../Components/HealthComponent.h"
++#include "Components/SphereComponent.h"
++#include "GameFramework/ProjectileMovementComponent.h"
++struct FProjectileTestAccess
++{
++ static void Hit(AWeaponProjectile* Arrow,AActor* Victim)
++ {FHitResult H;H.ImpactPoint=Victim->GetActorLocation();Arrow->HandleProjectileHit(nullptr,Victim,nullptr,FVector::ZeroVector,H);}
++ static float Remaining(AWeaponProjectile* A){return A->GetWorldTimerManager().GetTimerRemaining(A->RecycleTimer);}
++};
++namespace
++{
++ struct FProjectileWorld
++ {
++  UWorld* W=UWorld::CreateWorld(EWorldType::Game,false);
++  AEnemyCharacter* Enemy=nullptr;ATPCCharacter* Player=nullptr;UProjectilePoolSubsystem* Pool=nullptr;
++  FProjectileWorld(){GEngine->CreateNewWorldContext(EWorldType::Game).SetCurrentWorld(W);Enemy=W->SpawnActor<AEnemyCharacter>();Player=W->SpawnActor<ATPCCharacter>();Player->HealthComponent->CurrentHealth=100;Pool=W->GetSubsystem<UProjectilePoolSubsystem>();}
++  ~FProjectileWorld(){GEngine->DestroyWorldContext(W);W->DestroyWorld(false);if(W->IsRooted())W->RemoveFromRoot();}
++  AWeaponProjectile* Fire(AActor* Source=nullptr){return Pool->Acquire(AWeaponProjectile::StaticClass(),FTransform(FRotator::ZeroRotator,FVector(-300,0,100)),Source?Source:Enemy,Cast<APawn>(Source?Source:Enemy),10.f,1500.f);}
++ };
++}
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FProjectileDamageTest,"ThirdPerson.Projectiles.DamageOnceAndFriendlyFire",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
++bool FProjectileDamageTest::RunTest(const FString& Parameters)
++{
++ FProjectileWorld F;auto* A=F.Fire();TestNotNull(TEXT("Pool acquisition"),A);if(!A)return false;
++ FProjectileTestAccess::Hit(A,F.Enemy);TestFalse(TEXT("Owner cannot spend arrow"),A->HasImpacted());
++ FProjectileTestAccess::Hit(A,F.Player);TestEqual(TEXT("One hit removes ten HP"),F.Player->HealthComponent->CurrentHealth,90.f);
++ FProjectileTestAccess::Hit(A,F.Player);TestEqual(TEXT("Duplicate callbacks do not damage twice"),F.Player->HealthComponent->CurrentHealth,90.f);
++ TestTrue(TEXT("Impact has five seconds remaining"),FMath::IsNearlyEqual(FProjectileTestAccess::Remaining(A),5.f,.01f));
++ auto* Ally=F.W->SpawnActor<AEnemyCharacter>();auto* H=Ally->FindComponentByClass<UHealthComponent>();H->CurrentHealth=100;
++ auto* B=F.Fire();FProjectileTestAccess::Hit(B,Ally);TestEqual(TEXT("Enemy friendly fire stays disabled"),H->CurrentHealth,100.f);
++ return true;
++}
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FProjectileReuseTest,"ThirdPerson.Projectiles.ReuseAndReset",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
++bool FProjectileReuseTest::RunTest(const FString& Parameters)
++{
++ FProjectileWorld F;auto* A=F.Fire();FProjectileTestAccess::Hit(A,F.Player);F.Pool->Release(A);
++ TestTrue(TEXT("Returned arrow hidden"),A->IsHidden());TestFalse(TEXT("Returned arrow inactive"),A->IsProjectileActive());TestNull(TEXT("Old owner cleared"),A->GetOwner());TestNull(TEXT("Old attachment cleared"),A->GetAttachParentActor());
++ auto* B=F.Fire(F.Player);TestTrue(TEXT("Same actor reused"),A==B);TestEqual(TEXT("No extra allocation"),F.Pool->GetPoolSize(),1);
++ TestTrue(TEXT("New owner installed"),B->GetOwner()==F.Player);TestFalse(TEXT("Impact flag reset"),B->HasImpacted());
++ auto* M=B->FindComponentByClass<UProjectileMovementComponent>();TestNotNull(TEXT("Updated component restored after impact"),M->UpdatedComponent.Get());TestTrue(TEXT("Movement reactivated"),M->IsActive());TestTrue(TEXT("Fresh velocity"),M->Velocity.Equals(FVector(1500,0,0)));
++ TestTrue(TEXT("New flight timer replaces impact timer"),FMath::IsNearlyEqual(FProjectileTestAccess::Remaining(B),10.f,.01f));
++ return true;
++}
++IMPLEMENT_SIMPLE_AUTOMATION_TEST(FProjectileCollisionTest,"ThirdPerson.Projectiles.CollisionInvariant",EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
++bool FProjectileCollisionTest::RunTest(const FString& Parameters)
++{
++ FProjectileWorld F;auto* A=F.Fire();auto* S=A->FindComponentByClass<USphereComponent>();
++ TestTrue(TEXT("Only swept query collision, no physical pushes"),S->GetCollisionEnabled()==ECollisionEnabled::QueryOnly);
++ TestTrue(TEXT("Pawn hit detection restored"),S->GetCollisionResponseToChannel(ECC_Pawn)==ECR_Block);
++ FProjectileTestAccess::Hit(A,F.Player);TestFalse(TEXT("Embedded arrow has no collision"),A->GetActorEnableCollision());
++ TestEqual(TEXT("Embedded arrow velocity zero"),A->GetVelocity(),FVector::ZeroVector);return true;
++}
++#endif
+diff --git a/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.cpp b/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.cpp
+new file mode 100644
+index 0000000..00e5aee
+--- /dev/null
++++ b/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.cpp
+@@ -0,0 +1,67 @@
++#include "ProjectilePoolSubsystem.h"
++#include "WeaponProjectile.h"
++#include "Components/SphereComponent.h"
++#include "Engine/World.h"
++
++AWeaponProjectile* UProjectilePoolSubsystem::Acquire(TSubclassOf<AWeaponProjectile> Class,
++ const FTransform& Transform, AActor* Source, APawn* InstigatorPawn, float Damage, float Speed)
++{
++ if (!Class || !GetWorld() || !IsValid(Source)) return nullptr;
++ Projectiles.RemoveAll([](const auto& P) { return !IsValid(P); });
++ AWeaponProjectile* Result = nullptr;
++ int32 ClassCount = 0;
++ for (AWeaponProjectile* P : Projectiles)
++ {
++  if (P->GetClass() != Class) continue;
++  ++ClassCount;
++  if (!P->IsProjectileActive()) Result = P;
++ }
++ if (!Result)
++ {
++  if (ClassCount >= FMath::Max(1, Class.GetDefaultObject()->MaxPooledInstances) || Projectiles.Num() >= MaximumTotal)
++  {
++   UE_LOG(LogTemp, Warning, TEXT("Projectile pool full for %s; shot skipped (no active arrow recycled early)."), *Class->GetName());
++   return nullptr;
++  }
++  // Construction scripts finish before collision is activated and damage is initialized.
++  Result = GetWorld()->SpawnActorDeferred<AWeaponProjectile>(Class, Transform, Source, InstigatorPawn,
++      ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
++  if (!Result) return nullptr;
++  Result->FinishSpawning(Transform);
++  if (!IsValid(Result)) return nullptr;
++  Projectiles.Add(Result);
++ }
++ Result->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
++ Result->SetOwner(Source);
++ Result->SetInstigator(InstigatorPawn);
++ Result->SetActorTransform(Transform, false, nullptr, ETeleportType::TeleportPhysics);
++ Result->InitializeProjectile(Damage, Speed);
++ // Dynamic-world geometry can block arrows, but other arrows must not.
++ for (AWeaponProjectile* P : Projectiles)
++ {
++  if (P != Result && P->IsProjectileActive())
++  {
++   Result->IgnoreProjectileActor(P);
++   P->IgnoreProjectileActor(Result);
++  }
++ }
++ return Result;
++}
++void UProjectilePoolSubsystem::Release(AWeaponProjectile* Projectile)
++{
++ if (!IsValid(Projectile)) return;
++ Projectile->DeactivateProjectile();
++ // Also support manually spawned projectiles: they are not silently retained by the pool.
++ if (!Projectiles.Contains(Projectile)) Projectile->Destroy();
++}
++int32 UProjectilePoolSubsystem::GetActiveCount() const
++{
++ int32 Count=0; for (const AWeaponProjectile* P : Projectiles) if (IsValid(P) && P->IsProjectileActive()) ++Count;
++ return Count;
++}
++void UProjectilePoolSubsystem::Deinitialize()
++{
++ for (AWeaponProjectile* P : Projectiles) if (IsValid(P)) P->Destroy();
++ Projectiles.Reset();
++ Super::Deinitialize();
++}
+diff --git a/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.h b/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.h
+new file mode 100644
+index 0000000..953d981
+--- /dev/null
++++ b/Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.h
+@@ -0,0 +1,22 @@
++#pragma once
++#include "CoreMinimal.h"
++#include "Subsystems/WorldSubsystem.h"
++#include "ProjectilePoolSubsystem.generated.h"
++class AWeaponProjectile;
++/** World-local, bounded pool. Active / embedded arrows are never stolen for another shot. */
++UCLASS()
++class THIRDPERSON_API UProjectilePoolSubsystem : public UWorldSubsystem
++{
++ GENERATED_BODY()
++public:
++ UFUNCTION(BlueprintCallable, Category="Projectile Pool")
++ AWeaponProjectile* Acquire(TSubclassOf<AWeaponProjectile> ProjectileClass, const FTransform& Transform,
++     AActor* Source, APawn* InstigatorPawn, float Damage, float Speed);
++ void Release(AWeaponProjectile* Projectile);
++ UFUNCTION(BlueprintPure, Category="Projectile Pool") int32 GetPoolSize() const { return Projectiles.Num(); }
++ UFUNCTION(BlueprintPure, Category="Projectile Pool") int32 GetActiveCount() const;
++ virtual void Deinitialize() override;
++private:
++ UPROPERTY(Transient) TArray<TObjectPtr<AWeaponProjectile>> Projectiles;
++ static constexpr int32 MaximumTotal = 512;
++};
+diff --git a/Source/ThirdPerson/Weapons/WeaponProjectile.cpp b/Source/ThirdPerson/Weapons/WeaponProjectile.cpp
+index bf5a79d..2577ba1 100644
+--- a/Source/ThirdPerson/Weapons/WeaponProjectile.cpp
++++ b/Source/ThirdPerson/Weapons/WeaponProjectile.cpp
+@@ -1,84 +1,151 @@
+ #include "WeaponProjectile.h"
+-
++#include "ProjectilePoolSubsystem.h"
+ #include "../Components/HealthComponent.h"
++#include "../AI/EnemyCharacter.h"
+ #include "Components/SphereComponent.h"
++#include "Components/SkeletalMeshComponent.h"
+ #include "DrawDebugHelpers.h"
+ #include "GameFramework/ProjectileMovementComponent.h"
+-#include "../AI/EnemyCharacter.h"
++#include "Engine/World.h"
++#include "TimerManager.h"
+ 
+ AWeaponProjectile::AWeaponProjectile()
+ {
+-	PrimaryActorTick.bCanEverTick = true;
+-
+-	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
+-	SetRootComponent(CollisionSphere);
+-	CollisionSphere->InitSphereRadius(8.f);
+-	CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+-	CollisionSphere->SetCollisionObjectType(ECC_WorldDynamic);
+-	CollisionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
+-	CollisionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
+-	CollisionSphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+-	CollisionSphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
+-	CollisionSphere->OnComponentHit.AddDynamic(this, &ThisClass::HandleProjectileHit);
+-
+-	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
+-	ProjectileMovement->UpdatedComponent = CollisionSphere;
+-	ProjectileMovement->InitialSpeed = 1800.f;
+-	ProjectileMovement->MaxSpeed = 1800.f;
+-	ProjectileMovement->bRotationFollowsVelocity = true;
+-	ProjectileMovement->ProjectileGravityScale = 0.15f;
+-
+-	InitialLifeSpan = 5.f;
++ PrimaryActorTick.bCanEverTick = true;
++ PrimaryActorTick.bStartWithTickEnabled = false;
++ CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionSphere"));
++ SetRootComponent(CollisionSphere);
++ CollisionSphere->InitSphereRadius(8.f);
++ CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
++ CollisionSphere->OnComponentHit.AddDynamic(this, &ThisClass::HandleProjectileHit);
++ ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
++ ProjectileMovement->UpdatedComponent = CollisionSphere;
++ ProjectileMovement->InitialSpeed = ProjectileMovement->MaxSpeed = 1800.f;
++ ProjectileMovement->bRotationFollowsVelocity = true;
++ ProjectileMovement->ProjectileGravityScale = .15f;
++ ProjectileMovement->bAutoActivate = false;
++ InitialLifeSpan = 0.f;
++}
++void AWeaponProjectile::BeginPlay()
++{
++ Super::BeginPlay();
++ // BP defaults previously disabled the sphere while enabling BlockAllDynamic on ArrowMesh.
++ // Repair the runtime invariant after Blueprint construction, including existing child assets.
++ ConfigureCollision();
++ DeactivateProjectile();
++}
++void AWeaponProjectile::ConfigureCollision()
++{
++ TInlineComponentArray<UPrimitiveComponent*> Parts(this);
++ for (UPrimitiveComponent* Part : Parts)
++ {
++  Part->SetSimulatePhysics(false);
++  Part->SetCollisionEnabled(ECollisionEnabled::NoCollision);
++  Part->SetGenerateOverlapEvents(false);
++ }
++ CollisionSphere->SetCollisionObjectType(ECC_WorldDynamic);
++ CollisionSphere->SetCollisionResponseToAllChannels(ECR_Ignore);
++ CollisionSphere->SetCollisionResponseToChannel(ECC_Pawn, ECR_Block);
++ CollisionSphere->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
++ CollisionSphere->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
++ CollisionSphere->SetCanEverAffectNavigation(false);
+ }
+-
+ void AWeaponProjectile::InitializeProjectile(float InDamage, float InSpeed)
+ {
+-	Damage = FMath::Max(0.f, InDamage);
+-	const float SafeSpeed = FMath::Max(1.f, InSpeed);
+-	ProjectileMovement->InitialSpeed = SafeSpeed;
+-	ProjectileMovement->MaxSpeed = SafeSpeed;
+-	ProjectileMovement->Velocity = GetActorForwardVector() * SafeSpeed;
+-
+-	if (AActor* ProjectileOwner = GetOwner())
+-	{
+-		CollisionSphere->IgnoreActorWhenMoving(ProjectileOwner, true);
+-	}
++ GetWorldTimerManager().ClearTimer(RecycleTimer);
++ SetLifeSpan(0.f);
++ DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
++ ConfigureCollision();
++ CollisionSphere->ClearMoveIgnoreActors();
++ Damage = FMath::Max(0.f, InDamage);
++ bActive = true;
++ bImpacted = false;
++ const AActor* Source = GetInstigator() ? static_cast<AActor*>(GetInstigator()) : GetOwner();
++ bEnemyShot = IsValid(Source) && Source->IsA<AEnemyCharacter>();
++ auto IgnoreSource = [this](AActor* Source)
++ {
++  if (!IsValid(Source)) return;
++  CollisionSphere->IgnoreActorWhenMoving(Source, true);
++  TArray<AActor*> Attached; Source->GetAttachedActors(Attached, true, true);
++  for (AActor* Part : Attached) CollisionSphere->IgnoreActorWhenMoving(Part, true);
++ };
++ IgnoreSource(GetOwner()); IgnoreSource(GetInstigator());
++ const float SafeSpeed = FMath::Max(1.f, InSpeed);
++ // StopSimulating clears UpdatedComponent: explicitly restore it on every acquisition.
++ ProjectileMovement->SetUpdatedComponent(CollisionSphere);
++ ProjectileMovement->InitialSpeed = ProjectileMovement->MaxSpeed = SafeSpeed;
++ ProjectileMovement->Velocity = GetActorForwardVector() * SafeSpeed;
++ ProjectileMovement->UpdateComponentVelocity();
++ ProjectileMovement->Activate(true);
++ ProjectileMovement->SetComponentTickEnabled(true);
++ SetActorHiddenInGame(false);
++ SetActorEnableCollision(true);
++ CollisionSphere->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
++ SetActorTickEnabled(bDrawDebugProjectile);
++ GetWorldTimerManager().SetTimer(RecycleTimer, this, &ThisClass::ReturnToPool, FMath::Max(.1f, FlightLifetime), false);
++}
++void AWeaponProjectile::IgnoreProjectileActor(AActor* Actor)
++{
++ if (Actor) CollisionSphere->IgnoreActorWhenMoving(Actor, true);
++}
++void AWeaponProjectile::DeactivateProjectile()
++{
++ GetWorldTimerManager().ClearTimer(RecycleTimer);
++ SetLifeSpan(0.f);
++ bActive = false; bImpacted = false; bEnemyShot = false; Damage = 0.f;
++ SetActorEnableCollision(false);
++ CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
++ CollisionSphere->ClearMoveIgnoreActors();
++ ProjectileMovement->StopMovementImmediately();
++ ProjectileMovement->Deactivate();
++ ProjectileMovement->SetComponentTickEnabled(false);
++ DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
++ SetActorHiddenInGame(true);
++ SetActorTickEnabled(false);
++ SetOwner(nullptr); SetInstigator(nullptr);
++}
++void AWeaponProjectile::ReturnToPool()
++{
++ if (UProjectilePoolSubsystem* Pool = GetWorld()->GetSubsystem<UProjectilePoolSubsystem>()) Pool->Release(this);
++ else Destroy();
++}
++void AWeaponProjectile::EndPlay(const EEndPlayReason::Type Reason)
++{
++ GetWorldTimerManager().ClearTimer(RecycleTimer);
++ Super::EndPlay(Reason);
+ }
+-
+ void AWeaponProjectile::Tick(float DeltaSeconds)
+ {
+-	Super::Tick(DeltaSeconds);
+-
+-	if (bDrawDebugProjectile && GetWorld())
+-	{
+-		DrawDebugSphere(GetWorld(), GetActorLocation(), 8.f, 8, FColor::Yellow, false, 0.f, 0, 1.f);
+-	}
++ Super::Tick(DeltaSeconds);
++ if (bActive && bDrawDebugProjectile) DrawDebugSphere(GetWorld(), GetActorLocation(), 8.f, 8, FColor::Yellow, false, 0.f, 0, 1.f);
+ }
+-
+-void AWeaponProjectile::HandleProjectileHit(
+-	UPrimitiveComponent* HitComponent,
+-	AActor* OtherActor,
+-	UPrimitiveComponent* OtherComponent,
+-	FVector NormalImpulse,
+-	const FHitResult& Hit)
++void AWeaponProjectile::HandleProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
++ UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+ {
+-	if (OtherActor && OtherActor != GetOwner())
+-	{
+-		AActor* DamageSource = GetInstigator()
+-			? static_cast<AActor*>(GetInstigator())
+-			: GetOwner();
+-		const bool bEnemyFriendlyFire = DamageSource &&
+-			DamageSource->IsA<AEnemyCharacter>() &&
+-			OtherActor->IsA<AEnemyCharacter>();
+-		if (!bEnemyFriendlyFire)
+-		{
+-			if (UHealthComponent* Health =
+-				OtherActor->FindComponentByClass<UHealthComponent>())
+-			{
+-				Health->ApplyDamageFrom(Damage, DamageSource);
+-			}
+-		}
+-	}
+-
+-	Destroy();
++ if (!bActive || bImpacted || OtherActor == GetOwner() || OtherActor == GetInstigator()) return;
++ bImpacted = true; // Set before damage delegates can cause reentrant callbacks / death.
++ ProjectileMovement->StopMovementImmediately();
++ ProjectileMovement->Deactivate();
++ ProjectileMovement->SetComponentTickEnabled(false);
++ SetActorEnableCollision(false);
++ CollisionSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
++ SetActorTickEnabled(false);
++ AActor* Source = GetInstigator() ? static_cast<AActor*>(GetInstigator()) : GetOwner();
++ const bool bFriendly = bEnemyShot && IsValid(OtherActor) && OtherActor->IsA<AEnemyCharacter>();
++ if (IsValid(OtherActor) && !bFriendly)
++ {
++  if (UHealthComponent* Health = OtherActor->FindComponentByClass<UHealthComponent>()) Health->ApplyDamageFrom(Damage, IsValid(Source) ? Source : nullptr);
++ }
++ if (!IsValid(this)) return;
++ // Attach to an animated bone rather than the capsule so embedded arrows follow the body.
++ if (ACharacter* Character = Cast<ACharacter>(OtherActor); IsValid(Character) && Character->GetMesh())
++ {
++  USkeletalMeshComponent* Mesh = Character->GetMesh();
++  FName Bone = Hit.BoneName;
++  if (Bone.IsNone() || Mesh->GetBoneIndex(Bone) == INDEX_NONE) Bone = Mesh->FindClosestBone(Hit.ImpactPoint);
++  AttachToComponent(Mesh, FAttachmentTransformRules::KeepWorldTransform, Bone);
++ }
++ else if (IsValid(OtherComponent)) AttachToComponent(OtherComponent, FAttachmentTransformRules::KeepWorldTransform);
++ // This replaces the flight timer: five seconds are measured from impact, not spawn.
++ GetWorldTimerManager().SetTimer(RecycleTimer, this, &ThisClass::ReturnToPool, FMath::Max(.1f, ImpactLifetime), false);
+ }
+diff --git a/Source/ThirdPerson/Weapons/WeaponProjectile.h b/Source/ThirdPerson/Weapons/WeaponProjectile.h
+index 5b1a21e..b06262f 100644
+--- a/Source/ThirdPerson/Weapons/WeaponProjectile.h
++++ b/Source/ThirdPerson/Weapons/WeaponProjectile.h
+@@ -1,42 +1,42 @@
+ #pragma once
+-
+ #include "CoreMinimal.h"
+ #include "GameFramework/Actor.h"
+ #include "WeaponProjectile.generated.h"
+-
+-class UProjectileMovementComponent;
+ class USphereComponent;
++class UProjectileMovementComponent;
++class UPrimitiveComponent;
+ 
+-/** Asset-free projectile used by ranged weapons. A mesh/effect can be added later in a Blueprint child. */
++/** Swept sphere owns hit detection; attached meshes are cosmetic and never push characters. */
+ UCLASS()
+ class THIRDPERSON_API AWeaponProjectile : public AActor
+ {
+-	GENERATED_BODY()
+-
++ GENERATED_BODY()
+ public:
+-	AWeaponProjectile();
+-
+-	virtual void Tick(float DeltaSeconds) override;
+-	void InitializeProjectile(float InDamage, float InSpeed);
+-
++ AWeaponProjectile();
++ virtual void Tick(float DeltaSeconds) override;
++ void InitializeProjectile(float InDamage, float InSpeed);
++ void DeactivateProjectile();
++ void IgnoreProjectileActor(AActor* Actor);
++ UFUNCTION(BlueprintPure, Category="Projectile") bool IsProjectileActive() const { return bActive; }
++ UFUNCTION(BlueprintPure, Category="Projectile") bool HasImpacted() const { return bImpacted; }
++ UPROPERTY(EditDefaultsOnly, Category="Projectile|Lifetime", meta=(ClampMin="0.1")) float ImpactLifetime = 5.f;
++ UPROPERTY(EditDefaultsOnly, Category="Projectile|Lifetime", meta=(ClampMin="0.1")) float FlightLifetime = 10.f;
++ UPROPERTY(EditDefaultsOnly, Category="Projectile|Pool", meta=(ClampMin="1", ClampMax="512")) int32 MaxPooledInstances = 128;
+ protected:
+-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+-	TObjectPtr<USphereComponent> CollisionSphere;
+-
+-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+-	TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
+-
+-	UPROPERTY(EditDefaultsOnly, Category = "Projectile|Debug")
+-	bool bDrawDebugProjectile = true;
+-
++ virtual void BeginPlay() override;
++ virtual void EndPlay(const EEndPlayReason::Type Reason) override;
++ UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components") TObjectPtr<USphereComponent> CollisionSphere;
++ UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components") TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
++ UPROPERTY(EditDefaultsOnly, Category="Debug") bool bDrawDebugProjectile = false;
++ UFUNCTION() void HandleProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor,
++     UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+ private:
+-	UFUNCTION()
+-	void HandleProjectileHit(
+-		UPrimitiveComponent* HitComponent,
+-		AActor* OtherActor,
+-		UPrimitiveComponent* OtherComponent,
+-		FVector NormalImpulse,
+-		const FHitResult& Hit);
+-
+-	float Damage = 0.f;
++ friend struct FProjectileTestAccess;
++ void ConfigureCollision();
++ void ReturnToPool();
++ float Damage = 0.f;
++ bool bActive = false;
++ bool bImpacted = false;
++ bool bEnemyShot = false;
++ FTimerHandle RecycleTimer;
+ };
+diff --git a/Content/Third/AI/BB_RangedEnemy.uasset b/Content/Third/AI/BB_RangedEnemy.uasset
+index a2bb3a2c4a6b11dcd26b0280be62f7f6d678f2e2..70386ec00b5a4a7e9c7d46e8a08db63c17e14a07 100644
+GIT binary patch
+delta 1091
+zcmcbwcgtXcgy{F>^J5Qcw+W~I6aT56yH_!>y3i(QqOK#aHUk4gGb4}yg5-(SI<d*D
+z3=I50&J8vO1`Z%S1IPz~3|<5cQUl{J0g8h#46FdMH@dj^#7F(`?U=aB^$kD!B#`+a
+zGqoqPFa|5F0jf}wfT@Sj|A8QgkAXoR$kmeAT*)ZSBo5LMkXTZbpW~CCoLG{XpT}UG
+z9H+T?3iDe=Q3Z%T22Cja6KH_S<d0&)oN$@Rw^-$|s#8N#r^SX{od!r9h6z7_HYuT)
+zpfy>LU3l^VVU9`SEO6yoP=|piMUZkekROo*8I++MZXo>x6x2Wv#5egNkJMyFb`8!4
+zP@#X5FL5d}nTdlX3fUdRRDtT4z^WM-U;*!pD$R^09e^s$f+ih{Dh-WsxZzo-(!hiP
+z1~9wJA<_#u9mLdt641m1*WCh<7UXgeQ%919h0jEYbR$$6<}sM`Ziw_pptJ^(ZkXLq
+zA<~K55NVihnDi%9Y4l+Ek1CBGEIbn6FozkA9xRd&>5V)kOip~0V|jNn%1##NQ)Zh5
+zia5T>fr2uEazGXc08=&?$V`4H;5T_UpC2QH6~PZ<eTB0o3D`~EAu0e?F$b#dj37*1
+zrVxz9CJbXOhO-<*U}ASg>;$EuwxZfzC2BWW8fw1ZWN|Uo$q)D>CtnbN*yzW|KiN@4
+RWwMRf`^ouYypy%XO#oyX%^d&$
+
+delta 993
+zcmca*a9?kNglL54ij{ufY?9X8v)Qq!V?%Q+mro?)L|sQdEd~aLW=0?Z1U{^j3t80@
+zAxs7aJ|N>D8v_FekZxoJi83%e<U!CrKrt9!l9z!2gmr-!1Z08qMi&>K_^2Pg9TRuC
+zzTsz|1hNHWrq*N@#$csrpbBkqkXi)z4+M-rC2~L^eeunejM7Y-S2Mq56qSdn(SXuF
+zfeMu;7m5pW!eu5eWR*waokZb%MBz!Y$zz!K18AZmiiw(&CnBlSM7WYc0i<s74K@KW
+zC8#Jjkah=!6A&=+O-|&Mnk>Pt!RS2MkzHI&1tbWTVqky<4}*soSWySN16Y~~O*#}+
+zni)+x300Z}O*$V{8X9$QyK7LTfiVmQFsF4wq<3&SOpag|VVVZvYH&GB{=vz^1xha<
+zuoxmdgUdlo4akLg049AFBF(|=Fgb&ZhYM!*cZhHWQ1}LtFpD@iG=Rcl>OjNLy(@?+
+zjqY7Jh_nT7$z%a`9vyz52~IhQ$=ONyiA5<ci6w~)U?HdYpv1iN)D+je)Z9u2MWB;D
+z@=jjIyOU97at5C=+h2B|KHkX_`D6rTfh-UJB~}oSp8P<>Z!!<RA0vdd63%iHfQda8
+zu$#P0OaQ8)K@cV`D+FWhg0sSfVPaq4tcfBJv7X7Ca8pi;+6hWRoPg$*3^CQoTH@~~
+It4Wvu0D!`>n*aa+
+
+diff --git a/Content/Third/AI/BT_RangeEnemy.uasset b/Content/Third/AI/BT_RangeEnemy.uasset
+index edb75122f6874fd88d807a6e5f1362ba24755247..5f2218ff5459bfd1c0d346ea6b39029d6a4d9be3 100644
+GIT binary patch
+literal 48735
+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
+LT`_#O9_9ZJ9LymR
+
+literal 49195
+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
+NzrCk5U(QDP{|C`$rRe|w
+
+diff --git a/Content/Third/Character/BP_TPCCharacter.uasset b/Content/Third/Character/BP_TPCCharacter.uasset
+index 0931988e77cf3e7c48458dc3fc5038632e84f180..1c54f9a90015aca4539b1809f9c1e625f8d77881 100644
+GIT binary patch
+delta 12099
+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
+QiO@b8SXEhW`jDLe0e$^AEC2ui
+
+delta 13367
+zcmc&)30M?Yw!Vd6niiC$yFmmk77-Ls0*)FTZBSGYm#0SaoQaCi3I=Fs8kOW_z!-^1
+zG#YOVNt{ufnAN-(A2DW`Bqo_RV}fztm&7$X2^!6&iA3Hxx9+X3rmK`U-@NZ#zV2J~
+z|L2}_?x}OPqOU#X|Ne9St0HYX?F&v0T;BW9^gU~5EI8La=ychKe_Y$VC2g?OHB}<y
+z0Y5^52_cJP>5F~)jD{;#65xBo2tt-Xo!n2s3MP8$%6LNX9yE}$NrY6x=j9rOubD(o
+zOSS-1kxE;oDRHLz2?-2FQBP@uvbLF!w*d+crj>qsLj&P5tF&~2v&d0J+N>9{o3c9{
+zGTXWWJl^Rpah6Xna8;C)&m%QYU0%@?*>$*Im>IaqPN!RG6A?6KdegL!qut_rv~M$O
+zOwNQ^)3PS#W@YE+kfnWdSJVFTO(~kD#U|66aV9z|)+WW!kL=;ndj7pGHa;*K^k7M)
+zC*!))v$4IP#eleY^8f`V1aDImkk-WoLgUBc`oVWwoQ>{`Gr<)Y0L5)_iD8kvQ2^9#
+zSG9x8ri0>p>cR8kdrGOaK7NQ~r`zML(gSp8-(=}OS0~(+F{Hhc&H!L&eTX{*LCX>%
+zqkL$LHhPjo*C$w|)TXTo1rnHxNQ@EYnr0<Vk-(1&$=P9cki>#5rj``mN4QHgJ!xc^
+zjZq58ItIQctpsJZ<X%D<ot<2NdtF1N$LWT?Db{0L<7r<10kWkt4c!$^|8m9@{53~k
+z1oTT4{f48j0s55>x(Uz=0<{X+R{`zG6SJOfITNljuK?3amw6c&S<3_qZBGMpM%Yl%
+zHGrP=L7xKjoDWI?J@13A2K1s2`Xr$LP|+6N`&EEm7N}LAD*^S>`m8cf0MkjASpkf{
+zF0&k%0A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
+
+diff --git a/Content/Third/Weapon/BP_ArrowProjectile.uasset b/Content/Third/Weapon/BP_ArrowProjectile.uasset
+index faa51d04a8bee01f64e573a8ff23e11411e4bff4..2c7cf516f326b242a8e5659bb894a7c4cb875d08 100644
+GIT binary patch
+delta 9653
+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
+
+delta 4106
+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
+

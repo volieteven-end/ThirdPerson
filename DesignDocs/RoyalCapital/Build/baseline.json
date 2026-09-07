@@ -1,0 +1,15 @@
+{
+  "original_map": "E:\\UNREAL\\ue projects\\ThirdPerson\\Content\\ThirdPerson\\Lvl_ThirdPerson.umap",
+  "original_sha256": "82a85e1c3e4faedfa3b12fcaa758d095b8b817ca854cc6eb1d9dcd9647ed8420",
+  "original_world": "/Game/ThirdPerson/Lvl_ThirdPerson.Lvl_ThirdPerson",
+  "original_actor_count": 74,
+  "untouched_dirty_content": [
+    "/Game/Third/Character/BP_TPCCharacter",
+    "/Game/Third/SwordAnimation/Walk_B_Anim",
+    "/Game/Third/SwordAnimation/Walk_B_L_Anim",
+    "/Game/Characters/Mannequins/Anims/Unarmed/BS_Idle_Walk_Run"
+  ],
+  "new_map": "E:\\UNREAL\\ue projects\\ThirdPerson\\Content\\RoyalCapital\\Maps\\L_RoyalCapital.umap",
+  "empty_sha256": "4399be89667798172341a3f74b85d2153e903692e7e5c0ef3a44fae8ed8c091b",
+  "empty_actor_count": 0
+}

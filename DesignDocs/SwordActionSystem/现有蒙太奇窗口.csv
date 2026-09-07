@@ -1,0 +1,15 @@
+﻿蒙太奇,事件名称,事件类,窗口类型,起始秒,结束秒,持续秒,骨骼,半径cm,WarpTargetName,说明
+AM_EnemySwordAttack,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.214321,0.355516,0.141195,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_AirAttack,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.225088,0.31204,0.086952,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_01,MotionWarping,AnimNotifyState_MotionWarping,,0.080758,0.298275,0.217517,,,AttackTarget,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_01,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.214321,0.355516,0.141195,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_01,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.COMBO_INPUT: 1>,0.426114,1.246573,0.820459,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_02,MotionWarping,AnimNotifyState_MotionWarping,,0.060118,0.502337,0.442219,,,AttackTarget,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_02,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.222924,0.407732,0.184808,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_02,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.COMBO_INPUT: 1>,0.535338,0.990757,0.455419,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_03,MotionWarping,AnimNotifyState_MotionWarping,,0.316899,0.537142,0.220243,,,AttackTarget,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_03,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.332163,0.502252,0.170089,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_03,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.COMBO_INPUT: 1>,0.617825,1.169522,0.551697,hand_r,18.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_04,MotionWarping,AnimNotifyState_MotionWarping,,0.218239,0.533417,0.315178,,,None,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Attack_04,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.338095,0.535636,0.197541,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify
+AM_Sword_Rising,AttackWindowNotifyState,AttackWindowNotifyState,<AttackNotifyWindowType.DAMAGE: 0>,0.184954,0.32981,0.144856,hand_r,10.0,,现存配置；非建议值；不包含引用 Sequence 自身的 Notify

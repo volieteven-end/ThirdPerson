@@ -1,0 +1,18 @@
+{
+  "owning_player": "PlayerController_0",
+  "native_InventoryGrid": "/Temp/Untitled_1.ForestPreview_23570:WBP_Inventory_C_0.WidgetTree_0.InventoryGrid",
+  "native_InventorySlotWidgetClass": "/Game/Third/Widget/WBP_InventorySlot.WBP_InventorySlot_C",
+  "native_InventoryComponent": "/Temp/Untitled_1.ForestPreview_23570:PersistentLevel.Pawn_0.InventoryComponent_0",
+  "grid_exists": true,
+  "grid_count": 20,
+  "widget_class": "/Game/Third/Widget/WBP_Inventory.WBP_Inventory_C",
+  "grid_20": true,
+  "hp_percent_matches_50": false,
+  "selection_callback": true,
+  "use_heals_and_decrements": true,
+  "empty_slot_no_use": true,
+  "inventory_open": true,
+  "inventory_close": true,
+  "pass": true,
+  "phase": "rollback"
+}

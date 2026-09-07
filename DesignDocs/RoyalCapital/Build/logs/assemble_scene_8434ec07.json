@@ -1,0 +1,6 @@
+{
+  "id": "assemble_scene_8434ec07",
+  "success": true,
+  "output": "ASSEMBLY group 1/117\nASSEMBLY group 21/117\nASSEMBLY group 41/117\nASSEMBLY group 61/117\nASSEMBLY group 81/117\nASSEMBLY group 101/117\nASSEMBLY PASS | instances=3361 | HISM_groups=117 | treasure=4 | enemy=6 | boss=1 | cameras=4\n",
+  "seconds": 0.709
+}

@@ -1,0 +1,27 @@
+{
+  "assets": {
+    "/Game/Third/Character/BP_TPCCharacter": "LOAD_OK",
+    "/Game/Third/Character/ABP_TPCCharacter": "LOAD_OK",
+    "/Game/Third/Character/BP_EnemyRangedCharacter": "LOAD_OK",
+    "/Game/Third/Weapon/BP_ArrowProjectile": "LOAD_OK",
+    "/Game/Third/AI/BB_RangedEnemy": "LOAD_OK",
+    "/Game/Third/AI/BT_RangeEnemy": "LOAD_OK"
+  },
+  "keys": [
+    "TargetActor",
+    "HomeLocation",
+    "LastKnownLocation",
+    "DistanceToTarget",
+    "RetreatLocation",
+    "bHasLineOfSight",
+    "bIsInRangedAttackRange",
+    "bIsTooClose",
+    "bIsDead",
+    "bIsStunned",
+    "bNeedsSeparation",
+    "SeparationLocation",
+    "SelfActor",
+    "PatrolLocation"
+  ],
+  "result": "PASS"
+}

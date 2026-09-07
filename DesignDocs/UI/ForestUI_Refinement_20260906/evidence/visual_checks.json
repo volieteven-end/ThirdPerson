@@ -1,0 +1,39 @@
+{
+  "dark": {
+    "center_rgb": [
+      255,
+      255,
+      255
+    ],
+    "white_core": true,
+    "size": [
+      128,
+      128
+    ]
+  },
+  "light": {
+    "center_rgb": [
+      255,
+      255,
+      255
+    ],
+    "white_core": true,
+    "size": [
+      128,
+      128
+    ]
+  },
+  "hud_background": {
+    "before_rgb": [
+      9,
+      19,
+      11
+    ],
+    "after_rgb": [
+      75,
+      83,
+      72
+    ],
+    "brighter": true
+  }
+}

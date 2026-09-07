@@ -1,0 +1,7 @@
+{
+  "id": "assemble_scene_fad4a06a",
+  "success": false,
+  "output": "ASSEMBLY group 1/117\nASSEMBLY group 21/117\nASSEMBLY group 41/117\nASSEMBLY group 61/117\nASSEMBLY group 81/117\n",
+  "error": "Traceback (most recent call last):\n  File \"E:/UNREAL/ue projects/ThirdPerson/DesignDocs/RoyalCapital/Build/ue_bridge.py\", line 46, in _rc_tick\n    exec(compile(script.read_text(encoding='utf-8-sig'), str(script), 'exec'), {'__name__':'__main__', '__file__':str(script), 'JOB':job})\n  File \"E:\\UNREAL\\ue projects\\ThirdPerson\\DesignDocs\\RoyalCapital\\Build\\assemble_scene.py\", line 50, in <module>\n    assert len(indices)==len(specs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+  "seconds": 0.396
+}

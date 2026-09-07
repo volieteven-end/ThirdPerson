@@ -1,0 +1,483 @@
+{
+  "events": [
+    {
+      "label": "buffered.start",
+      "time": 1.581,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -1100.0,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "buffered.cancel",
+      "time": 1.7061,
+      "action": "Dash",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -1031.403,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "buffered.queue",
+      "time": 1.8561,
+      "action": "Attack",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -910.206,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "buffered.resume",
+      "time": 2.7063,
+      "action": "",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_02",
+      "position": [
+        -553.222,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "window.start",
+      "time": 6.2132,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -1100.0,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "window.cancel",
+      "time": 6.336,
+      "action": "Dash",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -1035.579,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "window.click",
+      "time": 7.5472,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_02",
+      "position": [
+        -557.372,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "timeout.start",
+      "time": 11.0503,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -1100.0,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "timeout.cancel",
+      "time": 11.171,
+      "action": "Dash",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -1040.387,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "timeout.click",
+      "time": 12.9766,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -561.97,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "second.start",
+      "time": 16.4896,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -1100.0,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "second.first_dash",
+      "time": 16.6107,
+      "action": "Dash",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -1039.017,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "second.second_dash",
+      "time": 17.8828,
+      "action": "Dash",
+      "state": "dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage",
+      "position": [
+        -560.716,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "label": "second.click",
+      "time": 18.992,
+      "action": "Attack",
+      "state": "dash=0 attack=1 montage=AM_Sword_Attack_01",
+      "position": [
+        -82.361,
+        -1200.0,
+        90.15
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "real player blueprint spawned",
+      "pass": true
+    },
+    {
+      "name": "first attack plays",
+      "pass": true
+    },
+    {
+      "name": "dash cancels active attack",
+      "pass": true
+    },
+    {
+      "name": "early left click waits for dodge end",
+      "pass": true
+    },
+    {
+      "name": "early left click resumes second attack automatically",
+      "pass": true
+    },
+    {
+      "name": "root motion dash actually moves capsule",
+      "pass": true
+    },
+    {
+      "name": "left click within window resumes second attack",
+      "pass": true
+    },
+    {
+      "name": "expired window starts first attack",
+      "pass": true
+    },
+    {
+      "name": "second consecutive dash is allowed",
+      "pass": true
+    },
+    {
+      "name": "second dash resets combo to first attack",
+      "pass": true
+    },
+    {
+      "name": "freshly loaded map has a complete navigation path",
+      "pass": true
+    },
+    {
+      "name": "melee enemy moves over 100cm through original AI",
+      "pass": true
+    },
+    {
+      "name": "perception automatically acquires player",
+      "pass": true
+    }
+  ],
+  "window": 0.6499999761581421,
+  "blend_out": 0.07999999821186066,
+  "ai_path_points": [
+    "<Struct 'Vector' (0x0000020E73B83710) {x: -0.000000, y: -1200.000000, z: 10.000000}>",
+    "<Struct 'Vector' (0x0000020E8127B1C0) {x: 600.000000, y: -1200.000000, z: 10.000000}>"
+  ],
+  "ai_samples": [
+    {
+      "time": 22.396080810576677,
+      "position": [
+        -25.427,
+        -1200.0,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E73B83710) {pitch: 0.000000, yaw: 0.000000, roll: -0.000000}>",
+      "player_pos": [
+        602.449,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 22.652440510690212,
+      "position": [
+        26.058,
+        -1200.0,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E8146B490) {pitch: 0.000000, yaw: 0.000000, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 22.90415320917964,
+      "position": [
+        172.267,
+        -1200.0,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E8141BDA0) {pitch: 0.000000, yaw: 0.000000, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 23.16069320961833,
+      "position": [
+        326.191,
+        -1200.0,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.IDLE: 0>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81491FA0) {pitch: 0.000000, yaw: 0.000000, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 23.413837011903524,
+      "position": [
+        381.49,
+        -1176.01,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81491FF0) {pitch: 0.000000, yaw: 23.451952, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 23.665840409696102,
+      "position": [
+        517.908,
+        -1116.83,
+        90.15
+      ],
+      "target": "None",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492040) {pitch: 0.000000, yaw: 23.451952, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 23.9224398098886,
+      "position": [
+        619.586,
+        -1100.48,
+        90.15
+      ],
+      "target": "None",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492090) {pitch: 0.000000, yaw: 8.190352, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 24.182623211294413,
+      "position": [
+        634.795,
+        -1098.291,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.IDLE: 0>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E814920E0) {pitch: 0.000000, yaw: 8.190352, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 24.443796411156654,
+      "position": [
+        640.311,
+        -1097.497,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492130) {pitch: 0.000000, yaw: 8.190352, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 24.69467681273818,
+      "position": [
+        636.112,
+        -1098.101,
+        90.15
+      ],
+      "target": "None",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492180) {pitch: 0.000000, yaw: 8.190352, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 24.95133661106229,
+      "position": [
+        617.225,
+        -1100.82,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E814921D0) {pitch: 0.000000, yaw: 8.190352, roll: -0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 25.216149609535933,
+      "position": [
+        611.164,
+        -1103.817,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.IDLE: 0>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492220) {pitch: 0.000000, yaw: -17.869232, roll: 0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 25.477690510451794,
+      "position": [
+        612.213,
+        -1104.712,
+        90.15
+      ],
+      "target": "None",
+      "move_status": "<PathFollowingStatus.MOVING: 3>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E81492270) {pitch: 0.000000, yaw: -79.921967, roll: 0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    },
+    {
+      "time": 25.738390009850264,
+      "position": [
+        613.766,
+        -1107.671,
+        90.15
+      ],
+      "target": "<Object '/Game/ThirdPerson/UEDPIE_0_Lvl_ThirdPerson.Lvl_ThirdPerson:PersistentLevel.BP_TPCCharacter_C_0' (0x0000020E7B08CC00) Class 'BP_TPCCharacter_C'>",
+      "move_status": "<PathFollowingStatus.IDLE: 0>",
+      "stunned": false,
+      "line_of_sight": true,
+      "yaw": "<Struct 'Rotator' (0x0000020E814922C0) {pitch: 0.000000, yaw: -88.775848, roll: 0.000000}>",
+      "player_pos": [
+        603.05,
+        -1200.0,
+        90.15
+      ]
+    }
+  ],
+  "ai_before": [
+    0.0,
+    -1200.0,
+    100.0
+  ],
+  "ai_after": [
+    613.766,
+    -1107.671,
+    90.15
+  ],
+  "result": "PASS"
+}

@@ -1,0 +1,136 @@
+Forest UI 实施与验证记录 | 2026-09-06
+正式项目: E:/UNREAL/ue projects/ThirdPerson
+状态: 已部署 13 个文件；正式项目保留修改；另一份副本已回退。
+
+CHANGED BRANCH/FIELD
+- UInventoryWidget::HandleHealthChanged -> HPbar.Percent: clamp(CurrentHealth / MaxHealth, 0, 1), MaxHealth<=0 -> 0.
+- UInventoryWidget::HandleStaminaChanged -> StaminaBar.Percent clamp and Forest material tint branch.
+- UInventoryWidget selection refresh -> ForestSelectedItemImage / ForestEmptySelection.
+- UInventorySlotWidget -> ForestSlotOverlay branch: icon/count clearing and outline-only selection.
+- UInventoryWidget::ChooseLevelUpgrade -> ForestUpgradeFrame branch folds LevelUpPanel after selection.
+- WBP_Inventory: compact status HUD; separate objective; 5x4 inventory/detail panel; independent upgrade modal; ChoiceCTitle/ChoiceCDescription corrected.
+- WBP_InventorySlot: Forest frame/icon/count/selection layout.
+- New: T_ForestPanel, T_ForestSlot, M_ForestFill, M_ForestOutline, MI_ForestHealth, MI_ForestStamina, MI_ForestExperience, plus 2 PNG sources.
+
+FOUR ARTIFACT PATHS
+MODIFIED_FILE=E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/MODIFIED_FILE.zip
+DIFF_FILE=E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/DIFF_FILE.patch
+VERIFICATION=E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/VERIFICATION.txt
+ROLLBACK=E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/ROLLBACK.sh
+
+SHARED TEST INPUT
+UE preview world: local PlayerController + Pawn + InventoryComponent + HealthComponent.
+MaxSlots=20; CurrentHealth=50; MaxHealth=100; potion Count=3, HealAmount=25.
+Select potion, use once -> CurrentHealth=75 and Count=2; select empty slot -> use disabled.
+Open and close InventoryPanel; modified-only checks: MaxHealth=0, CurrentHealth=150/MaxHealth=100,
+detail image and 8 bound buttons. No gameplay save file is changed.
+
+EXACT TEST COMMANDS (PowerShell)
+$v='E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/VERIFY_UI.ps1'
+
+BASELINE
+Command: & $v baseline
+Input: SHARED TEST INPUT; restored original source/assets in rollback_test/ThirdPerson (hash checked).
+Literal output:
+BASELINE core=PASS hp_percent=FAIL grid=20
+Exit status: 0
+Interpretation: baseline contracts pass; original HPbar does not match 50/100. This is the reproduced pre-existing defect.
+
+MODIFIED
+Command: & $v modified
+Input: SHARED TEST INPUT; modified source/assets in stage/ThirdPerson (hash checked).
+Literal output:
+MODIFIED core=PASS hp_percent=PASS grid=20 layout=PASS materials=PASS
+Exit status: 0
+
+ROLLBACK RUNTIME
+Command: & $v rollback
+Input: SHARED TEST INPUT; another copy after actual ROLLBACK.sh execution and rebuild.
+Literal output:
+ROLLBACK core=PASS hp_percent=FAIL grid=20
+ROLLBACK restored_hashes=PASS
+Exit status: 0
+Restored behavior: original HPbar defect is reproduced again, while original inventory actions still pass.
+Restored file status: original 4 replacement-file hashes restored, all 9 additions absent.
+Formal deployment remains modified; rollback operated only on rollback_test/ThirdPerson.
+
+ACTUAL ROLLBACK COMMAND (executed on another copy, not the formal project)
+$env:SystemRoot='C:\Windows'
+$env:WINDIR='C:\Windows'
+& 'C:/Program Files/Git/bin/bash.exe' --noprofile --norc 'E:/UNREAL/ue projects/ThirdPerson/DesignDocs/UI/ForestUI_Implemented_20260906/ROLLBACK.sh' 'E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/rollback_test/ThirdPerson'
+Input: candidate 13-file set in rollback_test/ThirdPerson; original backup and manifest.
+Literal result:
+ROLLBACK files=PASS restored=4 removed=9 build=PASS
+Exit status: 0
+Git Bash executable check for ROLLBACK.sh (test -x): passed.
+
+PRODUCTION C++ BUILD
+Command:
+& 'D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat' ThirdPersonEditor Win64 Development '-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject' -WaitMutex -NoHotReloadFromIDE
+Input: deployed original project, Development Editor Win64.
+Literal result: Result: Succeeded
+Exit status: 0
+Log: evidence/production_build.log
+
+PRODUCTION ASSET REOPEN
+Command:
+& 'D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe' 'E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject' -run=pythonscript '-script=E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/check_production.py' '-EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities' -unattended -NullRHI -nosound -nop4 '-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ForestUIBuild/20260906_v1/production_asset_check.log' -stdout -FullStdOutLogOutput
+Literal output: PRODUCTION assets=PASS widgets=PASS materials=PASS
+Exit status: 0
+Both widget BlueprintStatus values: BS_UP_TO_DATE: 3.
+Texture reimport source paths: production Content/Third/UIArt/ForestUI/*.png.
+Texture MaxTextureSize: 256; original source PNG sizes: 1254x1254.
+
+UMG RENDER / SLATE TEST
+Full-editor offscreen run: modified_editor.log.
+Literal output:
+MODIFIED core=PASS hp_percent=PASS grid=20 layout=PASS materials=PASS
+FOREST_RENDER_COMPLETE
+Exit status: 0
+The full-editor path initializes Slate; its asserted test advances LevelComponent from Lv.1 to Lv.5,
+selects upgrade index 0, confirms pending selection cleared and LevelUpPanel Collapsed.
+The NullRHI JSON reports do not include the Slate-only assertion; the full-editor run and test source provide that evidence.
+Reopened renders: HUD.png, Inventory.png, Upgrade.png (1920x1080), Inventory_720p.png (1280x720).
+These are actual UMG widget renders with fixture values, not a full manual PIE gameplay test.
+
+INTEGRITY
+See manifest.json for all original and modified SHA256 values.
+Content/Third/Widget/WBP_Inventory.uasset
+  original=210ECFFD418533451686ECC32E85876693872B236E620A6748EC186BEEA8E8C3
+  modified=3BE9C5D89114257520598744E0310F725CFC8B3A9514743FE394ABAC5AEFFE63
+Content/Third/Widget/WBP_InventorySlot.uasset
+  original=37A2312E8848D09FD705FEE142FD673EDCD3D5B80A86ECB83829FF69AF61023C
+  modified=174CC5EE3656E9C726BED8C43054A37EE1272DECC762AA8ED6C690CEA3435970
+Source/ThirdPerson/UI/InventroyWidget.cpp
+  original=C98955A043B5D7151A8AE39BDA1B30709D21D9401CD0F66FB4B836C9B6FE4D00
+  modified=420DC500F46202C223DECA0437C61176AA5D4EA8E4BE2470525F34B3581F7611
+Source/ThirdPerson/UI/InventorySlotWidget.cpp
+  original=42CD9489CEC12F5B2037A41AAAE00F2611ADCFD6DC4B1077052CCA5782AC1ED3
+  modified=04FFB8D28D7445EB319E65BD83B9C59669E9F0FAD56022F77098CF50A76694DA
+Content/Third/UIArt/ForestUI/MI_ForestExperience.uasset
+  original=ABSENT
+  modified=B774F8E43B321EBE989CBAE7801D201096E712BF57FAF024D32C7FA0541633D2
+Content/Third/UIArt/ForestUI/MI_ForestHealth.uasset
+  original=ABSENT
+  modified=17D9C6CC49E9672E19DE748FC43D10E916DA6B66283254F1B480292D32F82007
+Content/Third/UIArt/ForestUI/MI_ForestStamina.uasset
+  original=ABSENT
+  modified=E6F0AE72C5EE2850CE3B2FD576F63CEF0B888A49049E100842FB7A32600074D2
+Content/Third/UIArt/ForestUI/M_ForestFill.uasset
+  original=ABSENT
+  modified=4CE6DC052A5A83EE363FBC19AC60449DD330EAAC1857ADC5918790A075508E20
+Content/Third/UIArt/ForestUI/M_ForestOutline.uasset
+  original=ABSENT
+  modified=1EFBED3B2C9F43192B0165C008DBC08CCCE9D7F2B8FDBFE441244105AD6CAA32
+Content/Third/UIArt/ForestUI/T_ForestPanel.png
+  original=ABSENT
+  modified=40D1CA2C1C51B7D61793C23167A8869BC650465D13CFC648D491AAE150BFF9A9
+Content/Third/UIArt/ForestUI/T_ForestPanel.uasset
+  original=ABSENT
+  modified=369037FD60AA94E40CFC5EC2C0C94114F687E086853E851E97D690A3C8CD9581
+Content/Third/UIArt/ForestUI/T_ForestSlot.png
+  original=ABSENT
+  modified=6D6A7C26EC2DB7BFF12528FF8C0167052696B98B365478861DAA579DC0E6EA56
+Content/Third/UIArt/ForestUI/T_ForestSlot.uasset
+  original=ABSENT
+  modified=572D18A6388A69E28FB31059202E2DE65C60CC3F3F71E2B33EBF2D982243B7E3

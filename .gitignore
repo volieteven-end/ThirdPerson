@@ -1,0 +1,50 @@
+# Unreal-generated data. Keep source assets and build configuration in Git.
+/Binaries/
+**/Intermediate/
+**/DerivedDataCache/
+**/Saved/
+/Builds/
+/Build/**/FileOpenOrder/
+/Plugins/**/Binaries/
+
+# Historical test projects, source snapshots and generated task artifacts.
+/work/
+/Source/.codex-artifacts/
+/Source/tmp/
+/Source/output/
+/DesignDocs/**/backup/
+/DesignDocs/**/modified/
+/DesignDocs/**/MODIFIED_FILE.zip
+/Docs/cache-cleanup-*/
+/Docs/local-git-setup-*/
+
+# Machine-local editor/assistant settings and generated IDE solutions.
+/.vs/
+/.idea/
+/.vscode/
+/.codex/
+/.cursor/
+/.gemini/
+/.mcp.json
+*.sln
+*.slnx
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.DotSettings.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# Python caches and local secrets, not project source.
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Nested Rider machine-local settings found during staging.
+/Source/.idea/

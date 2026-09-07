@@ -1,0 +1,207 @@
+当前：锁定 Alt 闪避与远程 AI / 修改版已应用并编译 / 打开 UE 验收
+
+1. 修改分支与字段
+BP_TPCCharacter：删除重复 Blueprint MotionWarping，保留原生 MotionWarpingComponent；运行时组件数 2 → 1。
+ATPCCharacter::Dash → ClearAttackRootMotionForDodge：取消攻击后禁用旧 Modifier，RemoveWarpTarget(AttackTarget)，ConsumeRootMotion，RootMotionParams.Clear，再启动 Dodge。
+第一次闪避后的连招继续窗口仍为 0.65 秒；Shift 是 Sprint，Alt 是 Dash。
+BT_RangeEnemy：连接 Investigate / Patrol；Patrol Move To 使用新增 Vector PatrolLocation；所有 Move To AllowStrafe=true；Chase AcceptableRadius=300。
+UpdateRangedCombat：持续面向玩家；后退进入 450 cm / 退出 550 cm；可射击 450–950 cm；还原非战斗朝向。
+RangedPatrolRadius=800 cm（无 PatrolPoints 时按 HomeLocation 随机可达点巡逻）。
+BP_ArrowProjectile：CollisionSphere NoCollision → QueryOnly；ArrowMesh BlockAllDynamic → NoCollision。
+WeaponProjectile / ProjectilePoolSubsystem：命中伤害去重、友伤过滤、骨骼挂接；ImpactLifetime=5 s 从命中计时，FlightLifetime=10 s，MaxPooledInstances=128，总上限 512。
+
+2. 四个交付文件（已重新打开核验）
+MODIFIED_FILE.zip = E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\MODIFIED_FILE.zip
+DIFF_FILE.patch = E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\DIFF_FILE.patch
+VERIFICATION.txt = E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\VERIFICATION.txt
+ROLLBACK.sh = E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\ROLLBACK.sh
+
+补充文件：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\UE使用说明.md
+清单：E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\manifest.json
+回滚依赖同目录 ROLLBACK.ps1、manifest.json 和 backup；ZIP 是修改文件集合，不是完整项目。
+
+3. 报告与文件复核命令（已实际执行；不是再次运行游戏或再次回滚）
+$v = "E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\VERIFY.ps1"
+
+命令：& $v BASELINE
+输入：BASELINE
+字面输出：BASELINE: HP=100->100 patrol=0cm native=8/8 originals=13/13
+退出状态：0
+
+命令：& $v MODIFIED
+输入：MODIFIED
+字面输出：MODIFIED: native=13/13 PIE=40/40 locked=16/16 files=16/16
+退出状态：0
+
+命令：& $v ROLLBACK
+输入：ROLLBACK
+字面输出：ROLLBACK: restored=13 removed=3 HP=100->100 patrol=0cm native=8/8
+退出状态：0
+
+4. BASELINE 实际运行
+输入：原版本 13 个文件、没有 3 个新增源文件。最初在修改前的 stage 执行基线，随后在字节一致的独立原版本副本再次执行确认。
+原版本测试项目：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\rollback_test\ThirdPerson\ThirdPerson.uproject
+BASELINE（重复确认）脚本：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\baseline_runtime.py
+场景：/Game/ThirdPerson/Lvl_ThirdPerson；测试直接调用与输入绑定相同的处理函数；无渲染 PIE。
+弓箭输入：BP_ArrowProjectile，Damage=10，Speed=1500，射向无格挡/无无敌状态的主角。
+字面结果：result="OBSERVED"，hp_before=100，hp_after=100。
+巡逻输入：TargetActor 为空，观察 2 s。
+字面结果：patrol_before.pos="X=0.000 Y=-1200.000 Z=90.150"；patrol_after.pos="X=0.000 Y=-1200.000 Z=90.150"。
+重复确认 PIE 退出状态：BASELINE_PIE_EXIT=0。
+原版本 C++ 自动化报告：8 个测试，state 全为 Success，failed=0。
+锁定补充基线：4 个攻击时刻 × 四方向，运行时存在 MotionWarpingComponent 与 MotionWarping 两个组件；原生组件 before.warp 始终为空。
+
+5. MODIFIED 实际运行
+候选项目：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\stage\ThirdPerson\ThirdPerson.uproject
+构建命令：& "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\stage\ThirdPerson\ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+字面输出：Result: Succeeded；退出状态：0。
+原生自动化：13 个测试，7 succeeded + 6 succeededWithWarnings，failed=0；退出状态：0。
+测试夹具的缺少根运动资产、销毁临时世界 Warning 不影响断言。根运动交接新夹具最初缺少 OwnerAdapter 导致一次 exit=3，补齐 InitializeComponent 后最终 13/13；生产项目也再次运行通过。
+远程/弓箭脚本：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\test_runtime_final.py
+输入：真实地图和 BP；弓箭 10 点伤害；等待命中后 4.8 / 5.2 s；再次获取同一池对象；玩家远离/接近远程敌人；不注入 BT TargetActor / MoveTo。
+字面结果：result="PASS"，19/19 checks[].pass=true；HP 100→90；地面和身体箭均满足 4.8 s 可见、5.2 s 回收；same actor reused；AI 自动感知、巡逻、面向玩家后退并开火掉血。退出状态：0。
+原有连招/近战脚本：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\test_legacy_combo_final.py
+输入：攻击→闪避→闪避中预输入/结束后窗口内输入/超时/第二次闪避；原有导航与近战追击。
+字面结果：result="PASS"，13/13 checks[].pass=true；退出状态：0。
+锁定 Alt 脚本：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\test_locked_modified.py
+输入：锁定静止敌人；攻击后 0.05 / 0.20 / 0.50 / 0.85 s 进入闪避；四方向；闪避中第 4 次采样时预输入攻击；40 samples/组；强制 AlwaysTickPoseAndRefreshBones。
+字面结果：result="PASS"；16 组；checks 八项全部 true；warp_seen=true；max_mesh_offset=2；max_camera_distance=407.92156108742324；all_owned=true。退出状态：0。
+PIE=40/40 指 19+13+8 个汇总断言；16/16 指锁定四方向×四时刻组合，并非另增加 16 个独立自动化用例。
+原先飞走且镜头停住的偶发症状在上述基线与候选场景中都未复现；结论是重复组件/交接清理修复与这些场景回归通过，不声称原偶发已经完整复现。
+
+6. ROLLBACK 实际操作与恢复行为
+输入：独立副本 E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\rollback_test\ThirdPerson 已放入 16 个候选文件，候选哈希 16/16 已核对。
+精确命令（PowerShell 发起 Git Bash）：
+$env:SystemRoot='C:\Windows'; $env:WINDIR='C:\Windows'; $env:SystemDrive='C:'
+& "C:/Program Files/Git/bin/bash.exe" --noprofile --norc "E:\UNREAL\ue projects\ThirdPerson\DesignDocs\RangedCombatRepair_20260906\ROLLBACK.sh" "E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\rollback_test\ThirdPerson"
+字面输出：ROLLBACK: restored=13 removed=3 build=Succeeded exit=0
+退出状态：0。
+恢复状态：13 个原文件 SHA256 与备份一致；3 个新增文件不存在；原版本重新构建成功。
+恢复后 C++ 自动化：8/8，failed=0；退出状态：0。
+恢复后 PIE 脚本：E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\test_rollback_runtime.py
+字面结果：result="OBSERVED"；hp_before=100；hp_after=100；巡逻前后位置均为 X=0.000 Y=-1200.000 Z=90.150；退出状态：0。
+这确认回滚恢复了原来的行为，包括原有的不巡逻/箭不扣血现象。正式项目未回滚，仍保持修改版。
+
+7. 正式项目交付验证
+正式项目：E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject
+构建命令：& "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:\UNREAL\ue projects\ThirdPerson\ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+字面输出：Result: Succeeded；PRODUCTION_BUILD_EXIT=0。
+正式项目 C++ 自动化 13/13，failed=0，AUTOMATION_EXIT=0。
+关键资源加载/蓝图编译：PRODUCTION_ASSETS: loaded=6/6 blackboard=PatrolLocation result=PASS；ASSETS_EXIT=0。
+正式项目 PIE：result="PASS"，warp_components=1，player="BP_TPCCharacter_C"，RootMotionMode=ROOT_MOTION_FROM_MONTAGES_ONLY，ranged_spawned=true；SMOKE_EXIT=0。
+未将测试用 ForestUIEditor 插件复制进正式项目。
+原始范围哈希审计：2517 个原文件；非本次目标的 2504 个文件全部未变；本次修改 13 个原文件、新增 3 个文件；unexpected_changes=[]。
+
+8. 引擎日志中的实际运行命令（原样记录；可与 evidence 文件交叉核对）
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\baseline_automation.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\rollback_test\ThirdPerson\ThirdPerson.uproject" -ExecCmds="Automation RunTests ThirdPerson" -TestExit="Automation Test Queue Empty" -ReportExportPath="E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\baseline_automation" -unattended -NullRHI -nosound -nop4 -abslog="E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\baseline_automation.log" -stdout""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\baseline_repeat.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/ranged_baseline.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/baseline_repeat.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\locked_refreshed_baseline.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/ranged_locked_refreshed_baseline.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/locked_refreshed_baseline.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\final_automation.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -ExecCmds="Automation RunTests ThirdPerson" -TestExit="Automation Test Queue Empty" -ReportExportPath="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/final_automation" -unattended -NullRHI -nosound -nop4 -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/final_automation.log" -stdout""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\test_runtime_final.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/test_runtime_final.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/test_runtime_final.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\test_legacy_combo_final.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/test_legacy_combo_final.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/test_legacy_combo_final.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\test_locked_modified.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/test_locked_modified.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/test_locked_modified.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\rollback_automation.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -ExecCmds="Automation RunTests ThirdPerson" -TestExit="Automation Test Queue Empty" -ReportExportPath="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/rollback_automation" -unattended -NullRHI -nosound -nop4 -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/rollback_automation.log" -stdout""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\rollback_runtime.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/test_rollback_runtime.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/rollback_runtime.log"""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\production_automation.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -ExecCmds="Automation RunTests ThirdPerson" -TestExit="Automation Test Queue Empty" -ReportExportPath="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/production_automation" -unattended -NullRHI -nosound -nop4 -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/production_automation.log" -stdout""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\production_assets.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -run=pythonscript -script="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/verify_production_assets.py" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -unattended -NullRHI -nosound -nop4 -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/production_assets.log" -stdout""
+
+E:\UNREAL\ue projects\ThirdPerson\Saved\RangedCombatRepair\20260906_v1\logs\production_smoke.log
+可执行程序：D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe
+LogCsvProfiler: Display: Metadata set : commandline="" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities -ExecCmds="py C:/Users/Windows11/.codex/tmp/test_production_smoke.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash -abslog="E:/UNREAL/ue projects/ThirdPerson/Saved/RangedCombatRepair/20260906_v1/logs/production_smoke.log"""
+
+9. 逐文件 SHA256；原始文件仅以备份保留
+Source/ThirdPerson/AI/EnemyCharacter.h
+ORIGINAL=9e686f903d562e22a4a363341a3ab2f9f2e91ff85aaa92a20ac67952127149d6
+MODIFIED=54b522d7f09ec4207ca95dc0561e517f3ad73ab9e387cb57d6a3ea1ddee0c227
+Source/ThirdPerson/AI/RangedAIBehaviorNodes.cpp
+ORIGINAL=3bba0e69ff04ed298dd44677608e15c6c14e16fc14fb2dd52f6302b2a1b95339
+MODIFIED=af6b8556f5effdd8b713339c836df89a8ad9ae5d80745a43671db423b64a41ef
+Source/ThirdPerson/AI/RangedAIBehaviorNodes.h
+ORIGINAL=3d2df89f02a7e24aab56a392831e25c388d6a950c0d5e2c8050ab85676227ff4
+MODIFIED=69c5b3c6885124686b65d8183e3b5edd3b0d02b1e1ae2da7b6b6958025854b91
+Source/ThirdPerson/Character/TPCCharacter.cpp
+ORIGINAL=dd9a2ec0a5b31c264c3d25bb4c7e4e443ed2eb6aecedb5c02ce015b0a2ff04e7
+MODIFIED=13252df33b01d4f3bc50267fc3a39e006a8f0273c29b274ab52e61ec11fab42d
+Source/ThirdPerson/Character/TPCCharacter.h
+ORIGINAL=96d06c18cb87f3e206223f24a2d1e9b8fc68d4d1225cf6b6ff0f4ab34224c08b
+MODIFIED=1a2517a406b58e7884d58403bafa1207321437aea19bf10b7e3d87d5b61b40e3
+Source/ThirdPerson/Components/CombatComponent.cpp
+ORIGINAL=9198a5347891fb5029531864fe129210809cf927ed0c7f5a10b91acec78b9e07
+MODIFIED=9954b4f906a387533a2893d9305f66e8b0e183999c37f3f4809c7d24cff7b378
+Source/ThirdPerson/Tests/ActionSystemTests.cpp
+ORIGINAL=53237a631999178030ddf46f1cefc265cad494ac67023e7492a457201b17610f
+MODIFIED=1c32907ebdcda050b27c7ab87889c67088438321ee01dba1b83259286ee92cb9
+Source/ThirdPerson/Tests/ProjectileSystemTests.cpp
+ORIGINAL=ABSENT
+MODIFIED=fe4e26ff961aba466c08a5bd166c1bec607344bc140982046cfd613989541e54
+Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.cpp
+ORIGINAL=ABSENT
+MODIFIED=3ae7c5b1c4df561f6a78f57607c6b1ccd86664f89d8f1129f005ccc9eb6c7b0f
+Source/ThirdPerson/Weapons/ProjectilePoolSubsystem.h
+ORIGINAL=ABSENT
+MODIFIED=b5264a0c154370fbaa00358c6cc9a4560ff872117da7a8b4859954d4b9503d5a
+Source/ThirdPerson/Weapons/WeaponProjectile.cpp
+ORIGINAL=055d47594ff588aceea61fb0462a40860e27e4b4c1b50916d6b493f51e7640ad
+MODIFIED=e30808fed19879a939f93eca05ebfd48b7b4c00a95870240c13da76efc8e65de
+Source/ThirdPerson/Weapons/WeaponProjectile.h
+ORIGINAL=9143e1ff3931e912ac87f6b08206cb3e45a8b0b5627e7b81560b4e2aaf7d831b
+MODIFIED=685fc44af2b49f579557dac471aa9b2d7c4fb75426816ebb46b046a3b9347768
+Content/Third/AI/BB_RangedEnemy.uasset
+ORIGINAL=c7804dc496c9833909d7d3ac802d1a0bb7b5dc2ce146a1ac044c8e9ac76e423e
+MODIFIED=a66d0cc0abe3ed65da9b9b62394ce34861d365e23d208207b612a3a68ce13e36
+Content/Third/AI/BT_RangeEnemy.uasset
+ORIGINAL=f11f35c77535004c337888edd68e3a770504ab87bd929a581a10f141f31d8e28
+MODIFIED=7e3d6f27a26fcb01ed7917953b1a17c766aeca5fbcc16cf6ab7411ed7dc9a600
+Content/Third/Character/BP_TPCCharacter.uasset
+ORIGINAL=ebf12482488e713390c4a19a75e35868fbecc3e71b2056f57da6de6daf577c99
+MODIFIED=2c330e2c5a56b2f09095303d41254b46627f65f88cdd7750c6f6ad5953079ecc
+Content/Third/Weapon/BP_ArrowProjectile.uasset
+ORIGINAL=1e7d9bd98787efa57811de0ce7976dcfc0dfa8ea02fe8b5007a6e307a8320668
+MODIFIED=12eb9ace2acc5107521db6b3cd96644c100d076236d149cbda717bf76f804501
+
+10. 文件重开与封装检查
+ZIP：成功重开，16 个条目全部逐项核对候选 SHA256，CRC 检查通过。
+DIFF：成功重开；git apply --check 在已恢复原版副本中通过（exit=0）。
+ROLLBACK.sh：成功重开；bash -n exit=0；test -x 输出 EXECUTABLE；真实回滚命令已通过。
+VERIFICATION.txt：写入后以 UTF-8 重新读取核对必填字段。
+
+MODIFIED_FILE.zip SHA256=c9a1de89c10706580e3f2bfbe5e0a482ebe0cd7efd6f38a1263d0ebe7c566f65
+DIFF_FILE.patch SHA256=6401c448f26b5133aabe79f22b16e424d23838db1668223624e4ee8ba1ef3232
+ROLLBACK.sh SHA256=323aa6209dd9d1efe79b2fa7cb5e5b2e5cc41df5ab806198dae6ddbd3e37fb07
+ROLLBACK.ps1 SHA256=9d442c4347394edeb006fa518354ea1e5123855145274fc75cce72ed6f5b7b20
+VERIFY.py SHA256=6f6cab7929a33b4826afb3dc18412b5411bcb8317d8e4434f6a2870ae8345b4c
+VERIFY.ps1 SHA256=79ccb9d10a8547eb73c98e9178f58098d674d10e9e47ee876be9027bd1479e91
+UE使用说明.md SHA256=2da60d4ffe4a6753f50c70aee72aa3bc74bb4d647d8c7e49aae32f4410aee2b6

@@ -1,0 +1,7 @@
+{
+  "warp_components": 1,
+  "player": "BP_TPCCharacter_C",
+  "root_motion_mode": "<RootMotionMode.ROOT_MOTION_FROM_MONTAGES_ONLY: 3>",
+  "ranged_spawned": true,
+  "result": "PASS"
+}

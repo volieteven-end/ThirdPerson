@@ -1,0 +1,83 @@
+{
+  "project": "E:\\UNREAL\\ue projects\\ThirdPerson",
+  "entries": [
+    {
+      "path": "Content/Third/Widget/WBP_Inventory.uasset",
+      "original_sha256": "210ECFFD418533451686ECC32E85876693872B236E620A6748EC186BEEA8E8C3",
+      "modified_sha256": "3BE9C5D89114257520598744E0310F725CFC8B3A9514743FE394ABAC5AEFFE63",
+      "action": "replace"
+    },
+    {
+      "path": "Content/Third/Widget/WBP_InventorySlot.uasset",
+      "original_sha256": "37A2312E8848D09FD705FEE142FD673EDCD3D5B80A86ECB83829FF69AF61023C",
+      "modified_sha256": "174CC5EE3656E9C726BED8C43054A37EE1272DECC762AA8ED6C690CEA3435970",
+      "action": "replace"
+    },
+    {
+      "path": "Source/ThirdPerson/UI/InventroyWidget.cpp",
+      "original_sha256": "C98955A043B5D7151A8AE39BDA1B30709D21D9401CD0F66FB4B836C9B6FE4D00",
+      "modified_sha256": "420DC500F46202C223DECA0437C61176AA5D4EA8E4BE2470525F34B3581F7611",
+      "action": "replace"
+    },
+    {
+      "path": "Source/ThirdPerson/UI/InventorySlotWidget.cpp",
+      "original_sha256": "42CD9489CEC12F5B2037A41AAAE00F2611ADCFD6DC4B1077052CCA5782AC1ED3",
+      "modified_sha256": "04FFB8D28D7445EB319E65BD83B9C59669E9F0FAD56022F77098CF50A76694DA",
+      "action": "replace"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/MI_ForestExperience.uasset",
+      "original_sha256": null,
+      "modified_sha256": "B774F8E43B321EBE989CBAE7801D201096E712BF57FAF024D32C7FA0541633D2",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/MI_ForestHealth.uasset",
+      "original_sha256": null,
+      "modified_sha256": "17D9C6CC49E9672E19DE748FC43D10E916DA6B66283254F1B480292D32F82007",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/MI_ForestStamina.uasset",
+      "original_sha256": null,
+      "modified_sha256": "E6F0AE72C5EE2850CE3B2FD576F63CEF0B888A49049E100842FB7A32600074D2",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/M_ForestFill.uasset",
+      "original_sha256": null,
+      "modified_sha256": "4CE6DC052A5A83EE363FBC19AC60449DD330EAAC1857ADC5918790A075508E20",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/M_ForestOutline.uasset",
+      "original_sha256": null,
+      "modified_sha256": "1EFBED3B2C9F43192B0165C008DBC08CCCE9D7F2B8FDBFE441244105AD6CAA32",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/T_ForestPanel.png",
+      "original_sha256": null,
+      "modified_sha256": "40D1CA2C1C51B7D61793C23167A8869BC650465D13CFC648D491AAE150BFF9A9",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/T_ForestPanel.uasset",
+      "original_sha256": null,
+      "modified_sha256": "369037FD60AA94E40CFC5EC2C0C94114F687E086853E851E97D690A3C8CD9581",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/T_ForestSlot.png",
+      "original_sha256": null,
+      "modified_sha256": "6D6A7C26EC2DB7BFF12528FF8C0167052696B98B365478861DAA579DC0E6EA56",
+      "action": "add"
+    },
+    {
+      "path": "Content/Third/UIArt/ForestUI/T_ForestSlot.uasset",
+      "original_sha256": null,
+      "modified_sha256": "572D18A6388A69E28FB31059202E2DE65C60CC3F3F71E2B33EBF2D982243B7E3",
+      "action": "add"
+    }
+  ]
+}

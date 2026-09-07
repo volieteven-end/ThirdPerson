@@ -1,0 +1,30 @@
+Active code page: 65001
+Using bundled DotNet SDK version: 10.0 win-x64
+Running UnrealBuildTool: dotnet "..\..\Engine\Binaries\DotNET\UnrealBuildTool\UnrealBuildTool.dll" ThirdPersonEditor Win64 Development "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+Log file: C:\Users\Windows11\AppData\Local\UnrealBuildTool\Log.txt
+Determining max actions to execute in parallel (6 physical cores, 12 logical cores)
+  Executing up to 6 processes, one per physical core
+Using 'git status' to determine working set for adaptive non-unity build (E:\UNREAL\ue projects\ThirdPerson).
+UbaServer - Listening on 0.0.0.0:1345
+Building ThirdPersonEditor...
+===== Toolchain Information =====
+Using ISPC compiler (D:\Unreal5.8\UE_5.8\Engine\Source\ThirdParty\Intel\ISPC\bin\Windows\ispc.exe)
+  Intel(r) Implicit SPMD Program Compiler (Intel(r) ISPC), 1.24.0 (build commit  @ 20250404, LLVM 18.1.2) 
+Using Visual Studio 14.44.35228 toolchain (E:\Visual Studio2026\VC\Tools\MSVC\14.44.35207) and Windows 10.0.22621.0 SDK (C:\Program Files (x86)\Windows Kits\10).
+=================================
+Using Unreal Build Accelerator local executor to run 4 action(s)
+  CPU 6 physical cores, 12 logical cores
+  Memory 31.72 GB physical, 46.42 GB/79.72 GB committed
+  UBA Storage capacity 40 GB
+[1/4] Compile [x64] Module.ThirdPerson.cpp
+[2/4] Link [x64] UnrealEditor-ThirdPerson.lib
+  正在创建库 E:/UNREAL/ue projects/ThirdPerson/Intermediate/Build/Win64/x64/UnrealEditor/Development/ThirdPerson/UnrealEditor-ThirdPerson.lib 和对象 E:/UNREAL/ue projects/ThirdPerson/Intermediate/Build/Win64/x64/UnrealEditor/Development/ThirdPerson/UnrealEditor-ThirdPerson.exp
+[3/4] Link [x64] UnrealEditor-ThirdPerson.dll
+[4/4] WriteMetadata ThirdPersonEditor.target [NoUba]
+
+Total time in Unreal Build Accelerator local executor: 18.43 seconds
+Output binary: D:\Unreal5.8\UE_5.8\Engine\Binaries\Win64\UnrealEditor.exe
+
+Result: Succeeded
+Total execution time: 19.39 seconds
+Trace written to file C:\Users\Windows11\AppData\Local\UnrealBuildTool\Trace.uba with size 7.4kb

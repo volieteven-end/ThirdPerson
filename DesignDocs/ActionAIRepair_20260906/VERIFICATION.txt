@@ -1,0 +1,122 @@
+当前：近战 AI / 已重建导航并实现冲刺取消与限时衔接 / 正式项目保持修改状态
+
+CHANGED BRANCH/FIELDS:
+ATPCCharacter::Dash: shared IsMovementInputLocked gate -> BlocksDodge (attack is cancellable).
+UCombatComponent: CancelAttackForDash / FinishDashForCombo / QueueAttackDuringDash / TryResumeComboAfterDash.
+ATPCCharacter::CancelMotionAction: natural completion vs interruption; exactly one queued continuation.
+DashComboContinueWindow=0.65 seconds (after first dodge end).
+AttackDashCancelBlendOut=0.08 seconds.
+Recast navigation external actor: rebuild invalid serialized navigation in Lvl_ThirdPerson.
+
+FOUR ARTIFACTS:
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\MODIFIED_FILE.zip
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\DIFF_FILE.patch
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\VERIFICATION.txt
+E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\ROLLBACK.sh
+
+RESULT AUDIT COMMANDS (these reopen recorded UE results and check artifact hashes):
+
+BASELINE
+COMMAND: C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe "E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\VERIFY.py" BASELINE
+INPUT: BASELINE
+LITERAL OUTPUT: BASELINE: nav=FAILED; attack-dash=BLOCKED; tests=5/5; exit=0
+EXIT STATUS: 0
+
+MODIFIED
+COMMAND: C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe "E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\VERIFY.py" MODIFIED
+INPUT: MODIFIED
+LITERAL OUTPUT: MODIFIED: nav=PASS; cancel+chain=PASS; tests=8/8; PIE=13/13; exit=0
+EXIT STATUS: 0
+
+ROLLBACK
+COMMAND: C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe "E:\UNREAL\ue projects\ThirdPerson\DesignDocs\ActionAIRepair_20260906\VERIFY.py" ROLLBACK
+INPUT: ROLLBACK
+LITERAL OUTPUT: ROLLBACK: hashes=7/7; original-behavior=RESTORED; tests=5/5; exit=0
+EXIT STATUS: 0
+
+UNDERLYING UE EXECUTION EVIDENCE:
+Baseline input: real player Attack -> Dash (while AM_Sword_Attack_01 active).
+Literal state: dash=0 attack=1 montage=AM_Sword_Attack_01
+Baseline navigation: (1080,600,90.15) -> (500,550,88); path valid=false;
+MoveTo result=<PathFollowingRequestResult.FAILED: 0>; enemy remains (1080,600,90.15).
+Baseline existing automation: 5/5 Success; exit 0.
+
+Modified input: Attack -> 0.12s -> Dash -> 0.15s -> Attack.
+Literal cancel state: dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage
+Literal buffered state: dash=1 attack=0 montage=AM_Dodge_F_Anim_Montage
+Literal natural-end continuation: dash=0 attack=1 montage=AM_Sword_Attack_02
+Input 0.20s after dash end: AM_Sword_Attack_02.
+Input 0.80s after dash end: AM_Sword_Attack_01.
+Two consecutive dashes followed by Attack: AM_Sword_Attack_01.
+Modified PIE checks: 13/13; editor process exit 0.
+Modified automation: 8/8 Success; process exit 0.
+AI test: placed actual player 600 cm in front on clear ground; no blackboard target or MoveTo injection.
+AI acquired BP_TPCCharacter_C_0 and moved from (0,-1200,100) to (502.207,-1200,90.15).
+
+Rollback input: restored all 7 files in a SEPARATE project copy and rebuilt.
+Literal output: ROLLBACK: restored 7 original SHA256 files; build=Succeeded; exit=0
+Fresh rollback PIE: nav_path_valid=false; move_request=<PathFollowingRequestResult.FAILED: 0>;
+attack state and dash request state both dash=0 attack=1 montage=AM_Sword_Attack_01.
+Restored behavior/status: original broken navigation and attack-dash blocking reproduced; 5/5 original tests pass.
+Formal production remains MODIFIED, not rolled back.
+
+Production build: Result: Succeeded; exit 0.
+Production asset reopen: BP_TPCCharacter and BP_EnemyCharacter=BS_UP_TO_DATE;
+DashComboContinueWindow=0.6499999761581421; AttackDashCancelBlendOut=0.07999999821186066;
+identical baseline path start/end now valid=true, partial=false.
+Production automation: 8/8 Success; exit 0.
+
+EXACT UNDERLYING COMMANDS (PowerShell argument quoting; each final invocation returned exit 0):
+BASELINE BUILD: & "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+BASELINE AUTOMATION: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" "-ExecCmds=Automation RunTests ThirdPerson.ActionSystem;Quit" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/baseline_automation" -unattended -NullRHI -nosound -nop4 "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/baseline_automation.log" -stdout
+MODIFIED BUILD: & "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+MODIFIED AUTOMATION: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" "-ExecCmds=Automation RunTests ThirdPerson.ActionSystem" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/modified_automation" -unattended -NullRHI -nosound -nop4 "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/modified_automation.log" -stdout
+ROLLBACK BUILD: & "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+ROLLBACK AUTOMATION: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" "-ExecCmds=Automation RunTests ThirdPerson.ActionSystem" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_automation" -unattended -NullRHI -nosound -nop4 "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/rollback_automation.log" -stdout
+PRODUCTION BUILD: & "D:/Unreal5.8/UE_5.8/Engine/Build/BatchFiles/Build.bat" ThirdPersonEditor Win64 Development "-Project=E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" -WaitMutex -NoHotReloadFromIDE
+PRODUCTION AUTOMATION: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor-Cmd.exe" "E:/UNREAL/ue projects/ThirdPerson/ThirdPerson.uproject" "-ExecCmds=Automation RunTests ThirdPerson.ActionSystem" "-TestExit=Automation Test Queue Empty" "-ReportExportPath=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/production_automation" -unattended -NullRHI -nosound -nop4 "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/production_automation.log" -stdout
+BASELINE_PIE: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities "-ExecCmds=py C:/Users/Windows11/.codex/tmp/probe_action_ai.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/baseline_pie.log"
+BASELINE_ACTION_AND_NAV_BUILD: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities "-ExecCmds=py C:/Users/Windows11/.codex/tmp/rebuild_action_ai.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/baseline_and_rebuild_nav.log"
+MODIFIED_PIE: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/stage/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities "-ExecCmds=py C:/Users/Windows11/.codex/tmp/test_action_ai.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/modified_runtime.log"
+ROLLBACK_PIE: & "D:/Unreal5.8/UE_5.8/Engine/Binaries/Win64/UnrealEditor.exe" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_test/ThirdPerson/ThirdPerson.uproject" -EnablePlugins=PythonScriptPlugin,EditorScriptingUtilities "-ExecCmds=py C:/Users/Windows11/.codex/tmp/rollback_action_ai.py" -NullRHI -RenderOffscreen -unattended -nosound -nop4 -NoSplash "-abslog=E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/logs/rollback_runtime.log"
+ROLLBACK COMMAND: & "C:/Program Files/Git/bin/bash.exe" "E:/UNREAL/ue projects/ThirdPerson/DesignDocs/ActionAIRepair_20260906/ROLLBACK.sh" "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_test/ThirdPerson"
+
+SHA256 ORIGINAL -> MODIFIED:
+Content/__ExternalActors__/ThirdPerson/Lvl_ThirdPerson/8/QD/9W1U2X0C6GGAWJXDWIFM0Z.uasset
+8e91a05bffe95fc24eff43af7bd14a842fd3a45c4d993b62dcb6090d2f1efa1f -> b590c05152e8eac60f166aa6fab1fa2a3704e75ab30b62d48bb7c6c50d4e7a2c
+Source/ThirdPerson/Animation/CombatActionRules.h
+2ec71298df9f8ebd32790c381c2005bf2f01b20870c5eaff42ecbdab70fb162c -> 37ea40be88d59038667adf52263e72d1b3da7478b74ac8fc34fdcdb51ac2c7d3
+Source/ThirdPerson/Character/TPCCharacter.cpp
+23df046b69d1c78a5aa5b7456aa0df37f32e1891f8c729f88f792bc17cba64e3 -> dd9a2ec0a5b31c264c3d25bb4c7e4e443ed2eb6aecedb5c02ce015b0a2ff04e7
+Source/ThirdPerson/Character/TPCCharacter.h
+e478460453ff0ca48ac98ccaac2d9accb45c1cef29212c1a16801619cbd72bfa -> 96d06c18cb87f3e206223f24a2d1e9b8fc68d4d1225cf6b6ff0f4ab34224c08b
+Source/ThirdPerson/Components/CombatComponent.cpp
+65d5d35364a9ec40f450ee1aeadc87e99a817de35d9548e1d3a9b39945232973 -> 9198a5347891fb5029531864fe129210809cf927ed0c7f5a10b91acec78b9e07
+Source/ThirdPerson/Components/CombatComponent.h
+c9f7ce186430502592dcc88f0aac0a8cf492bb0cbc3b72b47723ba63d1e44c65 -> 0e1a98d8ea3c7fbd0d222dafdb7f9b975d2d41c68594120ef2d5c89969d7cf14
+Source/ThirdPerson/Tests/ActionSystemTests.cpp
+4b57a7e18690261fe0d789ef0de5f0a4c7dd68b1302efaabd39c75fd79731383 -> 53237a631999178030ddf46f1cefc265cad494ac67023e7492a457201b17610f
+
+RAW RESULT FILES:
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\baseline_pie.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\baseline_action_and_nav_build.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\modified_runtime.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\rollback_runtime.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\production_check.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\baseline_automation\index.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\modified_automation\index.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\rollback_automation\index.json
+E:\UNREAL\ue projects\ThirdPerson\Saved\ActionAIRepair\20260906_v1\production_automation\index.json
+
+FINAL ARTIFACT CHECKS:
+DIFF command: & "C:/Program Files/Git/cmd/git.exe" -C "E:/UNREAL/ue projects/ThirdPerson/Saved/ActionAIRepair/20260906_v1/rollback_test/ThirdPerson" apply --check "E:/UNREAL/ue projects/ThirdPerson/DesignDocs/ActionAIRepair_20260906/DIFF_FILE.patch"
+Literal output: (empty); exit status: 0.
+ROLLBACK.sh executable test: ROLLBACK_EXECUTABLE=PASS; exit status 0.
+Complete original Source/Content manifest scan: exactly the 7 intended files differ. UI assets and enemy/AI source code remain unchanged.
+
+Equivalent PowerShell result-audit invocation (inputs BASELINE / MODIFIED / ROLLBACK):
+$Python = "C:/Users/Windows11/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe"
+$Check = "E:/UNREAL/ue projects/ThirdPerson/DesignDocs/ActionAIRepair_20260906/VERIFY.py"
+& $Python $Check BASELINE
+& $Python $Check MODIFIED
+& $Python $Check ROLLBACK
