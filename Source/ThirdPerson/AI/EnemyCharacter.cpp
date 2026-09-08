@@ -20,6 +20,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "TimerManager.h"
 #include "BrainComponent.h"
+#include "MeleeAICombatSubsystem.h"
 AEnemyCharacter::AEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -179,6 +180,11 @@ void AEnemyCharacter::HandleDeath()
 		return;
 	}
 	bDead = true;
+	ClearHitReaction();
+	if (UMeleeAICombatSubsystem* Coordinator = GetWorld()->GetSubsystem<UMeleeAICombatSubsystem>())
+	{
+		Coordinator->ReleaseEnemy(this);
+	}
 	UE_LOG(LogTemp, Warning, TEXT("Enemy died"));
 	SetLockOnIndicatorVisible(false);
 	if (HealthBarWidget)
@@ -283,11 +289,60 @@ void AEnemyCharacter::HandleHealthChanged(
 		}
 		// Air/landing/get-up reactions retain their paired pose and physical recovery gate.
 	}
-	else if (!bDead && bTookDamage &&CurrentHealth > 0.f &&HitReactMontage)
+	else if (!bDead && bTookDamage && CurrentHealth > 0.f && !bParryStaggered)
 	{
-		PlayAnimMontage(HitReactMontage);
+		BeginHitReaction();
 	}
 	PreviousHealth = CurrentHealth;
+}
+
+void AEnemyCharacter::BeginHitReaction()
+{
+	// Repeated hits extend one recovery gate; they must not overwrite the saved
+	// enabled state with the disabled state owned by the previous hit.
+	if (!bHitReacting)
+	{
+		bCombatEnabledBeforeHit = CombatComponent && CombatComponent->IsCombatEnabled();
+		MovementModeBeforeHit = GetCharacterMovement()->MovementMode;
+		bHitReactionDisabledMovement = GetCharacterMovement()->IsMovingOnGround();
+	}
+	bHitReacting = true;
+	SetAIStunned(true);
+	if (Controller) Controller->StopMovement();
+	if (CombatComponent) CombatComponent->SetCombatEnabled(false);
+	const float FallingSpeed = GetCharacterMovement()->IsFalling() ? GetCharacterMovement()->Velocity.Z : 0.f;
+	GetCharacterMovement()->StopMovementImmediately();
+	if (GetCharacterMovement()->IsFalling()) GetCharacterMovement()->Velocity.Z = FallingSpeed;
+	if (bHitReactionDisabledMovement) GetCharacterMovement()->DisableMovement();
+
+	UAnimInstance* Anim = GetMesh() ? GetMesh()->GetAnimInstance() : nullptr;
+	const float MontageDuration = HitReactMontage && Anim
+		? Anim->Montage_Play(HitReactMontage, 1.f, EMontagePlayReturnType::Duration) : 0.f;
+	GetWorldTimerManager().SetTimer(HitReactionTimerHandle, this,
+		&ThisClass::FinishHitReaction,
+		FMath::Max(0.05f, MontageDuration > 0.f ? MontageDuration : HitReactFallbackDuration), false);
+}
+
+void AEnemyCharacter::FinishHitReaction()
+{
+	if (!bHitReacting) return;
+	bHitReacting = false;
+	if (bDead || bParryStaggered || bUppercutStunned) return;
+	if (bHitReactionDisabledMovement && GetCharacterMovement()->MovementMode == MOVE_None)
+	{
+		GetCharacterMovement()->SetMovementMode(static_cast<EMovementMode>(MovementModeBeforeHit));
+	}
+	bHitReactionDisabledMovement = false;
+	if (CombatComponent && bCombatEnabledBeforeHit) CombatComponent->SetCombatEnabled(true);
+	SetAIStunned(false);
+}
+
+void AEnemyCharacter::ClearHitReaction()
+{
+	// Stronger reactions take ownership of movement/combat before restoring them.
+	GetWorldTimerManager().ClearTimer(HitReactionTimerHandle);
+	bHitReacting = false;
+	bHitReactionDisabledMovement = false;
 }
 
 void AEnemyCharacter::ApplyParryStagger(AActor* ParryingActor)
@@ -297,18 +352,13 @@ void AEnemyCharacter::ApplyParryStagger(AActor* ParryingActor)
 		return;
 	}
 
+	ClearHitReaction();
 	bParryStaggered = true;
 	if (Controller)
 	{
 		Controller->StopMovement();
 	}
-	if (AAIController* AIController = Cast<AAIController>(Controller))
-	{
-		if (UBlackboardComponent* Blackboard = AIController->GetBlackboardComponent())
-		{
-			Blackboard->SetValueAsBool(TEXT("bIsStunned"), true);
-		}
-	}
+	SetAIStunned(true);
 	if (CombatComponent)
 	{
 		CombatComponent->SetCombatEnabled(false);
@@ -339,6 +389,7 @@ void AEnemyCharacter::ApplyUppercutHit(AActor* AttackingActor)
 		return;
 	}
 	if (LaunchPhase == EEnemyLaunchPhase::Airborne && LaunchesThisFlight >= MaxLaunchesPerFlight) return;
+	ClearHitReaction();
 	++LaunchesThisFlight;
 	LaunchPhase = EEnemyLaunchPhase::Airborne;
 	bReceivedUppercutLanding = false;
@@ -508,11 +559,19 @@ void AEnemyCharacter::FinishUppercutStun()
 
 void AEnemyCharacter::SetAIStunned(bool bStunned)
 {
+	if (bStunned && GetWorld())
+	{
+		if (UMeleeAICombatSubsystem* Coordinator = GetWorld()->GetSubsystem<UMeleeAICombatSubsystem>())
+		{
+			Coordinator->ReleaseAttackToken(this);
+		}
+	}
 	if (AAIController* AIController = Cast<AAIController>(Controller))
 	{
 		if (UBlackboardComponent* Blackboard = AIController->GetBlackboardComponent())
 		{
 			Blackboard->SetValueAsBool(TEXT("bIsStunned"), bStunned);
+			if (bStunned) Blackboard->SetValueAsBool(TEXT("bHasAttackToken"), false);
 		}
 	}
 }

@@ -25,6 +25,7 @@ public:
 	int32 GetActiveAttackerCount() const { return AttackTokenHolders.Num(); }
 
 private:
+	friend struct FMeleeAITestAccess;
 	void RemoveInvalidEntries();
 
 	static constexpr int32 CombatSlotCount = 8;

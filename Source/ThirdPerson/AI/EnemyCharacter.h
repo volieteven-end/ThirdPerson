@@ -34,6 +34,8 @@ public:
 	EEnemyLaunchPhase GetLaunchPhase() const { return LaunchPhase; }
 	UFUNCTION(BlueprintPure, Category = "Combat")
 	bool IsParryStaggered() const { return bParryStaggered; }
+	UFUNCTION(BlueprintPure, Category = "Combat")
+	bool IsHitReacting() const { return bHitReacting; }
 
     /** Ranged patrol samples reachable points around the spawn/HomeLocation when PatrolPoints is empty. */
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="AI|Patrol", meta=(ClampMin="100.0"))
@@ -44,6 +46,9 @@ public:
 	virtual void HandleHealthChanged(float CurrentHealth,float MaxHealth);
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> HitReactMontage;
+	/** Recovery gate when no ordinary hit montage can be played. */
+	UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit Reaction", meta = (ClampMin = "0.05"))
+	float HitReactFallbackDuration = 0.35f;
 	float PreviousHealth = 0.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathMontage;
@@ -138,6 +143,7 @@ protected:
 	float LockOnCameraAimBelowIndicator = 70.f;
 private:
     friend struct FTPCSwordPIETestAccess;
+	friend struct FMeleeAITestAccess;
 	int32 CurrentPatrolIndex = 0;
 	void PositionLockOnIndicator();
 	FVector GetLockOnCameraReferencePoint() const;
@@ -149,6 +155,14 @@ private:
 	void StartUppercutDownIdle();
 	void FinishUppercutStun();
 	void SetAIStunned(bool bStunned);
+	void BeginHitReaction();
+	void FinishHitReaction();
+	void ClearHitReaction();
+	bool bHitReacting = false;
+	bool bHitReactionDisabledMovement = false;
+	bool bCombatEnabledBeforeHit = false;
+	uint8 MovementModeBeforeHit = 0;
+	FTimerHandle HitReactionTimerHandle;
 	bool bParryStaggered = false;
 	bool bUppercutStunned = false;
 	bool bUppercutLandingRecovery = false;

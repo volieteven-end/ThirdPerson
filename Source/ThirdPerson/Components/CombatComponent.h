@@ -81,6 +81,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Combat|Block")
 	bool IsParryWindowActive() const { return bParryWindowActive; }
 	void SetCombatEnabled(bool bEnabled);
+	bool IsCombatEnabled() const { return bCombatEnabled; }
 	float ModifyIncomingDamage(float IncomingDamage, const AActor* DamageSource);
 	float ResolveIncomingHit(const FCombatHitSpec& Spec, const AActor* Source, FCombatHitResult& Result);
 	FCombatHitSpec MakeCurrentHitSpec(const FVector& ImpactPoint) const;
@@ -215,6 +216,7 @@ private:
     bool IsDashComboContextValid() const;
 	bool bAirDiveLanded = false;
 	friend struct FTPActionTestAccess;
+	friend struct FMeleeAITestAccess;
     friend struct FTPCSwordPIETestAccess;
  friend struct FCountessBossTestAccess;
 	bool bAttackWindowActive = false;

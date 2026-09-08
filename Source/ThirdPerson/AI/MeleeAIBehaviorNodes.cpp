@@ -5,6 +5,7 @@
 #include "../Components/CombatComponent.h"
 #include "../Components/HealthComponent.h"
 #include "AIController.h"
+#include "AISystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Engine/OverlapResult.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -187,6 +188,7 @@ void UBTService_UpdateEnemySeparation::TickNode(
 UBTService_UpdateMeleeCombat::UBTService_UpdateMeleeCombat()
 {
 	NodeName = TEXT("Update Melee Combat Context");
+	bCallTickOnSearchStart = true;
 	Interval = 0.15f;
 	RandomDeviation = 0.03f;
 	TargetActorKey.SelectedKeyName = MeleeAIKeys::TargetActor;
@@ -208,20 +210,74 @@ void UBTService_UpdateMeleeCombat::TickNode(
 	AActor* TargetActor = Blackboard
 		? Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKey.SelectedKeyName))
 		: nullptr;
-	if (!Blackboard || !EnemyPawn || !TargetActor)
+	if (!Blackboard || !EnemyPawn)
 	{
+		return;
+	}
+	const UHealthComponent* TargetHealth = IsValid(TargetActor)
+		? TargetActor->FindComponentByClass<UHealthComponent>() : nullptr;
+	if (TargetHealth && TargetHealth->GetCurrentHealth() <= 0.f)
+	{
+		Blackboard->ClearValue(TargetActorKey.SelectedKeyName);
+		TargetActor = nullptr;
+	}
+	const bool bDisabled = Blackboard->GetValueAsBool(TEXT("bIsStunned")) ||
+		Blackboard->GetValueAsBool(TEXT("bIsDead"));
+	if (!IsValid(TargetActor) || bDisabled)
+	{
+		Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, BIG_NUMBER);
+		Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, false);
+		Blackboard->SetValueAsBool(IsInAttackRangeKey.SelectedKeyName, false);
+		Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, false);
 		return;
 	}
 
 	const float Distance = FVector::Dist2D(
 		EnemyPawn->GetActorLocation(), TargetActor->GetActorLocation());
 	Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, Distance);
-	Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName,
-		Controller->LineOfSightTo(TargetActor));
+	const bool bHasSight = Controller->LineOfSightTo(TargetActor);
+	Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, bHasSight);
 	Blackboard->SetValueAsBool(IsInAttackRangeKey.SelectedKeyName,
-		Distance <= AttackDistance);
+		bHasSight && Distance <= AttackDistance);
+	const UCombatComponent* Combat = EnemyPawn->FindComponentByClass<UCombatComponent>();
+	const bool bAttacking = Combat && Combat->IsMeleeAttackInProgress();
+	const float RetreatThreshold = Blackboard->GetValueAsBool(IsTooCloseKey.SelectedKeyName)
+		? FMath::Max(TooCloseDistance, TooCloseReleaseDistance) : TooCloseDistance;
 	Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName,
-		Distance <= TooCloseDistance);
+		!bAttacking && Distance <= RetreatThreshold);
+}
+
+UBTService_MeleeAttackReservation::UBTService_MeleeAttackReservation()
+{
+	NodeName = TEXT("Own Melee Attack Reservation");
+	bCreateNodeInstance = true;
+	bNotifyTick = false;
+	bNotifyBecomeRelevant = true;
+	bNotifyCeaseRelevant = true;
+}
+
+void UBTService_MeleeAttackReservation::OnBecomeRelevant(
+	UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	Super::OnBecomeRelevant(OwnerComp, NodeMemory);
+	ReservedPawn = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetPawn() : nullptr;
+}
+
+void UBTService_MeleeAttackReservation::OnCeaseRelevant(
+	UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
+	if (APawn* Pawn = ReservedPawn.Get())
+	{
+		if (UMeleeAICombatSubsystem* Coordinator = Pawn->GetWorld()->GetSubsystem<UMeleeAICombatSubsystem>())
+			Coordinator->ReleaseAttackToken(Pawn);
+		if (UCombatComponent* Combat = Pawn->FindComponentByClass<UCombatComponent>();
+			Combat && Combat->IsMeleeAttackInProgress())
+			Combat->CancelActiveAttack();
+	}
+	if (UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent())
+		Blackboard->SetValueAsBool(MeleeAIKeys::HasAttackToken, false);
+	ReservedPawn.Reset();
+	Super::OnCeaseRelevant(OwnerComp, NodeMemory);
 }
 
 UBTTask_RequestCombatSlot::UBTTask_RequestCombatSlot()
@@ -323,7 +379,7 @@ EBTNodeResult::Type UBTTask_PerformMeleeAttack::ExecuteTask(
 	uint8* NodeMemory)
 {
 	AAIController* Controller = OwnerComp.GetAIOwner();
-	APawn* EnemyPawn = Controller ? Controller->GetPawn() : nullptr;
+	ACharacter* EnemyPawn = Controller ? Cast<ACharacter>(Controller->GetPawn()) : nullptr;
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	AActor* TargetActor = Blackboard
 		? Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKey.SelectedKeyName))
@@ -331,34 +387,78 @@ EBTNodeResult::Type UBTTask_PerformMeleeAttack::ExecuteTask(
 	if (!EnemyPawn || !TargetActor || !Blackboard ||
 		!Blackboard->GetValueAsBool(HasAttackTokenKey.SelectedKeyName))
 	{
-		return EBTNodeResult::Failed;
-	}
-
-	const float ActualDistance = FVector::Dist2D(
-		EnemyPawn->GetActorLocation(), TargetActor->GetActorLocation());
-	if (ActualDistance > MaximumAttackDistance)
-	{
 		ReleaseToken(OwnerComp);
 		return EBTNodeResult::Failed;
 	}
-
-	// Character movement normally owns enemy yaw. Stop the path and face the
-	// target explicitly so RotateToFace does not fight bOrientRotationToMovement.
-	Controller->StopMovement();
-	
+	RestoreFacing();
+	bAttackStarted = false;
+	AttackPawn = EnemyPawn;
+	AttackController = Controller;
+	AttackTarget = TargetActor;
 	ActiveCombatComponent = EnemyPawn->FindComponentByClass<UCombatComponent>();
-	if (!ActiveCombatComponent.IsValid())
+	if (!ActiveCombatComponent.IsValid() || !ActiveCombatComponent->IsCombatEnabled())
 	{
 		ReleaseToken(OwnerComp);
 		return EBTNodeResult::Failed;
 	}
+	Controller->StopMovement();
+	EnemyPawn->GetCharacterMovement()->StopMovementImmediately();
+	bPreviousOrientToMovement = EnemyPawn->GetCharacterMovement()->bOrientRotationToMovement;
+	bPreviousControllerDesiredRotation = EnemyPawn->GetCharacterMovement()->bUseControllerDesiredRotation;
+	bPreviousControllerYaw = EnemyPawn->bUseControllerRotationYaw;
+	PreviousFocusActor = Controller->GetFocusActorForPriority(EAIFocusPriority::Gameplay);
+	PreviousFocusLocation = Controller->GetFocalPointForPriority(EAIFocusPriority::Gameplay);
+	bFacingPolicySaved = true;
+	EnemyPawn->bUseControllerRotationYaw = false;
+	EnemyPawn->GetCharacterMovement()->bOrientRotationToMovement = false;
+	EnemyPawn->GetCharacterMovement()->bUseControllerDesiredRotation = true;
+	FacingStartedAt = EnemyPawn->GetWorld()->GetTimeSeconds();
+	Controller->SetFocus(TargetActor, EAIFocusPriority::Gameplay);
+	return TryStartAttack(OwnerComp);
+}
 
+EBTNodeResult::Type UBTTask_PerformMeleeAttack::TryStartAttack(UBehaviorTreeComponent& OwnerComp)
+{
+	ACharacter* Pawn = AttackPawn.Get();
+	AAIController* Controller = AttackController.Get();
+	AActor* Target = AttackTarget.Get();
+	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
+	const UHealthComponent* TargetHealth = Target ? Target->FindComponentByClass<UHealthComponent>() : nullptr;
+	if (!Pawn || !Controller || !Target || !Blackboard || !ActiveCombatComponent.IsValid() ||
+		!ActiveCombatComponent->IsCombatEnabled() ||
+		Blackboard->GetValueAsObject(MeleeAIKeys::TargetActor) != Target ||
+		!Blackboard->GetValueAsBool(MeleeAIKeys::HasAttackToken) ||
+		Blackboard->GetValueAsBool(TEXT("bIsStunned")) || Blackboard->GetValueAsBool(TEXT("bIsDead")) ||
+		(TargetHealth && TargetHealth->GetCurrentHealth() <= 0.f) ||
+		FVector::Dist2D(Pawn->GetActorLocation(), Target->GetActorLocation()) > MaximumAttackDistance ||
+		!Controller->LineOfSightTo(Target))
+	{
+		ReleaseToken(OwnerComp);
+		return EBTNodeResult::Failed;
+	}
+	const FVector ToTarget = (Target->GetActorLocation() - Pawn->GetActorLocation()).GetSafeNormal2D();
+	const float FacingDot = FVector::DotProduct(Pawn->GetActorForwardVector().GetSafeNormal2D(), ToTarget);
+	if (!ToTarget.IsNearlyZero() && FacingDot < FMath::Cos(FMath::DegreesToRadians(AttackFacingTolerance)))
+	{
+		if (Pawn->GetWorld()->GetTimeSeconds() - FacingStartedAt >= MaximumFacingTime)
+		{
+			ReleaseToken(OwnerComp);
+			return EBTNodeResult::Failed;
+		}
+		return EBTNodeResult::InProgress;
+	}
+	// Commit the direction once aligned. Root-motion strikes do not home after
+	// the player dodges; control/view yaw must not follow a retreat path either.
+	Controller->ClearFocus(EAIFocusPriority::Gameplay);
+	Controller->SetControlRotation(Pawn->GetActorRotation());
 	ActiveCombatComponent->TryAttack();
 	if (!ActiveCombatComponent->IsMeleeAttackInProgress())
 	{
 		ReleaseToken(OwnerComp);
-		return EBTNodeResult::Succeeded;
+		return EBTNodeResult::Failed;
 	}
+	bAttackStarted = true;
+	Blackboard->SetValueAsBool(MeleeAIKeys::IsTooClose, false);
 	return EBTNodeResult::InProgress;
 }
 
@@ -367,6 +467,12 @@ void UBTTask_PerformMeleeAttack::TickTask(
 	uint8* NodeMemory,
 	float DeltaSeconds)
 {
+	if (!bAttackStarted)
+	{
+		const EBTNodeResult::Type Result = TryStartAttack(OwnerComp);
+		if (Result != EBTNodeResult::InProgress) FinishLatentTask(OwnerComp, Result);
+		return;
+	}
 	if (!ActiveCombatComponent.IsValid() ||
 		!ActiveCombatComponent->IsMeleeAttackInProgress())
 	{
@@ -379,14 +485,15 @@ EBTNodeResult::Type UBTTask_PerformMeleeAttack::AbortTask(
 	UBehaviorTreeComponent& OwnerComp,
 	uint8* NodeMemory)
 {
+	if (ActiveCombatComponent.IsValid()) ActiveCombatComponent->CancelActiveAttack();
 	ReleaseToken(OwnerComp);
 	return Super::AbortTask(OwnerComp, NodeMemory);
 }
 
-void UBTTask_PerformMeleeAttack::ReleaseToken(UBehaviorTreeComponent& OwnerComp) const
+void UBTTask_PerformMeleeAttack::ReleaseToken(UBehaviorTreeComponent& OwnerComp)
 {
 	AAIController* Controller = OwnerComp.GetAIOwner();
-	APawn* EnemyPawn = Controller ? Controller->GetPawn() : nullptr;
+	APawn* EnemyPawn = AttackPawn.IsValid() ? AttackPawn.Get() : (Controller ? Controller->GetPawn() : nullptr);
 	if (EnemyPawn && EnemyPawn->GetWorld())
 	{
 		if (UMeleeAICombatSubsystem* Coordinator =
@@ -399,10 +506,33 @@ void UBTTask_PerformMeleeAttack::ReleaseToken(UBehaviorTreeComponent& OwnerComp)
 	{
 		Blackboard->SetValueAsBool(HasAttackTokenKey.SelectedKeyName, false);
 	}
-	if (Controller)
+	RestoreFacing();
+	ActiveCombatComponent.Reset();
+	AttackPawn.Reset();
+	AttackController.Reset();
+	AttackTarget.Reset();
+	bAttackStarted = false;
+}
+
+void UBTTask_PerformMeleeAttack::RestoreFacing()
+{
+	if (!bFacingPolicySaved) return;
+	if (AttackController.IsValid())
 	{
-		Controller->ClearFocus(EAIFocusPriority::Gameplay);
+		AttackController->ClearFocus(EAIFocusPriority::Gameplay);
+		if (PreviousFocusActor.IsValid())
+			AttackController->SetFocus(PreviousFocusActor.Get(), EAIFocusPriority::Gameplay);
+		else if (FAISystem::IsValidLocation(PreviousFocusLocation))
+			AttackController->SetFocalPoint(PreviousFocusLocation, EAIFocusPriority::Gameplay);
 	}
+	if (AttackPawn.IsValid())
+	{
+		AttackPawn->bUseControllerRotationYaw = bPreviousControllerYaw;
+		AttackPawn->GetCharacterMovement()->bOrientRotationToMovement = bPreviousOrientToMovement;
+		AttackPawn->GetCharacterMovement()->bUseControllerDesiredRotation = bPreviousControllerDesiredRotation;
+	}
+	bFacingPolicySaved = false;
+	PreviousFocusActor.Reset();
 }
 
 UBTTask_SelectRetreatPosition::UBTTask_SelectRetreatPosition()

@@ -8,6 +8,8 @@
 #include "MeleeAIBehaviorNodes.generated.h"
 
 class UCombatComponent;
+class ACharacter;
+class AAIController;
 
 /**
  * Periodically writes a nearby-enemy avoidance destination to the Blackboard.
@@ -71,6 +73,23 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector IsTooCloseKey;
 	UPROPERTY(EditAnywhere, Category = "Combat") float AttackDistance = 165.f;
 	UPROPERTY(EditAnywhere, Category = "Combat") float TooCloseDistance = 95.f;
+	/** Keep retreat selected until this far away; attack motion never requests retreat. */
+	UPROPERTY(EditAnywhere, Category = "Combat") float TooCloseReleaseDistance = 130.f;
+};
+
+/** Owns the reservation for the ENTIRE approach/attack sequence, including failed MoveTo and aborts. */
+UCLASS()
+class THIRDPERSON_API UBTService_MeleeAttackReservation : public UBTService
+{
+	GENERATED_BODY()
+public:
+	UBTService_MeleeAttackReservation();
+protected:
+	virtual void OnBecomeRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	virtual void OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+private:
+	friend struct FMeleeAITestAccess;
+	TWeakObjectPtr<APawn> ReservedPawn;
 };
 
 UCLASS()
@@ -142,10 +161,28 @@ protected:
 	/** Final safety check; an attack never starts beyond this center-to-center distance. */
 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0"))
 	float MaximumAttackDistance = 180.f;
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "1.0", ClampMax = "45.0"))
+	float AttackFacingTolerance = 10.f;
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.1"))
+	float MaximumFacingTime = 1.f;
 
 private:
-	void ReleaseToken(UBehaviorTreeComponent& OwnerComp) const;
+	friend struct FMeleeAITestAccess;
+	EBTNodeResult::Type TryStartAttack(UBehaviorTreeComponent& OwnerComp);
+	void ReleaseToken(UBehaviorTreeComponent& OwnerComp);
+	void RestoreFacing();
 	TWeakObjectPtr<UCombatComponent> ActiveCombatComponent;
+	TWeakObjectPtr<ACharacter> AttackPawn;
+	TWeakObjectPtr<AAIController> AttackController;
+	TWeakObjectPtr<AActor> AttackTarget;
+	TWeakObjectPtr<AActor> PreviousFocusActor;
+	FVector PreviousFocusLocation = FVector::ZeroVector;
+	float FacingStartedAt = 0.f;
+	bool bAttackStarted = false;
+	bool bFacingPolicySaved = false;
+	bool bPreviousOrientToMovement = false;
+	bool bPreviousControllerDesiredRotation = false;
+	bool bPreviousControllerYaw = false;
 };
 
 UCLASS()

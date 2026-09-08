@@ -12,6 +12,9 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "MeleeAICombatSubsystem.h"
+#include "../Components/EquipmentComponent.h"
+#include "../Weapons/WeaponDefinition.h"
+#include "TimerManager.h"
 
 namespace EnemyBlackboardKeys
 {
@@ -46,6 +49,8 @@ AEnemyAIController::AEnemyAIController()
 void AEnemyAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
+	GetWorldTimerManager().ClearTimer(TargetMemoryTimer);
+	RememberedTarget.Reset();
 
 	if (!SightConfig)
 	{
@@ -86,11 +91,14 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 		GetBlackboardComponent()->SetValueAsBool(
 			EnemyBlackboardKeys::HasAttackToken,
 			false);
+		GetBlackboardComponent()->SetValueAsFloat(TEXT("DistanceToTarget"), BIG_NUMBER);
 	}
 }
 
 void AEnemyAIController::OnUnPossess()
 {
+	GetWorldTimerManager().ClearTimer(TargetMemoryTimer);
+	RememberedTarget.Reset();
 	if (APawn* ControlledPawn = GetPawn())
 	{
 		if (UWorld* World = ControlledPawn->GetWorld())
@@ -117,6 +125,14 @@ void AEnemyAIController::HandleTargetPerceptionUpdated(
 	{
 		return;
 	}
+	const UHealthComponent* TargetHealth = Actor->FindComponentByClass<UHealthComponent>();
+	const UHealthComponent* OwnHealth = GetPawn() ? GetPawn()->FindComponentByClass<UHealthComponent>() : nullptr;
+	if ((TargetHealth && TargetHealth->GetCurrentHealth() <= 0.f) ||
+		(OwnHealth && OwnHealth->GetCurrentHealth() <= 0.f))
+	{
+		if (BlackboardComp->GetValueAsObject(EnemyBlackboardKeys::TargetActor) == Actor) ClearCombatTarget();
+		return;
+	}
 
 	BlackboardComp->SetValueAsVector(
 		EnemyBlackboardKeys::LastKnownLocation, Stimulus.StimulusLocation);
@@ -125,21 +141,79 @@ void AEnemyAIController::HandleTargetPerceptionUpdated(
 
 	if (Stimulus.WasSuccessfullySensed())
 	{
+		GetWorldTimerManager().ClearTimer(TargetMemoryTimer);
+		RememberedTarget.Reset();
+		LastTargetContactTime = GetWorld()->GetTimeSeconds();
 		BlackboardComp->SetValueAsObject(EnemyBlackboardKeys::TargetActor, Actor);
 	}
-	else
+	else if (BlackboardComp->GetValueAsObject(EnemyBlackboardKeys::TargetActor) == Actor)
+	{
+		if (UsesMeleeTargetMemory())
+		{
+			RememberedTarget = Actor;
+			LastTargetContactTime = GetWorld()->GetTimeSeconds();
+			GetWorldTimerManager().SetTimer(TargetMemoryTimer, this,
+				&ThisClass::UpdateRememberedTarget, 0.15f, true);
+		}
+		else ClearCombatTarget();
+	}
+}
+
+bool AEnemyAIController::UsesMeleeTargetMemory() const
+{
+	const UEquipmentComponent* Equipment = GetPawn() ? GetPawn()->FindComponentByClass<UEquipmentComponent>() : nullptr;
+	const UWeaponDefinition* Weapon = Equipment ? Equipment->GetEquippedWeaponDefinition() : nullptr;
+	return !Weapon || Weapon->WeaponType == EWeaponType::Melee;
+}
+
+void AEnemyAIController::UpdateRememberedTarget()
+{
+	UBlackboardComponent* BlackboardComp = GetBlackboardComponent();
+	AActor* Target = RememberedTarget.Get();
+	APawn* ControlledPawn = GetPawn();
+	if (!bUsingBehaviorTree || !BlackboardComp || !ControlledPawn || !Target ||
+		BlackboardComp->GetValueAsObject(EnemyBlackboardKeys::TargetActor) != Target)
+	{
+		GetWorldTimerManager().ClearTimer(TargetMemoryTimer);
+		RememberedTarget.Reset();
+		return;
+	}
+	const UHealthComponent* Health = Target->FindComponentByClass<UHealthComponent>();
+	if ((Health && Health->GetCurrentHealth() <= 0.f) || BlackboardComp->GetValueAsBool(TEXT("bIsDead")))
+	{
+		ClearCombatTarget();
+		return;
+	}
+	const float Now = GetWorld()->GetTimeSeconds();
+	// Once engaged, a rearward movement command does not make a nearby visible
+	// player cease to exist. Occlusion and disengage distance still expire memory.
+	const bool bVisible = FVector::DistSquared(ControlledPawn->GetActorLocation(), Target->GetActorLocation()) <=
+		FMath::Square(LoseSightRadius) && LineOfSightTo(Target);
+	BlackboardComp->SetValueAsBool(EnemyBlackboardKeys::HasLineOfSight, bVisible);
+	if (bVisible)
+	{
+		LastTargetContactTime = Now;
+		BlackboardComp->SetValueAsVector(EnemyBlackboardKeys::LastKnownLocation, Target->GetActorLocation());
+		return;
+	}
+	const UCombatComponent* Combat = ControlledPawn->FindComponentByClass<UCombatComponent>();
+	if (Now - LastTargetContactTime < MeleeTargetMemorySeconds || (Combat && Combat->IsMeleeAttackInProgress())) return;
+	ClearCombatTarget();
+}
+
+void AEnemyAIController::ClearCombatTarget()
+{
+	GetWorldTimerManager().ClearTimer(TargetMemoryTimer);
+	RememberedTarget.Reset();
+	if (UBlackboardComponent* BlackboardComp = GetBlackboardComponent())
 	{
 		BlackboardComp->ClearValue(EnemyBlackboardKeys::TargetActor);
-		if (APawn* ControlledPawn = GetPawn())
-		{
-			if (UMeleeAICombatSubsystem* Coordinator =
-				ControlledPawn->GetWorld()->GetSubsystem<UMeleeAICombatSubsystem>())
-			{
-				Coordinator->ReleaseAttackToken(ControlledPawn);
-			}
-		}
+		BlackboardComp->SetValueAsBool(EnemyBlackboardKeys::HasLineOfSight, false);
 		BlackboardComp->SetValueAsBool(EnemyBlackboardKeys::HasAttackToken, false);
 	}
+	if (APawn* ControlledPawn = GetPawn())
+		if (UMeleeAICombatSubsystem* Coordinator = ControlledPawn->GetWorld()->GetSubsystem<UMeleeAICombatSubsystem>())
+			Coordinator->ReleaseEnemy(ControlledPawn);
 }
 
 void AEnemyAIController::Tick(float DeltaTime)

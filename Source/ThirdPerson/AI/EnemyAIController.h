@@ -43,6 +43,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI|Perception")
 	float LoseSightRadius = 1200.f;
+	/** Engaged melee enemies tolerate a brief occlusion or a turn away from the target. */
+	UPROPERTY(EditDefaultsOnly, Category = "AI|Perception", meta = (ClampMin = "0.1"))
+	float MeleeTargetMemorySeconds = 0.75f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	float ChaseDistance = 800.f;
@@ -53,6 +56,13 @@ protected:
 	float AttackDistance = 150.f;
 	void TryAttack();
 private:
+	friend struct FMeleeAITestAccess;
+	bool UsesMeleeTargetMemory() const;
+	void UpdateRememberedTarget();
+	void ClearCombatTarget();
+	FTimerHandle TargetMemoryTimer;
+	TWeakObjectPtr<AActor> RememberedTarget;
+	float LastTargetContactTime = 0.f;
 	bool bIsChasing = false;
 	bool bUsingBehaviorTree = false;
 };
