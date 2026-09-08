@@ -24,6 +24,8 @@ ACountessBossCharacter::ACountessBossCharacter()
  DropPickupClass=nullptr; DropChance=0.f; ExperienceReward=300;
  HealthComponent->MaxHealth=1500; HealthComponent->CurrentHealth=1500;
  GetCharacterMovement()->RotationRate=FRotator(0,240,0);
+ GetCharacterMovement()->MaxAcceleration=1000.f;
+ GetCharacterMovement()->BrakingDecelerationWalking=1200.f;
 }
 void ACountessBossCharacter::BeginPlay()
 {

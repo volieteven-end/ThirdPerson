@@ -26,9 +26,28 @@ public:
  UPROPERTY(BlueprintReadOnly, Category="Boss") float DeathAlpha=0;
  UPROPERTY(BlueprintReadOnly, Category="Boss") float DeathTime=0;
  UPROPERTY(BlueprintReadOnly, Category="Boss") float HitTime=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") EBossLocomotionState LocomotionState=EBossLocomotionState::Idle;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float Acceleration=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float DirectionChange=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float FacingDelta=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float YawRate=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float CircleAlpha=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float CircleRightAlpha=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float TransitionAlpha=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float TransitionTime=0;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") float TransitionRate=1;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") bool bTransitionActive=false;
+ UPROPERTY(BlueprintReadOnly, Category="Boss|Locomotion") TObjectPtr<UAnimSequence> TransitionSequence;
  UPROPERTY(BlueprintReadOnly, Category="Boss") TObjectPtr<UAnimSequence> HitSequence;
  UPROPERTY(BlueprintReadOnly, Category="Boss") TObjectPtr<const UBossDefinition> BossDefinition;
 protected:
  virtual FAnimInstanceProxy* CreateAnimInstanceProxy() override;
  virtual void DestroyAnimInstanceProxy(FAnimInstanceProxy* Proxy) override;
+private:
+ float PreviousSpeed=0,PreviousYaw=0,LocomotionElapsed=0,TransitionDuration=0,TransitionCooldown=0;
+ FVector PreviousMoveDirection=FVector::ForwardVector;
+ int32 LatchedDirection=0;
+ bool bMoving=false,bPoseInitialized=false;
+ void UpdateLocomotion(const class ACountessBossCharacter* Boss,float Delta);
+ void BeginLocomotionTransition(EBossLocomotionState State,UAnimSequence* Sequence,float Duration);
 };

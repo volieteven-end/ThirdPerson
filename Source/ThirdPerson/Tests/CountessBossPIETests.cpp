@@ -37,16 +37,27 @@
 #include "Camera/CameraComponent.h"
 #include "UnrealClient.h"
 #include "Misc/CommandLine.h"
+#include "HAL/FileManager.h"
+#include "../Character/TPCCharacter.h"
+#include "../Components/ActionComponent.h"
+#include "../Components/CombatComponent.h"
+#include "../Components/EquipmentComponent.h"
+#include "../Components/StaminaComponent.h"
+#include "../Weapons/WeaponDefinition.h"
+#include "BossReadabilityCapture.h"
 
 struct FCountessPIETestAccess
 {
  static void Prepare(UBossActionComponent& A,AActor* Target,int32 Phase)
- { A.CancelAction(); A.CooldownUntil.Reset(); A.Target=Target; A.Phase=Phase; A.bPhasePending=false; A.RecoilUntil=0; A.Poise=A.GetMaxPoise(); A.State=EBossState::Combat; A.LastSeen=A.Now(); }
+ { A.CancelAction(); A.CooldownUntil.Reset(); A.Target=Target; A.Phase=Phase; A.bPhasePending=false; A.RecoilUntil=0; A.Poise=A.GetMaxPoise(); A.State=EBossState::Combat; A.LastSeen=A.Now(); A.LastPoiseHit=A.Now(); A.PoiseImmuneUntil=0; }
  static bool HasMotion(const UBossActionComponent& A) { return A.MoveSourceId!=0; }
  static int32 Stage(const UBossActionComponent& A) { return A.StageIndex; }
  static float ClipTime(const UBossActionComponent& A) { return A.ActiveMontage?A.Boss->GetMesh()->GetAnimInstance()->Montage_GetPosition(A.ActiveMontage):0; }
  static bool ValidateRush(UBossActionComponent& A,FVector& Out) { A.LockedDirection=A.Boss->GetActorForwardVector(); return A.ValidateRush(Out); }
  static void TickWarning(UBossActionComponent& A) { A.TickAction(1.f/60); }
+ static bool PlayingStage(const UBossActionComponent& A) { return A.Step==UBossActionComponent::EActionStep::Playing; }
+ static bool Recovering(const UBossActionComponent& A) { return A.Step==UBossActionComponent::EActionStep::Recovery; }
+ static bool Committed(const UBossActionComponent& A) { return A.bFacingCommitted; }
 };
 
 namespace
@@ -182,10 +193,17 @@ class FCountessActionScenario : public IAutomationLatentCommand
  bool bMotionObserved=false,bMissedTelegraph=false;
  FString BladeTrace=TEXT("action,stage,time,left_distance,right_distance\n");
  bool bScreenshotRequested=false;
+ int32 ObservedStage=-1,VideoTick=0,VideoFrame=0;
+ float StageHealth=0,PreparationTravel=0;
+ FVector InitialPreparationBlade;
+ bool bCheckedRelease=false,bSampledPreparation=false;
+ double RecoveryStarted=-1;
+ FString ReadabilityTrace=TEXT("fps,phase,action,stage,montage_time,first_event,hit_start,commit,preparation_travel,health,committed,recovering,world_elapsed\n");
  struct FCase { EBossAction Action; float Distance; int32 Phase; float Damage; };
- const FCase Cases[8]={{EBossAction::Combo,110,1,34},{EBossAction::DelayedSlash,150,1,30},{EBossAction::Siphon,200,1,22},
+ const FCase Cases[11]={{EBossAction::Combo,110,1,34},{EBossAction::DelayedSlash,150,1,30},{EBossAction::Siphon,200,1,22},
   {EBossAction::ShadowRush,500,1,24},{EBossAction::BloodWave,500,1,20},{EBossAction::BloodFeast,200,2,38},
-  {EBossAction::Combo,110,2,56},{EBossAction::ShadowRush,500,2,42}};
+  {EBossAction::Combo,110,2,56},{EBossAction::ShadowRush,500,2,42},
+  {EBossAction::DelayedSlash,150,2,30},{EBossAction::Siphon,200,2,22},{EBossAction::BloodWave,500,2,20}};
  const int32 FrameRates[3]={30,60,120};
  void Stop() { FApp::SetUseFixedTimeStep(PreviousFixed); FApp::SetFixedDeltaTime(PreviousDelta); }
 public:
@@ -193,7 +211,7 @@ public:
  virtual ~FCountessActionScenario() override { Stop(); }
  bool Update() override
  {
-  if (FPlatformTime::Seconds()-WallStart>180) { Test->AddError(FString::Printf(TEXT("Boss actions timed out at state %d case %d FPS %d"),State,CaseIndex,FrameRates[FPSIndex])); Stop(); return true; }
+  if (FPlatformTime::Seconds()-WallStart>300) { Test->AddError(FString::Printf(TEXT("Boss actions timed out at state %d case %d FPS %d"),State,CaseIndex,FrameRates[FPSIndex])); Stop(); return true; }
   UWorld* W=GEditor?GEditor->PlayWorld:nullptr; if (!W || !W->HasBegunPlay()) return false;
   if (State==0)
   {
@@ -204,11 +222,12 @@ public:
    Boss->BossActions->Definition=D;
    Player->FindComponentByClass<UHealthComponent>()->SetEncounterInvulnerable(true);
    MeshOffset=Boss->GetMesh()->GetRelativeLocation();
-   if (FParse::Param(FCommandLine::Get(),TEXT("BossVisualAudit")))
+   if (FParse::Param(FCommandLine::Get(),TEXT("BossVisualAudit")) || FParse::Param(FCommandLine::Get(),TEXT("BossReadableVideo")))
    {
     const FVector Eye(650,-650,350); auto* Camera=W->SpawnActor<ACameraActor>(Eye,(FVector(80,0,70)-Eye).Rotation());
     Camera->GetCameraComponent()->SetFieldOfView(65);
     Cast<APlayerController>(Player->GetController())->SetViewTarget(Camera);
+    IFileManager::Get().MakeDirectory(*(FPaths::ProjectSavedDir()/TEXT("BossReadability/Frames")),true);
    }
    FApp::SetFixedDeltaTime(1./60); FApp::SetUseFixedTimeStep(true); State=1; Start=W->GetTimeSeconds();
    W->GetWorldSettings()->MinUndilatedFrameTime=0; W->GetWorldSettings()->MaxUndilatedFrameTime=1;
@@ -231,7 +250,7 @@ public:
    auto* H=Player->FindComponentByClass<UHealthComponent>(); H->MaxHealth=1000; H->SetCurrentHealth(1000); H->SetEncounterInvulnerable(false);
    Boss->FindComponentByClass<UHealthComponent>()->SetCurrentHealth(1000); Boss->FindComponentByClass<UHealthComponent>()->SetEncounterInvulnerable(false);
    StartPosition=Boss->GetActorLocation(); CameraRotation=Player->GetController()->GetControlRotation();
-   bMotionObserved=false; bMissedTelegraph=false; Start=W->GetTimeSeconds(); State=3;
+   bMotionObserved=false; bMissedTelegraph=false; ObservedStage=-1; RecoveryStarted=-1; Start=W->GetTimeSeconds(); State=3;
   }
   else if (State==3 && W->GetTimeSeconds()-Start>.2)
   {
@@ -242,6 +261,41 @@ public:
   else if (State==4)
   {
    const auto* A=Boss->BossActions.Get();
+   if (Definition->AnimationRevision>=2 && FCountessPIETestAccess::PlayingStage(*A))
+   {
+    const int32 Stage=FCountessPIETestAccess::Stage(*A); const auto& S=Definition->FindAction(Cases[CaseIndex].Action)->Stages[Stage];
+    const float Time=FCountessPIETestAccess::ClipTime(*A); float HitStart=0,HitEnd=0; S.ReadHitWindow(HitStart,HitEnd);
+    const float Event=S.MoveStart>=0?S.MoveStart:HitStart;
+    const float HP=Player->FindComponentByClass<UHealthComponent>()->CurrentHealth;
+    const FVector Blade=Boss->GetMesh()->GetSocketLocation(TEXT("BladeTip_R"));
+    if (ObservedStage!=Stage)
+    {
+     ObservedStage=Stage; StageHealth=HP; PreparationTravel=0; InitialPreparationBlade=Blade; bCheckedRelease=false; bSampledPreparation=false;
+     Test->TestTrue(TEXT("Next stage starts directly in animation, not idle warning"),Time<.08f);
+    }
+    // The entry cross-fade and the final fast swing cannot masquerade as animated anticipation.
+    if (Time>=S.EntryBlendTime+.02f && Time<Event-.05f)
+    {
+     if (!bSampledPreparation) { InitialPreparationBlade=Blade; bSampledPreparation=true; }
+     PreparationTravel=FMath::Max(PreparationTravel,static_cast<float>(FVector::Dist(Blade,InitialPreparationBlade)));
+    }
+    if (Time<HitStart-.0001f) Test->TestEqual(TEXT("No damage during the body's preparation"),HP,StageHealth);
+    if (Time<Event-.0001f && S.MoveStart>=0) Test->TestFalse(TEXT("Rush cannot move before visible preparation"),FCountessPIETestAccess::HasMotion(*A));
+    if (!bCheckedRelease && Time>=Event)
+    {
+     bCheckedRelease=true;
+     Test->TestTrue(TEXT("Preparation animates the actual weapon/body, not a frozen pose"),PreparationTravel>=8.f);
+     Test->AddInfo(FString::Printf(TEXT("Readable phase=%d action=%d stage=%d fps=%d event=%.3f bodyTravel=%.1f"),Cases[CaseIndex].Phase,static_cast<int32>(Cases[CaseIndex].Action),Stage,FrameRates[FPSIndex],Event,PreparationTravel));
+    }
+    if (Time>=S.FacingCommitTime+2.f/FrameRates[FPSIndex]) Test->TestTrue(TEXT("Facing actually commits before release"),FCountessPIETestAccess::Committed(*A));
+    if (Time<S.FacingCommitTime-2.f/FrameRates[FPSIndex]) Test->TestFalse(TEXT("Early preparation still permits facing"),FCountessPIETestAccess::Committed(*A));
+    ReadabilityTrace+=FString::Printf(TEXT("%d,%d,%d,%d,%.4f,%.4f,%.4f,%.4f,%.2f,%.1f,%d,0,%.4f\n"),FrameRates[FPSIndex],Cases[CaseIndex].Phase,static_cast<int32>(Cases[CaseIndex].Action),Stage,Time,Event,HitStart,S.FacingCommitTime,PreparationTravel,HP,FCountessPIETestAccess::Committed(*A)?1:0,W->GetTimeSeconds()-Start);
+   }
+   if (FCountessPIETestAccess::Recovering(*A))
+   {
+    if (RecoveryStarted<0) RecoveryStarted=W->GetTimeSeconds();
+    ReadabilityTrace+=FString::Printf(TEXT("%d,%d,%d,%d,%.4f,0,0,0,0,%.1f,1,1,%.4f\n"),FrameRates[FPSIndex],Cases[CaseIndex].Phase,static_cast<int32>(Cases[CaseIndex].Action),FCountessPIETestAccess::Stage(*A),FCountessPIETestAccess::ClipTime(*A),Player->FindComponentByClass<UHealthComponent>()->CurrentHealth,W->GetTimeSeconds()-Start);
+   }
    if (FPSIndex==0 && (CaseIndex==0 || CaseIndex==3))
    {
     float Distances[2]; const auto* Capsule=Player->GetCapsuleComponent();
@@ -259,13 +313,15 @@ public:
    const double Elapsed=W->GetTimeSeconds()-Start;
    if (!bScreenshotRequested && FParse::Param(FCommandLine::Get(),TEXT("BossVisualAudit")) && FPSIndex==0 && CaseIndex==5 && Elapsed>.55)
    { FScreenshotRequest::RequestScreenshot(FPaths::ProjectSavedDir()/TEXT("Screenshots/CountessBoss_PIE.png"),true,false); bScreenshotRequested=true; }
-   if (Cases[CaseIndex].Action==EBossAction::BloodFeast && Elapsed<2.8)
+   float FeastHit=0,FeastEnd=0; Definition->FindAction(EBossAction::BloodFeast)->Stages[0].ReadHitWindow(FeastHit,FeastEnd);
+   if (Cases[CaseIndex].Action==EBossAction::BloodFeast && Elapsed<FeastHit-1./FrameRates[FPSIndex])
    { bool Found=false; for (TActorIterator<ABossTelegraph> It(W);It;++It) Found=true; bMissedTelegraph|=!Found; }
    if (!A->IsActionActive() || Elapsed>10)
    {
     const float Damage=1000-Player->FindComponentByClass<UHealthComponent>()->CurrentHealth;
     Test->TestEqual(FString::Printf(TEXT("Actual damage action %d at %d FPS"),CaseIndex,FrameRates[FPSIndex]),Damage,Cases[CaseIndex].Damage);
     Test->TestTrue(TEXT("Every action includes recovery and terminates"),!A->IsActionActive() && Elapsed>=1);
+    Test->TestTrue(TEXT("Observed recovery satisfies configured floor at this frame rate"),RecoveryStarted>=0 && W->GetTimeSeconds()-RecoveryStarted+2./FrameRates[FPSIndex]>=Definition->FindAction(Cases[CaseIndex].Action)->Recovery);
     Test->TestTrue(TEXT("All actions leave mesh fixed to capsule"),MeshOffset.Equals(Boss->GetMesh()->GetRelativeLocation(),.1f));
     Test->TestTrue(TEXT("Actions preserve player control rotation"),CameraRotation.Equals(Player->GetController()->GetControlRotation(),.1f));
     if (Cases[CaseIndex].Action==EBossAction::ShadowRush)
@@ -278,9 +334,170 @@ public:
     if (Cases[CaseIndex].Action==EBossAction::BloodFeast) Test->TestFalse(TEXT("Feast warning remains until landing hit"),bMissedTelegraph);
     for (TActorIterator<ABossBloodWave> It(W);It;++It) Test->TestFalse(TEXT("Impacted wave is returned to pool"),It->IsProjectileActive());
     Test->AddInfo(FString::Printf(TEXT("Action=%d Phase=%d FPS=%d Damage=%.0f Duration=%.3f Travel=%.2f"),CaseIndex,Cases[CaseIndex].Phase,FrameRates[FPSIndex],Damage,Elapsed,FVector::Dist2D(StartPosition,Boss->GetActorLocation())));
-    if (++CaseIndex<8) State=2;
+    if (++CaseIndex<UE_ARRAY_COUNT(Cases)) State=2;
     else if (++FPSIndex<3) { CaseIndex=0; State=2; }
-    else { FFileHelper::SaveStringToFile(BladeTrace,*(FPaths::ProjectSavedDir()/TEXT("CountessBossDesignAudit/blade_contact.csv"))); Stop(); return true; }
+    else
+    {
+     IFileManager::Get().MakeDirectory(*(FPaths::ProjectSavedDir()/TEXT("BossReadability")),true);
+     FFileHelper::SaveStringToFile(BladeTrace,*(FPaths::ProjectSavedDir()/TEXT("CountessBossDesignAudit/blade_contact.csv")));
+     FFileHelper::SaveStringToFile(ReadabilityTrace,*(FPaths::ProjectSavedDir()/TEXT("BossReadability/action_timeline.csv"))); Stop(); return true;
+    }
+   }
+   if (FParse::Param(FCommandLine::Get(),TEXT("BossReadableVideo")) && FPSIndex==0 && (++VideoTick%2)==0)
+   {
+    // Fixed 30 Hz simulation, capture every other frame => a truthful 15 FPS, normal-speed recording.
+    for (TActorIterator<ABossTelegraph> It(W);It;++It) It->SetActorHiddenInGame(true);
+    GEngine->AddOnScreenDebugMessage(9851,1.f,FColor::White,FString::Printf(TEXT("BODY TELEGRAPH AUDIT | phase %d action %d | %.2fs"),Cases[CaseIndex].Phase,static_cast<int32>(Cases[CaseIndex].Action),Elapsed));
+    Test->TestTrue(TEXT("Capture targets the actual PIE viewport"),CaptureBossReadabilityFrame(W,FPaths::ProjectSavedDir()/FString::Printf(TEXT("BossReadability/Frames/attack_%05d.png"),VideoFrame++)));
+   }
+  }
+  return false;
+ }
+};
+
+/** Inputs and real blade/radial collision run in PIE; no direct synthetic ApplyHit calls. */
+class FCountessDefenseScenario : public IAutomationLatentCommand
+{
+ FAutomationTestBase* Test;
+ TWeakObjectPtr<ACountessBossCharacter> Boss; TWeakObjectPtr<ATPCCharacter> Player;
+ UBossDefinition* Original=nullptr;
+ int32 Step=0,Case=0,Phase=1,Rate=0,Hits=0,Parries=0,Blocks=0;
+ const int32 Rates[3]={30,60,120};
+ double Started=0,ReactionAt=-1,RecoveryAt=-1,WallStart=FPlatformTime::Seconds();
+ bool Input=false,Counter=false,CounterHit=false,SawInvulnerability=false,SawRecoil=false;
+ float FrozenYaw=0,CounterHealth=0;
+ bool PreviousFixed=FApp::UseFixedTimeStep(); double PreviousDelta=FApp::GetFixedDeltaTime();
+ FDelegateHandle HitHandle;
+ FString Trace=TEXT("fps,phase,case,time,boss_state,action,clip_time,player_health,boss_health,recovery_elapsed\n");
+ FString Label(const TCHAR* Text) const { return FString::Printf(TEXT("%d FPS phase %d defense %d: %s"),Rates[Rate],Phase,Case,Text); }
+ EBossAction Action() const { return Case==2?EBossAction::Siphon:Case==4?EBossAction::DelayedSlash:EBossAction::Combo; }
+ void Restore()
+ {
+  FApp::SetUseFixedTimeStep(PreviousFixed); FApp::SetFixedDeltaTime(PreviousDelta);
+  if (Boss.IsValid() && Original) Boss->BossActions->Definition=Original;
+  if (Player.IsValid()) Player->HealthComponent->OnCombatHitResolved.Remove(HitHandle);
+ }
+public:
+ explicit FCountessDefenseScenario(FAutomationTestBase* T):Test(T){}
+ ~FCountessDefenseScenario() override { Restore(); }
+ bool Update() override
+ {
+  if (FPlatformTime::Seconds()-WallStart>240) { Test->AddError(Label(TEXT("timed out"))); return true; }
+  UWorld* W=GEditor?GEditor->PlayWorld.Get():nullptr; if (!W || !W->HasBegunPlay()) return false;
+  if (Step==0)
+  {
+   for (TActorIterator<ACountessBossCharacter> It(W);It;++It) { Boss=*It; break; }
+   Player=Cast<ATPCCharacter>(UGameplayStatics::GetPlayerCharacter(W,0)); if (!Boss.IsValid() || !Player.IsValid()) return false;
+   Original=Boss->BossActions->Definition; Boss->BossActions->Definition=DuplicateObject<UBossDefinition>(Original,Boss.Get());
+   if (auto* AI=Cast<AAIController>(Boss->GetController())) { AI->GetBrainComponent()->StopLogic(TEXT("Boss player defense fixture")); AI->StopMovement(); }
+   auto* Weapon=LoadObject<UWeaponDefinition>(nullptr,TEXT("/Game/Third/DataAsset/DA_TestSword.DA_TestSword"));
+   auto* Fixture=DuplicateObject<UWeaponDefinition>(Weapon,Player.Get()); Fixture->Damage=25.f;
+   Test->TestTrue(TEXT("Real player sword actions with transient damage fixture"),Player->EquipmentComponent->EquipWeapon(Fixture));
+   Player->EquipmentComponent->SetWeaponDrawn(true);
+   HitHandle=Player->HealthComponent->OnCombatHitResolved.AddLambda([this](const FCombatHitSpec&,const FCombatHitResult& R,AActor*)
+   { ++Hits; Parries+=R.bParried?1:0; Blocks+=R.bBlocked?1:0; });
+   W->GetWorldSettings()->MinUndilatedFrameTime=0; W->GetWorldSettings()->MaxUndilatedFrameTime=1;
+   Step=1;
+  }
+  auto* B=Boss.Get(); auto* A=B->BossActions.Get(); auto* P=Player.Get(); auto* H=B->FindComponentByClass<UHealthComponent>();
+  if (Step==1)
+  {
+   FApp::SetUseFixedTimeStep(true); FApp::SetFixedDeltaTime(1./Rates[Rate]);
+   FCountessPIETestAccess::Prepare(*A,P,Phase);
+   P->CombatComponent->SetCombatEnabled(false); P->CombatComponent->SetCombatEnabled(true);
+   P->ActionComponent->ClearInputBuffers(); P->ActionComponent->SetInputSuppressed(false);
+   P->GetCharacterMovement()->SetMovementMode(MOVE_Walking); P->GetCharacterMovement()->StopMovementImmediately();
+   B->GetCharacterMovement()->SetMovementMode(MOVE_Walking); B->GetCharacterMovement()->StopMovementImmediately();
+   B->SetActorLocationAndRotation(FVector(0,0,98),FRotator::ZeroRotator,false,nullptr,ETeleportType::TeleportPhysics);
+   P->SetActorLocationAndRotation(FVector(Case==2?190:110,0,98),FRotator(0,180,0),false,nullptr,ETeleportType::TeleportPhysics);
+   P->GetController()->SetControlRotation(FRotator(0,180,0));
+   P->HealthComponent->MaxHealth=1000; P->HealthComponent->SetCurrentHealth(1000); P->HealthComponent->SetEncounterInvulnerable(false);
+   H->SetCurrentHealth(1400); H->SetEncounterInvulnerable(false); P->StaminaComponent->SetCurrentStamina(100);
+   Hits=Parries=Blocks=0; Input=Counter=CounterHit=SawInvulnerability=SawRecoil=false; ReactionAt=RecoveryAt=-1;
+   Started=W->GetTimeSeconds(); Step=2; return false;
+  }
+  const double T=W->GetTimeSeconds()-Started;
+  if (Step==2)
+  {
+   if (T<.35) return false;
+   if (Case==0) P->StartBlock();
+   if (Case==3) A->Poise=10; // real first player hit now reaches the break threshold
+   Test->TestTrue(Label(TEXT("Boss action starts")),A->TryStartAction(Action()));
+   Started=W->GetTimeSeconds(); Step=3; return false;
+  }
+  const float Clip=FCountessPIETestAccess::ClipTime(*A);
+  if (Case==0) SawRecoil|=A->GetHitReactionAlpha()>.015f;
+  if (Case==1 && !Input && Clip>=.55f)
+  { P->StartBlock(); Input=true; Test->TestTrue(Label(TEXT("late guard opens actual parry window")),P->CombatComponent->IsParryWindowActive()); }
+  if (Case==1 && Parries>0)
+  {
+   if (ReactionAt<0) ReactionAt=W->GetTimeSeconds();
+   const double Age=W->GetTimeSeconds()-ReactionAt;
+   if (Age<.66) Test->TestFalse(Label(TEXT("parry preserves its .7 second punish window")),A->CanMove());
+   if (!Counter && Age>.07)
+   {
+    CounterHealth=H->CurrentHealth; P->CombatComponent->CancelGuard();
+    Counter=P->CombatComponent->TryParryCounter(); Test->TestTrue(Label(TEXT("successful parry enables the real counter action")),Counter);
+   }
+   if (Age<.7 && H->CurrentHealth<CounterHealth) CounterHit=true;
+  }
+  if (Case==2 && !Input && Clip>=.66f)
+  {
+   P->SetActorRotation(FRotator(0,90,0)); P->GetController()->SetControlRotation(FRotator(0,90,0)); P->Dash(); Input=true;
+   Test->TestTrue(Label(TEXT("dodge uses real root-motion player action")),P->IsDashing());
+  }
+  if (Case==2 && Clip>=.80f && Clip<=.86f) SawInvulnerability|=P->ActionComponent->IsInvulnerable();
+  if (Case==3 && !Input && T>=.1)
+  { P->HandlePrimaryAttack(); Input=true; Test->TestNotNull(Label(TEXT("counterattack uses a saved sword definition")),P->ActionComponent->GetActiveDefinition()); }
+  if (Case==3 && A->State==EBossState::PoiseBroken && ReactionAt<0) ReactionAt=W->GetTimeSeconds();
+  if (Case==3 && ReactionAt>=0 && W->GetTimeSeconds()-ReactionAt<2.35)
+   Test->TestEqual(Label(TEXT("poise break preserves the full 2.4 second punish window")),A->State,EBossState::PoiseBroken);
+  if (Case==4 && !Input && FCountessPIETestAccess::Committed(*A))
+  {
+   FrozenYaw=B->GetActorRotation().Yaw; P->SetActorLocation(FVector(0,600,98),false,nullptr,ETeleportType::TeleportPhysics); Input=true;
+  }
+  if (Case==4 && Input && FCountessPIETestAccess::PlayingStage(*A))
+   Test->TestTrue(Label(TEXT("committed heavy does not rotate after escaping to the side")),FMath::Abs(FMath::FindDeltaAngleDegrees(FrozenYaw,B->GetActorRotation().Yaw))<.2f);
+  if (FCountessPIETestAccess::Recovering(*A))
+  {
+   if (RecoveryAt<0) RecoveryAt=W->GetTimeSeconds();
+   Test->TestFalse(Label(TEXT("cannot chain a new action through recovery")),A->TryStartAction(EBossAction::DelayedSlash));
+   if (Case==4 && !Counter)
+   {
+    P->SetActorLocationAndRotation(B->GetActorLocation()+B->GetActorForwardVector()*110.f,FRotator(0,180,0),false,nullptr,ETeleportType::TeleportPhysics);
+    P->GetCharacterMovement()->StopMovementImmediately(); CounterHealth=H->CurrentHealth;
+    P->HandlePrimaryAttack(); Counter=true;
+   }
+   if (Case==4 && H->CurrentHealth<CounterHealth) CounterHit=true;
+  }
+  Trace+=FString::Printf(TEXT("%d,%d,%d,%.4f,%d,%d,%.4f,%.2f,%.2f,%.4f\n"),Rates[Rate],Phase,Case,T,static_cast<int32>(A->State),static_cast<int32>(A->CurrentAction),Clip,P->HealthComponent->CurrentHealth,H->CurrentHealth,RecoveryAt<0?-1.f:static_cast<float>(W->GetTimeSeconds()-RecoveryAt));
+  if (T>4.5)
+  {
+   Test->TestTrue(Label(TEXT("returns control after full recovery or reaction")),!A->IsActionActive() && A->CanMove());
+   if (Case==0)
+   {
+    Test->TestEqual(Label(TEXT("every real blade contact was blocked once")),Blocks,Phase==1?2:3);
+    Test->TestEqual(Label(TEXT("held guard was not a parry")),Parries,0);
+    Test->TestEqual(Label(TEXT("quarter damage without canceling later combo blades")),P->HealthComponent->CurrentHealth,Phase==1?991.5f:986.f);
+    Test->TestTrue(Label(TEXT("block adds a small recoil overlay")),SawRecoil);
+   }
+   else if (Case==1)
+   {
+    Test->TestEqual(Label(TEXT("one successful parry cancels remaining combo")),Parries,1);
+    Test->TestEqual(Label(TEXT("no further contacts after parry")),Hits,1);
+    Test->TestTrue(Label(TEXT("real parry counter lands within recoil")),CounterHit);
+   }
+   else if (Case==2) Test->TestTrue(Label(TEXT("dodge i-frames overlap the actual radial release")),SawInvulnerability);
+   else if (Case==3) Test->TestTrue(Label(TEXT("real player blade breaks Boss poise")),ReactionAt>=0 && H->CurrentHealth<1400);
+   else if (Case==4) Test->TestTrue(Label(TEXT("whiff has an animated, attackable recovery")),CounterHit && RecoveryAt>=0);
+   if (Case!=0) Test->TestEqual(Label(TEXT("the successful defense takes no damage")),P->HealthComponent->CurrentHealth,1000.f);
+   if (RecoveryAt>=0) Test->TestTrue(Label(TEXT("recovery never shorter than its configured floor")),W->GetTimeSeconds()-RecoveryAt>=Original->FindAction(Action())->Recovery);
+   Test->AddInfo(Label(TEXT("completed")));
+   if (++Case==5) { Case=0; if (++Phase==3) { Phase=1; ++Rate; } }
+   Step=1;
+   if (Rate==3)
+   {
+    FFileHelper::SaveStringToFile(Trace,*(FPaths::ProjectSavedDir()/TEXT("BossReadability/defense_timeline.csv"))); Restore(); return true;
    }
   }
   return false;
@@ -403,6 +620,15 @@ bool FCountessBossActionsPIETest::RunTest(const FString&)
  FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
  ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
  FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessActionScenario>(this));
+ ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand()); return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossDefensePIETest,"ThirdPerson.Boss.Readability.PIE.PlayerDefenseAt30_60_120",
+ EAutomationTestFlags::EditorContext|EAutomationTestFlags::EngineFilter)
+bool FCountessBossDefensePIETest::RunTest(const FString&)
+{
+ FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+ ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
+ FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessDefenseScenario>(this));
  ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand()); return true;
 }
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossLifecyclePIETest,"ThirdPerson.Boss.PIE.NavigationLOSResetReentry",

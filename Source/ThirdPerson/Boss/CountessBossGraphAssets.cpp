@@ -16,6 +16,7 @@
 #include "AnimGraphNode_SequenceEvaluator.h"
 #include "AnimGraphNode_BlendSpacePlayer.h"
 #include "AnimGraphNode_TwoWayBlend.h"
+#include "AnimGraphNode_BlendListByBool.h"
 #include "AnimGraphNode_Slot.h"
 #include "AnimGraphNode_ApplyAdditive.h"
 #include "AnimGraphNode_Inertialization.h"
@@ -75,13 +76,15 @@ UAnimGraphNode_TwoWayBlend* Blend(UEdGraph* Graph,UEdGraphNode* A,UEdGraphNode* 
  auto* N=AddNode<UAnimGraphNode_TwoWayBlend>(Graph,X,Y);
  Ok&=Wire(A,TEXT("Pose"),N,TEXT("A")); Ok&=Wire(B,TEXT("Pose"),N,TEXT("B")); Ok&=Bind(N,TEXT("Alpha"),Alpha); return N;
 }
-bool CalibrateFootSpeeds(UBossDefinition* D)
+bool CalibrateFootSpeeds(const TArray<TObjectPtr<UAnimSequence>>& Clips,TArray<float>& ReferenceSpeeds)
 {
- D->JogReferenceSpeeds.SetNum(4);
+ if (Clips.Num()!=4) return false;
+ ReferenceSpeeds.SetNum(4);
  const FVector Directions[]={FVector::ForwardVector,-FVector::ForwardVector,-FVector::RightVector,FVector::RightVector};
  for (int32 I=0;I<4;++I)
  {
-  auto* Sequence=D->Jog[I].Get(); const auto& Ref=Sequence->GetSkeleton()->GetReferenceSkeleton();
+  auto* Sequence=Clips[I].Get(); if (!Sequence) return false;
+  const auto& Ref=Sequence->GetSkeleton()->GetReferenceSkeleton();
   const int32 Samples=FMath::Max(60,Sequence->GetNumberOfSampledKeys()); const float DT=Sequence->GetPlayLength()/Samples;
   TArray<float> Speeds;
   for (FName Foot:{FName(TEXT("foot_l")),FName(TEXT("foot_r"))})
@@ -102,20 +105,22 @@ bool CalibrateFootSpeeds(UBossDefinition* D)
    }
   }
   if (Speeds.Num()<4) { UE_LOG(LogTemp,Error,TEXT("Insufficient planted-foot samples for %s"),*Sequence->GetName()); return false; }
-  Speeds.Sort(); D->JogReferenceSpeeds[I]=Speeds[Speeds.Num()/2];
-  UE_LOG(LogTemp,Display,TEXT("Countess foot calibration: %s, %d stance segments, %.2f cm/s at rate 1"),*Sequence->GetName(),Speeds.Num(),D->JogReferenceSpeeds[I]);
+  Speeds.Sort(); ReferenceSpeeds[I]=Speeds[Speeds.Num()/2];
+  UE_LOG(LogTemp,Display,TEXT("Countess foot calibration: %s, %d stance segments, %.2f cm/s at rate 1"),*Sequence->GetName(),Speeds.Num(),ReferenceSpeeds[I]);
  }
  return true;
 }
 }
 
-bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& AnimClass)
+bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& AnimClass,bool bRebuildAnimations)
 {
- if (!CalibrateFootSpeeds(D)) return false;
+ if (!CalibrateFootSpeeds(D->Jog,D->JogReferenceSpeeds)) return false;
+ if (D->AnimationRevision>=2 && (!CalibrateFootSpeeds(D->CircleLeft,D->CircleLeftReferenceSpeeds) || !CalibrateFootSpeeds(D->CircleRight,D->CircleRightReferenceSpeeds))) return false;
  auto* BS=Find<UBlendSpace>(TEXT("Animations/BS_CountessLocomotion"));
- if (!BS)
+ if (!BS || bRebuildAnimations)
  {
-  BS=NewObject<UBlendSpace>(CreatePackage(*(CountessGraphRoot+TEXT("Animations/BS_CountessLocomotion"))),TEXT("BS_CountessLocomotion"),RF_Public|RF_Standalone);
+  if (!BS) BS=NewObject<UBlendSpace>(CreatePackage(*(CountessGraphRoot+TEXT("Animations/BS_CountessLocomotion"))),TEXT("BS_CountessLocomotion"),RF_Public|RF_Standalone);
+  while (BS->GetNumberOfBlendSamples()) BS->DeleteSample(BS->GetNumberOfBlendSamples()-1);
   BS->SetSkeleton(Mesh->GetSkeleton()); BS->SetPreviewMesh(Mesh);
   // Direction in component space. Speed drives a separate calibrated playback-rate input.
   auto* Param=FindFProperty<FStructProperty>(UBlendSpace::StaticClass(),TEXT("BlendParameters"));
@@ -125,24 +130,86 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
   BS->AddSample(D->Idle,FVector::ZeroVector);
   const FVector Axis[]={FVector(1,0,0),FVector(-1,0,0),FVector(0,-1,0),FVector(0,1,0)};
   for (int32 I=0;I<4;++I) BS->AddSample(D->Jog[I],Axis[I]);
+  BS->TargetWeightInterpolationSpeedPerSec=6.667f;
   BS->ValidateSampleData(); BS->ResampleData(); BS->PostEditChange(); FAssetRegistryModule::AssetCreated(BS);
   if (!Save(BS)) return false;
  }
+ UBlendSpace* Circles[2]={nullptr,nullptr};
+ if (D->AnimationRevision>=2)
+  for (int32 Side=0;Side<2;++Side)
+  {
+   const FString Name=Side==0?TEXT("BS_CountessCircleLeft"):TEXT("BS_CountessCircleRight");
+   Circles[Side]=Find<UBlendSpace>(TEXT("Animations/")+Name);
+   if (!Circles[Side])
+   {
+    Circles[Side]=DuplicateObject<UBlendSpace>(BS,CreatePackage(*(CountessGraphRoot+TEXT("Animations/")+Name)),*Name);
+    Circles[Side]->SetFlags(RF_Public|RF_Standalone); FAssetRegistryModule::AssetCreated(Circles[Side]);
+   }
+   if (bRebuildAnimations)
+   {
+    auto* C=Circles[Side]; while (C->GetNumberOfBlendSamples()) C->DeleteSample(C->GetNumberOfBlendSamples()-1);
+    C->AddSample(D->Idle,FVector::ZeroVector);
+    const auto& Clips=Side==0?D->CircleLeft:D->CircleRight;
+    const FVector Axis[]={FVector(1,0,0),FVector(-1,0,0),FVector(0,-1,0),FVector(0,1,0)};
+    for (int32 I=0;I<4;++I) C->AddSample(Clips[I],Axis[I]);
+    C->ValidateSampleData(); C->ResampleData(); C->PostEditChange(); if (!Save(C)) return false;
+   }
+  }
  auto* BP=Find<UAnimBlueprint>(TEXT("Animations/ABP_CountessBoss"));
- if (!BP)
+ if (!BP || bRebuildAnimations)
  {
+  if (!BP)
+  {
   auto* Factory=NewObject<UAnimBlueprintFactory>(); Factory->ParentClass=UCountessBossAnimInstance::StaticClass();
   Factory->TargetSkeleton=Mesh->GetSkeleton(); Factory->PreviewSkeletalMesh=Mesh;
   BP=Cast<UAnimBlueprint>(Factory->FactoryCreateNew(UAnimBlueprint::StaticClass(),CreatePackage(*(CountessGraphRoot+TEXT("Animations/ABP_CountessBoss"))),TEXT("ABP_CountessBoss"),RF_Public|RF_Standalone,nullptr,GWarn));
   if (!BP) return false;
+  }
   UEdGraph* G=nullptr; for (UEdGraph* Graph:BP->FunctionGraphs) if (Graph->GetFName()==TEXT("AnimGraph")) G=Graph;
   if (!G) return false;
   UAnimGraphNode_Root* Output=nullptr; for (UEdGraphNode* N:G->Nodes) if (auto* R=Cast<UAnimGraphNode_Root>(N)) Output=R;
   if (!Output) return false;
+  const auto OldNodes=G->Nodes;
+  for (UEdGraphNode* Node:OldNodes) if (Node!=Output) FBlueprintEditorUtils::RemoveNode(BP,Node,true);
   auto* Walk=AddNode<UAnimGraphNode_BlendSpacePlayer>(G,-1600,0); Walk->SetAnimationAsset(BS); Walk->ReconstructNode();
   bool Ok=Bind(Walk,TEXT("X"),TEXT("MoveX")) && Bind(Walk,TEXT("Y"),TEXT("MoveY")) && Bind(Walk,TEXT("PlayRate"),TEXT("MoveRate"));
+  auto Sync=[](UAnimGraphNode_BlendSpacePlayer* N)
+  {
+   if (auto* P=FindFProperty<FNameProperty>(FAnimNode_BlendSpacePlayer::StaticStruct(),TEXT("GroupName"))) P->SetPropertyValue_InContainer(&N->Node,TEXT("CountessFeet"));
+   if (auto* P=FindFProperty<FEnumProperty>(FAnimNode_BlendSpacePlayer::StaticStruct(),TEXT("Method")))
+    P->GetUnderlyingProperty()->SetIntPropertyValue(P->ContainerPtrToValuePtr<void>(&N->Node),static_cast<uint64>(EAnimSyncMethod::SyncGroup));
+  };
+  Sync(Walk);
+  UEdGraphNode* Moving=Walk;
+  if (D->AnimationRevision>=2)
+  {
+   UAnimGraphNode_BlendSpacePlayer* CircleNodes[2];
+   for (int32 I=0;I<2;++I)
+   {
+    auto* N=AddNode<UAnimGraphNode_BlendSpacePlayer>(G,-2300,600+I*400); N->SetAnimationAsset(Circles[I]); N->ReconstructNode();
+    Ok&=Bind(N,TEXT("X"),TEXT("MoveX")); Ok&=Bind(N,TEXT("Y"),TEXT("MoveY")); Ok&=Bind(N,TEXT("PlayRate"),TEXT("MoveRate")); Sync(N); CircleNodes[I]=N;
+   }
+   auto* Circle=Blend(G,CircleNodes[0],CircleNodes[1],TEXT("CircleRightAlpha"),-1800,650,Ok);
+   Moving=Blend(G,Walk,Circle,TEXT("CircleAlpha"),-1400,250,Ok);
+   // A reset-on-entry player owns transition time. A dynamically switched evaluator
+   // retains the previous clip's sync accumulator (e.g. a 1s turn in a .45s start).
+   auto* Transition=Player(G,D->MoveStarts[0],-1800,1450); Transition->Node.SetLoopAnimation(false);
+   if (auto* P=FindFProperty<FNameProperty>(FAnimNode_SequencePlayer::StaticStruct(),TEXT("GroupName"))) P->SetPropertyValue_InContainer(&Transition->Node,TEXT("CountessFeet"));
+   if (auto* P=FindFProperty<FByteProperty>(FAnimNode_SequencePlayer::StaticStruct(),TEXT("GroupRole"))) P->SetPropertyValue_InContainer(&Transition->Node,EAnimGroupRole::TransitionLeader);
+   if (auto* P=FindFProperty<FEnumProperty>(FAnimNode_SequencePlayer::StaticStruct(),TEXT("Method")))
+    P->GetUnderlyingProperty()->SetIntPropertyValue(P->ContainerPtrToValuePtr<void>(&Transition->Node),static_cast<uint64>(EAnimSyncMethod::SyncGroup));
+   Ok&=Bind(Transition,TEXT("Sequence"),TEXT("TransitionSequence")); Ok&=Bind(Transition,TEXT("PlayRate"),TEXT("TransitionRate"));
+   auto* TransitionBlend=AddNode<UAnimGraphNode_BlendListByBool>(G,-1000,350);
+   if (auto* P=FindFProperty<FEnumProperty>(FAnimNode_BlendListBase::StaticStruct(),TEXT("ChildUpateMode")))
+    P->GetUnderlyingProperty()->SetIntPropertyValue(P->ContainerPtrToValuePtr<void>(&TransitionBlend->Node),static_cast<uint64>(EBlendListChildUpdateMode::ResetChildOnActivate));
+   Ok&=Wire(Transition,TEXT("Pose"),TransitionBlend,TEXT("BlendPose_0"));
+   Ok&=Wire(Moving,TEXT("Pose"),TransitionBlend,TEXT("BlendPose_1"));
+   Ok&=Bind(TransitionBlend,TEXT("bActiveValue"),TEXT("bTransitionActive"));
+   for (int32 I=0;I<2;++I) if (auto* P=TransitionBlend->FindPin(*FString::Printf(TEXT("BlendTime_%d"),I))) P->DefaultValue=FString::SanitizeFloat(D->MovementBlendTime);
+   Moving=TransitionBlend;
+  }
   auto* Rest=Player(G,D->Relaxed,-1600,-300);
-  auto* Idle=Blend(G,Rest,Walk,TEXT("CombatAlpha"),-1100,-50,Ok);
+  auto* Idle=Blend(G,Rest,Moving,TEXT("CombatAlpha"),-750,-50,Ok);
   auto* Fall=Player(G,D->Falling,-1100,400);
   auto* Falling=Blend(G,Idle,Fall,TEXT("FallAlpha"),-750,0,Ok);
   auto* Stun=Player(G,D->StunLoop,-750,650);
@@ -164,6 +231,7 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
   FAssetRegistryModule::AssetCreated(BP); if (!Save(BP)) return false;
  }
  AnimClass=BP->GeneratedClass;
+ if (bRebuildAnimations) return AnimClass && Save(D);
  auto* Tree=Find<UBehaviorTree>(TEXT("AI/BT_CountessBoss"));
  if (!Tree)
  {
@@ -215,4 +283,6 @@ bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& An
  D->StatusWidgetClass=Widget->GeneratedClass;
  return AnimClass && Save(D);
 }
+bool BuildCountessGraphAssets(USkeletalMesh* Mesh,UBossDefinition* D,UClass*& AnimClass)
+{ return BuildCountessGraphAssets(Mesh,D,AnimClass,false); }
 #endif

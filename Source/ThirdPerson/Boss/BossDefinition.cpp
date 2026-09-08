@@ -80,9 +80,20 @@ bool UBossDefinition::Validate(FString& Error) const
    float Start=0,End=0;
    if (!S.Sequence || S.Sequence->IsValidAdditive() || S.Length()<=0 || !S.ReadHitWindow(Start,End) || Start<0 || End>S.Length() || S.Damage<0)
    { Error=FString::Printf(TEXT("Invalid clip or hit window for action %d: %s, events %d, start %.4f, end %.4f, length %.4f"),static_cast<int32>(A.Id),*GetNameSafe(S.Montage),S.Montage?S.Montage->Notifies.Num():0,Start,End,S.Length()); return false; }
+   if (AnimationRevision>=2)
+   {
+    const float FirstEvent=S.MoveStart>=0 ? S.MoveStart : Start;
+    if (!S.Montage || S.MinReadableWindup<=0 || FirstEvent-S.EntryBlendTime+.0001f<S.MinReadableWindup ||
+        S.FacingCommitTime>FirstEvent-.149f || !S.RecoveryMontage ||
+        (S.MoveStart>=0 && (S.MoveEnd<=S.MoveStart || Start<S.MoveEnd)))
+    { Error=FString::Printf(TEXT("Unreadable body startup / missing recovery: %s"),*GetNameSafe(S.Montage)); return false; }
+   }
   }
  }
  if (Seen.Num()!=6 || !Idle || !Relaxed || !Intro || !Death || !StunStart || !StunLoop || !PhaseCast || !WaveClass)
  { Error=TEXT("Missing mandatory Countess assets/actions"); return false; }
+ if (AnimationRevision>=2 && (Jog.Num()!=4 || JogReferenceSpeeds.Num()!=4 || MoveStarts.Num()!=4 ||
+     MoveStops.Num()!=4 || MovePivots.Num()!=4 || CircleLeft.Num()!=4 || CircleRight.Num()!=4 || Turns.Num()!=4))
+ { Error=TEXT("Incomplete readable Boss locomotion set"); return false; }
  return true;
 }

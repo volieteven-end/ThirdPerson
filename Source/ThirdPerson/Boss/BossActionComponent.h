@@ -58,11 +58,15 @@ public:
  const UBossDefinition* GetDefinition() const;
  float GetStateElapsed() const;
  float GetHitReactionAlpha() const;
+ float GetHitReactionTime() const { return FMath::Max(0.f,static_cast<float>(Now()-LastHitReaction)); }
+ bool IsStrafing() const { return bStrafing; }
+ float GetFacingDelta() const;
  int32 GetContextRevision() const { return ContextRevision; }
  int32 GetHitReactionDirection() const { return HitReactionDirection; }
 private:
  friend struct FCountessBossTestAccess;
  friend struct FCountessPIETestAccess;
+ friend struct FCountessReadableMovementAccess;
  enum class EActionStep : uint8 { None, Telegraph, Playing, Recovery };
  UPROPERTY(Transient) TObjectPtr<ACountessBossCharacter> Boss;
  UPROPERTY(Transient) TObjectPtr<UHealthComponent> Health;
@@ -94,6 +98,8 @@ private:
  double PoiseImmuneUntil=0;
  double RecoilUntil=0;
  double LastHitReaction=-100;
+ float HitReactionStrength=.32f;
+ float HitReactionDuration=.35f;
  double NextMoveRequest=0;
  double LastSeen=0;
  double OutsideSince=-1;
@@ -111,6 +117,7 @@ private:
  bool bSavedControllerYaw=false;
  bool bSavedRVO=false;
  bool bReversingOrbit=false;
+ bool bStrafing=true;
  double Now() const;
  void SetState(EBossState NewState);
  void LockMovement();
@@ -121,6 +128,7 @@ private:
  void UpdateTelegraphTransform();
  void StartStage();
  void FinishStage();
+ void StartRecovery();
  void TickAction(float Delta);
  void SampleDamage(float OldTime, float NewTime);
  bool ReadBladePoints(FVector* Out) const;

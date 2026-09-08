@@ -93,7 +93,12 @@ void UBossActionComponent::TickComponent(float Delta,ELevelTick Type,FActorCompo
   }
   RestoreMovement();
   if (bPhasePending) StartPhaseTransition();
-  else FaceTarget(Delta,240.f);
+  else if (bStrafing || Boss->GetVelocity().Size2D()<35.f)
+  {
+   // Chase uses CMC/path rotation. Strafing/standing has this one yaw owner.
+   const float Speed=Boss->GetVelocity().Size2D();
+   FaceTarget(Delta,Speed<35.f && GetDefinition()->AnimationRevision>=2 ? 95.f : 180.f);
+  }
  }
  if (IsEncounterActive() && State!=EBossState::PoiseBroken && State!=EBossState::PhaseTransition &&
      Poise<GetMaxPoise() && Now()-LastPoiseHit>=GetDefinition()->PoiseRegenDelay)
@@ -157,6 +162,7 @@ void UBossActionComponent::OnResolvedHit(const FCombatHitSpec& Spec,const FComba
  if (State!=EBossState::Intro)
  {
   LastHitReaction=Now();
+  HitReactionStrength=.32f; HitReactionDuration=.35f;
   FVector Local=Boss->GetActorTransform().InverseTransformVectorNoScale(Source?Source->GetActorLocation()-Boss->GetActorLocation():Boss->GetActorForwardVector());
   HitReactionDirection=FMath::Abs(Local.X)>=FMath::Abs(Local.Y)?(Local.X>=0?0:1):(Local.Y<0?2:3);
   ReducePoise(Spec.PoiseDamage);
@@ -165,7 +171,8 @@ void UBossActionComponent::OnResolvedHit(const FCombatHitSpec& Spec,const FComba
 float UBossActionComponent::GetHitReactionAlpha() const
 {
  if (State!=EBossState::Combat && State!=EBossState::Action) return 0;
- return .25f*FMath::Clamp(1.f-static_cast<float>(Now()-LastHitReaction)/.35f,0.f,1.f);
+ const float Age=GetHitReactionTime();
+ return HitReactionStrength*FMath::Clamp(Age/.035f,0.f,1.f)*FMath::Clamp(1.f-Age/HitReactionDuration,0.f,1.f);
 }
 void UBossActionComponent::ReducePoise(float Amount)
 {
@@ -260,7 +267,15 @@ bool UBossActionComponent::TryStartAction(EBossAction Id)
  ++ActionSerial; CurrentAction=Id; StageIndex=0; Step=EActionStep::Telegraph;
  CooldownUntil.Add(Id,Now()+A->Cooldown); LastSpecial=Id==EBossAction::Combo?EBossAction::None:Id;
  LockMovement(); SetState(EBossState::Action); StepEnd=Now()+A->Telegraph;
- ShowTelegraph(); return true;
+ ShowTelegraph();
+ // Migrated actions contain the actual anticipation in their montage, not an idle timer.
+ if (GetDefinition()->AnimationRevision>=2) StartStage();
+ return IsActionActive();
+}
+float UBossActionComponent::GetFacingDelta() const
+{
+ return Boss && Target.IsValid() ? FMath::FindDeltaAngleDegrees(Boss->GetActorRotation().Yaw,
+     (Target->GetActorLocation()-Boss->GetActorLocation()).Rotation().Yaw) : 0.f;
 }
 void UBossActionComponent::FaceTarget(float Delta,float Speed)
 {
@@ -304,7 +319,7 @@ void UBossActionComponent::StartStage()
  if (!A || !A->Stages.IsValidIndex(StageIndex)) { CancelAction(); return; }
  const auto& S=A->Stages[StageIndex]; auto* Anim=Boss->GetMesh()->GetAnimInstance();
  if (!Anim) { CancelAction(); return; }
- if (TelegraphActor && CurrentAction!=EBossAction::BloodFeast && CurrentAction!=EBossAction::Siphon)
+ if (GetDefinition()->AnimationRevision<2 && TelegraphActor && CurrentAction!=EBossAction::BloodFeast && CurrentAction!=EBossAction::Siphon)
  { TelegraphActor->Destroy(); TelegraphActor=nullptr; }
  ActiveMontage=S.Montage?S.Montage.Get():UAnimMontage::CreateSlotAnimationAsDynamicMontage(S.Sequence,TEXT("DefaultSlot"),.08f,.12f,1,1);
  if (!ActiveMontage || Anim->Montage_Play(ActiveMontage,1.f)<=0) { CancelAction(); return; }
@@ -347,6 +362,12 @@ void UBossActionComponent::TickAction(float Delta)
  const float Time=FMath::Max(PreviousClipTime,bPlaying?Anim->Montage_GetPosition(ActiveMontage):FMath::Min(S.Length(),Elapsed));
  if (!bFacingCommitted && Time<S.FacingCommitTime) FaceTarget(Delta,120.f);
  else if (!bFacingCommitted) { LockedDirection=Boss->GetActorForwardVector(); bFacingCommitted=true; }
+ if (TelegraphActor)
+ {
+  UpdateTelegraphTransform();
+  float HitStart=0,HitEnd=0; S.ReadHitWindow(HitStart,HitEnd);
+  if (Time>=HitStart && S.Shape!=EBossHitShape::Radial) { TelegraphActor->Destroy(); TelegraphActor=nullptr; }
+ }
  const int64 Serial=ActionSerial;
  if (!bMoveStarted && S.MoveStart>=0 && Time>=S.MoveStart)
  { bMoveStarted=true; StartRush(); if (Serial!=ActionSerial || Step!=EActionStep::Playing) return; }
@@ -358,7 +379,7 @@ void UBossActionComponent::TickAction(float Delta)
  }
  SampleDamage(PreviousClipTime,Time); if (Serial!=ActionSerial) return;
  PreviousClipTime=Time;
- if (Elapsed>=S.Length()-KINDA_SMALL_NUMBER || Now()>=StepEnd) FinishStage();
+ if (Time>=S.Length()-KINDA_SMALL_NUMBER || Now()>=StepEnd) FinishStage();
 }
 void UBossActionComponent::FinishStage()
 {
@@ -368,8 +389,26 @@ void UBossActionComponent::FinishStage()
  const bool bRush=CurrentAction==EBossAction::ShadowRush && StageIndex==0 && Phase==2 && Target.IsValid() &&
      FVector::DistSquared2D(Boss->GetActorLocation(),Target->GetActorLocation())<=FMath::Square(240.f);
  if ((bCombo || bRush) && A->Stages.IsValidIndex(StageIndex+1))
- { ++StageIndex; Step=EActionStep::Telegraph; StepEnd=Now()+GetDefinition()->ComboGap; ShowTelegraph(); }
- else { Step=EActionStep::Recovery; StepEnd=Now()+FMath::Max(Phase==2?.45f:.55f,A->Recovery); }
+ {
+  ++StageIndex; ShowTelegraph();
+  if (GetDefinition()->AnimationRevision>=2) StartStage();
+  else { Step=EActionStep::Telegraph; StepEnd=Now()+GetDefinition()->ComboGap; }
+ }
+ else StartRecovery();
+}
+void UBossActionComponent::StartRecovery()
+{
+ const auto* A=GetDefinition()->FindAction(CurrentAction); if (!A) { CancelAction(); return; }
+ Step=EActionStep::Recovery; bWindowOpen=false; WindowHits.Reset();
+ float Duration=FMath::Max(Phase==2?.45f:.55f,A->Recovery);
+ const auto& S=A->Stages[StageIndex];
+ if (S.RecoveryMontage && Boss->GetMesh()->GetAnimInstance())
+ {
+  ActiveMontage=S.RecoveryMontage;
+  Boss->GetMesh()->GetAnimInstance()->Montage_Play(ActiveMontage,1.f);
+  Duration=FMath::Max(Duration,ActiveMontage->GetPlayLength());
+ }
+ StepEnd=Now()+Duration;
 }
 bool UBossActionComponent::IsCurrentNotify(const UAnimSequenceBase* Animation,int32 Id) const
 {
@@ -463,9 +502,15 @@ void UBossActionComponent::ApplyHit(AActor* Victim,const FVector& Point)
  const FCombatHitResult Result=H->ApplyCombatHit(Spec,Boss);
  UE_LOG(LogTemp,Verbose,TEXT("Countess Hit Action=%d Serial=%lld Window=%d Outcome=%d ActualDamage=%.2f Phase=%d Poise=%.1f"),static_cast<int32>(CurrentAction),Serial,StageIndex,static_cast<int32>(Result.Outcome),Result.ActualDamage,Phase,Poise);
  if (Serial!=ActionSerial || State==EBossState::Dead) return; // A parry cancels this executor reentrantly.
+ if (Result.bBlocked && !Result.bGuardBroken)
+ {
+  // A held guard pushes the attacking shoulders back, without cancelling the combo.
+  LastHitReaction=Now(); HitReactionDirection=1; HitReactionStrength=.13f; HitReactionDuration=.18f;
+ }
  if (Result.ActualDamage>0)
  {
-  if (auto* FX=UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),GetDefinition()->ImpactEffect,Point)) Effects.Add(FX);
+  if (!Result.bBlocked)
+   if (auto* FX=UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),GetDefinition()->ImpactEffect,Point)) Effects.Add(FX);
   if (bSiphon) Health->Heal(FMath::Min(20.f,Result.ActualDamage*.5f));
  }
 }
@@ -539,8 +584,11 @@ void UBossActionComponent::MoveToGoal(const FVector& Goal,float Speed,bool bStra
  auto* AI=Cast<AAIController>(Boss->GetController()); if (!AI) return;
  if (auto* BB=AI->GetBlackboardComponent()) BB->SetValueAsVector(TEXT("MoveGoal"),Goal);
  auto* M=Boss->GetCharacterMovement(); M->MaxWalkSpeed=Speed; M->bOrientRotationToMovement=!bStrafe;
+ bStrafing=bStrafe;
+ M->bUseControllerDesiredRotation=false;
  Boss->bUseControllerRotationYaw=false;
- if (bStrafe && Target.IsValid()) AI->SetFocus(Target.Get()); else AI->ClearFocus(EAIFocusPriority::Gameplay);
+ // The action component owns strafe-facing. Controller focus must not compete with it.
+ AI->ClearFocus(EAIFocusPriority::Gameplay);
  FAIMoveRequest Request; Request.SetGoalLocation(Goal); Request.SetAcceptanceRadius(35.f); Request.SetUsePathfinding(true);
  Request.SetProjectGoalLocation(true); Request.SetAllowPartialPath(false); Request.SetCanStrafe(bStrafe);
  // Reset completion and navigation use capsule-center tolerances, also for scaled bosses.

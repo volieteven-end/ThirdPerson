@@ -18,6 +18,8 @@ UENUM(BlueprintType)
 enum class EBossState : uint8 { Dormant, Intro, Combat, Action, PoiseBroken, PhaseTransition, Resetting, Dead };
 UENUM(BlueprintType)
 enum class EBossHitShape : uint8 { Blades, Radial, Projectile };
+UENUM(BlueprintType)
+enum class EBossLocomotionState : uint8 { Idle, Start, Moving, Stop, Pivot, Turn };
 
 USTRUCT(BlueprintType)
 struct THIRDPERSON_API FBossActionStage
@@ -26,6 +28,11 @@ struct THIRDPERSON_API FBossActionStage
  UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimSequence> Sequence;
  /** Optional authored montage. Empty creates a DefaultSlot montage from Sequence at runtime. */
  UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> Montage;
+ /** Readable body motion AFTER the entry blend, before damage (before movement for a rush). */
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="0", Units="s")) float MinReadableWindup = 0.f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimSequence> RecoverySequence;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly) TObjectPtr<UAnimMontage> RecoveryMontage;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, meta=(ClampMin="0", Units="s")) float EntryBlendTime = .08f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly) float Damage = 16.f;
  /** Bootstrap values used only when creating a new Montage. An assigned Montage's Notify is authoritative. */
  UPROPERTY(VisibleAnywhere, BlueprintReadOnly) float HitStart = .15f;
@@ -84,6 +91,8 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float OrbitSpeed = 180.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RetreatSpeed = 220.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ComboGap = .35f;
+ /** Versioned, targeted editor migration. Never rebuilds the encounter map or vendor package. */
+ UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Animation") int32 AnimationRevision = 0;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RushMaxDistance = 500.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RushStopDistance = 120.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float BladeTraceRadius = 22.f;
@@ -105,6 +114,19 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> Jog;
  /** Measured planted-foot travel at play rate 1, forward/backward/left/right, cm/s. */
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<float> JogReferenceSpeeds={300.f,300.f,300.f,300.f};
+ /** All directional arrays use forward, backward, left, right. */
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> MoveStarts;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> MoveStops;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> MovePivots;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> CircleLeft;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> CircleRight;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<float> CircleLeftReferenceSpeeds;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<float> CircleRightReferenceSpeeds;
+ /** Left 90, right 90, left 180, right 180; root-neutral clips, body yaw has a single owner. */
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> Turns;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") float MovementBlendTime = .15f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") float MoveStartThreshold = 35.f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") float MoveStopThreshold = 12.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Animation") TArray<TObjectPtr<UAnimSequence>> HitReactions;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> ImpactEffect;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> SiphonEffect;

@@ -10,4 +10,6 @@ class THIRDPERSON_API UCountessBossAssetTools : public UBlueprintFunctionLibrary
 public:
  UFUNCTION(BlueprintCallable,Category="Boss|Editor") static bool BuildCountessAssets();
  UFUNCTION(BlueprintCallable,Category="Boss|Editor") static bool BuildCountessTestMap();
+ /** Deliberately updates only this encounter's animation assets; never touches maps/vendor assets. */
+ UFUNCTION(BlueprintCallable,Category="Boss|Editor") static bool UpgradeReadableAnimations();
 };
