@@ -39,11 +39,33 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector HasLineOfSightKey;
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector IsInRangedAttackRangeKey;
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector IsTooCloseKey;
-	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float MinimumAttackDistance = 450.f;
+	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector ShouldApproachTargetKey;
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float MinimumAttackDistance = 180.f;
 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float MaximumAttackDistance = 950.f;
-	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatTriggerDistance = 450.f;
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatTriggerDistance = 300.f;
     /** Hysteresis: remain in retreat until outside this distance; avoids stepping back and forth. */
-    UPROPERTY(EditAnywhere, Category="Combat", meta=(ClampMin="0.0")) float RetreatStopDistance = 550.f;
+    UPROPERTY(EditAnywhere, Category="Combat", meta=(ClampMin="0.0")) float RetreatStopDistance = 440.f;
+	/** Backpedalling is slower than the player's ordinary 450 cm/s run. */
+	UPROPERTY(EditAnywhere, Category = "Combat|Movement", meta = (ClampMin = "0.0", Units = "cm/s")) float RetreatSpeed = 260.f;
+	UPROPERTY(EditAnywhere, Category = "Combat|Movement", meta = (ClampMin = "0.0", Units = "cm/s")) float ApproachSpeed = 360.f;
+	UPROPERTY(EditAnywhere, Category = "Combat|Movement", meta = (ClampMin = "0.0", Units = "cm/s")) float PatrolSpeed = 220.f;
+	UPROPERTY(EditAnywhere, Category = "Combat|Retreat", meta = (ClampMin = "0.0", Units = "s")) float RetreatReactionDelay = 0.2f;
+	UPROPERTY(EditAnywhere, Category = "Combat|Retreat", meta = (ClampMin = "0.1", Units = "s")) float MaximumRetreatDuration = 1.f;
+	/** A committed pause between backsteps, even when the player keeps pressing. */
+	UPROPERTY(EditAnywhere, Category = "Combat|Retreat", meta = (ClampMin = "0.1", Units = "s")) float RetreatCooldown = 1.4f;
+
+private:
+	friend struct FRangedAITestAccess;
+	void ApplyMovementSpeed(ACharacter* Character, float Speed);
+	void RestoreMovementSpeed();
+	TWeakObjectPtr<ACharacter> MovementPawn;
+	TWeakObjectPtr<AActor> SpacingTarget;
+	float SavedMovementSpeed = 0.f;
+	float AppliedMovementSpeed = 0.f;
+	double CloseSince = -1.;
+	double RetreatStartedAt = 0.;
+	double NextRetreatAllowedAt = 0.;
+	bool bRetreating = false;
 };
 
 /** Selects a navigable point away from the player with a small side-step. */
@@ -62,7 +84,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector TargetActorKey;
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector RetreatLocationKey;
-	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatDistance = 500.f;
+	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0")) float RetreatDistance = 240.f;
 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0", ClampMax = "1.0")) float SideStepAmount = 0.3f;
 };
 

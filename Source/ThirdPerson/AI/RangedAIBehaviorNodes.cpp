@@ -17,6 +17,7 @@ namespace RangedAIKeys
 	static const FName IsInAttackRange(TEXT("bIsInRangedAttackRange"));
 	static const FName IsTooClose(TEXT("bIsTooClose"));
 	static const FName RetreatLocation(TEXT("RetreatLocation"));
+	static const FName ShouldApproachTarget(TEXT("bShouldApproachTarget"));
 }
 
 UBTService_UpdateRangedCombat::UBTService_UpdateRangedCombat()
@@ -32,6 +33,7 @@ UBTService_UpdateRangedCombat::UBTService_UpdateRangedCombat()
 	HasLineOfSightKey.SelectedKeyName = RangedAIKeys::HasLineOfSight;
 	IsInRangedAttackRangeKey.SelectedKeyName = RangedAIKeys::IsInAttackRange;
 	IsTooCloseKey.SelectedKeyName = RangedAIKeys::IsTooClose;
+	ShouldApproachTargetKey.SelectedKeyName = RangedAIKeys::ShouldApproachTarget;
 }
 
 void UBTService_UpdateRangedCombat::TickNode(
@@ -43,6 +45,8 @@ void UBTService_UpdateRangedCombat::TickNode(
 	UBlackboardComponent* Blackboard = OwnerComp.GetBlackboardComponent();
 	AAIController* Controller = OwnerComp.GetAIOwner();
 	APawn* EnemyPawn = Controller ? Controller->GetPawn() : nullptr;
+	ACharacter* Character = Cast<ACharacter>(EnemyPawn);
+	const double Now = EnemyPawn ? EnemyPawn->GetWorld()->GetTimeSeconds() : 0.;
 	AActor* TargetActor = Blackboard
 		? Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKey.SelectedKeyName))
 		: nullptr;
@@ -59,16 +63,22 @@ void UBTService_UpdateRangedCombat::TickNode(
     if (!Blackboard || !EnemyPawn || !IsValid(TargetActor) || bDisabled)
     {
         RestoreFacing();
+		ApplyMovementSpeed(Character, PatrolSpeed);
+		if (bRetreating) NextRetreatAllowedAt = Now + RetreatCooldown;
+		bRetreating = false;
+		CloseSince = -1.;
+		SpacingTarget.Reset();
         if (Blackboard)
         {
             Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName, false);
             Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, false);
             Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, false);
-            Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, 0.f);
+            Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, BIG_NUMBER);
+			Blackboard->SetValueAsBool(ShouldApproachTargetKey.SelectedKeyName, false);
         }
         return;
     }
-    if (ACharacter* Character = Cast<ACharacter>(EnemyPawn))
+    if (Character)
     {
         if (FacingPawn.Get() != Character)
         {
@@ -88,12 +98,70 @@ void UBTService_UpdateRangedCombat::TickNode(
     const bool bSight = Controller->LineOfSightTo(TargetActor);
     const float Enter = FMath::Max(MinimumAttackDistance, RetreatTriggerDistance);
     const float Exit = FMath::Max(Enter + 50.f, RetreatStopDistance);
-    const bool bRetreat = Distance < (Blackboard->GetValueAsBool(IsTooCloseKey.SelectedKeyName) ? Exit : Enter);
+	const UCombatComponent* Combat = EnemyPawn->FindComponentByClass<UCombatComponent>();
+	const bool bShooting = Combat && Combat->IsRangedAttackInProgress();
+	if (SpacingTarget.Get() != TargetActor)
+	{
+		if (bRetreating) NextRetreatAllowedAt = Now + RetreatCooldown;
+		SpacingTarget = TargetActor;
+		bRetreating = false;
+		CloseSince = -1.;
+	}
+	if (bRetreating)
+	{
+		// A moving player cannot make one retreat last forever. Ending it also
+		// aborts the branch's old MoveTo through the Both observer on bIsTooClose.
+		if (Distance >= Exit || Now - RetreatStartedAt >= MaximumRetreatDuration)
+		{
+			bRetreating = false;
+			NextRetreatAllowedAt = Now + RetreatCooldown;
+			CloseSince = -1.;
+		}
+	}
+	else if (Distance < Enter && !bShooting)
+	{
+		if (CloseSince < 0.) CloseSince = Now;
+		if (Now >= NextRetreatAllowedAt && Now - CloseSince >= RetreatReactionDelay)
+		{
+			bRetreating = true;
+			RetreatStartedAt = Now;
+		}
+	}
+	else CloseSince = -1.;
+	// Preserve a visible shooting opportunity while the player approaches;
+	// only real close-range/LOS/stun failures may interrupt the bow's wind-up.
+	const bool bPreparingRetreat = !bRetreating && !bShooting && Distance < Enter && Now >= NextRetreatAllowedAt;
+    const bool bInRange = !bRetreating && !bPreparingRetreat && bSight && Distance >= MinimumAttackDistance && Distance <= MaximumAttackDistance;
+	const bool bShouldApproach = !bRetreating && (Distance > MaximumAttackDistance || !bSight);
+	ApplyMovementSpeed(Character, bRetreating ? RetreatSpeed : (bShouldApproach ? ApproachSpeed : RetreatSpeed));
     Blackboard->SetValueAsFloat(DistanceToTargetKey.SelectedKeyName, Distance);
     Blackboard->SetValueAsBool(HasLineOfSightKey.SelectedKeyName, bSight);
-    Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, bRetreat);
-    Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName,
-        !bRetreat && bSight && Distance >= MinimumAttackDistance && Distance <= MaximumAttackDistance);
+    Blackboard->SetValueAsBool(IsTooCloseKey.SelectedKeyName, bRetreating);
+    Blackboard->SetValueAsBool(IsInRangedAttackRangeKey.SelectedKeyName, bInRange);
+	Blackboard->SetValueAsBool(ShouldApproachTargetKey.SelectedKeyName, bShouldApproach);
+}
+
+void UBTService_UpdateRangedCombat::ApplyMovementSpeed(ACharacter* Character, float Speed)
+{
+	if (MovementPawn.Get() != Character)
+	{
+		RestoreMovementSpeed();
+		MovementPawn = Character;
+		if (Character) SavedMovementSpeed = Character->GetCharacterMovement()->MaxWalkSpeed;
+	}
+	if (Character)
+	{
+		// Respect a deliberately slower actor override; never speed it up.
+		AppliedMovementSpeed = FMath::Min(SavedMovementSpeed, FMath::Max(0.f, Speed));
+		Character->GetCharacterMovement()->MaxWalkSpeed = AppliedMovementSpeed;
+	}
+}
+
+void UBTService_UpdateRangedCombat::RestoreMovementSpeed()
+{
+	if (MovementPawn.IsValid() && FMath::IsNearlyEqual(MovementPawn->GetCharacterMovement()->MaxWalkSpeed, AppliedMovementSpeed))
+		MovementPawn->GetCharacterMovement()->MaxWalkSpeed = SavedMovementSpeed;
+	MovementPawn.Reset();
 }
 
 void UBTService_UpdateRangedCombat::RestoreFacing()
@@ -111,6 +179,11 @@ void UBTService_UpdateRangedCombat::RestoreFacing()
 void UBTService_UpdateRangedCombat::OnCeaseRelevant(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     RestoreFacing();
+	RestoreMovementSpeed();
+	SpacingTarget.Reset();
+	bRetreating = false;
+	CloseSince = -1.;
+	NextRetreatAllowedAt = 0.;
     Super::OnCeaseRelevant(OwnerComp, NodeMemory);
 }
 
@@ -187,6 +260,8 @@ EBTNodeResult::Type UBTTask_PerformRangedAttack::ExecuteTask(
 		: nullptr;
 	if (!Controller || !EnemyPawn || !Blackboard || !TargetActor ||
 		!Blackboard->GetValueAsBool(HasLineOfSightKey.SelectedKeyName) ||
+		Blackboard->GetValueAsBool(TEXT("bIsStunned")) || Blackboard->GetValueAsBool(TEXT("bIsDead")) ||
+		!Controller->LineOfSightTo(TargetActor) ||
 		FVector::Dist2D(EnemyPawn->GetActorLocation(),
 			TargetActor->GetActorLocation()) > MaximumAttackDistance)
 	{
@@ -194,6 +269,7 @@ EBTNodeResult::Type UBTTask_PerformRangedAttack::ExecuteTask(
 	}
 
 	Controller->StopMovement();
+	if (ACharacter* Character = Cast<ACharacter>(EnemyPawn)) Character->GetCharacterMovement()->StopMovementImmediately();
 	// UpdateRangedCombat owns facing, including movement and cooldowns.
 	ActiveCombatComponent = EnemyPawn->FindComponentByClass<UCombatComponent>();
 	if (!ActiveCombatComponent.IsValid() ||
