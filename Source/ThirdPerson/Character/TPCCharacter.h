@@ -134,7 +134,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> BlockAction;
 
-	/** Enemy currently followed by the camera. Null means free-look mode. */
+	/** Enemy followed by character facing / attack assist. The camera always remains free. */
 	UPROPERTY(BlueprintReadOnly, Category = "Lock On")
 	TObjectPtr<AEnemyCharacter> LockedTarget;
 
@@ -144,10 +144,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Lock On", meta = (ClampMin = "1.0", ClampMax = "180.0"))
 	float InitialLockOnMaxAngle = 70.f;
 
+	/** Character-facing interpolation speed; never rotates the player's camera. */
 	UPROPERTY(EditDefaultsOnly, Category = "Lock On", meta = (ClampMin = "0.1"))
 	float LockOnRotationSpeed = 10.f;
 
-	/** Accumulated horizontal mouse delta required for one target switch. */
+	/** Hold Alt and move the mouse horizontally to deliberately switch one target. */
 	UPROPERTY(EditDefaultsOnly, Category = "Lock On", meta = (ClampMin = "0.1"))
 	float TargetSwitchMouseThreshold = 2.5f;
 
@@ -166,6 +167,9 @@ public:
 	/** Capsule-to-target distance retained by attack magnetism. */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
 	float AttackMagnetismStopDistance = 120.f;
+	/** Approach budget per attack startup; separate from movement authored after the warp window. */
+	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0", Units = "cm"))
+	float MaxLockOnAttackPullDistance = 60.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
 	float MaxAttackWarpTranslation = 250.f;
 
@@ -313,6 +317,7 @@ private:
 	void HandleMotionMontageEnded(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
 	void HandleMotionBlendingOut(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
 	void UpdateMotionAction();
+	bool HasActionRotationOwner() const;
 	void ApplyActionRotationPolicy();
 	void StopGroundInputMomentum();
 	void ClearAttackRootMotionForDodge();
@@ -353,6 +358,7 @@ private:
 	bool bAttackTargetAssistActive = false;
 	float AttackTargetAssistEndTime = 0.f;
 	float AttackFacingYaw = 0.f;
+	FVector AttackAssistStartLocation = FVector::ZeroVector;
 	/** Last currently-held WASD axis; cleared when the Move action completes. */
 	FVector2D LastMoveInputAxis = FVector2D::ZeroVector;
 };

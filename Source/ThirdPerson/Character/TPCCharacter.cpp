@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "InputCoreTypes.h"
 #include "../Components/InteractionComponent.h"
 #include "../Components/InventoryComponent.h"
 #include "../Components/HealthComponent.h"
@@ -307,7 +308,17 @@ void ATPCCharacter::ClearMoveInput()
 void ATPCCharacter::Look(const FInputActionValue& Value)
 {
 	const FVector2D Axis = Value.Get<FVector2D>();
-	if (LockedTarget)
+	const APlayerController* PlayerController = Cast<APlayerController>(Controller);
+	if (!PlayerController || PlayerController->IsLookInputIgnored())
+	{
+		FinishLookInput();
+		return;
+	}
+	// Looking around must neither release lock-on nor choose another enemy. Switching
+	// retains the existing one-gesture latch, but requires an intentional modifier.
+	const bool bSwitchGesture = LockedTarget && (PlayerController->IsInputKeyDown(EKeys::LeftAlt) ||
+		PlayerController->IsInputKeyDown(EKeys::RightAlt));
+	if (bSwitchGesture)
 	{
 		if (!bTargetSwitchLatched)
 		{
@@ -322,6 +333,7 @@ void ATPCCharacter::Look(const FInputActionValue& Value)
 		return;
 	}
 
+	FinishLookInput();
 	AddControllerYawInput(Axis.X);
 	AddControllerPitchInput(-Axis.Y);
 }
@@ -905,13 +917,19 @@ void ATPCCharacter::UpdateAttackWarpTarget()
 		FVector TargetToPlayer = GetActorLocation() - LockedTarget->GetActorLocation();
 		TargetToPlayer.Z = 0.f;
 		const float Distance = TargetToPlayer.Size();
-		if (Distance <= AttackMagnetismRange && TargetToPlayer.Normalize())
+		if (Distance <= AttackMagnetismRange)
 		{
 			const float CapsuleGap = GetCapsuleComponent()->GetScaledCapsuleRadius() +
 				LockedTarget->GetCapsuleComponent()->GetScaledCapsuleRadius() + 8.f;
-			WarpLocation = LockedTarget->GetActorLocation() +
-				TargetToPlayer * FMath::Max(CapsuleGap, AttackMagnetismStopDistance);
-			WarpLocation.Z = GetActorLocation().Z;
+			const float RemainingPull = FMath::Max(0.f, MaxLockOnAttackPullDistance -
+				static_cast<float>(FVector::Dist2D(AttackAssistStartLocation, GetActorLocation())));
+			const float PullDistance = FMath::Clamp(Distance - FMath::Max(CapsuleGap, AttackMagnetismStopDistance),
+				0.f, RemainingPull);
+			// Do not retreat to the preferred attack spacing. Preserve only the small
+			// collision-safety margin if a previous stage already reached capsule contact.
+			const float SafetySeparation = FMath::Max(0.f, CapsuleGap - Distance);
+			WarpLocation = GetActorLocation() + TargetToPlayer.GetSafeNormal() *
+				(SafetySeparation > 0.f ? SafetySeparation : -PullDistance);
 		}
 	}
 
@@ -941,6 +959,7 @@ void ATPCCharacter::BeginAttackTargetAssist()
 	if (IsTurningInPlace()) { CancelMotionAction(); }
 	StopGroundInputMomentum();
 	ApplyActionRotationPolicy();
+	AttackAssistStartLocation = GetActorLocation();
 	UpdateAttackWarpTarget();
 	if (!GetWorld() || AttackFacingDuration <= 0.f)
 	{
@@ -1056,24 +1075,20 @@ void ATPCCharacter::UpdateLockOn(float DeltaSeconds)
 		return;
 	}
 
-	APlayerController* PlayerController = Cast<APlayerController>(Controller);
-	if (!PlayerController || !FollowCamera)
+	if (!Controller || HasActionRotationOwner())
 	{
 		return;
 	}
 
-	FRotator DesiredRotation = (GetLockTargetPoint(LockedTarget) -
-		FollowCamera->GetComponentLocation()).Rotation();
-	DesiredRotation.Roll = 0.f;
-	DesiredRotation.Pitch = FMath::ClampAngle(DesiredRotation.Pitch, -55.f, 35.f);
-
-	const FRotator NewRotation = FMath::RInterpTo(
-		PlayerController->GetControlRotation(),
-		DesiredRotation,
-		DeltaSeconds,
-		LockOnRotationSpeed);
-	PlayerController->SetControlRotation(NewRotation);
-
+	FVector Direction = LockedTarget->GetActorLocation() - GetActorLocation();
+	Direction.Z = 0.f;
+	if (Direction.Normalize())
+	{
+		// Lock-on owns only the body's yaw. ControlRotation belongs exclusively to
+		// free look; attack/dodge/hit root motion keeps its existing rotation windows.
+		SetActorRotation(FMath::RInterpTo(GetActorRotation(), FRotator(0.f, Direction.Rotation().Yaw, 0.f),
+			DeltaSeconds, LockOnRotationSpeed));
+	}
 }
 
 AEnemyCharacter* ATPCCharacter::FindInitialLockTarget() const
@@ -1270,17 +1285,22 @@ void ATPCCharacter::StopGroundInputMomentum()
 	}
 }
 
+bool ATPCCharacter::HasActionRotationOwner() const
+{
+	return (ActionComponent && ActionComponent->OwnsRotation()) || bActionDead || bMovementLockedByHit ||
+		MotionAction != ETPCMotionAction::None ||
+		(CombatComponent && (CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()));
+}
+
 void ATPCCharacter::ApplyActionRotationPolicy()
 {
 	UCharacterMovementComponent* Movement = GetCharacterMovement();
 	if (!Movement) { return; }
-	const bool bActionOwnsRotation = (ActionComponent && ActionComponent->OwnsRotation()) || bActionDead || bMovementLockedByHit ||
-		MotionAction != ETPCMotionAction::None ||
-		(CombatComponent && (CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()));
-	// One rotation owner: root motion / attack assist during actions, CMC outside actions.
-	// DesiredRotation uses RotationRate, avoiding an instant controller-yaw snap on release.
+	const bool bActionOwnsRotation = HasActionRotationOwner();
+	// One body-rotation owner: action root motion / assist, locked-target facing,
+	// or ordinary movement. None of them borrows the freely orbiting camera's yaw.
 	bUseControllerRotationYaw = false;
-	Movement->bUseControllerDesiredRotation = !bActionOwnsRotation && LockedTarget != nullptr;
+	Movement->bUseControllerDesiredRotation = false;
 	Movement->bOrientRotationToMovement = !bActionOwnsRotation && LockedTarget == nullptr;
 }
 

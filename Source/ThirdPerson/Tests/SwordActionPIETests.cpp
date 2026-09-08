@@ -60,6 +60,15 @@ struct FTPCSwordPIETestAccess
 
 namespace SwordPIE
 {
+UWeaponDefinition* DamageFixture(UWeaponDefinition* SavedWeapon)
+{
+    // Hit-count oracles use 25 damage. Never rewrite a user's tuned weapon asset;
+    // only this transient definition differs, while real meshes/actions stay shared.
+    auto* Fixture = SavedWeapon ? DuplicateObject<UWeaponDefinition>(SavedWeapon, GetTransientPackage()) : nullptr;
+    if (Fixture) Fixture->Damage = 25.f;
+    return Fixture;
+}
+
 class FCoreScenario : public IAutomationLatentCommand
 {
     FAutomationTestBase* Test;
@@ -106,7 +115,7 @@ public:
             Player = Cast<ATPCCharacter>(UGameplayStatics::GetPlayerCharacter(W, 0)); if (!Player.IsValid()) return false;
             for (TActorIterator<ACountessBossCharacter> It(W); It; ++It) It->Destroy();
             auto* Weapon = LoadObject<UWeaponDefinition>(nullptr, TEXT("/Game/Third/DataAsset/DA_TestSword.DA_TestSword"));
-            if (!Test->TestTrue(TEXT("PIE equips the real sword actor"), Player->EquipmentComponent->EquipWeapon(Weapon))) return true;
+            if (!Test->TestTrue(TEXT("PIE equips the real sword actor with normalized test damage"), Player->EquipmentComponent->EquipWeapon(DamageFixture(Weapon)))) return true;
             Test->TestNotNull(TEXT("Saved player owns unified action component"), Player->ActionComponent.Get());
             UClass* Class = LoadClass<AEnemyCharacter>(nullptr, TEXT("/Game/Third/Character/BP_EnemyCharacter.BP_EnemyCharacter_C"));
             FActorSpawnParameters Params; Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -406,7 +415,7 @@ public:
             FApp::SetFixedDeltaTime(1./Rates[FPSIndex]);
             auto* Weapon=LoadObject<UWeaponDefinition>(nullptr,TEXT("/Game/Third/DataAsset/DA_TestSword.DA_TestSword"));
             if (FPSIndex==0 && Case==0) Test->TestTrue(Label(TEXT("sword is equipped from the saved default")),P->EquipmentComponent->GetEquippedWeaponDefinition()==Weapon);
-            P->EquipmentComponent->EquipWeapon(Weapon); P->EquipmentComponent->SetWeaponDrawn(true);
+            P->EquipmentComponent->EquipWeapon(DamageFixture(Weapon)); P->EquipmentComponent->SetWeaponDrawn(true);
             Enemy=SpawnEnemy(W,FVector(115,-1000,98));
             if (!Test->TestNotNull(Label(TEXT("real opponent")),Enemy.Get())) return true;
             HitGroups.Reset(); SeenActions.Reset(); Queued.Reset();
