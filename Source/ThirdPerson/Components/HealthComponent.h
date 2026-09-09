@@ -54,6 +54,8 @@ public:
 	void SetCurrentHealth(float NewHealth);
 	void AddMaxHealth(float Amount, bool bHealAddedAmount);
 	void MultiplyDamageReceived(float Multiplier);
+	/** Copy permanent attributes only; death, hit and immunity state stay fresh. */
+	void RestoreRespawnAttributes(const UHealthComponent& Source);
 	float GetCurrentHealth() const { return CurrentHealth; }
 	float GetMaxHealth() const { return MaxHealth; }
 protected:

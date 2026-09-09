@@ -38,6 +38,13 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryChanged OnInventoryChanged;
 	bool UseItemAtSlot(int32 SlotIndex);
+	/** The same definition as the world's health pickup; also used by the quick slot. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory|Health Potion")
+	TObjectPtr<UItemDefinition> HealthPotionDefinition;
+	UFUNCTION(BlueprintPure, Category = "Inventory|Health Potion")
+	int32 GetHealthPotionCount() const;
+	bool RefillHealthPotionsAfterDeath();
+	void RestoreRespawnInventory(const UInventoryComponent& Source);
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

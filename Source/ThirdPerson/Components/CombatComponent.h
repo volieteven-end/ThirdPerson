@@ -94,6 +94,7 @@ public:
 	void MultiplyDamage(float Multiplier);
 	void MultiplyAttackCooldown(float Multiplier);
 	void MultiplyMeleeReach(float Multiplier);
+	void RestoreRespawnAttributes(const UCombatComponent& Source);
 	bool IsMeleeAttackInProgress() const { return bMeleeAttackInProgress; }
 	UFUNCTION(BlueprintPure, Category = "Combat|Combo")
 	bool HasBufferedComboInput() const;
@@ -159,6 +160,7 @@ protected:
 	bool bDrawHandTraceDebug = true;
 	
 private:
+	friend struct FTPCRespawnTestAccess;
 	UActionComponent* GetActions() const;
 	TPCActionRules::FComboBuffer& GetComboBuffer();
 	uint64 GetComboGeneration() const;

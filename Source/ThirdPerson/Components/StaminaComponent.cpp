@@ -1,5 +1,14 @@
 ﻿#include "StaminaComponent.h"
 
+void UStaminaComponent::RestoreRespawnAttributes(const UStaminaComponent& Source)
+{
+	MaxStamina = Source.MaxStamina;
+	RecoveryPerSecond = Source.RecoveryPerSecond;
+	RecoveryDelay = Source.RecoveryDelay;
+	RecoveryResumeTime = 0.f;
+	SetCurrentStamina(MaxStamina);
+}
+
 UStaminaComponent::UStaminaComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;

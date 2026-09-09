@@ -4,14 +4,16 @@
 #include "InventoryComponent.h"
 #include "../Items/ItemDefinition.h"
 #include "HealthComponent.h"
+#include "UObject/ConstructorHelpers.h"
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
-
-	// ...
+	static ConstructorHelpers::FObjectFinder<UItemDefinition> Potion(
+		TEXT("/Game/Third/DataAsset/DA_Test0Rb.DA_Test0Rb"));
+	HealthPotionDefinition = Potion.Object;
 }
 
 
@@ -118,6 +120,11 @@ void UInventoryComponent::TryUseFirstConsumable()
 }
 bool UInventoryComponent::UseFirstConsumable()
 {
+	// Prefer the potion shown in the quick slot, regardless of inventory ordering.
+	for (int32 Index = 0; Index < Slots.Num(); ++Index)
+	{
+		if (Slots[Index].ItemDefinition == HealthPotionDefinition && UseItemAtSlot(Index)) return true;
+	}
 	for (int32 Index = 0; Index < Slots.Num(); ++Index)
 	{
 		if (UseItemAtSlot(Index))
@@ -194,7 +201,7 @@ bool UInventoryComponent::UseItemAtSlot(int32 SlotIndex)
 	UHealthComponent* HealthComponent =OwnerActor->FindComponentByClass<UHealthComponent>();
 	FInventorySlot& InventorySlot = Slots[SlotIndex];
 	UItemDefinition* ItemDefinition =InventorySlot.ItemDefinition;
-	if (!HealthComponent ||!ItemDefinition ||ItemDefinition->ItemType != EItemType::Consumable ||ItemDefinition->HealAmount <= 0.f ||HealthComponent->GetCurrentHealth() >=HealthComponent->GetMaxHealth())
+	if (!HealthComponent ||!ItemDefinition ||InventorySlot.Count <= 0 ||ItemDefinition->ItemType != EItemType::Consumable ||ItemDefinition->HealAmount <= 0.f ||HealthComponent->GetCurrentHealth() <= 0.f ||HealthComponent->GetCurrentHealth() >=HealthComponent->GetMaxHealth())
 	{
 		return false;
 	}
@@ -206,4 +213,40 @@ bool UInventoryComponent::UseItemAtSlot(int32 SlotIndex)
 	}
 	OnInventoryChanged.Broadcast();
 	return true;
+}
+
+int32 UInventoryComponent::GetHealthPotionCount() const
+{
+	int32 Count = 0;
+	if (HealthPotionDefinition)
+		for (const FInventorySlot& Slot : Slots)
+			if (Slot.ItemDefinition == HealthPotionDefinition) Count += FMath::Max(0, Slot.Count);
+	return Count;
+}
+
+bool UInventoryComponent::RefillHealthPotionsAfterDeath()
+{
+	const int32 Missing = FMath::Max(0, 2 - GetHealthPotionCount());
+	if (!Missing) return true;
+	if (!IsValid(HealthPotionDefinition) || HealthPotionDefinition->ItemId.IsNone() ||
+		HealthPotionDefinition->MaxStack <= 0 || HealthPotionDefinition->ItemType != EItemType::Consumable ||
+		HealthPotionDefinition->HealAmount <= 0.f) return false;
+
+	int32 Remaining = Missing;
+	for (const FInventorySlot& Slot : Slots)
+		if (Slot.ItemDefinition == HealthPotionDefinition)
+			Remaining -= FMath::Min(Remaining, FMath::Max(0, HealthPotionDefinition->MaxStack - Slot.Count));
+	const int32 ExtraSlots = FMath::DivideAndRoundUp(Remaining, HealthPotionDefinition->MaxStack);
+	// Death recovery must not evict loot from a full bag. Extend only as far as needed.
+	MaxSlots = FMath::Max(MaxSlots, Slots.Num() + ExtraSlots);
+	return AddItem(HealthPotionDefinition, Missing);
+}
+
+void UInventoryComponent::RestoreRespawnInventory(const UInventoryComponent& Source)
+{
+	Slots = Source.Slots;
+	MaxSlots = Source.MaxSlots;
+	HealthPotionDefinition = Source.HealthPotionDefinition;
+	ensureMsgf(RefillHealthPotionsAfterDeath(), TEXT("Respawn health potion definition must be valid"));
+	OnInventoryChanged.Broadcast();
 }

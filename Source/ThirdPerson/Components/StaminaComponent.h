@@ -22,6 +22,7 @@ public:
 	float GetMaxStamina() const { return MaxStamina; }
 	void SetCurrentStamina(float NewStamina);
 	void AddMaxStamina(float Amount, bool bRestoreAddedAmount);
+	void RestoreRespawnAttributes(const UStaminaComponent& Source);
 	UPROPERTY(BlueprintAssignable)
 	FOnStaminaChanged OnStaminaChanged;
 	

@@ -28,6 +28,8 @@
 #include "../Components/EquipmentComponent.h"
 #include "../Components/LevelComponent.h"
 #include "../Save/TPCSaveGame.h"
+#include "../Save/TPCRespawnSubsystem.h"
+#include "../Save/TPCSaveSlots.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Items/ItemDefinition.h"
 #include "TPCPlayerController.h"
@@ -120,9 +122,13 @@ void ATPCCharacter::BeginPlay()
 			this,
 			&ThisClass::BeginAttackTargetAssist);
 	}
-	const FString SaveSlotName = TEXT("PlayerSave");
+	const FString SaveSlotName = TPCSaveSlots::Resolve();
 
-	if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	if (ATPCCharacter* Source = GetWorld()->GetSubsystem<UTPCRespawnSubsystem>()->TakeSourceFor(this))
+	{
+		RestoreRespawnProgress(*Source);
+	}
+	else if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
 		if (UTPCSaveGame* SaveGame =Cast<UTPCSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName,0)))
 		{
@@ -155,6 +161,8 @@ void ATPCCharacter::BeginPlay()
 			if (InventoryComponent)
 			{
 				InventoryComponent->Slots.Reset();
+				InventoryComponent->MaxSlots = FMath::Max(InventoryComponent->MaxSlots,
+					FMath::Max(SaveGame->InventoryCapacity, SaveGame->InventorySlots.Num()));
 
 				for (const FSaveInventorySlot& SavedSlot :SaveGame->InventorySlots)
 				{
@@ -464,9 +472,10 @@ void ATPCCharacter::RespawnPlayer()
 
 	if (AGameModeBase* GameMode = GetWorld()->GetAuthGameMode())
 	{
-		RespawnController->UnPossess(); // 不再控制死亡的旧角色
-		Destroy();                      // 删除旧角色，避免它继续跌落
-
+		// Keep the old pawn alive until the new pawn has inherited its progress.
+		auto* Handoff = GetWorld()->GetSubsystem<UTPCRespawnSubsystem>();
+		TGuardValue<TWeakObjectPtr<ATPCCharacter>> PendingGuard(Handoff->PendingSource, this);
+		RespawnController->UnPossess();
 		GameMode->RestartPlayer(RespawnController);
 
 		if (APawn* NewPawn = RespawnController->GetPawn())
@@ -482,6 +491,8 @@ void ATPCCharacter::RespawnPlayer()
                     P->SetActorLocationAndRotation(Start->GetActorLocation(), Start->GetActorRotation(), false, nullptr, ETeleportType::TeleportPhysics);
                 if (auto* PC = Cast<ATPCPlayerController>(RespawnController))
                 { PC->SetViewTarget(P); PC->RestoreGameplayInput(); }
+                P->LevelComponent->NotifyPendingUpgradeChoices();
+                Destroy();
             }
 			UE_LOG(
 				LogTemp,
@@ -490,7 +501,29 @@ void ATPCCharacter::RespawnPlayer()
 				*NewPawn->GetName(),
 				*NewPawn->GetActorLocation().ToString());
 		}
+		else
+		{
+			// A failed spawn must not discard the only copy of the player's bag/stats.
+			RespawnController->Possess(this);
+			DisableInput(Cast<APlayerController>(RespawnController));
+			if (auto* PC = Cast<ATPCPlayerController>(RespawnController)) PC->ShowDeathScreen();
+		}
 	}
+}
+
+void ATPCCharacter::RestoreRespawnProgress(const ATPCCharacter& Source)
+{
+	SetDoubleJumpUnlocked(Source.bDoubleJumpUnlocked);
+	if (UWeaponDefinition* Weapon = Source.EquipmentComponent->GetEquippedWeaponDefinition())
+		EquipmentComponent->EquipWeapon(Weapon);
+	else
+		EquipmentComponent->UnequipWeapon();
+	HealthComponent->RestoreRespawnAttributes(*Source.HealthComponent);
+	StaminaComponent->RestoreRespawnAttributes(*Source.StaminaComponent);
+	CombatComponent->RestoreRespawnAttributes(*Source.CombatComponent);
+	LevelComponent->RestoreRespawnProgress(*Source.LevelComponent);
+	InventoryComponent->RestoreRespawnInventory(*Source.InventoryComponent);
+	PreviousHealth = HealthComponent->GetCurrentHealth();
 }
 void ATPCCharacter::HandleHealthChanged(float CurrentHealth,float MaxHealth)
 {

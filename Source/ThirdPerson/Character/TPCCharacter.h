@@ -48,6 +48,7 @@ protected:
 	void HandleDeath();
 
 	void RespawnPlayer();
+	void RestoreRespawnProgress(const ATPCCharacter& Source);
     void FinishDeathPresentation();
     bool bDeathPresentationReady = false;
 

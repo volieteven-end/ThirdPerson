@@ -64,6 +64,9 @@ public:
 		const TArray<ELevelUpgradeType>& SavedUpgrades);
 
 	int32 GetLevel() const { return Level; }
+	/** Attributes are copied separately: do not apply level/upgrade bonuses twice. */
+	void RestoreRespawnProgress(const ULevelComponent& Source);
+	void NotifyPendingUpgradeChoices();
 	int32 GetCurrentExperience() const { return CurrentExperience; }
 	int32 GetExperienceToNextLevel() const;
 	bool HasPendingUpgradeChoice() const { return PendingUpgradeSelections > 0; }
@@ -94,6 +97,7 @@ protected:
 	float DamagePerLevel = 2.f;
 
 private:
+	friend struct FTPCRespawnTestAccess;
 	void LevelUpOnce();
 	void GenerateUpgradeChoices();
 	FLevelUpgradeChoice MakeUpgradeChoice(ELevelUpgradeType Type) const;

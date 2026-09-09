@@ -3,6 +3,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TPCSaveGame.h"
+#include "TPCSaveSlots.h"
 #include "../Items/ItemDefinition.h"
 #include "../Character/TPCCharacter.h"
 #include "../Components/HealthComponent.h"
@@ -69,6 +70,7 @@ void ACheckpointActor::HandlePlayerEnter(
 	SaveGame->InventorySlots.Reset();
 	if (UInventoryComponent* Inventory =Player->FindComponentByClass<UInventoryComponent>())
 	{
+		SaveGame->InventoryCapacity = Inventory->MaxSlots;
 		for (const FInventorySlot& Slot : Inventory->Slots)
 		{
 			if (!Slot.ItemDefinition || Slot.Count <= 0)
@@ -99,7 +101,7 @@ void ACheckpointActor::HandlePlayerEnter(
 		SavedDoor.SaveId = Door->GetSaveId();
 		SavedDoor.bIsOpen = Door->IsOpen();
 	}
-	const bool bSaved = UGameplayStatics::SaveGameToSlot(SaveGame,SaveSlotName,0);
+	const bool bSaved = UGameplayStatics::SaveGameToSlot(SaveGame,TPCSaveSlots::Resolve(SaveSlotName),0);
 	if (bSaved)
 	{
 		bIsActivated = true;

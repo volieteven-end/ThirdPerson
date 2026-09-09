@@ -13,23 +13,26 @@
 #include "../Components/ActionComponent.h"
 #include "TPCCharacter.h"
 #include "../UI/PlayerDeathWidget.h"
+#include "../UI/HealthPotionWidget.h"
 void ATPCPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	RestoreGameplayInput();
-	if (!IsLocalController()||!InventoryWidgetClass)
+	if (!IsLocalController())
 	{
 		return;
 	}
-	InventoryWidget=CreateWidget<UInventoryWidget>(this, InventoryWidgetClass);
-	if (!InventoryWidget)
+	HealthPotionWidget = CreateWidget<UHealthPotionWidget>(this, UHealthPotionWidget::StaticClass());
+	if (HealthPotionWidget) HealthPotionWidget->AddToViewport(5);
+	if (InventoryWidgetClass)
 	{
-		return;
-	}
-	InventoryWidget->AddToViewport();
-	if (ATPCGameMode* GameMode =Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode()))
-	{
-		InventoryWidget->SetGameMode(GameMode);
+		InventoryWidget = CreateWidget<UInventoryWidget>(this, InventoryWidgetClass);
+		if (InventoryWidget)
+		{
+			InventoryWidget->AddToViewport();
+			if (auto* GameMode = Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode()))
+				InventoryWidget->SetGameMode(GameMode);
+		}
 	}
 	ConnectInventory(GetPawn());
 	
@@ -71,10 +74,12 @@ void ATPCPlayerController::RestoreGameplayInput()
 
 void ATPCPlayerController::ConnectInventory(APawn* InPawn)
 {
-	if (!IsLocalController()||!InventoryWidget||!InPawn)
+	if (!IsLocalController()||!InPawn)
 	{
 		return;
 	}
+	if (HealthPotionWidget) HealthPotionWidget->SetInventory(InPawn->FindComponentByClass<UInventoryComponent>());
+	if (!InventoryWidget) return;
 	if (UInventoryComponent* Inventory=InPawn->FindComponentByClass<UInventoryComponent>())
 	{
 		InventoryWidget->SetInventory(Inventory);

@@ -218,6 +218,23 @@ void ULevelComponent::RestoreProgress(
 	BroadcastProgress();
 }
 
+void ULevelComponent::RestoreRespawnProgress(const ULevelComponent& Source)
+{
+	Level = Source.Level;
+	CurrentExperience = Source.CurrentExperience;
+	PendingUpgradeSelections = Source.PendingUpgradeSelections;
+	CurrentChoices = Source.CurrentChoices;
+	SelectedUpgrades = Source.SelectedUpgrades;
+	bProgressRestored = true;
+	BroadcastProgress();
+}
+
+void ULevelComponent::NotifyPendingUpgradeChoices()
+{
+	if (PendingUpgradeSelections > 0 && CurrentChoices.Num() == 3)
+		OnUpgradeChoicesReady.Broadcast(CurrentChoices[0], CurrentChoices[1], CurrentChoices[2]);
+}
+
 void ULevelComponent::BroadcastProgress()
 {
 	OnLevelProgressChanged.Broadcast(

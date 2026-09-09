@@ -35,6 +35,18 @@ namespace
 	}
 }
 // Sets default values for this component's properties
+void UCombatComponent::RestoreRespawnAttributes(const UCombatComponent& Source)
+{
+	Damage = Source.Damage;
+	AttackRange = Source.AttackRange;
+	AttackRadius = Source.AttackRadius;
+	AttackCooldown = Source.AttackCooldown;
+	LevelDamageBonus = Source.LevelDamageBonus;
+	DamageMultiplier = Source.DamageMultiplier;
+	AttackCooldownMultiplier = Source.AttackCooldownMultiplier;
+	MeleeReachMultiplier = Source.MeleeReachMultiplier;
+}
+
 UCombatComponent::UCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;

@@ -53,6 +53,7 @@ struct FTPCSwordPIETestAccess
         if (P.GetController()) P.GetController()->SetControlRotation(FRotator::ZeroRotator);
     }
     static bool DamageWindow(const UCombatComponent& C) { return C.bAttackWindowActive; }
+    static void DisableExperienceReward(AEnemyCharacter& E) { E.ExperienceReward = 0; }
     static bool CombatEnabled(const UCombatComponent& C) { return C.bCombatEnabled; }
     static int32 LaunchCount(const AEnemyCharacter& E) { return E.LaunchesThisFlight; }
     static bool DiveLanded(const UCombatComponent& C) { return C.bAirDiveLanded; }
@@ -353,6 +354,9 @@ class FLifecycleScenario : public IAutomationLatentCommand
         FActorSpawnParameters Params; Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
         auto* E = W->SpawnActor<AEnemyCharacter>(Class,Location,FRotator(0,180,0),Params);
         if (!E) return nullptr;
+        // Combat lifecycle fixtures must not accumulate upgrades (and pause on the
+        // selection modal) now that player progress correctly survives death.
+        FTPCSwordPIETestAccess::DisableExperienceReward(*E);
         if (auto* AI = Cast<AAIController>(E->GetController()))
         { if (AI->GetBrainComponent()) AI->GetBrainComponent()->StopLogic(TEXT("Sword lifecycle deterministic probe")); AI->StopMovement(); }
         E->FindComponentByClass<UCombatComponent>()->SetCombatEnabled(false);

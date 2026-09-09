@@ -58,5 +58,7 @@ public:
 	UPROPERTY(SaveGame)
 	TArray<FSaveInventorySlot> InventorySlots;
 	UPROPERTY(SaveGame)
+	int32 InventoryCapacity = 20;
+	UPROPERTY(SaveGame)
 	TArray<FSaveDoorState> DoorStates;
 };

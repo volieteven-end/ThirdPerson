@@ -7,6 +7,13 @@
 #include "../AI/EnemyCharacter.h"
 
 
+void UHealthComponent::RestoreRespawnAttributes(const UHealthComponent& Source)
+{
+	MaxHealth = Source.MaxHealth;
+	DamageReceivedMultiplier = Source.DamageReceivedMultiplier;
+	SetCurrentHealth(MaxHealth);
+}
+
 UHealthComponent::UHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;

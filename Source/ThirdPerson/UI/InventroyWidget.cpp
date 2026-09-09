@@ -2,6 +2,7 @@
 
 
 #include "InventroyWidget.h"
+#include "../Save/TPCSaveSlots.h"
 #include "../Components/InventoryComponent.h"
 #include "../Components/HealthComponent.h"
 #include "../GameMode/TPCGameMode.h"
@@ -283,7 +284,7 @@ void UInventoryWidget::HandleStaminaChanged(float CurrentStamina,float MaxStamin
 }
 void UInventoryWidget::ClearSaveAndRestart()
 {
-	const bool bDeleted =UGameplayStatics::DeleteGameInSlot(TEXT("PlayerSave"),0);
+	const bool bDeleted =UGameplayStatics::DeleteGameInSlot(TPCSaveSlots::Resolve(),0);
 
 	UE_LOG(LogTemp,Warning,TEXT("Save deleted: %s"),bDeleted ? TEXT("Success") : TEXT("No save found"));
 
@@ -511,6 +512,8 @@ void UInventoryWidget::HandleUpgradeChoicesReady(
 	const FLevelUpgradeChoice& ChoiceB,
 	const FLevelUpgradeChoice& ChoiceC)
 {
+	// The restored upgrade modal must accept keyboard focus after possession changes.
+	SetIsFocusable(true);
 	ShowLevelUpChoices(
 		ChoiceA.DisplayName, ChoiceA.Description,
 		ChoiceB.DisplayName, ChoiceB.Description,
