@@ -77,10 +77,18 @@ bool UEquipmentComponent::EquipWeapon(UWeaponDefinition* NewWeaponDefinition)
 void UEquipmentComponent::SetWeaponDrawn(bool bDrawn)
 {
     bWeaponDrawn = bDrawn;
-    if (IsValid(EquippedWeaponActor))
+    auto* Character = Cast<ACharacter>(GetOwner());
+    if (IsValid(EquippedWeaponActor) && EquippedWeaponDefinition && Character && Character->GetMesh())
     {
-        if (!bDrawn) EquippedWeaponActor->SetAttackEffectActive(false);
-        EquippedWeaponActor->SetActorHiddenInGame(!bDrawn);
+        if (!bDrawn)
+        {
+            EquippedWeaponActor->SetAttackEffectActive(false);
+            if (auto* Combat = Character->FindComponentByClass<UCombatComponent>()) Combat->ClearSwordBuff();
+        }
+        const FName Socket = bDrawn ? EquippedWeaponDefinition->EquipSocketName : EquippedWeaponDefinition->SheathSocketName;
+        EquippedWeaponActor->AttachToComponent(Character->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, Socket);
+        EquippedWeaponActor->SetActorRelativeTransform(bDrawn ? FTransform::Identity : EquippedWeaponDefinition->SheathRelativeTransform);
+        EquippedWeaponActor->SetActorHiddenInGame(false);
     }
 }
 

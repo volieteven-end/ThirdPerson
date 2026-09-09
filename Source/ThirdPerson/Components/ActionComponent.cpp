@@ -20,7 +20,7 @@ const UActionSet* UActionComponent::GetActionSet() const
 {
     const auto* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
     const auto* Weapon = Equipment ? Equipment->GetEquippedWeaponDefinition() : nullptr;
-    return Weapon ? Weapon->ActionSet.Get() : nullptr;
+    return Weapon && Equipment->IsWeaponDrawn() ? Weapon->ActionSet.Get() : nullptr;
 }
 
 ETPCMovementContext UActionComponent::GetMovementContext() const

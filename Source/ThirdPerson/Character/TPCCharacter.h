@@ -7,6 +7,7 @@
 #include "TPCCharacter.generated.h"
 class UTPCSaveGame;
 class UAnimMontage;
+class UAnimInstance;
 class UAnimSequenceBase;
 class USpringArmComponent;
 class UCameraComponent;
@@ -37,6 +38,9 @@ public:
 	// Sets default values for this character's properties
 	ATPCCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
     UFUNCTION(BlueprintCallable, Category="Death") void RestartAfterDeath();
+    /** Switch only when no full-body action owns the current animation instance. */
+    void RefreshEquipmentAnimation();
+    UPROPERTY(EditDefaultsOnly, Category="Animation|Equipment") TSubclassOf<UAnimInstance> UnarmedAnimationClass;
 	
 protected:
 	// Called when the game starts or when spawned
@@ -52,6 +56,7 @@ protected:
 	void RestoreRespawnProgress(const ATPCCharacter& Source);
     void FinishDeathPresentation();
     bool bDeathPresentationReady = false;
+    UPROPERTY(Transient) TSubclassOf<UAnimInstance> ArmedAnimationClass;
 
 	FTimerHandle RespawnTimerHandle;
 public:	

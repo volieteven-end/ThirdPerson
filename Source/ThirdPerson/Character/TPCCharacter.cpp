@@ -41,6 +41,7 @@
 #include "MotionWarpingComponent.h"
 #include "RootMotionModifier.h"
 #include "../Audio/TPCCharacterAudioComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 namespace
 {
@@ -85,6 +86,7 @@ ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
 	InventoryComponent=CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 	HealthComponent=CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
 	CombatComponent=CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	CombatComponent->BaseMeleeReachScale = 1.15f;
 	ActionComponent=CreateDefaultSubobject<UActionComponent>(TEXT("ActionComponent"));
 	StaminaComponent = CreateDefaultSubobject<UStaminaComponent>(TEXT("StaminaComponent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
@@ -96,12 +98,15 @@ ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
 		TEXT("AIStimuliSource"));
 	AIStimuliSource->bAutoRegister = true;
 	AIStimuliSource->RegisterForSense(UAISense_Sight::StaticClass());
+	static ConstructorHelpers::FClassFinder<UAnimInstance> UnarmedBP(TEXT("/Game/Characters/Mannequins/Anims/Unarmed/ABP_Unarmed"));
+	UnarmedAnimationClass = UnarmedBP.Class;
 } 	
 
 // Called when the game starts or when spawned
 void ATPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	ArmedAnimationClass = GetMesh()->GetAnimClass();
 	StandingCameraTargetOffset = CameraBoom
 		? CameraBoom->TargetOffset
 		: FVector::ZeroVector;
@@ -681,6 +686,7 @@ void ATPCCharacter::Dash()
 void ATPCCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+    RefreshEquipmentAnimation();
     UpdateHeldSprint();
     if (IsLocomotionInputPaused())
     {
@@ -852,8 +858,16 @@ void ATPCCharacter::HandlePrimaryAttack()
         return;
     }
 	if (IsTurningInPlace()) { CancelMotionAction(); }
-    if (EquipmentComponent && EquipmentComponent->GetEquippedWeaponDefinition() && !EquipmentComponent->IsWeaponDrawn())
-    { HandleToggleWeapon(); return; } // One press draws; it does not also queue an unseen attack.
+    if (!EquipmentComponent || !EquipmentComponent->GetEquippedWeaponDefinition() || !EquipmentComponent->IsWeaponDrawn())
+    {
+        RefreshEquipmentAnimation();
+        if (!GetCharacterMovement()->IsFalling())
+        {
+            UnCrouch(); CombatComponent->TryAttack(); ApplyActionRotationPolicy();
+        }
+        else if (ActionComponent) ActionComponent->BufferIntent(ETPCActionIntent::PrimaryAttack, true);
+        return;
+    }
 	if (CombatComponent->IsMeleeAttackInProgress())
 	{
 		CombatComponent->TryAttack();
@@ -891,6 +905,17 @@ void ATPCCharacter::HandleToggleWeapon()
     if (!CombatComponent || !ActionComponent || !ActionComponent->CanRequest(ETPCActionIntent::ToggleWeapon)) return;
     if (IsTurningInPlace()) CancelMotionAction();
     if (CombatComponent->TryToggleWeapon()) { StopGroundInputMomentum(); ApplyActionRotationPolicy(); }
+}
+
+void ATPCCharacter::RefreshEquipmentAnimation()
+{
+    if (!GetMesh() || !UnarmedAnimationClass || bActionDead ||
+        (ActionComponent && ActionComponent->GetActionState() != ETPCActionState::Free)) return;
+    if (!ArmedAnimationClass && GetMesh()->GetAnimClass() != UnarmedAnimationClass)
+        ArmedAnimationClass = GetMesh()->GetAnimClass();
+    const bool bArmed = EquipmentComponent && EquipmentComponent->GetEquippedWeaponDefinition() && EquipmentComponent->IsWeaponDrawn();
+    UClass* DesiredClass = bArmed ? ArmedAnimationClass.Get() : UnarmedAnimationClass.Get();
+    if (DesiredClass && GetMesh()->GetAnimClass() != DesiredClass) GetMesh()->SetAnimInstanceClass(DesiredClass);
 }
 
 void ATPCCharacter::HandleAirDiveAttack()
@@ -1464,6 +1489,7 @@ void ATPCCharacter::UpdateMotionAction()
         }
 		return;
 	}
+	if (!EquipmentComponent || !EquipmentComponent->GetEquippedWeaponDefinition() || !EquipmentComponent->IsWeaponDrawn()) return;
 	if (!bEnableRootMotionTurn || IsMovementInputLocked() || LockedTarget || !Controller || !GetWorld() ||
 		GetWorld()->GetTimeSeconds() < NextTurnAllowedTime || bIsCrouched || !GetCharacterMovement()->IsMovingOnGround() ||
 		GetVelocity().SizeSquared2D() > 9.f || !LastMoveInputAxis.IsNearlyZero() || !GetPendingMovementInputVector().IsNearlyZero()) { return; }

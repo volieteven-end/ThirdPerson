@@ -26,6 +26,8 @@
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "../Animation/SwordBladeSampling.h"
+#include "../Animation/MeleeTraceGeometry.h"
+#include "../Character/TPCCharacter.h"
 
 namespace
 {
@@ -383,13 +385,13 @@ bool UCombatComponent::StartAirMontageAttack()
 }
 
 
-bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float DamageScale, EActiveCombatAttackType AttackType)
+bool UCombatComponent::StartSpecialMontageAttack(UAnimMontage* Montage, float DamageScale, EActiveCombatAttackType AttackType, const UActionDefinition* AuthoredDefinition)
 {
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
 	if (!bCombatEnabled || !Anim || !GetWorld() || !Montage) { return false; }
 	const UActionSet* Set = GetActionSet();
-	const UActionDefinition* Def = Set ? Set->FindByMontage(Montage) : nullptr;
+	const UActionDefinition* Def = AuthoredDefinition ? AuthoredDefinition : Set ? Set->FindByMontage(Montage) : nullptr;
 	UStaminaComponent* Stamina = Character->FindComponentByClass<UStaminaComponent>();
 	if (Def && Def->StaminaCost > 0.f && (!Stamina || Stamina->GetCurrentStamina() < Def->StaminaCost)) return false;
     if (const UActionComponent* Actions = GetActions())
@@ -476,6 +478,15 @@ void UCombatComponent::ReachComboChainPoint(UAnimSequenceBase* Animation, int32 
 	if (!IsCurrentAttackNotify(Animation, MontageInstanceId)) { return; }
 	GetComboBuffer().bChainPointReached = true;
 	TryCommitBufferedCombo();
+}
+
+void UCombatComponent::FinishAuthoredDamageWindow(UAnimSequenceBase* Animation, int32 MontageInstanceId)
+{
+    if (!IsCurrentAttackNotify(Animation, MontageInstanceId)) return;
+    EndAttackWindow();
+    // The mannequin's original punches have damage notifies but no sword chain-point
+    // notifies. Their real hit-window end is a safe, animation-authored combo boundary.
+    if (IsUnarmedPlayer()) ReachComboChainPoint(Animation, MontageInstanceId);
 }
 
 bool UCombatComponent::CanChainAttack() const
@@ -766,10 +777,9 @@ void UCombatComponent::StartAttackWindow(
 	USkeletalMeshComponent* Mesh =OwnerCharacter->GetMesh();
 	UEquipmentComponent* Equipment =
 		OwnerCharacter->FindComponentByClass<UEquipmentComponent>();
-	const UWeaponDefinition* WeaponDefinition =
-		Equipment ? Equipment->GetEquippedWeaponDefinition() : nullptr;
+	const UWeaponDefinition* WeaponDefinition = GetEquippedWeaponDefinition();
 	AWeaponActor* WeaponActor =
-		Equipment ? Equipment->GetEquippedWeaponActor() : nullptr;
+		WeaponDefinition && Equipment ? Equipment->GetEquippedWeaponActor() : nullptr;
 	USkeletalMeshComponent* WeaponTraceMesh =
 		WeaponActor ? WeaponActor->GetSkeletalWeaponMesh() : nullptr;
 
@@ -801,7 +811,7 @@ void UCombatComponent::StartAttackWindow(
 	}
 
 	ActiveAttackBoneName = InAttackBoneName;
-	ActiveTraceRadius = InTraceRadius;
+	ActiveTraceRadius = InTraceRadius * GetMeleeTraceScale();
 	ActiveHitGroup = HitGroup;
 	HitActors = HitGroups.FindOrAdd(HitGroup);
 	if (!bUseWeaponBladeTrace)
@@ -921,6 +931,12 @@ void UCombatComponent::TickComponent(
 
         auto SweepBlade = [&](const FVector& BeforeBase, const FVector& BeforeTip, const FVector& AfterBase, const FVector& AfterTip)
         {
+            const FVector Origin = OwnerCharacter->GetActorLocation();
+            const float Reach = GetMeleeTraceScale();
+            const FVector TraceBeforeBase = TPCMeleeTrace::Extend(BeforeBase,Origin,Reach);
+            const FVector TraceBeforeTip = TPCMeleeTrace::Extend(BeforeTip,Origin,Reach);
+            const FVector TraceAfterBase = TPCMeleeTrace::Extend(AfterBase,Origin,Reach);
+            const FVector TraceAfterTip = TPCMeleeTrace::Extend(AfterTip,Origin,Reach);
             // Overlapping spheres cover the blade's full length, not just its tip.
             const float Length = FMath::Max(FVector::Distance(BeforeBase, BeforeTip), FVector::Distance(AfterBase, AfterTip));
             const int32 Samples = FMath::Clamp(FMath::CeilToInt(Length / FMath::Max(1.f, ActiveTraceRadius * 1.5f)) + 1, 5, 32);
@@ -928,8 +944,8 @@ void UCombatComponent::TickComponent(
             {
                 const float Alpha = static_cast<float>(I) / (Samples - 1);
                 TArray<FHitResult> Hits;
-                World->SweepMultiByChannel(Hits, FMath::Lerp(BeforeBase, BeforeTip, Alpha),
-                    FMath::Lerp(AfterBase, AfterTip, Alpha), FQuat::Identity, ECC_Pawn,
+                World->SweepMultiByChannel(Hits, FMath::Lerp(TraceBeforeBase, TraceBeforeTip, Alpha),
+                    FMath::Lerp(TraceAfterBase, TraceAfterTip, Alpha), FQuat::Identity, ECC_Pawn,
                     FCollisionShape::MakeSphere(ActiveTraceRadius), QueryParams);
                 ApplyHits(Hits);
                 if (!bAttackWindowActive) break; // A parry can interrupt the attacker inside ApplyCombatHit.
@@ -991,7 +1007,8 @@ void UCombatComponent::TickComponent(
 		OwnerCharacter->GetMesh()->GetBoneLocation(ActiveAttackBoneName);
 	TArray<FHitResult> Hits;
 	World->SweepMultiByChannel(
-		Hits, PreviousAttackLocation, CurrentAttackLocation, FQuat::Identity,
+		Hits, TPCMeleeTrace::Extend(PreviousAttackLocation,OwnerCharacter->GetActorLocation(),GetMeleeTraceScale()),
+        TPCMeleeTrace::Extend(CurrentAttackLocation,OwnerCharacter->GetActorLocation(),GetMeleeTraceScale()), FQuat::Identity,
 		ECC_Pawn, FCollisionShape::MakeSphere(ActiveTraceRadius), QueryParams);
 	ApplyHits(Hits);
 	if (bDrawHandTraceDebug)
@@ -1053,7 +1070,12 @@ const UWeaponDefinition* UCombatComponent::GetEquippedWeaponDefinition() const
 
 	const UEquipmentComponent* Equipment =
 		OwnerActor->FindComponentByClass<UEquipmentComponent>();
-	return Equipment ? Equipment->GetEquippedWeaponDefinition() : nullptr;
+	return Equipment && Equipment->IsWeaponDrawn() ? Equipment->GetEquippedWeaponDefinition() : nullptr;
+}
+
+bool UCombatComponent::IsUnarmedPlayer() const
+{
+    return GetOwner() && GetOwner()->IsA<ATPCCharacter>() && !GetEquippedWeaponDefinition();
 }
 
 float UCombatComponent::GetEffectiveDamage() const
@@ -1076,7 +1098,7 @@ float UCombatComponent::GetEffectiveAttackRange() const
 	const float BaseRange = Weapon && Weapon->WeaponType == EWeaponType::Melee
 		? Weapon->MeleeRange
 		: AttackRange;
-	return BaseRange * MeleeReachMultiplier;
+	return BaseRange * GetMeleeTraceScale();
 }
 
 float UCombatComponent::GetEffectiveAttackRadius() const
@@ -1085,7 +1107,7 @@ float UCombatComponent::GetEffectiveAttackRadius() const
 	const float BaseRadius = Weapon && Weapon->WeaponType == EWeaponType::Melee
 		? Weapon->MeleeRadius
 		: AttackRadius;
-	return BaseRadius * MeleeReachMultiplier;
+	return BaseRadius * GetMeleeTraceScale();
 }
 
 void UCombatComponent::AddDamageBonus(float Amount)
@@ -1302,7 +1324,7 @@ bool UCombatComponent::HasBufferedComboInput() const
 
 bool UCombatComponent::StartDefinedAttack(const UActionDefinition* Def, EActiveCombatAttackType Type)
 {
-    return Def && StartSpecialMontageAttack(Def->Montage, Def->DamageMultiplier, Type);
+    return Def && StartSpecialMontageAttack(Def->Montage, Def->DamageMultiplier, Type, Def);
 }
 
 bool UCombatComponent::TrySprintAttack()
@@ -1337,10 +1359,10 @@ void UCombatComponent::CommitSpecialMovement()
             SwordBuffExpiresAt = GetWorld()->GetTimeSeconds() + Set->BuffDuration;
             SwordBuffMultiplier = Set->BuffDamageMultiplier; // Refresh duration, never multiply repeatedly.
         }
-        else if (ActiveAttackType == EActiveCombatAttackType::DrawWeapon || ActiveAttackType == EActiveCombatAttackType::SheatheWeapon)
-            if (auto* Equipment = Character->FindComponentByClass<UEquipmentComponent>())
-                Equipment->SetWeaponDrawn(ActiveAttackType == EActiveCombatAttackType::DrawWeapon);
     }
+    if (ActiveAttackType == EActiveCombatAttackType::DrawWeapon || ActiveAttackType == EActiveCombatAttackType::SheatheWeapon)
+        if (auto* Equipment = Character->FindComponentByClass<UEquipmentComponent>())
+            Equipment->SetWeaponDrawn(ActiveAttackType == EActiveCombatAttackType::DrawWeapon);
     if (ActiveAttackType == EActiveCombatAttackType::Uppercut)
         Character->LaunchCharacter(FVector(0.f, 0.f, UppercutLaunchVelocity), false, true);
     else if (ActiveAttackType == EActiveCombatAttackType::AirDive && !bAirDiveLanded && Character->GetCharacterMovement()->IsFalling())
@@ -1387,7 +1409,7 @@ void UCombatComponent::UpdateDiveApproach()
 
 float UCombatComponent::GetSwordBuffMultiplier() const
 {
-    return GetWorld() && GetWorld()->GetTimeSeconds() < SwordBuffExpiresAt ? SwordBuffMultiplier : 1.f;
+    return !IsUnarmedPlayer() && GetWorld() && GetWorld()->GetTimeSeconds() < SwordBuffExpiresAt ? SwordBuffMultiplier : 1.f;
 }
 
 bool UCombatComponent::TryBuff()
@@ -1402,9 +1424,11 @@ bool UCombatComponent::TryBuff()
 
 bool UCombatComponent::TryToggleWeapon()
 {
-    const auto* Set = GetActionSet(); const auto* Actions = GetActions();
+    const auto* Actions = GetActions();
     const auto* Character = Cast<ACharacter>(GetOwner());
     const auto* Equipment = GetOwner() ? GetOwner()->FindComponentByClass<UEquipmentComponent>() : nullptr;
+    const auto* Weapon = Equipment ? Equipment->GetEquippedWeaponDefinition() : nullptr;
+    const auto* Set = Weapon ? Weapon->ActionSet.Get() : nullptr;
     if (!Set || !Actions || !Actions->CanRequest(ETPCActionIntent::ToggleWeapon) || !Equipment ||
         !Character || Character->GetCharacterMovement()->IsFalling()) return false;
     return StartDefinedAttack(Equipment->IsWeaponDrawn() ? Set->SheatheWeapon : Set->DrawWeapon,

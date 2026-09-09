@@ -24,6 +24,7 @@
 #include "Engine/OverlapResult.h"
 #include "DrawDebugHelpers.h"
 #include "HAL/IConsoleManager.h"
+#include "../Animation/MeleeTraceGeometry.h"
 
 static TAutoConsoleVariable<int32> CVarCountessDebug(TEXT("tp.Boss.Debug"),0,TEXT("Show Countess state and exact blade sweep endpoints."));
 
@@ -241,7 +242,8 @@ void UBossActionComponent::CancelAction()
 bool UBossActionComponent::IsActionLegal(EBossAction Id,float Distance,bool bLOS) const
 {
  const auto* A=GetDefinition()->FindAction(Id);
- if (!A || !bLOS || !CanMove() || bPhasePending || Distance<A->MinRange || Distance>A->MaxRange) return false;
+ const float Reach = (Id==EBossAction::Combo || Id==EBossAction::DelayedSlash) ? GetDefinition()->MeleeReachScale : 1.f;
+ if (!A || !bLOS || !CanMove() || bPhasePending || Distance<A->MinRange || Distance>A->MaxRange*Reach) return false;
  if ((Phase==2?A->PhaseTwoWeight:A->PhaseOneWeight)<=0) return false;
  if (const double* Until=CooldownUntil.Find(Id); Until && Now()<*Until) return false;
  return true;
@@ -451,7 +453,7 @@ bool UBossActionComponent::ReadBladePoints(FVector* Out) const
  for (int32 I=0;I<4;++I)
  {
   if (!Boss->GetMesh()->DoesSocketExist(Names[I])) return false;
-  Out[I]=Boss->GetMesh()->GetSocketLocation(Names[I]);
+  Out[I]=TPCMeleeTrace::Extend(Boss->GetMesh()->GetSocketLocation(Names[I]),Boss->GetActorLocation(),GetDefinition()->MeleeReachScale);
  }
  return true;
 }
@@ -467,7 +469,7 @@ void UBossActionComponent::SweepBlades()
    FVector Start=FMath::Lerp(PreviousBlade[Blade*2],PreviousBlade[Blade*2+1],Alpha);
    FVector End=FMath::Lerp(Points[Blade*2],Points[Blade*2+1],Alpha);
    TArray<FHitResult> Hits;
-   GetWorld()->SweepMultiByObjectType(Hits,Start,End,FQuat::Identity,FCollisionObjectQueryParams(ECC_Pawn),FCollisionShape::MakeSphere(GetDefinition()->BladeTraceRadius),Q);
+   GetWorld()->SweepMultiByObjectType(Hits,Start,End,FQuat::Identity,FCollisionObjectQueryParams(ECC_Pawn),FCollisionShape::MakeSphere(GetDefinition()->BladeTraceRadius*GetDefinition()->MeleeReachScale),Q);
    for (const auto& Hit:Hits) { ApplyHit(Hit.GetActor(),Hit.ImpactPoint); if (Serial!=ActionSerial) return; }
   }
  for (int32 I=0;I<4;++I) PreviousBlade[I]=Points[I];

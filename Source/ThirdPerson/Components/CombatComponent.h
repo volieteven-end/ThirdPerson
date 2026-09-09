@@ -87,13 +87,17 @@ public:
 	FCombatHitSpec MakeCurrentHitSpec(const FVector& ImpactPoint) const;
 	void PerformAttackHit();
 	void StartAttackWindow(FName InAttackBoneName,float InTraceRadius, FName HitGroup = TEXT("Primary"));
-    void EndAttackWindow();
+	void EndAttackWindow();
+    void FinishAuthoredDamageWindow(UAnimSequenceBase* Animation, int32 MontageInstanceId);
 	void OpenComboInputWindow();
 	void CloseComboInputWindow();
 	void AddDamageBonus(float Amount);
 	void MultiplyDamage(float Multiplier);
 	void MultiplyAttackCooldown(float Multiplier);
 	void MultiplyMeleeReach(float Multiplier);
+	/** Baseline tuning, separate from permanent upgrade multipliers. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat", meta=(ClampMin="0.1"))
+	float BaseMeleeReachScale = 1.f;
 	void RestoreRespawnAttributes(const UCombatComponent& Source);
 	bool IsMeleeAttackInProgress() const { return bMeleeAttackInProgress; }
 	UFUNCTION(BlueprintPure, Category = "Combat|Combo")
@@ -177,6 +181,8 @@ private:
 	bool bDiveApproachStarted = false;
 	mutable TArray<TObjectPtr<UAnimMontage>> ResolvedGroundMontages;
 	const UWeaponDefinition* GetEquippedWeaponDefinition() const;
+	bool IsUnarmedPlayer() const;
+	float GetMeleeTraceScale() const { return BaseMeleeReachScale * MeleeReachMultiplier; }
 	float GetEffectiveDamage() const;
 	float GetEffectiveAttackCooldown() const;
 	float GetEffectiveAttackRange() const;
@@ -196,7 +202,8 @@ private:
 	bool StartSpecialMontageAttack(
 		UAnimMontage* Montage,
 		float DamageScale,
-		EActiveCombatAttackType AttackType);
+		EActiveCombatAttackType AttackType,
+        const UActionDefinition* AuthoredDefinition = nullptr);
 	void SpawnMeleeHitEffect(const FHitResult& Hit) const;
 	void ApplySpecialHitReaction(AActor* HitActor) const;
 	void HandleAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted, uint64 Generation);
@@ -220,6 +227,7 @@ private:
 	friend struct FTPActionTestAccess;
 	friend struct FMeleeAITestAccess;
     friend struct FTPCSwordPIETestAccess;
+    friend struct FTPCSwordActionTestAccess;
     friend struct FTutorialImpactTestAccess;
  friend struct FCountessBossTestAccess;
 	bool bAttackWindowActive = false;

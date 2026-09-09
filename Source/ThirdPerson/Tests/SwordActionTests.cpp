@@ -36,6 +36,7 @@ struct FTPCSwordActionTestAccess
     static void Tick(UActionComponent& A) { A.TickComponent(1.f / 60, LEVELTICK_All, nullptr); }
     static bool Pending(const UActionComponent& A) { return A.BufferedIntent != ETPCActionIntent::None; }
     static void Expire(UActionComponent& A) { A.BufferedUntil = -1.; }
+    static void ExpireAttackCooldown(UCombatComponent& C) { C.LastAttackTime = -BIG_NUMBER; }
 };
 
 namespace SwordTests
@@ -257,12 +258,17 @@ bool FTPCSwordUtilityTest::RunTest(const FString&)
     TestEqual(TEXT("Death/disable clears the buff"),C->GetSwordBuffMultiplier(),1.f);
     auto* WeaponActor=E->GetEquippedWeaponActor();
     P->HandleToggleWeapon(); Anim->Montage_SetPosition(Set->SheatheWeapon->Montage,.56f); FTPCSwordActionTestAccess::Tick(*A);
-    TestTrue(TEXT("Sheathe commit hides, rather than destroys, the sword"),E->GetEquippedWeaponActor()==WeaponActor && !E->IsWeaponDrawn() && WeaponActor->IsHidden());
-    C->CancelActiveAttack(); P->HandlePrimaryAttack();
-    TestTrue(TEXT("Primary while sheathed selects Draw"),A->GetActiveDefinition()==Set->DrawWeapon);
+    TestTrue(TEXT("Sheathe commit keeps the same sword visible on the back"),E->GetEquippedWeaponActor()==WeaponActor && !E->IsWeaponDrawn() && !WeaponActor->IsHidden());
+    TestEqual(TEXT("Sheathed sword uses its back socket"),WeaponActor->GetAttachParentSocketName(),E->GetEquippedWeaponDefinition()->SheathSocketName);
+    C->CancelActiveAttack(); FTPCSwordActionTestAccess::ExpireAttackCooldown(*C); P->HandlePrimaryAttack();
+    TestNull(TEXT("Primary while sheathed does not select a sword action"),A->GetActiveDefinition());
+    TestTrue(TEXT("Primary while sheathed starts an unarmed attack"),C->IsMeleeAttackInProgress() && !E->IsWeaponDrawn());
+    TestEqual(TEXT("Unarmed locomotion uses the mannequin animation blueprint"),P->GetMesh()->GetAnimClass(),P->UnarmedAnimationClass.Get());
+    C->CancelActiveAttack(); P->HandleToggleWeapon(); Anim=P->GetMesh()->GetAnimInstance();
+    TestTrue(TEXT("X still draws from an unarmed action context"),A->GetActiveDefinition()==Set->DrawWeapon);
     Anim->Montage_SetPosition(Set->DrawWeapon->Montage,.56f); FTPCSwordActionTestAccess::Tick(*A);
     TestTrue(TEXT("Draw commit unhides the same actor"),E->IsWeaponDrawn() && E->GetEquippedWeaponActor()==WeaponActor && !WeaponActor->IsHidden());
-    C->CancelActiveAttack();
+    C->CancelActiveAttack(); P->RefreshEquipmentAnimation();
     auto* InvalidWeapon=DuplicateObject<UWeaponDefinition>(E->GetEquippedWeaponDefinition(),GetTransientPackage());
     auto* InvalidSet=DuplicateObject<UActionSet>(const_cast<UActionSet*>(Set),GetTransientPackage());
     auto* InvalidAction=DuplicateObject<UActionDefinition>(Set->GroundCombo[0],GetTransientPackage());

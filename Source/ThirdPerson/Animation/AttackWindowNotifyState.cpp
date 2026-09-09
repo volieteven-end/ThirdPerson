@@ -17,7 +17,7 @@ namespace
 		if (AWeaponActor* WeaponActor =
 			Equipment ? Equipment->GetEquippedWeaponActor() : nullptr)
 		{
-			WeaponActor->SetAttackEffectActive(bActive);
+			WeaponActor->SetAttackEffectActive(bActive && Equipment->IsWeaponDrawn());
 		}
 	}
 }
@@ -46,6 +46,6 @@ void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 	// Outgoing NotifyEnd cannot close the next attack's damage / FX window.
 	if (!Combat || !Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference))) { return; }
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->CloseComboInputWindow(); }
-	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->EndAttackWindow(); }
+	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->FinishAuthoredDamageWindow(Animation, GetCombatNotifyMontageInstanceId(EventReference)); }
 	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, false); }
 }

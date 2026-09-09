@@ -26,7 +26,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equipment")
 	void UnequipWeapon();
 
-    /** Animation commit changes visibility only; it never respawns the equipped actor. */
+    /** Animation commit moves the same actor between its hand and back mounts. */
     UFUNCTION(BlueprintCallable, Category = "Equipment") void SetWeaponDrawn(bool bDrawn);
     UFUNCTION(BlueprintPure, Category = "Equipment") bool IsWeaponDrawn() const { return bWeaponDrawn; }
 

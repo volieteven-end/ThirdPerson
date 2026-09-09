@@ -81,6 +81,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Equip")
 	FName EquipSocketName = TEXT("weapon_r");
 
+	/** Back mount, relative to the chosen spine socket/bone; independent of the hand grip. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Equip")
+	FName SheathSocketName = TEXT("spine_03");
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Equip")
+	FTransform SheathRelativeTransform = FTransform(FRotator(-34.f, -170.f, 62.f), FVector(44.f, -14.f, 31.f));
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|UI")
 	TObjectPtr<UTexture2D> Icon;
 };

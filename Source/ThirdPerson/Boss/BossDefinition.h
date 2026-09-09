@@ -96,6 +96,8 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RushMaxDistance = 500.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RushStopDistance = 120.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float BladeTraceRadius = 22.f;
+ /** Horizontal melee reach; radial skills and projectiles keep their authored sizes. */
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss", meta=(ClampMin="0.1")) float MeleeReachScale = 1.15f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float AreaVerticalTolerance = 140.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") int32 RandomSeed = 137;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Actions") TArray<FBossActionDefinition> Actions;

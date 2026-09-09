@@ -199,7 +199,9 @@ public:
                     Test->TestTrue(Label(TEXT("warp target stays outside opponent capsule")),FVector::Dist2D(Warp->GetLocation(),Enemy->GetActorLocation())>=Gap+7.f);
                 }
             }
-            if (D && A->GetMontagePosition() >= .07f && (!bQueued || (CaseIndex == 1 && Step != Starts)))
+            // Send only enough input for this bounded two/four-stage probe, even when
+            // the player's tuned final move permits chaining into another cycle.
+            if (D && Starts < (CaseIndex == 0 ? 2 : 4) && A->GetMontagePosition() >= .07f && (!bQueued || (CaseIndex == 1 && Step != Starts)))
             {
                 for (int32 I = 0; I < 5; ++I) P->HandlePrimaryAttack();
                 bQueued = true; Step = Starts;
@@ -628,12 +630,18 @@ public:
             if (Step==0)
             {
                 if (T<.45f) Test->TestTrue(Label(TEXT("sheathe waits for commit notify")),P->EquipmentComponent->IsWeaponDrawn());
-                if (T>.65f && !bA) { bA=true; Test->TestTrue(Label(TEXT("sheathe hides the same weapon actor")),!P->EquipmentComponent->IsWeaponDrawn() && OriginalWeapon==P->EquipmentComponent->GetEquippedWeaponActor() && OriginalWeapon->IsHidden()); }
+                if (T>.65f && !bA) { bA=true; Test->TestTrue(Label(TEXT("sheathe back-mounts the same visible weapon actor")),!P->EquipmentComponent->IsWeaponDrawn() && OriginalWeapon==P->EquipmentComponent->GetEquippedWeaponActor() && !OriginalWeapon->IsHidden()); }
                 if (T>1.6f) { P->HandlePrimaryAttack(); Step=1; StepStart=W->GetTimeSeconds(); }
             }
-            else if (S>1.7f)
+            else if (Step==1 && S>1.3f)
             {
-                Test->TestTrue(Label(TEXT("primary while sheathed draws, rather than attacking invisibly")),SeenActions.Contains(TEXT("Sword.Draw")) && !SeenActions.Contains(TEXT("Sword.Light.1")));
+                Test->TestTrue(Label(TEXT("primary while sheathed keeps the sword on the back")),!P->EquipmentComponent->IsWeaponDrawn() && !SeenActions.Contains(TEXT("Sword.Draw")));
+                Test->TestEqual(Label(TEXT("unarmed mannequin animation is active")),P->GetMesh()->GetAnimClass(),P->UnarmedAnimationClass.Get());
+                P->HandleToggleWeapon(); Step=2; StepStart=W->GetTimeSeconds();
+            }
+            else if (Step==2 && S>1.7f)
+            {
+                Test->TestTrue(Label(TEXT("X explicitly draws the sword")),SeenActions.Contains(TEXT("Sword.Draw")) && !SeenActions.Contains(TEXT("Sword.Light.1")));
                 Test->TestTrue(Label(TEXT("draw commits visibility without respawning equipment")),P->EquipmentComponent->IsWeaponDrawn() && OriginalWeapon==P->EquipmentComponent->GetEquippedWeaponActor() && !OriginalWeapon->IsHidden()); Next(W);
             }
             break;
@@ -718,7 +726,9 @@ public:
             }
             break;
         case 13:
-            if (D && A->GetMontagePosition()>.07f && !Queued.Contains(D->ActionId))
+            // Three buffered followups exercise one four-stage cycle, regardless of
+            // whether the saved final move now permits a fifth attack.
+            if (D && Queued.Num()<3 && A->GetMontagePosition()>.07f && !Queued.Contains(D->ActionId))
             { Queued.Add(D->ActionId); P->HandlePrimaryAttack(); }
             if (T>4.2f && !C->IsMeleeAttackInProgress())
             {
