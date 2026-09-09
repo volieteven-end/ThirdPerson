@@ -125,12 +125,14 @@ void ATPCCharacter::BeginPlay()
 			&ThisClass::BeginAttackTargetAssist);
 	}
 	const FString SaveSlotName = TPCSaveSlots::Resolve();
+	const ATPCGameMode* PersistenceMode = Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode());
+	const bool bReadPersistentSave = !PersistenceMode || PersistenceMode->bUsePersistentPlayerSave;
 
 	if (ATPCCharacter* Source = GetWorld()->GetSubsystem<UTPCRespawnSubsystem>()->TakeSourceFor(this))
 	{
 		RestoreRespawnProgress(*Source);
 	}
-	else if (UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	else if (bReadPersistentSave && UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
 	{
 		if (UTPCSaveGame* SaveGame =Cast<UTPCSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName,0)))
 		{

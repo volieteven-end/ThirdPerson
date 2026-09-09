@@ -188,7 +188,8 @@ void UInventoryWidget::SetGameMode(ATPCGameMode* InGameMode)
 
 void UInventoryWidget::HandleEnemyDefeated(int32 NewDefeatedCount)
 {
-	RefreshKillText(FText::FromString(FString::Printf(TEXT("Kills: %d"), NewDefeatedCount)));
+	RefreshKillText(GameMode && !GameMode->bEnableVictoryProgress ? FText::GetEmpty() :
+		FText::FromString(FString::Printf(TEXT("Kills: %d"), NewDefeatedCount)));
 	RefreshObjective();	
 }
 void UInventoryWidget::HandleGameWon()
@@ -451,6 +452,14 @@ void UInventoryWidget::RefreshObjective()
 {
 	if (!GameMode)
 	{
+		return;
+	}
+	if (!GameMode->bEnableVictoryProgress)
+	{
+		RefreshObjectiveText(FText::GetEmpty());
+		// The tutorial supplies its own objective card; hide the legacy card's art as well.
+		for (const FName Name : {FName(TEXT("ForestObjectivePanel")), FName(TEXT("ForestObjectiveCanvas"))})
+			if (UWidget* Widget = GetWidgetFromName(Name)) Widget->SetVisibility(ESlateVisibility::Collapsed);
 		return;
 	}
 

@@ -883,6 +883,28 @@ void UCombatComponent::TickComponent(
 		}
 	};
 
+	const UWeaponDefinition* ImpactWeapon = GetEquippedWeaponDefinition();
+	if (ActiveAttackType == EActiveCombatAttackType::AirDive && bAirDiveLanded && ActiveHitGroup == TEXT("Landing") &&
+		ImpactWeapon && ImpactWeapon->DiveLandingImpactRadius > 0.f)
+	{
+		// Opt-in weapons can use the physical landing impact instead of the recovery
+		// pose's sideways blade. The actual Landed + authored damage window gate this;
+		// the existing per-action hit group and health pipeline still own all results.
+		const FVector Origin = OwnerCharacter->GetCharacterMovement()->GetActorFeetLocation() + FVector(0,0,60);
+		TArray<FHitResult> ImpactHits;
+		World->SweepMultiByObjectType(ImpactHits, Origin, Origin + FVector(0,0,.01f), FQuat::Identity,
+			FCollisionObjectQueryParams(ECC_Pawn), FCollisionShape::MakeSphere(FMath::Clamp(ImpactWeapon->DiveLandingImpactRadius,0.f,200.f)), QueryParams);
+		ImpactHits.RemoveAll([&](const FHitResult& Hit)
+		{
+			if (!Hit.GetActor()) return true;
+			FCollisionQueryParams Occlusion = QueryParams; Occlusion.AddIgnoredActor(Hit.GetActor());
+			FHitResult Wall;
+			return World->LineTraceSingleByChannel(Wall,Origin,Hit.GetActor()->GetActorLocation(),ECC_Visibility,Occlusion);
+		});
+		ApplyHits(ImpactHits);
+		return;
+	}
+
 	if (bUseWeaponBladeTrace)
 	{
 		USkeletalMeshComponent* WeaponTraceMesh = ActiveWeaponTraceMesh.Get();

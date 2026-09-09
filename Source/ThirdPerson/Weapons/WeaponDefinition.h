@@ -48,6 +48,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Combat", meta = (ClampMin = "1.0", EditCondition = "WeaponType == EWeaponType::Melee", EditConditionHides))
 	float MeleeRadius = 50.f;
 
+	/** Optional physical ground-impact volume for the Dive Landing notify group.
+	 * Zero preserves the normal weapon's blade-only traces. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Melee", meta = (ClampMin = "0", ClampMax = "200", Units = "cm"))
+	float DiveLandingImpactRadius = 0.f;
+
 	/** Socket near the beginning of the blade. Used for melee weapon traces. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon|Combat", meta = (EditCondition = "WeaponType == EWeaponType::Melee", EditConditionHides))
 	FName BladeBaseSocketName = TEXT("BladeBase");

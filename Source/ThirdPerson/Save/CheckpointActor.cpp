@@ -43,6 +43,10 @@ void ACheckpointActor::HandlePlayerEnter(
 	{
 		return;
 	}
+	if (const ATPCGameMode* Mode = GetWorld()->GetAuthGameMode<ATPCGameMode>())
+	{
+		if (!Mode->bUsePersistentPlayerSave) return;
+	}
 	UTPCSaveGame* SaveGame =Cast<UTPCSaveGame>(UGameplayStatics::CreateSaveGameObject(UTPCSaveGame::StaticClass()));
 	if (!SaveGame)
 	{

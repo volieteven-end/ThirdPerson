@@ -6,6 +6,8 @@
 #include "../Animation/CombatActionRules.h"
 #include "ActionComponent.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnActionPlaybackStarted, uint64, ETPCActionState, const UActionDefinition*);
+
 /** The one full-body action channel. Combat owns traces/damage; Character owns physical movement. */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UActionComponent : public UActorComponent
@@ -25,6 +27,8 @@ public:
     UFUNCTION(BlueprintPure) float GetMontagePosition() const;
     uint64 GetActionInstanceId() const { return InstanceId; }
     int32 GetMontageInstanceId() const { return MontageInstanceId; }
+    /** Observation only: broadcast after a real montage instance has been bound. */
+    FOnActionPlaybackStarted OnActionPlaybackStarted;
     bool AuthorizeOrBuffer(ETPCActionIntent Intent);
     void BufferIntent(ETPCActionIntent Intent, bool bRequireGround = false);
     void ClearInputBuffers();
@@ -59,6 +63,7 @@ private:
     float FallbackInvulnerabilityEnd = 0.f;
     bool bDamageActive = false;
     bool bCommitted = false;
+    uint64 PublishedPlaybackId = 0;
     bool bInputSuppressed = false;
     bool bBufferedRequiresGround = false;
 };

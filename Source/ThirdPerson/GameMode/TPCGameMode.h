@@ -17,6 +17,11 @@ class THIRDPERSON_API ATPCGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	/** Per-world policy. Training worlds never read or write the campaign save. */
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game|Persistence")
+	bool bUsePersistentPlayerSave = true;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Game")
+	bool bEnableVictoryProgress = true;
 	void RegisterEnemyDefeated();
 	void RestoreEnemiesDefeated(int32 SavedDefeatedCount);
 	int32 GetEnemiesDefeated() const{return EnemiesDefeated;}

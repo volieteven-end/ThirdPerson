@@ -19,6 +19,7 @@ struct FInventorySlot
 	TObjectPtr<UItemDefinition> ItemDefinition;
 };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChanged);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnConsumableUsed, UItemDefinition*, float, int32);
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UInventoryComponent : public UActorComponent
 {
@@ -38,6 +39,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryChanged OnInventoryChanged;
 	bool UseItemAtSlot(int32 SlotIndex);
+	/** Successful healing only; quantity is the remaining stack total after consumption. */
+	FOnConsumableUsed OnConsumableUsed;
 	/** The same definition as the world's health pickup; also used by the quick slot. */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Inventory|Health Potion")
 	TObjectPtr<UItemDefinition> HealthPotionDefinition;

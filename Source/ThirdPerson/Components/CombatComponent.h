@@ -220,6 +220,7 @@ private:
 	friend struct FTPActionTestAccess;
 	friend struct FMeleeAITestAccess;
     friend struct FTPCSwordPIETestAccess;
+    friend struct FTutorialImpactTestAccess;
  friend struct FCountessBossTestAccess;
 	bool bAttackWindowActive = false;
 	FVector PreviousAttackLocation = FVector::ZeroVector;

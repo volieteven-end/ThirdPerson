@@ -110,6 +110,11 @@ void UActionComponent::BindMontage(uint64 ExpectedId, UAnimMontage* Montage, int
     if (ExpectedId != InstanceId) return;
     ActiveMontage = Montage;
     MontageInstanceId = InMontageInstanceId;
+    if (Montage && InMontageInstanceId != INDEX_NONE && PublishedPlaybackId != InstanceId)
+    {
+        PublishedPlaybackId = InstanceId;
+        OnActionPlaybackStarted.Broadcast(InstanceId, State, Definition);
+    }
 }
 
 void UActionComponent::EndAction(uint64 ExpectedId)

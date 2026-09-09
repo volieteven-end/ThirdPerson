@@ -205,6 +205,7 @@ bool UInventoryComponent::UseItemAtSlot(int32 SlotIndex)
 	{
 		return false;
 	}
+	const float BeforeHealing = HealthComponent->GetCurrentHealth();
 	HealthComponent->Heal(ItemDefinition->HealAmount);
 	--InventorySlot.Count;
 	if (InventorySlot.Count <= 0)
@@ -212,6 +213,11 @@ bool UInventoryComponent::UseItemAtSlot(int32 SlotIndex)
 		Slots.RemoveAt(SlotIndex);
 	}
 	OnInventoryChanged.Broadcast();
+	const float ActualHealing = HealthComponent->GetCurrentHealth() - BeforeHealing;
+	int32 Remaining = 0;
+	for (const FInventorySlot& Slot : Slots)
+		if (Slot.ItemDefinition == ItemDefinition) Remaining += FMath::Max(0, Slot.Count);
+	if (ActualHealing > 0.f) OnConsumableUsed.Broadcast(ItemDefinition, ActualHealing, Remaining);
 	return true;
 }
 

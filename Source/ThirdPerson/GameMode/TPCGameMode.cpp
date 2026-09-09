@@ -4,7 +4,7 @@
 #include "TPCGameMode.h"
 void ATPCGameMode::RegisterEnemyDefeated()
 {
-	if (bGameWon)
+	if (!bEnableVictoryProgress || bGameWon)
 	{
 		return;
 	}
@@ -26,6 +26,7 @@ void ATPCGameMode::RegisterEnemyDefeated()
 }
 void ATPCGameMode::RestoreEnemiesDefeated(int32 SavedDefeatedCount)
 {
+	if (!bEnableVictoryProgress) return;
 	EnemiesDefeated =FMath::Max(0, SavedDefeatedCount);
 	OnEnemyDefeated.Broadcast(EnemiesDefeated);
 	if (EnemiesDefeated >= VictoryKillCount)
@@ -38,7 +39,7 @@ void ATPCGameMode::RestoreEnemiesDefeated(int32 SavedDefeatedCount)
 }
 void ATPCGameMode::WinGame()
 {
-	if (bGameWon)
+	if (!bEnableVictoryProgress || bGameWon)
 	{
 		return;
 	}
