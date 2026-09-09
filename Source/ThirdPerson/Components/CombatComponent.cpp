@@ -2,6 +2,7 @@
 
 
 #include "CombatComponent.h"
+#include "../Audio/TPCCharacterAudioComponent.h"
 #include "ActionComponent.h"
 #include "../Components/HealthComponent.h"
 #include "DrawDebugHelpers.h"
@@ -808,6 +809,18 @@ void UCombatComponent::StartAttackWindow(
 		PreviousAttackLocation =Mesh->GetBoneLocation(ActiveAttackBoneName);
 	}
 	bAttackWindowActive = true;
+	if (WeaponDefinition && WeaponDefinition->WeaponType == EWeaponType::Melee)
+	{
+		if (auto* Audio = OwnerCharacter->FindComponentByClass<UTPCCharacterAudioComponent>())
+		{
+			const auto* Definition = GetActiveDefinition();
+			const bool bHeavy = ActiveAttackType == EActiveCombatAttackType::Uppercut ||
+				ActiveAttackType == EActiveCombatAttackType::AirDive || ActiveAttackType == EActiveCombatAttackType::Special ||
+				(Definition && Definition->DamageMultiplier >= 1.4f);
+			const float Rate = Mesh->GetAnimInstance() ? Mesh->GetAnimInstance()->Montage_GetPlayRate(ActiveAttackMontage.Get()) : 1.f;
+			Audio->PlaySwordSwing(AttackGeneration, HitGroup, bHeavy, Rate);
+		}
+	}
 	if (UActionComponent* Actions = GetActions()) Actions->SetDamageWindowActive(true);
 	SetComponentTickEnabled(true);
 }

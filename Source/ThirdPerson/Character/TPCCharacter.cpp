@@ -40,6 +40,7 @@
 #include "../AI/EnemyCharacter.h"
 #include "MotionWarpingComponent.h"
 #include "RootMotionModifier.h"
+#include "../Audio/TPCCharacterAudioComponent.h"
 
 namespace
 {
@@ -88,6 +89,7 @@ ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
 	StaminaComponent = CreateDefaultSubobject<UStaminaComponent>(TEXT("StaminaComponent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
 	LevelComponent = CreateDefaultSubobject<ULevelComponent>(TEXT("LevelComponent"));
+	CharacterAudioComponent = CreateDefaultSubobject<UTPCCharacterAudioComponent>(TEXT("CharacterAudioComponent"));
 	MotionWarpingComponent = CreateDefaultSubobject<UMotionWarpingComponent>(
 		TEXT("MotionWarpingComponent"));
 	AIStimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(
@@ -901,6 +903,7 @@ void ATPCCharacter::HandleAirDiveAttack()
 
 void ATPCCharacter::Landed(const FHitResult& Hit)
 {
+	if (CharacterAudioComponent) { CharacterAudioComponent->PlayLanding(FMath::Abs(GetVelocity().Z)); }
 	Super::Landed(Hit);
 	if (CombatComponent) { CombatComponent->HandleOwnerLanded(); }
     if (GetWorld() && !IsMovementInputLocked())

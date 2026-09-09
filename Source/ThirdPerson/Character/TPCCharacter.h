@@ -20,6 +20,7 @@ class UActionComponent;
 class UStaminaComponent;
 class UEquipmentComponent;
 class ULevelComponent;
+class UTPCCharacterAudioComponent;
 class UAIPerceptionStimuliSourceComponent;
 class UMotionWarpingComponent;
 class AEnemyCharacter;
@@ -79,6 +80,8 @@ public:
 	TObjectPtr<UEquipmentComponent> EquipmentComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<ULevelComponent> LevelComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<UTPCCharacterAudioComponent> CharacterAudioComponent;
 	/** Applies montage-authored root-motion warp windows to attack targets. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UMotionWarpingComponent> MotionWarpingComponent;

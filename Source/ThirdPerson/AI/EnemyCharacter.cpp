@@ -21,6 +21,7 @@
 #include "TimerManager.h"
 #include "BrainComponent.h"
 #include "MeleeAICombatSubsystem.h"
+#include "../Audio/TPCCharacterAudioComponent.h"
 AEnemyCharacter::AEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -36,6 +37,7 @@ AEnemyCharacter::AEnemyCharacter()
 	// 让 AI 路径移动产生加速度，供 ABP_Unarmed 判断 ShouldMove。
 	GetCharacterMovement()->bRequestedMoveUseAcceleration = true;
 	HealthComponent =CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	CreateDefaultSubobject<UTPCCharacterAudioComponent>(TEXT("CharacterAudioComponent"));
 	HealthBarWidget =CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
 
 	HealthBarWidget->SetupAttachment(RootComponent);

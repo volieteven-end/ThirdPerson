@@ -26,7 +26,7 @@ public class ThirdPerson : ModuleRules
 		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput" });
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "AnimGraph", "BlueprintGraph", "Kismet", "KismetCompiler", "BehaviorTreeEditor", "AIGraph", "UMGEditor", "AnimationBlueprintLibrary" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "AnimGraph", "BlueprintGraph", "Kismet", "KismetCompiler", "BehaviorTreeEditor", "AIGraph", "UMGEditor", "AnimationBlueprintLibrary", "AudioMixer" });
 		}
 
 		// Uncomment if you are using Slate UI
