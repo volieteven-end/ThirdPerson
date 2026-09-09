@@ -276,7 +276,7 @@ public:
 	void Move(const FInputActionValue& Value);
 	void ClearMoveInput();
 	void Look(const FInputActionValue& Value);
-    /** Shared Shift: release a short press to dodge; hold to sprint, never both. */
+    /** Shared Space: release a short press to dodge; hold to sprint, never both. */
     void StartSprintOrDodgeInput();
     void FinishSprintOrDodgeInput();
     void CancelSprintOrDodgeInput();

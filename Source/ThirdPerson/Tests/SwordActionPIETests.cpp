@@ -20,6 +20,7 @@
 #include "Misc/CommandLine.h"
 #include "TimerManager.h"
 #include "UnrealClient.h"
+#include "InputKeyEventArgs.h"
 #include "MotionWarpingComponent.h"
 #include "../Character/TPCCharacter.h"
 #include "../Character/TPCPlayerController.h"
@@ -56,6 +57,9 @@ struct FTPCSwordPIETestAccess
     static int32 LaunchCount(const AEnemyCharacter& E) { return E.LaunchesThisFlight; }
     static bool DiveLanded(const UCombatComponent& C) { return C.bAirDiveLanded; }
     static void Axis(ATPCCharacter& P, FVector2D Axis) { P.LastMoveInputAxis = Axis; }
+    static uint64 MotionGeneration(const ATPCCharacter& P) { return P.MotionGeneration; }
+    static void OldMotionEnd(ATPCCharacter& P, UAnimMontage* Montage, uint64 Generation) { P.HandleMotionMontageEnded(Montage, false, Generation); }
+    static void HitLock(ATPCCharacter& P) { P.LockMovementForHit(.9f); }
 };
 
 namespace SwordPIE
@@ -835,6 +839,181 @@ bool FTPCSwordPIECoreTest::RunTest(const FString&)
     FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
     ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
     ADD_LATENT_AUTOMATION_COMMAND(SwordPIE::FCoreScenario(this));
+    ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand());
+    return true;
+}
+
+namespace SwordPIE
+{
+class FDodgeControlScenario : public IAutomationLatentCommand
+{
+    FAutomationTestBase* Test;
+    TWeakObjectPtr<ATPCCharacter> Player;
+    TWeakObjectPtr<APlayerController> PC;
+    TWeakObjectPtr<UAnimMontage> DodgeMontage;
+    const int32 Rates[3] = {30,60,120};
+    int32 Rate = 0, Case = 0, Stage = 0, Step = 0, DodgeInstanceId = INDEX_NONE;
+    uint64 DodgeGeneration = 0;
+    double Started = 0, DodgeStarted = -1, Released = -1, WallStart = FPlatformTime::Seconds();
+    float ReturnTime = 0;
+    FVector ReleasedLocation, ResumeDirection;
+    bool PreviousFixed = FApp::UseFixedTimeStep(), SawImmunity = false, SawPostImmunity = false;
+    double PreviousDelta = FApp::GetFixedDeltaTime();
+    FString Trace = TEXT("fps,case,time,dodge_time,clip_time,return_time,dashing,locked,immune,old_pose_weight,old_root_disabled,x,y,z,vx,vy,vz\n");
+    FString Label(const TCHAR* Message) const { return FString::Printf(TEXT("%d FPS dodge control case %d: %s"), Rates[Rate], Case, Message); }
+    void Key(FKey K, bool Down)
+    { if (PC.IsValid()) PC->InputKey(FInputKeyEventArgs::CreateSimulated(K, Down ? IE_Pressed : IE_Released, Down ? 1.f : 0.f)); }
+    void ReleaseKeys()
+    {
+        for (const FKey K : {EKeys::W,EKeys::A,EKeys::S,EKeys::D,EKeys::SpaceBar,EKeys::F,EKeys::LeftMouseButton,EKeys::RightMouseButton}) Key(K,false);
+        if (Player.IsValid()) { Player->ClearMoveInput(); Player->CancelSprintOrDodgeInput(); Player->EndJump(); Player->StopBlock(); }
+    }
+    void Stop()
+    {
+        ReleaseKeys(); FApp::SetUseFixedTimeStep(PreviousFixed); FApp::SetFixedDeltaTime(PreviousDelta);
+        FFileHelper::SaveStringToFile(Trace, *(FPaths::ProjectSavedDir()/TEXT("InputDodge/control_handoff.csv")));
+    }
+    void Next(UWorld* W)
+    {
+        const FString Result = Released >= 0
+            ? FString::Printf(TEXT("completed; control=%.4fs / %.4fs source"), Released-DodgeStarted, DodgeMontage.IsValid()?DodgeMontage->GetPlayLength():0.f)
+            : TEXT("completed; interruption preserved the newer hit lock");
+        Test->AddInfo(Label(*Result));
+        ReleaseKeys(); if (++Case == 10) { Case = 0; ++Rate; }
+        Stage = 1; Started = W->GetTimeSeconds();
+    }
+    void StartDodge(UWorld* W)
+    {
+        const FVector2D Axes[] = {{1,0},{-1,0},{0,-1},{0,1}};
+        FTPCSwordPIETestAccess::Axis(*Player, Axes[Case<4?Case:0]);
+        Player->Dash();
+        Test->TestTrue(Label(TEXT("dodge accepted")), Player->IsDashing());
+        const auto* A = Player->ActionComponent.Get(); const auto* D = A->GetActiveDefinition();
+        if (!D) { Test->AddError(Label(TEXT("missing active dodge definition"))); return; }
+        DodgeMontage = D->Montage; DodgeInstanceId = A->GetMontageInstanceId();
+        DodgeGeneration = FTPCSwordPIETestAccess::MotionGeneration(*Player);
+        ReturnTime = D->ControlReturnTime; DodgeStarted = W->GetTimeSeconds();
+        Test->TestFalse(Label(TEXT("startup immunity not extended")), A->IsInvulnerable());
+    }
+public:
+    explicit FDodgeControlScenario(FAutomationTestBase* InTest):Test(InTest){}
+    ~FDodgeControlScenario() override { Stop(); }
+    bool Update() override
+    {
+        if (Rate == 3) return true;
+        if (FPlatformTime::Seconds()-WallStart > 150) { Test->AddError(Label(TEXT("wall timeout"))); return true; }
+        auto* W = GEditor ? GEditor->PlayWorld.Get() : nullptr; if (!W || !W->HasBegunPlay()) return false;
+        if (Stage == 0)
+        {
+            Player = Cast<ATPCCharacter>(UGameplayStatics::GetPlayerCharacter(W,0)); PC = UGameplayStatics::GetPlayerController(W,0);
+            if (!Player.IsValid() || !PC.IsValid()) return false;
+            for (TActorIterator<AEnemyCharacter> It(W);It;++It) { if (It->GetController()) It->GetController()->Destroy(); It->Destroy(); }
+            Player->EquipmentComponent->SetWeaponDrawn(true);
+            Player->GetMesh()->VisibilityBasedAnimTickOption = EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
+            W->GetWorldSettings()->MinUndilatedFrameTime = 0; W->GetWorldSettings()->MaxUndilatedFrameTime = 1;
+            Started = W->GetTimeSeconds(); Stage = 1;
+        }
+        auto* P = Player.Get(); auto* A = P->ActionComponent.Get(); auto* C = P->CombatComponent.Get();
+        auto* M = P->GetCharacterMovement(); auto* Anim = P->GetMesh()->GetAnimInstance();
+        if (Stage == 1)
+        {
+            FApp::SetUseFixedTimeStep(true); FApp::SetFixedDeltaTime(1./Rates[Rate]);
+            if (W->GetTimeSeconds()-Started < .25) return false;
+            ReleaseKeys(); FTPCSwordPIETestAccess::Reset(*P); P->EquipmentComponent->SetWeaponDrawn(true);
+            Step = 0; DodgeStarted = Released = -1; SawImmunity = SawPostImmunity = false; DodgeMontage.Reset();
+            Started = W->GetTimeSeconds(); Stage = 2; return false;
+        }
+        if (Stage == 2)
+        {
+            if (W->GetTimeSeconds()-Started < .15) return false;
+            Test->TestTrue(Label(TEXT("real fixed world delta")), FMath::IsNearlyEqual(W->GetDeltaSeconds(),1.f/Rates[Rate],.0001f));
+            if (Case == 8) P->HandlePrimaryAttack(); else StartDodge(W);
+            Stage = 3;
+        }
+        if (Case == 8 && DodgeStarted < 0)
+        {
+            const auto* D = A->GetActiveDefinition();
+            if (D && D->State == ETPCActionState::Attack && A->GetMontagePosition() >= D->CancelStart + .015f) StartDodge(W);
+            if (W->GetTimeSeconds()-Started > 2.) { Test->AddError(Label(TEXT("attack did not reach dodge cancel"))); Next(W); }
+            return false;
+        }
+        if (DodgeStarted < 0) { Test->AddError(Label(TEXT("dodge never started"))); Next(W); return false; }
+        const double T = W->GetTimeSeconds()-DodgeStarted;
+        auto* Old = Anim->GetMontageInstanceForID(DodgeInstanceId);
+        const float ClipTime = Old ? Old->GetPosition() : -1.f;
+        SawImmunity |= A->IsInvulnerable();
+        if (P->IsDashing() && ClipTime > .32f) SawPostImmunity |= !A->IsInvulnerable();
+        if (P->IsDashing() && T < ReturnTime-2.f/Rates[Rate]) Test->TestTrue(Label(TEXT("main dodge still owns movement")), P->IsMovementInputLocked());
+        if (Case < 4 && Step == 0 && T > .1)
+        {
+            ResumeDirection = Case < 2 ? FVector::RightVector : FVector::ForwardVector;
+            Key(Case < 2 ? EKeys::D : EKeys::W, true); Step = 1;
+        }
+        if (Case == 5 && Step == 0 && T > ReturnTime-.10f) { Key(EKeys::F,true); Step = 1; }
+        if (Case == 8 && Step == 0 && T > .1) { P->HandlePrimaryAttack(); Step = 1; }
+        if (Case == 9 && Step == 0 && T > .2) { FTPCSwordPIETestAccess::HitLock(*P); Step = 1; }
+        if (Case != 9 && Released < 0 && !P->IsDashing())
+        {
+            Released = W->GetTimeSeconds(); ReleasedLocation = P->GetActorLocation();
+            Test->TestTrue(Label(TEXT("control handed back at authored travel end, not clip end")), T >= ReturnTime-.001f && T <= ReturnTime+2.1f/Rates[Rate]);
+            Test->TestTrue(Label(TEXT("outgoing recovery still has visible weight")), Old && Old->GetWeight() > .01f);
+            Test->TestTrue(Label(TEXT("outgoing root motion no longer blocks input or next animation")), Old && Old->IsRootMotionDisabled());
+            Test->TestTrue(Label(TEXT("immunity starts and ends before control handoff")), SawImmunity && SawPostImmunity && !A->IsInvulnerable());
+            if (Case != 8) Test->TestFalse(Label(TEXT("ordinary control is already unlocked during pose fade")), P->IsMovementInputLocked());
+            if (Case == 6) { Key(EKeys::LeftMouseButton,true); Step = 1; }
+            if (Case == 7) { Key(EKeys::RightMouseButton,true); Step = 1; }
+        }
+        const FVector L = P->GetActorLocation(), V = M->Velocity;
+        Trace += FString::Printf(TEXT("%d,%d,%.4f,%.4f,%.4f,%.4f,%d,%d,%d,%.4f,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n"),
+            Rates[Rate],Case,W->GetTimeSeconds()-Started,T,ClipTime,ReturnTime,P->IsDashing(),P->IsMovementInputLocked(),A->IsInvulnerable(),
+            Old?Old->GetWeight():0.f,Old?Old->IsRootMotionDisabled():false,L.X,L.Y,L.Z,V.X,V.Y,V.Z);
+        if (Released >= 0 && W->GetTimeSeconds()-Released > .10f && Step < 2)
+        {
+            const auto* D = A->GetActiveDefinition();
+            if (Case < 4)
+            {
+                Test->TestTrue(Label(TEXT("held WASD physically moves in the NEW direction during recovery")), FVector::DotProduct(L-ReleasedLocation,ResumeDirection) > 3.f);
+                Test->TestTrue(Label(TEXT("movement is input driven, not outgoing dodge drift")), FVector::DotProduct(V,ResumeDirection) > 40.f);
+            }
+            else if (Case == 4) Test->TestTrue(Label(TEXT("idle exit does not keep sliding after root handoff")), FVector::Dist2D(ReleasedLocation,L) < 15.f);
+            else if (Case == 5) Test->TestTrue(Label(TEXT("buffered F jump executes before old dodge clip ends")), M->IsFalling() && V.Z > 50.f);
+            else if (Case == 6 || Case == 8)
+            {
+                Test->TestTrue(Label(TEXT("attack begins before old dodge clip ends")), D && D->ActionId == (Case==6?TEXT("Sword.Light.1"):TEXT("Sword.Light.2")));
+                const uint64 NewAction = A->GetActionInstanceId();
+                FTPCSwordPIETestAccess::OldMotionEnd(*P,DodgeMontage.Get(),DodgeGeneration);
+                Test->TestEqual(Label(TEXT("stale dodge end cannot release the new attack")),A->GetActionInstanceId(),NewAction);
+                auto* NewInstance = Anim->GetMontageInstanceForID(A->GetMontageInstanceId());
+                Test->TestTrue(Label(TEXT("next attack retains its own root motion")),NewInstance && !NewInstance->IsRootMotionDisabled());
+            }
+            else if (Case == 7) Test->TestTrue(Label(TEXT("guard responds before old dodge clip ends")), C->IsBlocking());
+            Step = 2;
+        }
+        if (Case == 9 && T > ReturnTime+.1f)
+        {
+            FTPCSwordPIETestAccess::OldMotionEnd(*P,DodgeMontage.Get(),DodgeGeneration);
+            Test->TestTrue(Label(TEXT("interrupted dodge cannot release the newer hit lock")), P->IsMovementInputLocked());
+            Test->TestFalse(Label(TEXT("interruption ends dodge immunity")), A->IsInvulnerable());
+            Next(W); return false;
+        }
+        if (Case != 9 && T > 1.05)
+        {
+            Test->TestTrue(Label(TEXT("control handoff and follow-up were actually observed")), Released >= 0 && Step == 2);
+            Next(W); return false;
+        }
+        if (T > 2.0) { Test->AddError(Label(TEXT("handoff timeout"))); Next(W); }
+        return false;
+    }
+};
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTPCDodgeControlTest, "ThirdPerson.Sword.PIE.DodgeControlAt30_60_120",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FTPCDodgeControlTest::RunTest(const FString&)
+{
+    FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+    ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
+    ADD_LATENT_AUTOMATION_COMMAND(SwordPIE::FDodgeControlScenario(this));
     ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand());
     return true;
 }

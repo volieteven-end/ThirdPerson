@@ -514,12 +514,8 @@ bool USwordActionAssetTools::ApplyGameplayFeedbackAssets()
     FKismetEditorUtilities::CompileBlueprint(BP);
     auto* Player = Cast<ATPCCharacter>(BP->GeneratedClass->GetDefaultObject());
     if (!Player || !Player->DefaultMappingContext || !Player->SprintAction) return false;
-    auto* Context = Player->DefaultMappingContext.Get();
-    Context->UnmapAllKeysFromAction(Player->DashAction);
-    Context->UnmapAllKeysFromAction(Player->SprintAction);
-    Context->MapKey(Player->SprintAction, EKeys::LeftShift);
     Player->SprintHoldThreshold = .2f; Player->LandingContactTime = .12f;
-    if (!Save(Context) || !Save(BP)) return false;
+    if (!Save(BP) || !ApplyInputDodgeFeedbackAssets()) return false;
     for (const TCHAR* Name : {TEXT("BP_EnemyCharacter"), TEXT("BP_EnemyRangedCharacter")})
     {
         auto* EnemyBP = Load<UBlueprint>(FString(TEXT("/Game/Third/Character/"))+Name);
@@ -579,6 +575,52 @@ bool USwordActionAssetTools::ApplyInertiaFeedbackAssets()
     if (!bArrowFound) return false;
     FKismetEditorUtilities::CompileBlueprint(Arrow);
     return Save(Sprint) && Save(Definition) && Save(AirOne) && Save(AirTwo) && Save(Arrow);
+#else
+    return false;
+#endif
+}
+
+bool USwordActionAssetTools::ApplyInputDodgeFeedbackAssets()
+{
+#if WITH_EDITOR
+    using namespace SwordAssetAuthoring;
+    auto* Class = LoadClass<ATPCCharacter>(nullptr, TEXT("/Game/Third/Character/BP_TPCCharacter.BP_TPCCharacter_C"));
+    const auto* Player = Class ? Class->GetDefaultObject<ATPCCharacter>() : nullptr;
+    if (!Player || !Player->DefaultMappingContext || !Player->SprintAction || !Player->JumpAction) return false;
+    auto* Context = Player->DefaultMappingContext.Get();
+    // Keep unrelated bindings and each existing mapping's modifiers/triggers intact.
+    for (const auto& Mapping : Context->GetMappings())
+        if ((Mapping.Key == EKeys::SpaceBar || Mapping.Key == EKeys::F) &&
+            Mapping.Action != Player->SprintAction && Mapping.Action != Player->JumpAction)
+        {
+            UE_LOG(LogTemp, Error, TEXT("Input remap would conflict with %s on %s"), *GetNameSafe(Mapping.Action), *Mapping.Key.ToString());
+            return false;
+        }
+    bool bSprintMapped = false, bJumpMapped = false;
+    for (int32 I = 0; I < Context->GetMappings().Num(); ++I)
+    {
+        auto& Mapping = Context->GetMapping(I);
+        if (Mapping.Action == Player->SprintAction && (Mapping.Key == EKeys::LeftShift || Mapping.Key == EKeys::SpaceBar))
+        { Mapping.Key = EKeys::SpaceBar; bSprintMapped = true; }
+        else if (Mapping.Action == Player->JumpAction && (Mapping.Key == EKeys::SpaceBar || Mapping.Key == EKeys::F))
+        { Mapping.Key = EKeys::F; bJumpMapped = true; }
+    }
+    if (!bSprintMapped) Context->MapKey(Player->SprintAction, EKeys::SpaceBar);
+    if (!bJumpMapped) Context->MapKey(Player->JumpAction, EKeys::F);
+    if (!Save(Context)) return false;
+    // Source clips are 1s long. These are the per-direction end of useful travel,
+    // measured from their root curves; the source animations themselves stay untouched.
+    const TCHAR* Directions[] = { TEXT("F"), TEXT("B"), TEXT("L"), TEXT("R") };
+    const float ReturnTimes[] = { .65f, .50f, .60f, .60f };
+    for (int32 I = 0; I < UE_ARRAY_COUNT(Directions); ++I)
+    {
+        auto* D = Load<UActionDefinition>(Root + FString::Printf(TEXT("Data/DA_Action_Dodge_%s"), Directions[I]));
+        if (!D || !D->Montage || D->Montage->GetPlayLength() <= ReturnTimes[I] + .1f || D->InvulnerabilityEnd >= ReturnTimes[I]) return false;
+        D->ControlReturnTime = ReturnTimes[I]; D->ControlReturnBlendTime = .10f;
+        if (!Save(D)) return false;
+    }
+    UE_LOG(LogTemp, Display, TEXT("INPUT_DODGE_FEEDBACK_READY: Space tap dodge / hold sprint; F jump; controls F=.65 B=.50 L=.60 R=.60, visual blend .10."));
+    return true;
 #else
     return false;
 #endif

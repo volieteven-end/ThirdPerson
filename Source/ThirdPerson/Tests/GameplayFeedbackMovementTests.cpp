@@ -55,7 +55,7 @@ class FScenario : public IAutomationLatentCommand
     }
     void Release()
     {
-        for (const FKey K:{EKeys::W,EKeys::LeftShift,EKeys::LeftAlt,EKeys::C,EKeys::SpaceBar}) Key(K,false);
+        for (const FKey K:{EKeys::W,EKeys::SpaceBar,EKeys::LeftAlt,EKeys::C,EKeys::F}) Key(K,false);
         if (Player.IsValid()) { Player->CancelSprintOrDodgeInput(); Player->ClearMoveInput(); Player->StopCrouch(); Player->EndJump(); }
     }
     void Stop()
@@ -88,14 +88,18 @@ public:
             auto* P=Player.Get(); P->bEnableRootMotionTurn=false;
             P->GetMesh()->VisibilityBasedAnimTickOption=EVisibilityBasedAnimTickOption::AlwaysTickPoseAndRefreshBones;
             P->HealthComponent->MaxHealth=10000.f; P->HealthComponent->SetCurrentHealth(10000.f);
-            int32 ShiftMappings=0,AltMappings=0,DashMappings=0;
+            int32 SpaceMappings=0,JumpMappings=0,AltMappings=0,DashMappings=0;
             for (const auto& M:P->DefaultMappingContext->GetMappings())
             {
-                if (M.Key==EKeys::LeftShift && M.Action==P->SprintAction) ++ShiftMappings;
+                if (M.Key==EKeys::SpaceBar && M.Action==P->SprintAction) ++SpaceMappings;
+                if (M.Key==EKeys::F && M.Action==P->JumpAction) ++JumpMappings;
+                if (M.Key==EKeys::SpaceBar) Test->TestTrue(TEXT("Space cannot also jump"),M.Action==P->SprintAction);
+                if (M.Key==EKeys::F) Test->TestTrue(TEXT("F has no conflicting action"),M.Action==P->JumpAction);
                 if (M.Key==EKeys::LeftAlt || M.Key==EKeys::RightAlt) ++AltMappings;
                 if (M.Action==P->DashAction) ++DashMappings;
             }
-            Test->TestEqual(TEXT("Shift has exactly one shared mapping"),ShiftMappings,1);
+            Test->TestEqual(TEXT("Space has exactly one shared mapping"),SpaceMappings,1);
+            Test->TestEqual(TEXT("F has exactly one jump mapping"),JumpMappings,1);
             Test->TestEqual(TEXT("Alt is unused"),AltMappings,0);
             Test->TestEqual(TEXT("No second independent dash key remains"),DashMappings,0);
             if (FParse::Param(FCommandLine::Get(),TEXT("FeedbackVisualAudit")))
@@ -115,10 +119,10 @@ public:
             PC->SetControlRotation(FRotator::ZeroRotator); M->StopMovementImmediately();
             SawDodge=SawSprint=SawAir=SawLanding=SawHeldContact=false; Contact=-1;
             Stage=2; Start=W->GetTimeSeconds();
-            if (Case==0 || Case==1) { Key(EKeys::W,true); Key(EKeys::LeftShift,true); }
+            if (Case==0 || Case==1) { Key(EKeys::W,true); Key(EKeys::SpaceBar,true); }
             if (Case==2) Key(EKeys::LeftAlt,true);
-            if (Case==3 || Case==4) Key(EKeys::LeftShift,true);
-            if (Case==5 || Case==6 || Case==7) { if (Case==5) Key(EKeys::W,true); Key(EKeys::SpaceBar,true); }
+            if (Case==3 || Case==4) Key(EKeys::SpaceBar,true);
+            if (Case==5 || Case==6 || Case==7) { if (Case==5) Key(EKeys::W,true); Key(EKeys::F,true); }
             if (Case==8) Key(EKeys::W,true);
             if (Case==9) Key(EKeys::C,true);
             if (Case==10)
@@ -157,12 +161,12 @@ public:
         }
         if (Case==0)
         {
-            if (Step==0 && T>=.07) { Test->TestFalse(Label(TEXT("short press does not start sprint")),SawSprint); Key(EKeys::LeftShift,false); Step=1; }
-            if (T>1.5) { Test->TestTrue(Label(TEXT("short Shift release starts root-motion dodge through Enhanced Input")),SawDodge); Test->TestFalse(Label(TEXT("tap never also sprinted")),SawSprint); Next(W); return false; }
+            if (Step==0 && T>=.07) { Test->TestFalse(Label(TEXT("short press does not start sprint")),SawSprint); Key(EKeys::SpaceBar,false); Step=1; }
+            if (T>1.5) { Test->TestTrue(Label(TEXT("short Space release starts root-motion dodge through Enhanced Input")),SawDodge); Test->TestFalse(Label(TEXT("tap never also sprinted")),SawSprint); Next(W); return false; }
         }
         else if (Case==1)
         {
-            if (Step==0 && T>.55) { Test->TestTrue(Label(TEXT("held Shift starts sprint")),P->bIsSprinting); Test->TestEqual(Label(TEXT("sprint speed")),M->MaxWalkSpeed,650.f); Key(EKeys::LeftShift,false); Step=1; }
+            if (Step==0 && T>.55) { Test->TestTrue(Label(TEXT("held Space starts sprint")),P->bIsSprinting); Test->TestEqual(Label(TEXT("sprint speed")),M->MaxWalkSpeed,650.f); Key(EKeys::SpaceBar,false); Step=1; }
             if (T>.8) { Test->TestFalse(Label(TEXT("hold/release never dodges")),SawDodge); Test->TestFalse(Label(TEXT("release stops sprint")),P->bIsSprinting); Test->TestEqual(Label(TEXT("walk speed restored")),M->MaxWalkSpeed,450.f); Next(W); return false; }
         }
         else if (Case==2)
@@ -171,19 +175,19 @@ public:
         }
         else if (Case==3)
         {
-            if (Step==0 && T>.35) { Test->TestFalse(Label(TEXT("held stationary Shift is not sprinting")),SawSprint); Test->TestEqual(Label(TEXT("stationary Shift spends no stamina")),P->StaminaComponent->GetCurrentStamina(),100.f); Key(EKeys::W,true); Step=1; }
-            if (T>.6) { Test->TestTrue(Label(TEXT("W after held Shift starts sprint without repressing Shift")),P->bIsSprinting); Test->TestFalse(Label(TEXT("stationary hold never dodges")),SawDodge); Next(W); return false; }
+            if (Step==0 && T>.35) { Test->TestFalse(Label(TEXT("held stationary Space is not sprinting")),SawSprint); Test->TestEqual(Label(TEXT("stationary Space spends no stamina")),P->StaminaComponent->GetCurrentStamina(),100.f); Key(EKeys::W,true); Step=1; }
+            if (T>.6) { Test->TestTrue(Label(TEXT("W after held Space starts sprint without repressing Space")),P->bIsSprinting); Test->TestFalse(Label(TEXT("stationary hold never dodges")),SawDodge); Next(W); return false; }
         }
         else if (Case==4)
         {
             if (Step==0 && T>.04) { PC->ToggleInventory(); Step=1; }
-            if (Step==1 && T>.15) { Key(EKeys::LeftShift,false); Step=2; }
+            if (Step==1 && T>.15) { Key(EKeys::SpaceBar,false); Step=2; }
             if (Step==2 && T>.3) { PC->ToggleInventory(); Step=3; }
-            if (T>.5) { Test->TestFalse(Label(TEXT("menu discards pending Shift tap")),SawDodge); Test->TestFalse(Label(TEXT("menu clears held sprint")),SawSprint); Next(W); return false; }
+            if (T>.5) { Test->TestFalse(Label(TEXT("menu discards pending Space tap")),SawDodge); Test->TestFalse(Label(TEXT("menu clears held sprint")),SawSprint); Next(W); return false; }
         }
         else if (Case==5 || Case==6 || Case==7)
         {
-            if (Step==0 && T>.1) { Key(EKeys::SpaceBar,false); Step=1; }
+            if (Step==0 && T>.1) { Key(EKeys::F,false); Step=1; }
             if (SawAir && M->IsMovingOnGround() && Contact<0) { Contact=T; ContactPosition=L; }
             if (Contact>=0)
             {
@@ -213,7 +217,7 @@ public:
                 }
                 if (Case==7)
                 {
-                    if (Step==1 && Since>.02) { Key(EKeys::SpaceBar,true); Step=2; }
+                    if (Step==1 && Since>.02) { Key(EKeys::F,true); Step=2; }
                     if (Since>.15) { Test->TestTrue(Label(TEXT("re-jump interrupts short landing buffer")),M->IsFalling()); Next(W); return false; }
                 }
             }

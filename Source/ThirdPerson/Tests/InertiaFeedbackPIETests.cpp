@@ -52,7 +52,7 @@ class FScenario : public IAutomationLatentCommand
     void Key(FKey K,bool Down) { if (PC.IsValid()) PC->InputKey(FInputKeyEventArgs::CreateSimulated(K,Down?IE_Pressed:IE_Released,Down?1.f:0.f)); }
     void Release()
     {
-        for (FKey K:{EKeys::W,EKeys::LeftShift,EKeys::SpaceBar,EKeys::LeftMouseButton}) Key(K,false);
+        for (FKey K:{EKeys::W,EKeys::SpaceBar,EKeys::F,EKeys::LeftMouseButton}) Key(K,false);
         if (Player.IsValid()) { Player->CancelSprintOrDodgeInput(); Player->ClearMoveInput(); Player->EndJump(); }
     }
     void Next(UWorld* W)
@@ -106,7 +106,7 @@ public:
             Contact=AttackAt=JumpAt=-1; MinimumAttackSpeed=MinimumContactSpeed=MAX_flt; AirSpeed=0;
             Stage=2; Start=W->GetTimeSeconds();
             if (Case<4) Key(EKeys::W,true);
-            if (Case==3) Key(EKeys::LeftShift,true);
+            if (Case==3) Key(EKeys::SpaceBar,true);
             if (Case==4)
             {
                 P->SetActorLocation(FVector(500,-900,98));
@@ -129,10 +129,10 @@ public:
         }
         if (Case<=2)
         {
-            if (Step==0 && T>.4) { Test->TestTrue(Label(TEXT("run-up reaches speed")),V.Size2D()>400); Key(EKeys::SpaceBar,true); JumpAt=T; Step=1; }
+            if (Step==0 && T>.4) { Test->TestTrue(Label(TEXT("run-up reaches speed")),V.Size2D()>400); Key(EKeys::F,true); JumpAt=T; Step=1; }
             if (Step==1 && T-JumpAt>.1)
             {
-                Key(EKeys::SpaceBar,false);
+                Key(EKeys::F,false);
                 if (Case==0) { BeforeAttackSpeed=V.Size2D(); BeforeAttackZ=V.Z; Key(EKeys::LeftMouseButton,true); AttackAt=T; }
                 if (Case==2) Key(EKeys::W,false);
                 Step=2;
@@ -179,7 +179,7 @@ public:
         }
         else if (Case==3)
         {
-            if (Step==0 && T>.5) { Test->TestTrue(Label(TEXT("held Shift sprint before slash")),P->bIsSprinting); Key(EKeys::LeftMouseButton,true); AttackAt=T; Step=1; }
+            if (Step==0 && T>.5) { Test->TestTrue(Label(TEXT("held Space sprint before slash")),P->bIsSprinting); Key(EKeys::LeftMouseButton,true); AttackAt=T; Step=1; }
             if (AttackAt>=0)
             {
                 const double Since=T-AttackAt;

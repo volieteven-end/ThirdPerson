@@ -47,6 +47,10 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float CommitTime = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float InvulnerabilityStart = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float InvulnerabilityEnd = -1.f;
+    /** Dodge montage time when its displacement is effectively finished and control returns.
+     * The visual recovery blends out independently; -1 uses the character's legacy fallback. */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(Units="s")) float ControlReturnTime = -1.f;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin="0.02", ClampMax="0.25", Units="s")) float ControlReturnBlendTime = .10f;
 };
 
 /** Weapon-owned style. The old weapon montage array is used only when no action set exists. */

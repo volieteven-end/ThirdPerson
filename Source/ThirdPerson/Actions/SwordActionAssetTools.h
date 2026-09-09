@@ -15,4 +15,6 @@ public:
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyGameplayFeedbackAssets();
     /** Tune sprint recovery, airborne pose extraction and the arrow visual component only. */
     UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyInertiaFeedbackAssets();
+    /** Save only the requested keyboard mappings and per-direction dodge control handoff. */
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool ApplyInputDodgeFeedbackAssets();
 };

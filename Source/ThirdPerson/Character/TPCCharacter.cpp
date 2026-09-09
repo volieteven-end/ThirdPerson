@@ -1406,7 +1406,24 @@ void ATPCCharacter::UpdateMotionAction()
 	if (MotionAction != ETPCMotionAction::None)
 	{
 		// Covers mesh / AnimInstance replacement even when the original delegate is lost.
-		if (!Anim || !Anim->GetMontageInstanceForID(ActiveMotionInstanceId)) { CancelMotionAction(); }
+		FAnimMontageInstance* Instance = Anim ? Anim->GetMontageInstanceForID(ActiveMotionInstanceId) : nullptr;
+		if (!Instance) { CancelMotionAction(); return; }
+        if (IsDashing())
+        {
+            const auto* Definition = ActionComponent ? ActionComponent->GetActiveDefinition() : nullptr;
+            const float ReturnTime = Definition && Definition->ControlReturnTime >= 0.f
+                ? Definition->ControlReturnTime : FMath::Min(.65f, ActiveMotionMontage->GetPlayLength() * .8f);
+            const float InvulnerabilityEnd = Definition ? Definition->InvulnerabilityEnd : DashInvulnerabilityDuration;
+            if (Instance->GetPosition() >= FMath::Max(ReturnTime, InvulnerabilityEnd))
+            {
+                const float BlendTime = Definition ? Definition->ControlReturnBlendTime : .10f;
+                // Keep the outgoing pose alive for a short blend, but it must no longer
+                // override walking/jumping or the next attack's root motion with a zero delta.
+                // This flag belongs to this montage INSTANCE, never to the next dodge/attack.
+                Instance->PushDisableRootMotion();
+                CancelMotionAction(FMath::Clamp(BlendTime, .02f, .25f), false);
+            }
+        }
 		return;
 	}
 	if (!bEnableRootMotionTurn || IsMovementInputLocked() || LockedTarget || !Controller || !GetWorld() ||

@@ -76,6 +76,15 @@ bool FTPCSwordAssetTest::RunTest(const FString&)
     TestEqual(TEXT("Two air stages per flight"), Set->AirCombo.Num(), 2);
     TestEqual(TEXT("Four directional dodges"), Set->Dodges.Num(), 4);
     TestEqual(TEXT("Four root turns"), Set->Turns.Num(), 4);
+    for (const UActionDefinition* D : Set->Dodges)
+    {
+        if (!TestNotNull(TEXT("Saved dodge definition"), D) || !D->Montage) return false;
+        TestTrue(TEXT("Dodge control returns after immunity, before the source recovery ends"),
+            D->ControlReturnTime > D->InvulnerabilityEnd && D->ControlReturnTime + D->ControlReturnBlendTime < D->Montage->GetPlayLength());
+        TestTrue(TEXT("Dodge visual recovery has a short nonzero blend"), D->ControlReturnBlendTime >= .05f && D->ControlReturnBlendTime <= .15f);
+        TestEqual(TEXT("Dodge invulnerability still ends at .30s"), D->InvulnerabilityEnd, .30f);
+        TestEqual(TEXT("Dodge stamina cost is unchanged"), D->StaminaCost, 30.f);
+    }
     TSet<FName> Ids;
     TArray<const UActionDefinition*> Definitions;
     for (const auto* Moves : { &Set->GroundCombo, &Set->AirCombo, &Set->Dodges, &Set->Turns })
