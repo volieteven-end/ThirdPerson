@@ -62,6 +62,12 @@ public:
 	void TryAirAttack();
 	/** A separate input action; normal air attacks never force a downward launch. */
 	void TryAirDiveAttack();
+	/** True until physical ground contact; enemy capsules must not end a dive. */
+	bool IsAirDiveDescending() const
+	{
+		return bCombatEnabled && bMeleeAttackInProgress &&
+			ActiveAttackType == EActiveCombatAttackType::AirDive && !bAirDiveLanded;
+	}
 	void HandleOwnerLanded();
 	void CancelActiveAttack(float BlendOutTime = 0.1f);
 
