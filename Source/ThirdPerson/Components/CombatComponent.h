@@ -231,6 +231,7 @@ private:
     bool IsDashComboContextValid() const;
 	bool bAirDiveLanded = false;
 	friend struct FTPActionTestAccess;
+	friend struct FCombatVFXTestAccess;
 	friend struct FMeleeAITestAccess;
     friend struct FTPCSwordPIETestAccess;
     friend struct FTPCSwordActionTestAccess;

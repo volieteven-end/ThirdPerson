@@ -7,6 +7,7 @@
 class UStaticMeshComponent;
 class USkeletalMeshComponent;
 class UWeaponDefinition;
+class UWeaponVFXComponent;
 
 /** Visual world representation of an equipped weapon. */
 UCLASS()
@@ -16,6 +17,8 @@ class THIRDPERSON_API AWeaponActor : public AActor
 
 public:
 	AWeaponActor();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Weapon|Effects")
+	TObjectPtr<UWeaponVFXComponent> WeaponVFX;
 
 	void InitializeWeapon(UWeaponDefinition* InWeaponDefinition);
 

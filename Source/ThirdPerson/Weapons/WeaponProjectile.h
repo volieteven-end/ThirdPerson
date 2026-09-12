@@ -28,6 +28,8 @@ public:
 protected:
  virtual void BeginPlay() override;
  virtual void EndPlay(const EEndPlayReason::Type Reason) override;
+ /** Exactly once on a validated impact, before this projectile returns to its pool. */
+ virtual void PlayImpactEffect(const FHitResult& Hit) {}
  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components") TObjectPtr<USphereComponent> CollisionSphere;
  UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components") TObjectPtr<UProjectileMovementComponent> ProjectileMovement;
  UPROPERTY(EditDefaultsOnly, Category="Debug") bool bDrawDebugProjectile = false;
@@ -35,6 +37,7 @@ protected:
      UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 private:
  friend struct FProjectileTestAccess;
+ friend struct FCombatVFXTestAccess;
  void ConfigureCollision();
  void ReturnToPool();
  float Damage = 0.f;

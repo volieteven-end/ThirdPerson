@@ -59,6 +59,12 @@ UBossDefinition::UBossDefinition()
  FeastEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/Ultimate/FX/p_CountessUlt_GroundImpactFX"));
  PhaseEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/Ultimate/FX/p_CountessUlt_CastFX"));
  TrailEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/p_CountessMeleeTrail"));
+ SiphonCastEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/BladeSiphon/FX/P_Countess_SiphonOneShot"));
+ SiphonHitEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/BladeSiphon/FX/p_Countess_BladeSiphon_HitFX"));
+ RushSlashEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/BlinkStrike/FX/p_Countess_XSlash"));
+ FeastSlashEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/Ultimate/FX/p_CountessUlt_SlashFX"));
+ WaveFlightEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/RollingDark/FX/p_RollingDark_SegmentFX"));
+ WaveImpactEffect=FX(TEXT("/Game/ParagonCountess/FX/Particles/Abilities/RollingDark/FX/p_RollingDark_ImpactFX"));
  WaveClass=ABossBloodWave::StaticClass();
  if (FPackageName::DoesPackageExist(TEXT("/Game/Third/Bosses/Countess/Materials/M_BossTelegraph")))
   WarningMaterial=LoadObject<UMaterialInterface>(nullptr,TEXT("/Game/Third/Bosses/Countess/Materials/M_BossTelegraph.M_BossTelegraph"));

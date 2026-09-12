@@ -3,10 +3,12 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "WeaponDefinition.h"
+#include "WeaponVFXComponent.h"
 
 AWeaponActor::AWeaponActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	WeaponVFX = CreateDefaultSubobject<UWeaponVFXComponent>(TEXT("WeaponVFX"));
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponMesh"));
 	SetRootComponent(WeaponMesh);
@@ -28,6 +30,5 @@ void AWeaponActor::InitializeWeapon(UWeaponDefinition* InWeaponDefinition)
 
 void AWeaponActor::SetAttackEffectActive_Implementation(bool bActive)
 {
-	// Intentionally asset-free. BP weapon children activate/deactivate their
-	// own Niagara or particle component in this event.
+	WeaponVFX->SetAttackActive(bActive);
 }

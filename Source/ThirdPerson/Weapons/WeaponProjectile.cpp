@@ -149,6 +149,7 @@ void AWeaponProjectile::HandleProjectileHit(UPrimitiveComponent* HitComponent, A
   }
  }
  if (!IsValid(this) || !bActive) return;
+ PlayImpactEffect(Hit);
  if (bReturnImmediatelyOnImpact) { ReturnToPool(); return; }
  // Attach to an animated bone rather than the capsule so embedded arrows follow the body.
  if (ACharacter* Character = Cast<ACharacter>(OtherActor); IsValid(Character) && Character->GetMesh())

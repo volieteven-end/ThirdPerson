@@ -23,10 +23,10 @@ public class ThirdPerson : ModuleRules
 			"SlateCore"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput", "Niagara" });
 		if (Target.bBuildEditor)
 		{
-			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "AnimGraph", "BlueprintGraph", "Kismet", "KismetCompiler", "BehaviorTreeEditor", "AIGraph", "UMGEditor", "AnimationBlueprintLibrary", "AudioMixer" });
+			PrivateDependencyModuleNames.AddRange(new string[] { "UnrealEd", "AssetRegistry", "AnimGraph", "BlueprintGraph", "Kismet", "KismetCompiler", "BehaviorTreeEditor", "AIGraph", "UMGEditor", "AnimationBlueprintLibrary", "AudioMixer", "RHI" });
 		}
 
 		// Uncomment if you are using Slate UI

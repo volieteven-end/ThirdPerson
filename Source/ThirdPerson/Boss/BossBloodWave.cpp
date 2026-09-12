@@ -1,29 +1,39 @@
 #include "BossBloodWave.h"
-#include "Components/StaticMeshComponent.h"
 #include "Components/SphereComponent.h"
-#include "Engine/StaticMesh.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "UObject/ConstructorHelpers.h"
-#include "Materials/MaterialInstanceDynamic.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "BossDefinition.h"
+#include "BossActionComponent.h"
+#include "../Weapons/CombatVFXSettings.h"
 ABossBloodWave::ABossBloodWave()
 {
  bReturnImmediatelyOnImpact=true; FlightLifetime=1200.f/900.f; MaxPooledInstances=16;
  CollisionSphere->InitSphereRadius(28.f);
  ProjectileMovement->ProjectileGravityScale=0.f;
- Visual=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BloodWaveVisual")); Visual->SetupAttachment(GetRootComponent());
- ConstructorHelpers::FObjectFinder<UStaticMesh> Mesh(TEXT("/Engine/BasicShapes/Sphere"));
- Visual->SetStaticMesh(Mesh.Object); Visual->SetRelativeScale3D(FVector(.12f,.8f,.55f));
- Visual->SetCollisionEnabled(ECollisionEnabled::NoCollision); Visual->SetCastShadow(false);
+ FlightEffect=CreateDefaultSubobject<UParticleSystemComponent>(TEXT("BloodWaveFlight"));
+ FlightEffect->SetupAttachment(GetRootComponent()); FlightEffect->bAutoActivate=false;
+ FlightEffect->SetCollisionEnabled(ECollisionEnabled::NoCollision); FlightEffect->SetCastShadow(false);
 }
 void ABossBloodWave::InitializeCombatProjectile(const FCombatHitSpec& Spec,float Speed)
 {
  FCombatHitSpec Wave=Spec; Wave.bCanBeBlocked=true; Wave.bCanBeParried=false;
  FlightLifetime=1200.f/FMath::Max(1.f,Speed);
- if (auto* Parent=GetDefault<UBossDefinition>()->WarningMaterial.Get())
- {
-  auto* M=Visual->CreateDynamicMaterialInstance(0,Parent);
-  M->SetScalarParameterValue(TEXT("Circle"),0.f); M->SetVectorParameterValue(TEXT("WarningColor"),FLinearColor(1,.01f,.035f));
- }
+ const UBossDefinition* D=GetDefault<UBossDefinition>();
+ if (const auto* A=GetOwner()?GetOwner()->FindComponentByClass<UBossActionComponent>():nullptr) D=A->GetDefinition();
+ ImpactEffect=D->WaveImpactEffect; EffectScale=D->WaveEffectScale;
+ FlightEffect->DeactivateSystem(); FlightEffect->KillParticlesForced();
+ FlightEffect->SetTemplate(D->WaveFlightEffect); FlightEffect->SetRelativeScale3D(FVector(EffectScale));
  Super::InitializeCombatProjectile(Wave,Speed);
+ if (TPCCombatVFX::IsEnabled() && D->WaveFlightEffect) FlightEffect->ActivateSystem(true);
+}
+void ABossBloodWave::DeactivateProjectile()
+{
+ FlightEffect->DeactivateImmediate(); ImpactEffect=nullptr;
+ Super::DeactivateProjectile();
+}
+void ABossBloodWave::PlayImpactEffect(const FHitResult& Hit)
+{
+ // World-owned one-shot: returning the wave must not truncate its impact burst.
+ if (TPCCombatVFX::IsEnabled()) UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ImpactEffect,Hit.ImpactPoint,Hit.ImpactNormal.Rotation(),FVector(EffectScale),true);
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
+#include "../Weapons/WeaponVFXTypes.h"
 #include "AttackWindowNotifyState.generated.h"
 
 UENUM(BlueprintType)
@@ -30,6 +31,8 @@ public:
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp,UAnimSequenceBase* Animation,const FAnimNotifyEventReference& EventReference) override;
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	EAttackNotifyWindowType WindowType = EAttackNotifyWindowType::Damage;
+	UPROPERTY(EditAnywhere, Category="Attack|Effects")
+	EWeaponVFXStyle EffectStyle = EWeaponVFXStyle::Automatic;
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	FName AttackBoneName = TEXT("hand_r");
 	UPROPERTY(EditAnywhere, Category = "Attack",meta = (ClampMin = "1.0"))

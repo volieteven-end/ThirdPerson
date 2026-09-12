@@ -64,6 +64,7 @@ public:
  int32 GetContextRevision() const { return ContextRevision; }
  int32 GetHitReactionDirection() const { return HitReactionDirection; }
 private:
+ friend struct FCombatVFXTestAccess;
  friend struct FCountessBossTestAccess;
  friend struct FCountessPIETestAccess;
  friend struct FCountessReadableMovementAccess;

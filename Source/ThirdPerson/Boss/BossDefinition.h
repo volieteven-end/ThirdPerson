@@ -139,6 +139,14 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> FeastEffect;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> PhaseEffect;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> TrailEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> SiphonCastEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> SiphonHitEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> RushSlashEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> FeastSlashEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> WaveFlightEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> WaveImpactEffect;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects", meta=(ClampMin=".1", ClampMax="2")) float SkillAccentScale = .65f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects", meta=(ClampMin=".1", ClampMax="2")) float WaveEffectScale = .55f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UMaterialInterface> WarningMaterial;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TSubclassOf<AWeaponProjectile> WaveClass;
  const FBossActionDefinition* FindAction(EBossAction Id) const;

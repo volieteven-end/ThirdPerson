@@ -1,4 +1,5 @@
 #include "BossActionComponent.h"
+#include "../Weapons/CombatVFXSettings.h"
 #include "CountessBossCharacter.h"
 #include "BossTelegraph.h"
 #include "BossStatusWidget.h"
@@ -433,6 +434,9 @@ void UBossActionComponent::SampleDamage(float OldTime,float NewTime)
   if (!bTrailsStarted)
   {
    bTrailsStarted=true;
+   if (TPCCombatVFX::IsEnabled() && CurrentAction==EBossAction::ShadowRush)
+    if (auto* FX=UGameplayStatics::SpawnEmitterAttached(GetDefinition()->RushSlashEffect,Boss->GetMesh(),TEXT("weapon_r"),
+        FVector::ZeroVector,FRotator::ZeroRotator,FVector(GetDefinition()->SkillAccentScale))) Effects.Add(FX);
    for (const TCHAR* Side:{TEXT("L"),TEXT("R")})
     if (auto* FX=UGameplayStatics::SpawnEmitterAttached(GetDefinition()->TrailEffect,Boss->GetMesh()))
     {
@@ -478,6 +482,10 @@ void UBossActionComponent::DamageArea()
 {
  if (TelegraphActor) { TelegraphActor->Destroy(); TelegraphActor=nullptr; }
  const auto& S=GetDefinition()->FindAction(CurrentAction)->Stages[StageIndex];
+ // Reached once per authored window, even when a frame crosses the entire window.
+ if (TPCCombatVFX::IsEnabled()) if (auto* FX=UGameplayStatics::SpawnEmitterAttached(
+     CurrentAction==EBossAction::Siphon?GetDefinition()->SiphonCastEffect:GetDefinition()->FeastSlashEffect,
+     Boss->GetMesh(),TEXT("weapon_r"),FVector::ZeroVector,FRotator::ZeroRotator,FVector(GetDefinition()->SkillAccentScale))) Effects.Add(FX);
  TArray<FOverlapResult> Hits; FCollisionQueryParams Q(SCENE_QUERY_STAT(BossArea),false,Boss);
  GetWorld()->OverlapMultiByObjectType(Hits,Boss->GetActorLocation(),FQuat::Identity,FCollisionObjectQueryParams(ECC_Pawn),
      FCollisionShape::MakeBox(FVector(S.Radius,S.Radius,GetDefinition()->AreaVerticalTolerance)),Q);
@@ -512,7 +520,13 @@ void UBossActionComponent::ApplyHit(AActor* Victim,const FVector& Point)
  if (Result.ActualDamage>0)
  {
   if (!Result.bBlocked)
-   if (auto* FX=UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),GetDefinition()->ImpactEffect,Point)) Effects.Add(FX);
+  {
+   UParticleSystem* Impact=!TPCCombatVFX::IsEnabled()?GetDefinition()->ImpactEffect:
+       CurrentAction==EBossAction::Siphon?GetDefinition()->SiphonHitEffect:
+       CurrentAction==EBossAction::ShadowRush?GetDefinition()->RushEffect:GetDefinition()->ImpactEffect;
+   if (auto* FX=UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),Impact,Point,FRotator::ZeroRotator,
+       FVector(CurrentAction==EBossAction::Siphon || CurrentAction==EBossAction::ShadowRush?GetDefinition()->SkillAccentScale:1.f))) Effects.Add(FX);
+  }
   if (bSiphon) Health->Heal(FMath::Min(20.f,Result.ActualDamage*.5f));
  }
 }
