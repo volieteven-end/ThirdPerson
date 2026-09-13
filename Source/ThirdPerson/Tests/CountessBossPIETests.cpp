@@ -31,6 +31,7 @@
 #include "Misc/Paths.h"
 #include "Animation/AnimMontage.h"
 #include "GameFramework/WorldSettings.h"
+#include "GameFramework/PlayerStart.h"
 #include "../Components/LevelComponent.h"
 #include "../GameMode/TPCGameMode.h"
 #include "Camera/CameraActor.h"
@@ -608,6 +609,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossPIETest,"ThirdPerson.Boss.PIE.Enco
 bool FCountessBossPIETest::RunTest(const FString&)
 {
  FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+ // Legacy lifecycle fixtures keep their original radius/LOS policy and campaign kill counter.
+ auto* FixtureWorld=GEditor->GetEditorWorldContext().World();
+ FixtureWorld->GetWorldSettings()->DefaultGameMode=LoadClass<AGameModeBase>(nullptr,TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode.BP_ThirdPersonGameMode_C"));
+ for (TActorIterator<ACountessBossCharacter> It(FixtureWorld); It; ++It) It->BossActions->ArenaBoundary=nullptr;
+ for (TActorIterator<APlayerStart> It(FixtureWorld); It; ++It) if (It->PlayerStartTag==TEXT("ArenaArrival")) It->Destroy();
  ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
  FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessPIEScenario>(this));
  ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand());
@@ -618,6 +624,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossActionsPIETest,"ThirdPerson.Boss.P
 bool FCountessBossActionsPIETest::RunTest(const FString&)
 {
  FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+ // Legacy lifecycle fixtures keep their original radius/LOS policy and campaign kill counter.
+ auto* FixtureWorld=GEditor->GetEditorWorldContext().World();
+ FixtureWorld->GetWorldSettings()->DefaultGameMode=LoadClass<AGameModeBase>(nullptr,TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode.BP_ThirdPersonGameMode_C"));
+ for (TActorIterator<ACountessBossCharacter> It(FixtureWorld); It; ++It) It->BossActions->ArenaBoundary=nullptr;
+ for (TActorIterator<APlayerStart> It(FixtureWorld); It; ++It) if (It->PlayerStartTag==TEXT("ArenaArrival")) It->Destroy();
  ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
  FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessActionScenario>(this));
  ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand()); return true;
@@ -627,6 +638,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossDefensePIETest,"ThirdPerson.Boss.R
 bool FCountessBossDefensePIETest::RunTest(const FString&)
 {
  FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+ // Legacy lifecycle fixtures keep their original radius/LOS policy and campaign kill counter.
+ auto* FixtureWorld=GEditor->GetEditorWorldContext().World();
+ FixtureWorld->GetWorldSettings()->DefaultGameMode=LoadClass<AGameModeBase>(nullptr,TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode.BP_ThirdPersonGameMode_C"));
+ for (TActorIterator<ACountessBossCharacter> It(FixtureWorld); It; ++It) It->BossActions->ArenaBoundary=nullptr;
+ for (TActorIterator<APlayerStart> It(FixtureWorld); It; ++It) if (It->PlayerStartTag==TEXT("ArenaArrival")) It->Destroy();
  ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
  FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessDefenseScenario>(this));
  ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand()); return true;
@@ -636,6 +652,11 @@ IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCountessBossLifecyclePIETest,"ThirdPerson.Boss
 bool FCountessBossLifecyclePIETest::RunTest(const FString&)
 {
  FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+ // Legacy lifecycle fixtures keep their original radius/LOS policy and campaign kill counter.
+ auto* FixtureWorld=GEditor->GetEditorWorldContext().World();
+ FixtureWorld->GetWorldSettings()->DefaultGameMode=LoadClass<AGameModeBase>(nullptr,TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode.BP_ThirdPersonGameMode_C"));
+ for (TActorIterator<ACountessBossCharacter> It(FixtureWorld); It; ++It) It->BossActions->ArenaBoundary=nullptr;
+ for (TActorIterator<APlayerStart> It(FixtureWorld); It; ++It) if (It->PlayerStartTag==TEXT("ArenaArrival")) It->Destroy();
  ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
  FAutomationTestFramework::Get().EnqueueLatentCommand(MakeShared<FCountessLifecycleScenario>(this));
  ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand()); return true;

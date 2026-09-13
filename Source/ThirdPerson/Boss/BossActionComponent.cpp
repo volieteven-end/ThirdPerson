@@ -26,6 +26,7 @@
 #include "DrawDebugHelpers.h"
 #include "HAL/IConsoleManager.h"
 #include "../Animation/MeleeTraceGeometry.h"
+#include "../Arena/ArenaActors.h"
 
 static TAutoConsoleVariable<int32> CVarCountessDebug(TEXT("tp.Boss.Debug"),0,TEXT("Show Countess state and exact blade sweep endpoints."));
 
@@ -118,6 +119,7 @@ bool UBossActionComponent::BeginEncounter(AActor* Player)
  const APawn* Pawn=Cast<APawn>(Player);
  const UHealthComponent* PlayerHealth=IsValid(Player)?Player->FindComponentByClass<UHealthComponent>():nullptr;
  if (!bInitialized || State!=EBossState::Dormant || !Pawn || !Pawn->IsPlayerControlled() || !PlayerHealth || PlayerHealth->CurrentHealth<=0) return false;
+ if (ArenaBoundary && !ArenaBoundary->ContainsActor(Player)) return false;
  Target=Player; LastKnownLocation=Player->GetActorLocation(); LastSeen=Now(); bHasLOS=HasLineOfSightTo(Player);
  Health->SetEncounterInvulnerable(true); LockMovement(); SetState(EBossState::Intro);
  StepEnd=Now()+(bIntroSeen?.75f:GetDefinition()->Intro->GetPlayLength());
@@ -138,13 +140,27 @@ void UBossActionComponent::UpdateContext(float Delta)
  if (State==EBossState::Dormant)
  {
   APawn* Player=UGameplayStatics::GetPlayerPawn(this,0); // Local player lookup, not an actor scan.
-  if (Player && FVector::DistSquared2D(Player->GetActorLocation(),Boss->GetActorLocation())<=FMath::Square(GetDefinition()->EngageRadius) && HasLineOfSightTo(Player)) BeginEncounter(Player);
+  if (Player && (ArenaBoundary ? ArenaBoundary->ContainsActor(Player) :
+      FVector::DistSquared2D(Player->GetActorLocation(),Boss->GetActorLocation())<=FMath::Square(GetDefinition()->EngageRadius) && HasLineOfSightTo(Player))) BeginEncounter(Player);
   return;
  }
  AActor* Player=Target.Get();
  const UHealthComponent* H=Player?Player->FindComponentByClass<UHealthComponent>():nullptr;
  if (!Player || !H || H->CurrentHealth<=0) { RequestReset(); return; }
  bHasLOS=HasLineOfSightTo(Player);
+ if (ArenaBoundary)
+ {
+  const bool bInside = ArenaBoundary->ContainsActor(Player);
+  if (bInside)
+  {
+   OutsideSince=-1; LastSeen=Now();
+   // Keep pursuing/repathing inside the encounter; attacks still use bHasLOS.
+   LastKnownLocation=Player->GetActorLocation();
+  }
+  else if (OutsideSince<0) OutsideSince=Now();
+  if (OutsideSince>=0 && Now()-OutsideSince>=ArenaExitGrace) RequestReset();
+  return;
+ }
  if (bHasLOS) { LastSeen=Now(); LastKnownLocation=Player->GetActorLocation(); }
  const bool bOutside=FVector::DistSquared2D(Boss->GetActorLocation(),HomeLocation)>FMath::Square(GetDefinition()->HomeLeash) ||
      FVector::DistSquared2D(Player->GetActorLocation(),HomeLocation)>FMath::Square(GetDefinition()->HomeLeash);
@@ -547,6 +563,7 @@ bool UBossActionComponent::ValidateRush(FVector& Destination) const
  const FVector Start=Boss->GetActorLocation(); FVector End=Start+LockedDirection*Distance;
  FNavLocation Projected; if (!Nav->ProjectPointToNavigation(End,Projected,FVector(70,70,150))) return false;
  End=Projected.Location+FVector(0,0,Boss->GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+ if (ArenaBoundary && !ArenaBoundary->ContainsLocation(End,-Boss->GetCapsuleComponent()->GetScaledCapsuleRadius())) return false;
  if (FMath::Abs(End.Z-Start.Z)>45) return false;
  FCollisionQueryParams Q(SCENE_QUERY_STAT(BossRush),false,Boss);
  FHitResult Hit;
@@ -598,14 +615,15 @@ void UBossActionComponent::MoveToGoal(const FVector& Goal,float Speed,bool bStra
 {
  if (Now()<NextMoveRequest) return; NextMoveRequest=Now()+.4;
  auto* AI=Cast<AAIController>(Boss->GetController()); if (!AI) return;
- if (auto* BB=AI->GetBlackboardComponent()) BB->SetValueAsVector(TEXT("MoveGoal"),Goal);
+ const FVector SafeGoal=ArenaBoundary && State!=EBossState::Resetting ? ArenaBoundary->ClampToInterior(Goal) : Goal;
+ if (auto* BB=AI->GetBlackboardComponent()) BB->SetValueAsVector(TEXT("MoveGoal"),SafeGoal);
  auto* M=Boss->GetCharacterMovement(); M->MaxWalkSpeed=Speed; M->bOrientRotationToMovement=!bStrafe;
  bStrafing=bStrafe;
  M->bUseControllerDesiredRotation=false;
  Boss->bUseControllerRotationYaw=false;
  // The action component owns strafe-facing. Controller focus must not compete with it.
  AI->ClearFocus(EAIFocusPriority::Gameplay);
- FAIMoveRequest Request; Request.SetGoalLocation(Goal); Request.SetAcceptanceRadius(35.f); Request.SetUsePathfinding(true);
+ FAIMoveRequest Request; Request.SetGoalLocation(SafeGoal); Request.SetAcceptanceRadius(35.f); Request.SetUsePathfinding(true);
  Request.SetProjectGoalLocation(true); Request.SetAllowPartialPath(false); Request.SetCanStrafe(bStrafe);
  // Reset completion and navigation use capsule-center tolerances, also for scaled bosses.
  if (State==EBossState::Resetting) { Request.SetAcceptanceRadius(55.f); Request.SetReachTestIncludesAgentRadius(false); }

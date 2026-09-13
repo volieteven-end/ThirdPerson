@@ -10,6 +10,7 @@
 #include "../Components/LevelComponent.h"
 #include "../Components/EquipmentComponent.h"
 #include "../Items/ItemDefinition.h"
+#include "GameFramework/WorldSettings.h"
 
 struct FTPCRespawnTestAccess
 {
@@ -314,6 +315,7 @@ public:
 				auto* ExpandedSave = NewObject<UTPCSaveGame>();
 				ExpandedSave->InventoryCapacity = P->InventoryComponent->MaxSlots;
 				ExpandedSave->PlayerTransform = P->GetActorTransform();
+				ExpandedSave->CheckpointMap = UGameplayStatics::GetCurrentLevelName(P, true);
 				ExpandedSave->EnemiesDefeated = 3;
 				for (const auto& Slot : P->InventoryComponent->Slots)
 				{
@@ -363,6 +365,9 @@ bool FTPCRespawnPIETest::RunTest(const FString&)
 {
 	auto SaveScope = MakeShared<RespawnTest::FSaveScope>();
 	FAutomationEditorCommonUtils::LoadMap(TEXT("/Game/Third/Bosses/Countess/Maps/L_CountessBossTest"));
+	// This regression intentionally exercises same-world campaign respawn, not arena reload.
+	GEditor->GetEditorWorldContext().World()->GetWorldSettings()->DefaultGameMode =
+		LoadClass<AGameModeBase>(nullptr,TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonGameMode.BP_ThirdPersonGameMode_C"));
 	ADD_LATENT_AUTOMATION_COMMAND(FStartPIECommand(false));
 	ADD_LATENT_AUTOMATION_COMMAND(RespawnTest::FScenario(this, SaveScope));
 	ADD_LATENT_AUTOMATION_COMMAND(FEndPlayMapCommand());

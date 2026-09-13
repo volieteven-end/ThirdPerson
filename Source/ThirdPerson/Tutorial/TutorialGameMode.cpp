@@ -7,6 +7,7 @@
 #include "EngineUtils.h"
 #include "UObject/ConstructorHelpers.h"
 #include "UObject/UnrealType.h"
+#include "../Arena/ArenaTravelSubsystem.h"
 
 ATutorialPlayerController::ATutorialPlayerController()
 {
@@ -25,6 +26,9 @@ ATutorialGameMode::ATutorialGameMode()
 }
 AActor* ATutorialGameMode::FindPlayerStart_Implementation(AController* PC, const FString& IncomingName)
 {
+    if (const auto* Travel = UArenaTravelSubsystem::Get(this))
+        if (const FName Arrival = Travel->GetArrivalTag(this); !Arrival.IsNone())
+            for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It) if (It->PlayerStartTag == Arrival) return *It;
     const auto* D = ATutorialDirector::Find(this);
     const FName Tag(*FString::Printf(TEXT("Tutorial_%d"), D ? D->GetCheckpointIndex() : 0));
     for (TActorIterator<APlayerStart> It(GetWorld()); It; ++It) if (It->PlayerStartTag == Tag) return *It;
@@ -32,7 +36,10 @@ AActor* ATutorialGameMode::FindPlayerStart_Implementation(AController* PC, const
 }
 void ATutorialGameMode::RestartPlayer(AController* PC)
 {
+    const auto* Travel = UArenaTravelSubsystem::Get(this);
+    const bool bPortalArrival = Travel && !Travel->GetArrivalTag(this).IsNone();
     Super::RestartPlayer(PC);
+    if (bPortalArrival) return; // A restored objective is not a death/retry of the lesson.
     if (PC) if (auto* P = Cast<ATPCCharacter>(PC->GetPawn()))
         if (auto* D = ATutorialDirector::Find(this)) D->PlayerRestarted(P);
 }

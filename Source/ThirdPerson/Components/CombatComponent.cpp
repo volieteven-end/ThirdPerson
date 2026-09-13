@@ -162,6 +162,8 @@ void UCombatComponent::TryAirDiveAttack()
 		Anim->Montage_JumpToSection(AirDiveStartSection, AirDiveMontage);
 		Anim->Montage_SetNextSection(AirDiveStartSection, AirDiveLoopSection, AirDiveMontage);
 		Anim->Montage_SetNextSection(AirDiveLoopSection, AirDiveLoopSection, AirDiveMontage);
+		Anim->Montage_SetNextSection(TEXT("Descent"), TEXT("ContactWait"), AirDiveMontage);
+		Anim->Montage_SetNextSection(TEXT("ContactWait"), TEXT("ContactWait"), AirDiveMontage);
 		Anim->Montage_SetNextSection(AirDiveLandSection, NAME_None, AirDiveMontage);
 		if (!GetActiveDefinition()) { CommitSpecialMovement(); }
 	}
@@ -179,7 +181,7 @@ void UCombatComponent::HandleOwnerLanded()
 		GetComboBuffer().Reset(GetComboGeneration());
 		ACharacter* Character = Cast<ACharacter>(GetOwner());
 		UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
-		if (Anim) { Anim->Montage_Resume(ActiveAttackMontage.Get()); Anim->Montage_JumpToSection(AirDiveLandSection, ActiveAttackMontage.Get()); }
+		if (Anim) { UpdateDiveApproach(); }
 		else { CancelActiveAttack(); }
 	}
 	else if (ActiveAttackType == EActiveCombatAttackType::Air)
@@ -768,7 +770,12 @@ void UCombatComponent::StartAttackWindow(
 	float InTraceRadius, FName HitGroup)
 {
 	if (!bCombatEnabled || !bMeleeAttackInProgress) { return; }
-    if (ActiveAttackType == EActiveCombatAttackType::AirDive && !bAirDiveLanded && HitGroup == TEXT("Landing")) return;
+    if (ActiveAttackType == EActiveCombatAttackType::AirDive)
+    {
+        // Physical contact alone never deals damage. A grounded early-start window must
+        // not hit once before the authored landing window hits the same target again.
+        if (HitGroup == TEXT("Landing") ? !bAirDiveLanded : bAirDiveLanded) return;
+    }
 	ACharacter* OwnerCharacter =Cast<ACharacter>(GetOwner());
 	if (!OwnerCharacter ||!OwnerCharacter->GetMesh())
 	{
@@ -1371,25 +1378,53 @@ void UCombatComponent::CommitSpecialMovement()
 
 void UCombatComponent::UpdateDiveApproach()
 {
-    if (!bCombatEnabled || !bMeleeAttackInProgress || ActiveAttackType != EActiveCombatAttackType::AirDive ||
-        bAirDiveLanded || !bSpecialMovementCommitted || !GetWorld()) return;
+    if (!bCombatEnabled || !bMeleeAttackInProgress || ActiveAttackType != EActiveCombatAttackType::AirDive || !GetWorld()) return;
     ACharacter* Character = Cast<ACharacter>(GetOwner());
     UAnimInstance* Anim = Character && Character->GetMesh() ? Character->GetMesh()->GetAnimInstance() : nullptr;
     UAnimMontage* M = ActiveAttackMontage.Get();
-    if (!Character || !Anim || !M || M->GetSectionIndex(TEXT("Descent")) == INDEX_NONE || !Character->GetCharacterMovement()->IsFalling()) return;
-    if (bDiveApproachStarted)
+    if (!Character || !Anim || !M) return;
+    const bool bHasDescent = M->GetSectionIndex(TEXT("Descent")) != INDEX_NONE;
+    if (!bHasDescent)
     {
-        const int32 LandIndex = M->GetSectionIndex(AirDiveLandSection);
-        const float Contact = LandIndex != INDEX_NONE ? M->CompositeSections[LandIndex].GetTime() : BIG_NUMBER;
-        const float Position = Anim->Montage_GetPosition(M);
-        if (Position + GetWorld()->GetDeltaSeconds() * 1.1f >= Contact)
+        // Compatibility for non-sword legacy Start/Loop/Land montages.
+        if (bAirDiveLanded)
         {
-            Anim->Montage_SetPosition(M, Contact - 1.f / 60.f);
-            Anim->Montage_Pause(M); // Landed resumes, never a timer or an animation section.
+            Anim->Montage_SetNextSection(AirDiveStartSection, AirDiveLandSection, M);
+            Anim->Montage_Resume(M);
+            if (Anim->Montage_GetCurrentSection(M) == AirDiveLoopSection) Anim->Montage_JumpToSection(AirDiveLandSection, M);
         }
         return;
     }
-    // Only a walkable floor directly below can begin the flip-out. Landed still owns impact/recovery.
+    const FName Section = Anim->Montage_GetCurrentSection(M);
+    const FName Wait = M->GetSectionIndex(TEXT("ContactWait")) != INDEX_NONE ? FName(TEXT("ContactWait")) : AirDiveLandSection;
+    if (bAirDiveLanded)
+    {
+        bDiveApproachStarted = true;
+        Anim->Montage_SetNextSection(AirDiveStartSection, TEXT("Descent"), M);
+        Anim->Montage_SetNextSection(AirDiveLoopSection, TEXT("Descent"), M);
+        Anim->Montage_SetNextSection(TEXT("Descent"), Wait, M);
+        if (Wait != AirDiveLandSection) Anim->Montage_SetNextSection(Wait, AirDiveLandSection, M);
+        Anim->Montage_Resume(M);
+        // Only the holding loop can be skipped. Start and the flip-out always play through.
+        if (Section == AirDiveLoopSection) Anim->Montage_JumpToSection(TEXT("Descent"), M);
+        return;
+    }
+    if (!bSpecialMovementCommitted || !Character->GetCharacterMovement()->IsFalling()) return;
+    if (bDiveApproachStarted)
+    {
+        if (Section == TEXT("Descent") || Section == Wait)
+        {
+            const int32 LandIndex = M->GetSectionIndex(AirDiveLandSection);
+            const float Contact = LandIndex != INDEX_NONE ? M->CompositeSections[LandIndex].GetTime() : BIG_NUMBER;
+            const float Position = Anim->Montage_GetPosition(M);
+            if (Position + GetWorld()->GetDeltaSeconds() * FMath::Max(1.f, Anim->Montage_GetPlayRate(M)) * 1.1f >= Contact)
+            {
+                Anim->Montage_SetPosition(M, Contact - 1.f / 60.f);
+                Anim->Montage_Pause(M); // Physical contact opens the barrier, not a timer.
+            }
+        }
+        return;
+    }
     FHitResult Hit;
     const FVector Feet = Character->GetCharacterMovement()->GetActorFeetLocation();
     FCollisionQueryParams Query(SCENE_QUERY_STAT(SwordDiveFloor), false, Character);
@@ -1398,12 +1433,11 @@ void UCombatComponent::UpdateDiveApproach()
         Character->GetCharacterMovement()->IsWalkable(Hit))
     {
         bDiveApproachStarted = true;
-        Anim->Montage_JumpToSection(TEXT("Descent"), M);
-        // Root-motion animation can advance before this component's next pre-physics tick.
-        // Keep a section-level barrier too: even a hitch cannot enter Land without Landed.
-        const FName WaitSection = M->GetSectionIndex(TEXT("ContactWait")) != INDEX_NONE ? FName(TEXT("ContactWait")) : FName(TEXT("Descent"));
-        Anim->Montage_SetNextSection(TEXT("Descent"), WaitSection, M);
-        Anim->Montage_SetNextSection(WaitSection, WaitSection, M);
+        Anim->Montage_SetNextSection(AirDiveStartSection, TEXT("Descent"), M);
+        Anim->Montage_SetNextSection(AirDiveLoopSection, TEXT("Descent"), M);
+        Anim->Montage_SetNextSection(TEXT("Descent"), Wait, M);
+        if (Wait != AirDiveLandSection) Anim->Montage_SetNextSection(Wait, Wait, M);
+        if (Section == AirDiveLoopSection) Anim->Montage_JumpToSection(TEXT("Descent"), M);
     }
 }
 

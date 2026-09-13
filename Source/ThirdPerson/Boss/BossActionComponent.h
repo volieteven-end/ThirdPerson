@@ -10,6 +10,7 @@ class UHealthComponent;
 class UParticleSystemComponent;
 class ABossTelegraph;
 class UBossStatusWidget;
+class AArenaBounds;
 
 DECLARE_MULTICAST_DELEGATE(FOnBossStatusChanged);
 
@@ -24,6 +25,9 @@ public:
  virtual void EndPlay(const EEndPlayReason::Type Reason) override;
  virtual void TickComponent(float Delta, ELevelTick Type, FActorComponentTickFunction* Function) override;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") TObjectPtr<UBossDefinition> Definition;
+ /** Explicit arena overrides radial/lost-sight disengagement. Unbound bosses retain legacy policy. */
+ UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Boss|Arena") TObjectPtr<AArenaBounds> ArenaBoundary;
+ UPROPERTY(EditAnywhere, Category="Boss|Arena", meta=(ClampMin="0.1")) float ArenaExitGrace = 2.f;
  UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Boss") EBossState State = EBossState::Dormant;
  UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Boss") int32 Phase = 1;
  UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Boss") float Poise = 100.f;
@@ -68,6 +72,7 @@ private:
  friend struct FCountessBossTestAccess;
  friend struct FCountessPIETestAccess;
  friend struct FCountessReadableMovementAccess;
+ friend struct FArenaTestAccess;
  enum class EActionStep : uint8 { None, Telegraph, Playing, Recovery };
  UPROPERTY(Transient) TObjectPtr<ACountessBossCharacter> Boss;
  UPROPERTY(Transient) TObjectPtr<UHealthComponent> Health;

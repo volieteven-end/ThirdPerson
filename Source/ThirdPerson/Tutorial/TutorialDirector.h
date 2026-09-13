@@ -13,6 +13,7 @@ class ATutorialTrainingEnemy;
 class UTutorialHUDWidget;
 class UItemDefinition;
 class UWeaponDefinition;
+struct FTutorialTravelSnapshot;
 
 UCLASS()
 class THIRDPERSON_API ATutorialDirector : public AActor
@@ -43,6 +44,8 @@ public:
     bool IsComplete() const { return Progress.BasicsFinished(); }
     bool IsSummaryOpen() const { return bSummaryPending && Progress.BasicsFinished(); }
     const FTutorialProgress& GetProgress() const { return Progress; }
+    FTutorialTravelSnapshot ExportTravelSnapshot() const;
+    bool ImportTravelSnapshot(const FTutorialTravelSnapshot& Snapshot);
     ATutorialTrainingEnemy* GetTrainingTarget() const { return Target.Get(); }
     FVector GetGuidanceLocation() const;
     virtual void Tick(float DeltaSeconds) override;

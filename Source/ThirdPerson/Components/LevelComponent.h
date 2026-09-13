@@ -67,6 +67,9 @@ public:
 	/** Attributes are copied separately: do not apply level/upgrade bonuses twice. */
 	void RestoreRespawnProgress(const ULevelComponent& Source);
 	void NotifyPendingUpgradeChoices();
+	int32 GetPendingUpgradeSelections() const { return PendingUpgradeSelections; }
+	const TArray<FLevelUpgradeChoice>& GetPendingUpgradeChoices() const { return CurrentChoices; }
+	void RestorePendingUpgradeChoices(int32 Count, const TArray<uint8>& Choices);
 	int32 GetCurrentExperience() const { return CurrentExperience; }
 	int32 GetExperienceToNextLevel() const;
 	bool HasPendingUpgradeChoice() const { return PendingUpgradeSelections > 0; }

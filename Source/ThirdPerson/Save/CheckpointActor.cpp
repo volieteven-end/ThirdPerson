@@ -4,6 +4,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TPCSaveGame.h"
 #include "TPCSaveSlots.h"
+#include "TPCPlayerProgress.h"
 #include "../Items/ItemDefinition.h"
 #include "../Character/TPCCharacter.h"
 #include "../Components/HealthComponent.h"
@@ -53,39 +54,9 @@ void ACheckpointActor::HandlePlayerEnter(
 		return;
 	}
 	SaveGame->PlayerTransform =RespawnPoint->GetComponentTransform();
-	if (UHealthComponent* Health =Player->FindComponentByClass<UHealthComponent>())
-	{
-		SaveGame->PlayerHealth =Health->GetCurrentHealth();
-	}
-	if (UStaminaComponent* Stamina =Player->FindComponentByClass<UStaminaComponent>())
-	{
-		SaveGame->PlayerStamina =Stamina->GetCurrentStamina();
-	}
-	if (ULevelComponent* Level = Player->FindComponentByClass<ULevelComponent>())
-	{
-		SaveGame->PlayerLevel = Level->GetLevel();
-		SaveGame->PlayerExperience = Level->GetCurrentExperience();
-		SaveGame->PlayerUpgrades.Reset();
-		for (const ELevelUpgradeType Upgrade : Level->GetSelectedUpgrades())
-		{
-			SaveGame->PlayerUpgrades.Add(static_cast<uint8>(Upgrade));
-		}
-	}
-	SaveGame->InventorySlots.Reset();
-	if (UInventoryComponent* Inventory =Player->FindComponentByClass<UInventoryComponent>())
-	{
-		SaveGame->InventoryCapacity = Inventory->MaxSlots;
-		for (const FInventorySlot& Slot : Inventory->Slots)
-		{
-			if (!Slot.ItemDefinition || Slot.Count <= 0)
-			{
-				continue;
-			}
-			FSaveInventorySlot& SavedSlot =SaveGame->InventorySlots.AddDefaulted_GetRef();
-			SavedSlot.ItemDefinition = Slot.ItemDefinition;
-			SavedSlot.Count = Slot.Count;
-		}
-	}
+	TPCPlayerProgress::Capture(*Player, *SaveGame);
+	SaveGame->bHasCheckpoint = true;
+	SaveGame->CheckpointMap = UGameplayStatics::GetCurrentLevelName(this, true);
 	if (ATPCGameMode* GameMode =Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		SaveGame->EnemiesDefeated =GameMode->GetEnemiesDefeated();

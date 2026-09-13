@@ -30,6 +30,8 @@
 #include "../Save/TPCSaveGame.h"
 #include "../Save/TPCRespawnSubsystem.h"
 #include "../Save/TPCSaveSlots.h"
+#include "../Save/TPCPlayerProgress.h"
+#include "../Arena/ArenaTravelSubsystem.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Items/ItemDefinition.h"
 #include "TPCPlayerController.h"
@@ -129,79 +131,32 @@ void ATPCCharacter::BeginPlay()
 			this,
 			&ThisClass::BeginAttackTargetAssist);
 	}
-	const FString SaveSlotName = TPCSaveSlots::Resolve();
 	const ATPCGameMode* PersistenceMode = Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode());
 	const bool bReadPersistentSave = !PersistenceMode || PersistenceMode->bUsePersistentPlayerSave;
-
+	auto* Travel = UArenaTravelSubsystem::Get(this);
 	if (ATPCCharacter* Source = GetWorld()->GetSubsystem<UTPCRespawnSubsystem>()->TakeSourceFor(this))
 	{
 		RestoreRespawnProgress(*Source);
 	}
-	else if (bReadPersistentSave && UGameplayStatics::DoesSaveGameExist(SaveSlotName, 0))
+	else if (Travel && Travel->InitializeArenaPlayer(*this))
 	{
-		if (UTPCSaveGame* SaveGame =Cast<UTPCSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveSlotName,0)))
+		// Arena arrival uses portable progress and its own safe PlayerStart.
+	}
+	else if (bReadPersistentSave)
+	{
+		if (auto* Save = Cast<UTPCSaveGame>(UGameplayStatics::LoadGameFromSlot(TPCSaveSlots::Resolve(), 0)))
 		{
-			SetActorTransform(SaveGame->PlayerTransform,false,nullptr,ETeleportType::TeleportPhysics);
-
-			if (LevelComponent)
+			TPCPlayerProgress::Apply(*this, *Save);
+			if (TPCPlayerProgress::OwnsCheckpoint(*Save, this))
 			{
-				TArray<ELevelUpgradeType> SavedUpgrades;
-				for (const uint8 SavedUpgrade : SaveGame->PlayerUpgrades)
-				{
-					if (SavedUpgrade <= static_cast<uint8>(ELevelUpgradeType::IronSkin))
-					{
-						SavedUpgrades.Add(static_cast<ELevelUpgradeType>(SavedUpgrade));
-					}
-				}
-				LevelComponent->RestoreProgress(
-					SaveGame->PlayerLevel,
-					SaveGame->PlayerExperience,
-					SavedUpgrades);
+				SetActorTransform(Save->PlayerTransform, false, nullptr, ETeleportType::TeleportPhysics);
+				if (auto* Mode = GetWorld()->GetAuthGameMode<ATPCGameMode>()) Mode->RestoreEnemiesDefeated(Save->EnemiesDefeated);
+				RestoreDoorStates(Save);
 			}
-
-			if (HealthComponent)
-			{
-				HealthComponent->SetCurrentHealth(SaveGame->PlayerHealth);
-			}
-			if (StaminaComponent)
-			{
-				StaminaComponent->SetCurrentStamina(SaveGame->PlayerStamina);
-			}
-			if (InventoryComponent)
-			{
-				InventoryComponent->Slots.Reset();
-				InventoryComponent->MaxSlots = FMath::Max(InventoryComponent->MaxSlots,
-					FMath::Max(SaveGame->InventoryCapacity, SaveGame->InventorySlots.Num()));
-
-				for (const FSaveInventorySlot& SavedSlot :SaveGame->InventorySlots)
-				{
-					if (SavedSlot.Count <= 0)
-					{
-						continue;
-					}
-					UItemDefinition* ItemDefinition =SavedSlot.ItemDefinition.LoadSynchronous();
-					if (ItemDefinition)
-					{
-						InventoryComponent->AddItem(ItemDefinition,SavedSlot.Count);
-					}
-				}
-			}
-			if (ATPCGameMode* GameMode =Cast<ATPCGameMode>(GetWorld()->GetAuthGameMode()))
-			{
-				GameMode->RestoreEnemiesDefeated(SaveGame->EnemiesDefeated);
-			}
-			TWeakObjectPtr<ATPCCharacter> WeakCharacter(this);
-			TWeakObjectPtr<UTPCSaveGame> WeakSaveGame(SaveGame);
-			GetWorldTimerManager().SetTimerForNextTick([WeakCharacter, WeakSaveGame]()
-				{
-					if (WeakCharacter.IsValid() &&WeakSaveGame.IsValid())
-					{
-						WeakCharacter->RestoreDoorStates(WeakSaveGame.Get());
-					}
-				});
-			UE_LOG(LogTemp, Warning, TEXT("Checkpoint loaded"));
 		}
 	}
+	PreviousHealth = HealthComponent->GetCurrentHealth();
+	if (Travel) Travel->ConsumeArrival(this);
 	if (!DefaultMappingContext)
 	{
 		return;
@@ -472,6 +427,13 @@ void ATPCCharacter::RestartAfterDeath()
 
 void ATPCCharacter::RespawnPlayer()
 {
+	if (UArenaTravelSubsystem::IsArena(this))
+	{
+		if (auto* Travel = UArenaTravelSubsystem::Get(this))
+			Travel->Travel(this, UGameplayStatics::GetCurrentLevelName(this, true) == TEXT("L_RandomArena")
+				? UArenaTravelSubsystem::WaveMap() : UArenaTravelSubsystem::BossMap(), TEXT("ArenaArrival"), true);
+		return;
+	}
 	AController* RespawnController = Controller;
 
 	if (!RespawnController)

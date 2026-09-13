@@ -17,6 +17,7 @@
 #include "EngineUtils.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "../Arena/ArenaTravelSubsystem.h"
 
 ATutorialDirector::ATutorialDirector()
 {
@@ -36,6 +37,7 @@ void ATutorialDirector::BeginPlay()
     if (!Course || !Course->IsValidCourse(Error) || !PlayerWeapon || !EnemyWeapon)
     { UE_LOG(LogTemp,Error,TEXT("Tutorial configuration is incomplete: %s"),*Error); SetActorTickEnabled(false); return; }
     Progress.Initialize(Course);
+    if (auto* Travel = UArenaTravelSubsystem::Get(this)) Travel->RestoreTutorial(*this);
     for (TActorIterator<ATutorialZone> It(GetWorld()); It; ++It) Zones.Add(*It);
     bInitialized = true;
     BindPlayer(Cast<ATPCCharacter>(UGameplayStatics::GetPlayerPawn(this,0)));
@@ -65,6 +67,16 @@ void ATutorialDirector::BindPlayer(ATPCCharacter* Pawn)
     Pawn->HealthComponent->OnCombatHitResolved.AddUObject(this,&ThisClass::OnPlayerHit);
     Pawn->InventoryComponent->OnConsumableUsed.AddUObject(this,&ThisClass::OnPotionUsed);
     InitializePlayer(); ResetActionTracking();
+    // A placed director may bind while the pawn's Blueprint BeginPlay is still equipping
+    // its default sword. Finalize the training kit after that initialization, without retrying progress.
+    TWeakObjectPtr<ATutorialDirector> WeakThis(this);
+    TWeakObjectPtr<ATPCCharacter> WeakPawn(Pawn);
+    GetWorldTimerManager().SetTimerForNextTick([WeakThis,WeakPawn]()
+    {
+        if (!WeakThis.IsValid() || !WeakPawn.IsValid() || WeakThis->Player != WeakPawn) return;
+        WeakThis->InitializePlayer();
+        if (WeakThis->bEntered && WeakThis->Progress.Lesson == 4) WeakPawn->HealthComponent->SetCurrentHealth(50.f);
+    });
     if (!HUD) if (auto* PC = Cast<APlayerController>(Pawn->GetController()))
     {
         HUD = CreateWidget<UTutorialHUDWidget>(PC,UTutorialHUDWidget::StaticClass());
@@ -257,7 +269,7 @@ void ATutorialDirector::OnTargetHit(const FCombatHitSpec&, const FCombatHitResul
     else if (Def == Set->Dive)
     {
         if (Goal->Signal == ETutorialSignal::DiveHit) SendSignal(ETutorialSignal::DiveHit,Serial,E->TrainingId);
-        else if (ChainPhase == 3 && (Player->GetCharacterMovement()->IsFalling() || GetWorld()->GetTimeSeconds() - LastLandingTime < .6))
+        else if (ChainPhase == 3)
             SendSignal(ETutorialSignal::AirChain,Serial,E->TrainingId);
         ChainPhase = 0;
     }
@@ -319,7 +331,9 @@ void ATutorialDirector::Tick(float DeltaSeconds)
         PendingLandingZone.Reset();
     }
     bWasFalling = Falling;
-    if (!Falling && Now - LastLandingTime > .6) { AirNext = ChainPhase = 0; bSawJump = false; }
+    const auto* CurrentSet=P->ActionComponent->GetActionSet();
+    const bool bFinishingDive=CurrentSet && P->CombatComponent->IsMeleeAttackInProgress() && P->ActionComponent->GetActiveDefinition()==CurrentSet->Dive;
+    if (!Falling && Now - LastLandingTime > .6 && !bFinishingDive) { AirNext = ChainPhase = 0; bSawJump = false; }
     if (P->ActionComponent->GetActionState() == ETPCActionState::Free) GroundNext = 0;
     // Poll only the active marker: arriving before acceleration/landing must not require backing out.
     const auto* O = Progress.CurrentObjective();
@@ -368,7 +382,29 @@ void ATutorialDirector::ContinuePractice() { bSummaryPending = false; CloseMenu(
 void ATutorialDirector::ReturnToCampaign()
 {
     if (!Course || Course->ReturnMap.IsNull()) return;
-    CloseMenu(); UGameplayStatics::OpenLevel(this,FName(*Course->ReturnMap.ToSoftObjectPath().GetLongPackageName()));
+    CloseMenu();
+    if (auto* Travel = UArenaTravelSubsystem::Get(this))
+        Travel->Travel(Player.Get(), Course->ReturnMap.ToSoftObjectPath().GetLongPackageName(), TEXT("Campaign"));
+}
+
+FTutorialTravelSnapshot ATutorialDirector::ExportTravelSnapshot() const
+{
+    FTutorialTravelSnapshot S;
+    S.CoursePath = Course ? Course->GetPathName() : FString();
+    for (auto Status : Progress.Status) S.Status.Add(static_cast<uint8>(Status));
+    S.Lesson = Progress.Lesson; S.Objective = Progress.Objective; S.Count = Progress.Count;
+    S.LastLesson = LastLesson; S.bPractice = Progress.bPractice;
+    return S;
+}
+bool ATutorialDirector::ImportTravelSnapshot(const FTutorialTravelSnapshot& S)
+{
+    if (!Course || S.CoursePath != Course->GetPathName() || S.Status.Num() != Course->Lessons.Num() ||
+        (S.Lesson != INDEX_NONE && !Course->Lessons.IsValidIndex(S.Lesson))) return false;
+    for (int32 I = 0; I < S.Status.Num(); ++I) Progress.Status[I] = static_cast<ETutorialLessonStatus>(S.Status[I]);
+    Progress.Lesson = S.Lesson; Progress.Objective = S.Objective; Progress.Count = S.Count;
+    Progress.bPractice = S.bPractice; LastLesson = S.LastLesson;
+    Progress.Seen.Reset(); ResetActionTracking(); bEntered = bSummaryPending = false;
+    return true;
 }
 void ATutorialDirector::ShowToast(const FText& Text) { Toast = Text; ToastUntil = GetWorld()->GetTimeSeconds() + 4.; }
 FText ATutorialDirector::GetHeading() const
@@ -393,6 +429,8 @@ FText ATutorialDirector::GetProgressText() const
 }
 FText ATutorialDirector::GetStatusText() const
 {
+    if (const auto* Travel = UArenaTravelSubsystem::Get(this))
+        if (!Travel->GetErrorText().IsEmpty()) return Travel->GetErrorText();
     if (Target.IsValid() && Target->IsThreatening()) return FText::FromString(TEXT("陪练准备出招！面向它，观察挥刀时机。"));
     if (GetWorld() && GetWorld()->GetTimeSeconds() < ToastUntil) return Toast;
     if (Progress.Lesson == 1 && GroundNext > 0) return FText::FromString(FString::Printf(TEXT("连击命中 %d / 4"),GroundNext));

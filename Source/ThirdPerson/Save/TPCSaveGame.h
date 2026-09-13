@@ -6,6 +6,7 @@
 #include "GameFramework/SaveGame.h"
 #include "TPCSaveGame.generated.h"
 class UItemDefinition;
+class UWeaponDefinition;
 USTRUCT()
 struct FSaveInventorySlot
 {
@@ -34,6 +35,16 @@ class THIRDPERSON_API UTPCSaveGame : public USaveGame
 	GENERATED_BODY()
 
 public:
+	/** Progress is portable; checkpoint position/doors belong only to CheckpointMap. */
+	UPROPERTY(SaveGame) FString CheckpointMap;
+	UPROPERTY(SaveGame) bool bHasCheckpoint = true; // Legacy saves contained a checkpoint.
+	UPROPERTY(SaveGame) bool bHasEquipmentState = false;
+	UPROPERTY(SaveGame) TSoftObjectPtr<UWeaponDefinition> EquippedWeapon;
+	UPROPERTY(SaveGame) bool bWeaponDrawn = true;
+	UPROPERTY(SaveGame) bool bDoubleJumpUnlocked = false;
+	UPROPERTY(SaveGame) int32 PendingUpgradeSelections = 0;
+	UPROPERTY(SaveGame) TArray<uint8> PendingUpgradeChoices;
+
 	UPROPERTY(SaveGame)
 	FTransform PlayerTransform;
 

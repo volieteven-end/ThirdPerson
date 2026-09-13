@@ -235,6 +235,19 @@ void ULevelComponent::NotifyPendingUpgradeChoices()
 		OnUpgradeChoicesReady.Broadcast(CurrentChoices[0], CurrentChoices[1], CurrentChoices[2]);
 }
 
+void ULevelComponent::RestorePendingUpgradeChoices(int32 Count, const TArray<uint8>& Choices)
+{
+	PendingUpgradeSelections = FMath::Max(0,Count); CurrentChoices.Reset();
+	TSet<uint8> Seen;
+	if (PendingUpgradeSelections > 0)
+	{
+		for (uint8 Value : Choices)
+			if (Value <= static_cast<uint8>(ELevelUpgradeType::IronSkin) && !Seen.Contains(Value) && CurrentChoices.Num()<3)
+			{ Seen.Add(Value); CurrentChoices.Add(MakeUpgradeChoice(static_cast<ELevelUpgradeType>(Value))); }
+		if (CurrentChoices.Num()!=3) GenerateUpgradeChoices();
+	}
+}
+
 void ULevelComponent::BroadcastProgress()
 {
 	OnLevelProgressChanged.Broadcast(

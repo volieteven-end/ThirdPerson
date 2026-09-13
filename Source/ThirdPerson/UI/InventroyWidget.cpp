@@ -496,6 +496,7 @@ void UInventoryWidget::SetLevelComponent(ULevelComponent* InLevelComponent)
 			LevelComponent->GetLevel(),
 			LevelComponent->GetCurrentExperience(),
 			LevelComponent->GetExperienceToNextLevel());
+		LevelComponent->NotifyPendingUpgradeChoices();
 	}
 }
 
