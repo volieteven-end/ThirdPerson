@@ -37,6 +37,7 @@ class THIRDPERSON_API UCombatComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:
+    void SetAttackTraceDebugVisible(bool bVisible) { bDrawHandTraceDebug = bVisible; }
 	UCombatComponent();
 	/** Native hook used by the owning character for facing and target magnetism. */
 	FOnMeleeAttackStartedNative OnMeleeAttackStarted;
@@ -167,7 +168,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Combo")
 	bool bChainOnLegacyComboWindowEnd = false;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Debug")
-	bool bDrawHandTraceDebug = true;
+	bool bDrawHandTraceDebug = false;
 	
 private:
 	friend struct FTPCRespawnTestAccess;

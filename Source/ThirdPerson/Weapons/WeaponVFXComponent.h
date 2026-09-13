@@ -20,6 +20,8 @@ class THIRDPERSON_API UWeaponVFXComponent : public UActorComponent
     GENERATED_BODY()
 public:
     UWeaponVFXComponent();
+    /** Legacy automatic player effects are opt-in. Authored animation notifies own sword FX by default. */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon|Effects") bool bEnableAutomaticEffects = false;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon|Effects") TObjectPtr<UWeaponVFXProfile> Profile;
     void SetAttackActive(bool bActive);
     void SetStyle(EWeaponVFXStyle InStyle) { RequestedStyle = InStyle; }

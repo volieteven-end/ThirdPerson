@@ -10,15 +10,7 @@
 
 namespace
 {
-	bool HasExplicitEffectWindow(const UAnimSequenceBase* Animation)
-	{
-		return Animation && Animation->Notifies.ContainsByPredicate([](const FAnimNotifyEvent& Event)
-		{
-			const auto* Window = Cast<UAttackWindowNotifyState>(Event.NotifyStateClass);
-			return Window && Window->WindowType == EAttackNotifyWindowType::WeaponEffect;
-		});
-	}
-	void SetEquippedWeaponEffect(USkeletalMeshComponent* MeshComp, bool bActive, EWeaponVFXStyle Style, bool bProfileOnly = false)
+	void SetEquippedWeaponEffect(USkeletalMeshComponent* MeshComp, bool bActive, EWeaponVFXStyle Style)
 	{
 		AActor* OwnerActor = MeshComp ? MeshComp->GetOwner() : nullptr;
 		UEquipmentComponent* Equipment = OwnerActor
@@ -27,7 +19,7 @@ namespace
 		if (AWeaponActor* WeaponActor =
 			Equipment ? Equipment->GetEquippedWeaponActor() : nullptr)
 		{
-			if (bProfileOnly && !WeaponActor->WeaponVFX->Profile) return;
+			if (!WeaponActor->WeaponVFX->bEnableAutomaticEffects) return;
 			if (bActive) WeaponActor->WeaponVFX->SetStyle(Style);
 			WeaponActor->SetAttackEffectActive(bActive && Equipment->IsWeaponDrawn());
 		}
@@ -46,11 +38,7 @@ void UAttackWindowNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->OpenComboInputWindow(); }
 	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->StartAttackWindow(AttackBoneName, TraceRadius, HitGroup); }
 	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, true, EffectStyle); }
-	// Existing authored moves without a separate cosmetic window follow their damage window.
-	// This preserves dirty montage assets and never rewrites gameplay notify timing.
-	if (WindowType == EAttackNotifyWindowType::Damage && !HasExplicitEffectWindow(Animation) &&
-		Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference)))
-		SetEquippedWeaponEffect(MeshComp, true, EffectStyle, true);
+	// Damage windows no longer synthesize FX; animation-authored trail/Niagara notifies own them.
 }
 
 void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -65,7 +53,4 @@ void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->CloseComboInputWindow(); }
 	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->FinishAuthoredDamageWindow(Animation, GetCombatNotifyMontageInstanceId(EventReference)); }
 	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, false, EffectStyle); }
-	if (WindowType == EAttackNotifyWindowType::Damage && !HasExplicitEffectWindow(Animation) &&
-		Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference)))
-		SetEquippedWeaponEffect(MeshComp, false, EffectStyle, true);
 }

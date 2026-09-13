@@ -69,6 +69,8 @@ bool UEquipmentComponent::EquipWeapon(UWeaponDefinition* NewWeaponDefinition)
 
 	EquippedWeaponDefinition = NewWeaponDefinition;
 	EquippedWeaponActor = NewWeaponActor;
+    // Hide attack-volume visualization, including old Blueprint overrides; collision queries stay enabled.
+    if (auto* Combat = GetOwner()->FindComponentByClass<UCombatComponent>()) Combat->SetAttackTraceDebugVisible(false);
     SetWeaponDrawn(true);
 	OnEquippedWeaponChanged.Broadcast(EquippedWeaponDefinition, EquippedWeaponActor);
 	return true;

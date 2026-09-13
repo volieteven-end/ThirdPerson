@@ -34,6 +34,7 @@ UWeaponVFXComponent::UWeaponVFXComponent()
 void UWeaponVFXComponent::BeginPlay()
 {
     Super::BeginPlay();
+    if (!bEnableAutomaticEffects) return;
     Weapon = Cast<AWeaponActor>(GetOwner());
     AActor* Character = Weapon.IsValid() ? Weapon->GetOwner() : nullptr;
     if (!Profile || !Character || GetNetMode() == NM_DedicatedServer) return;
@@ -63,7 +64,7 @@ void UWeaponVFXComponent::BeginPlay()
 
 bool UWeaponVFXComponent::CanShow() const
 {
-    if (!TPCCombatVFX::IsEnabled() || !Profile || !Weapon.IsValid() || !Equipment.IsValid() ||
+    if (!bEnableAutomaticEffects || !TPCCombatVFX::IsEnabled() || !Profile || !Weapon.IsValid() || !Equipment.IsValid() ||
         Equipment->GetEquippedWeaponActor() != Weapon.Get() || !Equipment->IsWeaponDrawn() ||
         !Combat.IsValid() || !Combat->IsCombatEnabled()) return false;
     const auto* H = Weapon->GetOwner()->FindComponentByClass<UHealthComponent>();
@@ -137,6 +138,7 @@ void UWeaponVFXComponent::StartTrail()
 
 void UWeaponVFXComponent::SetAttackActive(bool bActive)
 {
+    if (!bEnableAutomaticEffects) { StopAll(); return; }
     if (!Profile) return;
     SuppressLegacyTrail();
     RefreshState();
@@ -178,7 +180,7 @@ void UWeaponVFXComponent::RefreshState()
 
 void UWeaponVFXComponent::SuppressLegacyTrail()
 {
-    if (!Profile || !Profile->LegacyTrail || !Weapon.IsValid()) return;
+    if (!bEnableAutomaticEffects || !Profile || !Profile->LegacyTrail || !Weapon.IsValid()) return;
     TInlineComponentArray<UParticleSystemComponent*> Parts(Weapon.Get());
     if (const auto* C = Cast<ACharacter>(Weapon->GetOwner()))
     {

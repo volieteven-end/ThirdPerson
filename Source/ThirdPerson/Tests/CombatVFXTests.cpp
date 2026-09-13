@@ -16,6 +16,7 @@
 #include "Camera/CameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/ShapeComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Particles/ParticleEmitter.h"
 #include "Particles/ParticleLODLevel.h"
@@ -60,7 +61,7 @@ struct FCombatVFXTestAccess
     static bool Play(UCombatComponent& C, const UActionDefinition* D)
     { return C.StartDefinedAttack(D, EActiveCombatAttackType::Normal); }
     static bool Window(const UCombatComponent& C) { return C.bAttackWindowActive; }
-    static void HideDebug(UCombatComponent& C) { C.bDrawHandTraceDebug = false; }
+    static bool DebugVisible(const UCombatComponent& C) { return C.bDrawHandTraceDebug; }
     static bool Blade(const UWeaponVFXComponent& V, FVector& Base, FVector& Tip) { return V.ReadBlade(Base, Tip); }
     static int32 MontageId(const UCombatComponent& C) { return C.ActiveAttackInstanceId; }
     static void Buff(UCombatComponent& C, float Seconds)
@@ -80,6 +81,7 @@ bool FCombatVFXAssetTest::RunTest(const FString&)
     const auto* CDO = Cast<AWeaponActor>(BP->GeneratedClass->GetDefaultObject());
     const UWeaponVFXProfile* Profile = CDO && CDO->WeaponVFX ? CDO->WeaponVFX->Profile.Get() : nullptr;
     if (!TestNotNull(TEXT("Saved inherited VFX profile survives blueprint reload"), Profile)) return false;
+    TestFalse(TEXT("Player automatic VFX disabled; authored notifies own effects"), CDO->WeaponVFX->bEnableAutomaticEffects);
     for (const auto* System : {Profile->BasicTrail.Get(), Profile->IceTrail.Get(), Profile->ElectricTrail.Get(), Profile->BuffSword.Get()})
     {
         if (!TestNotNull(TEXT("Required Niagara system exists"), System)) continue;
@@ -128,7 +130,7 @@ class FScenario : public IAutomationLatentCommand
     TWeakObjectPtr<ACameraActor> Camera;
     const int32 Rates[3] = {30, 60, 120};
     int32 Rate = 0, Case = 0, Stage = 0, Pass = 1, CaptureCount = 0;
-    bool SawTrail = false, SawBuff = false, DidInterrupt = false;
+    bool SawTrail = false, SawBuff = false, SawAuthoredTrail = false, DidInterrupt = false;
     double Start = 0, ActiveAt = -1, WallStart = FPlatformTime::Seconds();
     bool PreviousFixed = FApp::UseFixedTimeStep();
     double PreviousDelta = FApp::GetFixedDeltaTime();
@@ -151,7 +153,7 @@ class FScenario : public IAutomationLatentCommand
         Test->AddInfo(Label(TEXT("completed")));
         Reset(Player.Get());
         ++Case; Stage = 1;
-        if (Case == 13)
+        if (Case == 15)
         {
             Case = 0;
             if (Rate == 1 && Pass == 0) Pass = 1;
@@ -181,7 +183,7 @@ public:
             if (!Player.IsValid()) return false;
             for (TActorIterator<ACountessBossCharacter> It(W); It; ++It) It->Destroy();
             auto* P = Player.Get();
-            FCombatVFXTestAccess::HideDebug(*P->CombatComponent);
+            Test->TestFalse(TEXT("Existing BP debug override is hidden on equip"), FCombatVFXTestAccess::DebugVisible(*P->CombatComponent));
             P->HealthComponent->MaxHealth = 10000.f; P->HealthComponent->SetCurrentHealth(10000.f);
             P->EquipmentComponent->EquipWeapon(LoadObject<UWeaponDefinition>(nullptr, TEXT("/Game/Third/DataAsset/DA_TestSword.DA_TestSword")));
             if (!Test->TestNotNull(TEXT("Saved sword equipped"), P->EquipmentComponent->GetEquippedWeaponActor())) return true;
@@ -210,7 +212,7 @@ public:
         {
             Reset(P); FApp::SetFixedDeltaTime(1. / Rates[Rate]);
             IConsoleManager::Get().FindConsoleVariable(TEXT("tpc.CombatVFX"))->Set(Pass);
-            Start = W->GetTimeSeconds(); ActiveAt = -1; SawTrail = SawBuff = DidInterrupt = false; CaptureCount = 0;
+            Start = W->GetTimeSeconds(); ActiveAt = -1; SawTrail = SawBuff = SawAuthoredTrail = DidInterrupt = false; CaptureCount = 0;
             Stage = 2; return false;
         }
         double T = W->GetTimeSeconds() - Start;
@@ -219,12 +221,12 @@ public:
             if (T < .2) return false;
             const auto* Set = C->GetActionSet();
             if (!Test->TestNotNull(TEXT("Saved action set"), Set)) return true;
-            if (Case < 8)
+            if (Case < 8 || Case >= 13)
             {
                 const UActionDefinition* Moves[] = {Set->GroundCombo[0], Set->GroundCombo.Last(), Set->AirCombo[0],
                     Set->AirCombo.Last(), Set->Rising, Set->Dive, Set->SprintAttack, Set->ParryCounter};
                 // Real saved montages/notifies; movement regressions are covered by the separate sword/dive suites.
-                Test->TestTrue(Label(TEXT("authored action starts")), FCombatVFXTestAccess::Play(*C, Moves[Case]));
+                Test->TestTrue(Label(TEXT("authored action starts")), FCombatVFXTestAccess::Play(*C, Case >= 13 ? Set->GroundCombo[Case - 12].Get() : Moves[Case]));
             }
             else if (Case < 11 || Case == 12)
             {
@@ -251,12 +253,16 @@ public:
         }
         const bool Active = FCombatVFXTestAccess::Window(*C);
         SawTrail |= VFX->IsTrailActive(); SawBuff |= VFX->IsBuffActive();
+        TArray<USceneComponent*> Children; P->GetMesh()->GetChildrenComponents(true, Children);
+        for (auto* Child : Children)
+            if (const auto* FX = Cast<UParticleSystemComponent>(Child))
+                SawAuthoredTrail |= FX->IsActive() && FX->IsVisible() && FX->Template && FX->Template->GetName() == TEXT("P_Trail");
         if (Case == 12)
         {
             if (!DidInterrupt && T > .15)
             {
                 DidInterrupt = true;
-                Test->TestEqual(Label(TEXT("death starts with active buff and trail")), SawBuff && SawTrail, Pass == 1);
+                Test->TestFalse(Label(TEXT("gameplay buff does not start automatic sword FX")), SawBuff || SawTrail);
                 P->HealthComponent->ApplyDamage(20000.f);
                 Test->TestEqual(Label(TEXT("real lethal damage enters death")), P->ActionComponent->GetActionState(), ETPCActionState::Dead);
             }
@@ -275,9 +281,9 @@ public:
                     Test->TestFalse(Label(TEXT("new sword has no inherited buff")), NewWeapon->WeaponVFX->IsBuffActive());
                     Reset(Reborn);
                     NewWeapon->SetAttackEffectActive(true);
-                    Test->TestEqual(Label(TEXT("fresh sword can activate after respawn")), NewWeapon->WeaponVFX->IsTrailActive(), Pass == 1);
+                    Test->TestFalse(Label(TEXT("respawn does not restore automatic sword FX")), NewWeapon->WeaponVFX->IsTrailActive());
                     NewWeapon->SetAttackEffectActive(false);
-                    FCombatVFXTestAccess::HideDebug(*Reborn->CombatComponent);
+                    Test->TestFalse(Label(TEXT("respawn keeps attack debug hidden")), FCombatVFXTestAccess::DebugVisible(*Reborn->CombatComponent));
                     Cast<APlayerController>(Reborn->GetController())->SetViewTarget(Camera.Get());
                     Player = Reborn; Next(W); return false;
                 }
@@ -286,26 +292,9 @@ public:
             return false;
         }
         if (Active && ActiveAt < 0) ActiveAt = T;
-        if (VFX->IsTrailActive() && Case < 8)
-        {
-            const EWeaponVFXStyle Expected = (Case == 4 || Case == 5) ? EWeaponVFXStyle::Ice :
-                (Case == 1 || Case == 3 || Case == 6 || Case == 7) ? EWeaponVFXStyle::Electric : EWeaponVFXStyle::Basic;
-            Test->TestEqual(Label(TEXT("correct cosmetic style")), VFX->GetResolvedStyle(), Expected);
-            auto* FX = FCombatVFXTestAccess::Trail(*VFX);
-            if (FApp::CanEverRender()) Test->TestTrue(Label(TEXT("actual Niagara component is active")), FX && FX->IsActive());
-            FVector Base, Tip;
-            if (FX && FCombatVFXTestAccess::Blade(*VFX, Base, Tip))
-            {
-                bool Valid = false;
-                const FVector End = FX->GetVariableVec3(TEXT("User.EndParticle_Position"), Valid);
-                Test->TestTrue(Label(TEXT("endpoint is a blade-local offset, never a world position")), Valid &&
-                    End.Equals(FVector(0, 0, FVector::Distance(Base, Tip) * .5f), .1f));
-            }
-            FAnimNotifyEventReference Old; Old.AddContextData<UE::Anim::FAnimNotifyMontageInstanceContext>(FCombatVFXTestAccess::MontageId(*C) - 1);
-            auto* Notify = NewObject<UAttackWindowNotifyState>(); Notify->WindowType = EAttackNotifyWindowType::WeaponEffect;
-            Notify->NotifyEnd(P->GetMesh(), const_cast<UAnimMontage*>(P->ActionComponent->GetActiveDefinition()->Montage.Get()), Old);
-            Test->TestTrue(Label(TEXT("stale notify cannot close current trail")), VFX->IsTrailActive());
-        }
+        if (Capture() && Rate == 1 && Pass == 1 && Case >= 13 && CaptureCount < 4 && T > .22 + CaptureCount * .32)
+            Test->TestTrue(TEXT("Handoff PIE capture"), CaptureBossReadabilityFrame(W, FPaths::ProjectSavedDir() /
+                FString::Printf(TEXT("CombatVFX/handoff_%d_%d.png"), Case - 11, CaptureCount++)));
         if (Capture() && Rate == 1 && Case < 8)
         {
             const double GPU = FPlatformTime::ToMilliseconds(RHIGetGPUFrameCycles());
@@ -314,9 +303,14 @@ public:
                 Test->TestTrue(TEXT("PIE viewport capture"), CaptureBossReadabilityFrame(W, FPaths::ProjectSavedDir() /
                     FString::Printf(TEXT("CombatVFX/sword_%d_%d_%d.png"), Pass, Case, CaptureCount++)));
         }
-        if (Case < 8 && T > 1.8)
+        if ((Case < 8 || Case >= 13) && T > 1.8)
         {
-            Test->TestEqual(Label(TEXT("trail observed only when enabled")), SawTrail, Pass == 1);
+            Test->TestFalse(Label(TEXT("C++ attack windows do not create duplicate trail FX")), SawTrail);
+            Test->TestNull(Label(TEXT("No automatic Niagara component was allocated")), FCombatVFXTestAccess::Trail(*VFX));
+            if (FApp::CanEverRender() && (Case == 0 || Case >= 13))
+                Test->TestTrue(Label(TEXT("Animation-authored P_Trail remains visible")), SawAuthoredTrail);
+            TInlineComponentArray<UShapeComponent*> Shapes(Weapon);
+            for (auto* Shape : Shapes) Test->TestFalse(Label(TEXT("Weapon helper shape remains invisible")), Shape->IsVisible());
             C->CancelActiveAttack();
             Test->TestFalse(Label(TEXT("cancel stops all attack emission")), VFX->IsTrailActive());
             Next(W); return false;
@@ -332,7 +326,7 @@ public:
             }
             if (T > .8)
             {
-                Test->TestEqual(Label(TEXT("buff sword observed only when enabled")), SawBuff, Pass == 1);
+                Test->TestFalse(Label(TEXT("buff does not enable automatic sword enchantment")), SawBuff);
                 Test->TestFalse(Label(TEXT("buff expires / sheath / disabled combat stop sword")), VFX->IsBuffActive());
                 Weapon->SetAttackEffectActive(false);
                 Test->TestFalse(Label(TEXT("no surviving attack trail")), VFX->IsTrailActive());
