@@ -12,6 +12,8 @@ class UCombatComponent;
 class UEquipmentComponent;
 class AActor;
 class UAnimMontage;
+class UWeaponDefinition;
+class AWeaponActor;
 UENUM(BlueprintType)
 enum class EEnemyLaunchPhase : uint8 { None, Airborne, LandImpact, DownIdle, DownHit, GetUp, Dead };
 UCLASS()
@@ -21,6 +23,7 @@ class THIRDPERSON_API AEnemyCharacter : public ACharacter
 
 public:
 	AEnemyCharacter();
+	virtual void OnConstruction(const FTransform& Transform) override;
 	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Lock On")
@@ -144,6 +147,9 @@ protected:
 private:
     friend struct FTPCSwordPIETestAccess;
 	friend struct FMeleeAITestAccess;
+	void IgnoreCameraCollision();
+	UFUNCTION()
+	void HandleEquippedWeaponChanged(UWeaponDefinition* Definition, AWeaponActor* Weapon);
 	int32 CurrentPatrolIndex = 0;
 	void PositionLockOnIndicator();
 	FVector GetLockOnCameraReferencePoint() const;

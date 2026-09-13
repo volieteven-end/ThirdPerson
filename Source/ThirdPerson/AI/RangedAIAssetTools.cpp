@@ -20,6 +20,14 @@
 #include "Misc/PackageName.h"
 #include "UObject/SavePackage.h"
 #include "UObject/UnrealType.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimSequence.h"
+#include "AssetRegistry/AssetRegistryModule.h"
+#include "Components/PrimitiveComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "../UI/EnemyHealthWidget.h"
 
 namespace RangedAssetMigration
 {
@@ -35,6 +43,67 @@ bool Save(UObject* Asset)
 }
 }
 #endif
+
+bool URangedAIAssetTools::ConfigureEnemyPresentation()
+{
+#if WITH_EDITOR
+	auto* Blueprint = LoadObject<UBlueprint>(nullptr, TEXT("/Game/Third/Character/BP_EnemyRangedCharacter.BP_EnemyRangedCharacter"));
+	auto* Sequence = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/ArcherAnimsetPro/Animations/InPlace/Bow_InPlace_Death_01.Bow_InPlace_Death_01"));
+	auto* WidgetClass = LoadClass<UEnemyHealthWidget>(nullptr, TEXT("/Game/Third/Widget/WBP_EnemyHealth.WBP_EnemyHealth_C"));
+	auto* MeleeDeath = LoadObject<UAnimMontage>(nullptr, TEXT("/Game/Characters/Mannequins/Anims/Death/AM_EnemyDeath.AM_EnemyDeath"));
+	auto* SwordDeath = LoadObject<UAnimSequence>(nullptr, TEXT("/Game/Third/SwordAnimation/Dead_Anim.Dead_Anim"));
+	if (!Blueprint || !Sequence || !WidgetClass || !MeleeDeath || !SwordDeath ||
+		MeleeDeath->GetSkeleton() != SwordDeath->GetSkeleton() || MeleeDeath->SlotAnimTracks.Num() != 1 ||
+		MeleeDeath->SlotAnimTracks[0].AnimTrack.AnimSegments.Num() != 1 || MeleeDeath->CompositeSections.Num() > 1) return false;
+	FKismetEditorUtilities::CompileBlueprint(Blueprint);
+	auto* Enemy = Cast<AEnemyCharacter>(Blueprint->GeneratedClass->GetDefaultObject());
+	auto* BarProperty = FindFProperty<FObjectProperty>(AEnemyCharacter::StaticClass(), TEXT("HealthBarWidget"));
+	auto* Bar = Enemy && BarProperty ? Cast<UWidgetComponent>(BarProperty->GetObjectPropertyValue_InContainer(Enemy)) : nullptr;
+	if (!Bar || !Enemy->GetMesh()->GetSkeletalMeshAsset() ||
+		Enemy->GetMesh()->GetSkeletalMeshAsset()->GetSkeleton() != Sequence->GetSkeleton()) return false;
+
+	const TCHAR* PackageName = TEXT("/Game/Third/ArcherAnimation/AM_RangedDeath");
+	auto* Montage = LoadObject<UAnimMontage>(nullptr, TEXT("/Game/Third/ArcherAnimation/AM_RangedDeath.AM_RangedDeath"), nullptr, LOAD_NoWarn);
+	if (!Montage)
+	{
+		auto* Template = UAnimMontage::CreateSlotAnimationAsDynamicMontage(Sequence, TEXT("DefaultSlot"), .12f, .1f, 1.f, 1);
+		if (!Template) return false;
+		Montage = DuplicateObject<UAnimMontage>(Template, CreatePackage(PackageName), TEXT("AM_RangedDeath"));
+		Montage->ClearFlags(RF_Transient);
+		Montage->SetFlags(RF_Public | RF_Standalone);
+		FAssetRegistryModule::AssetCreated(Montage);
+	}
+	// Existing authored changes are retained on rerun; never rebuild other montages.
+	Montage->bEnableAutoBlendOut = false;
+	Montage->PostEditChange();
+	if (!RangedAssetMigration::Save(Montage)) return false;
+	// The old MM_Death_Front_01 ends with its pelvis still at standing height.
+	// Reuse the complete sword fall without overwriting the dirty melee Blueprint.
+	auto& Segment = MeleeDeath->SlotAnimTracks[0].AnimTrack.AnimSegments[0];
+	Segment.SetAnimReference(SwordDeath);
+	Segment.AnimStartTime = 0.f; Segment.AnimEndTime = SwordDeath->GetPlayLength();
+	Segment.StartPos = 0.f; Segment.AnimPlayRate = 1.f; Segment.LoopingCount = 1;
+	MeleeDeath->SetCompositeLength(MeleeDeath->CalculateSequenceLength());
+	MeleeDeath->bEnableAutoBlendOut = false;
+	MeleeDeath->PostEditChange();
+	if (!RangedAssetMigration::Save(MeleeDeath)) return false;
+	Enemy->DeathMontage = Montage;
+	Bar->SetWidgetClass(WidgetClass);
+	Bar->SetWidgetSpace(EWidgetSpace::Screen);
+	Bar->SetDrawSize(FVector2D(160,20));
+	Bar->SetRelativeLocation(FVector(0,0,120));
+	Bar->SetVisibility(true);
+	Bar->SetHiddenInGame(false);
+	Bar->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Bar->SetGenerateOverlapEvents(false);
+	Bar->SetWindowFocusable(false);
+	TInlineComponentArray<UPrimitiveComponent*> Primitives(Enemy);
+	for (auto* Component : Primitives) Component->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	return RangedAssetMigration::Save(Blueprint);
+#else
+	return false;
+#endif
+}
 
 bool URangedAIAssetTools::ConfigureRangedCombat()
 {

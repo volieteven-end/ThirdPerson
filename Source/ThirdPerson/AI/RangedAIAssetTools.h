@@ -12,4 +12,8 @@ class THIRDPERSON_API URangedAIAssetTools : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, Category = "AI|Editor")
 	static bool ConfigureRangedCombat();
+
+	/** Enemy health/death presentation only; does not rebuild AI, character meshes or maps. */
+	UFUNCTION(BlueprintCallable, Category = "AI|Editor")
+	static bool ConfigureEnemyPresentation();
 };

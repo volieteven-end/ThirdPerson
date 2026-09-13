@@ -22,10 +22,32 @@
 #include "BrainComponent.h"
 #include "MeleeAICombatSubsystem.h"
 #include "../Audio/TPCCharacterAudioComponent.h"
+#include "../Weapons/WeaponActor.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Animation/AnimInstance.h"
+#include "UObject/ConstructorHelpers.h"
+
+namespace EnemyPresentation
+{
+void IgnoreCamera(AActor* Actor)
+{
+	if (!IsValid(Actor)) return;
+	TInlineComponentArray<UPrimitiveComponent*> Components;
+	Actor->GetComponents(Components, true);
+	for (UPrimitiveComponent* Component : Components)
+	{
+		// Leave Pawn, Visibility, weapon traces and world collision untouched.
+		Component->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	}
+}
+}
+
 AEnemyCharacter::AEnemyCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 	// Local steering complements the behavior-tree separation branch while
@@ -44,6 +66,12 @@ AEnemyCharacter::AEnemyCharacter()
 	HealthBarWidget->SetRelativeLocation(FVector(0.f, 0.f, 120.f));
 	HealthBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
 	HealthBarWidget->SetDrawSize(FVector2D(160.f, 20.f));
+	static ConstructorHelpers::FClassFinder<UEnemyHealthWidget> HealthWidgetClass(TEXT("/Game/Third/Widget/WBP_EnemyHealth"));
+	HealthBarWidget->SetWidgetClass(HealthWidgetClass.Class);
+	HealthBarWidget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HealthBarWidget->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	HealthBarWidget->SetGenerateOverlapEvents(false);
+	HealthBarWidget->SetWindowFocusable(false);
 	CombatComponent =CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	EquipmentComponent = CreateDefaultSubobject<UEquipmentComponent>(TEXT("EquipmentComponent"));
 
@@ -55,15 +83,45 @@ AEnemyCharacter::AEnemyCharacter()
 	LockOnIndicatorWidget->SetDrawSize(FVector2D(LockOnIndicatorSize));
 	LockOnIndicatorWidget->SetPivot(FVector2D(0.5f, 0.5f));
 	LockOnIndicatorWidget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	LockOnIndicatorWidget->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	LockOnIndicatorWidget->SetGenerateOverlapEvents(false);
 	LockOnIndicatorWidget->SetWindowFocusable(false);
 	LockOnIndicatorWidget->SetHiddenInGame(true);
 	LockOnIndicatorWidget->SetVisibility(false);
 }
 
+void AEnemyCharacter::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	IgnoreCameraCollision();
+}
+
+void AEnemyCharacter::IgnoreCameraCollision()
+{
+	EnemyPresentation::IgnoreCamera(this);
+	TArray<AActor*> Attachments;
+	GetAttachedActors(Attachments, true, true);
+	for (AActor* Attachment : Attachments) EnemyPresentation::IgnoreCamera(Attachment);
+}
+
+void AEnemyCharacter::HandleEquippedWeaponChanged(UWeaponDefinition*, AWeaponActor* Weapon)
+{
+	// Covers equipment spawned after BeginPlay as well as the initial loadout.
+	EnemyPresentation::IgnoreCamera(Weapon);
+	IgnoreCameraCollision();
+}
+
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// Blueprint defaults, placed-instance overrides and construction scripts have run.
+	// Both EnemySpawner and arena waves enter this same path; no per-frame scan.
+	IgnoreCameraCollision();
+	if (EquipmentComponent)
+	{
+		EquipmentComponent->OnEquippedWeaponChanged.AddDynamic(this, &ThisClass::HandleEquippedWeaponChanged);
+		HandleEquippedWeaponChanged(EquipmentComponent->GetEquippedWeaponDefinition(), EquipmentComponent->GetEquippedWeaponActor());
+	}
 
 	if (HealthComponent)
 	{
@@ -73,6 +131,11 @@ void AEnemyCharacter::BeginPlay()
 	}
 	if (HealthBarWidget)
 	{
+		// Older blueprints can serialize an empty override of the native widget class.
+		if (!HealthBarWidget->GetWidgetClass())
+			HealthBarWidget->SetWidgetClass(GetDefault<AEnemyCharacter>()->HealthBarWidget->GetWidgetClass());
+		HealthBarWidget->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		HealthBarWidget->SetGenerateOverlapEvents(false);
 		HealthBarWidget->InitWidget();
 		if (UEnemyHealthWidget* HealthWidget =Cast<UEnemyHealthWidget>(HealthBarWidget->GetUserWidgetObject()))
 		{
@@ -245,9 +308,15 @@ void AEnemyCharacter::HandleDeath()
 	float LifeSpan = MinimumDeathLifeSpan;
 	if (DeathMontage)
 	{
-		const float MontageLength =PlayAnimMontage(DeathMontage);
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		const float MontageLength = AnimInstance
+			? AnimInstance->Montage_Play(DeathMontage, 1.f, EMontagePlayReturnType::Duration) : 0.f;
 		if (MontageLength > 0.f)
 		{
+			// Set the playing instance, not the shared asset: dead enemies must not
+			// blend back into walking/aiming while waiting for corpse cleanup.
+			if (FAnimMontageInstance* Instance = AnimInstance->GetActiveInstanceForMontage(DeathMontage))
+				Instance->bEnableAutoBlendOut = false;
 			LifeSpan = FMath::Max(
 				MinimumDeathLifeSpan,
 				MontageLength + DeathDestroyDelay);
