@@ -17,5 +17,5 @@ protected:
  virtual void PlayImpactEffect(const FHitResult& Hit) override;
  UPROPERTY(VisibleAnywhere, BlueprintReadOnly) TObjectPtr<UParticleSystemComponent> FlightEffect;
  UPROPERTY(Transient) TObjectPtr<UParticleSystem> ImpactEffect;
- float EffectScale = .55f;
+ float ImpactScale = .85f;
 };

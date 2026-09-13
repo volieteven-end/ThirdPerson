@@ -147,6 +147,8 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UParticleSystem> WaveImpactEffect;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects", meta=(ClampMin=".1", ClampMax="2")) float SkillAccentScale = .65f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects", meta=(ClampMin=".1", ClampMax="2")) float WaveEffectScale = .55f;
+ /** Cosmetic only. Impact is intentionally independent of the flight silhouette and collision sphere. */
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects", meta=(ClampMin=".1", ClampMax="2")) float WaveImpactScale = .85f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TObjectPtr<UMaterialInterface> WarningMaterial;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Effects") TSubclassOf<AWeaponProjectile> WaveClass;
  const FBossActionDefinition* FindAction(EBossAction Id) const;

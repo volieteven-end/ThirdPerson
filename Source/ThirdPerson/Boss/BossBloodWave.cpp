@@ -21,9 +21,9 @@ void ABossBloodWave::InitializeCombatProjectile(const FCombatHitSpec& Spec,float
  FlightLifetime=1200.f/FMath::Max(1.f,Speed);
  const UBossDefinition* D=GetDefault<UBossDefinition>();
  if (const auto* A=GetOwner()?GetOwner()->FindComponentByClass<UBossActionComponent>():nullptr) D=A->GetDefinition();
- ImpactEffect=D->WaveImpactEffect; EffectScale=D->WaveEffectScale;
+ ImpactEffect=D->WaveImpactEffect; ImpactScale=D->WaveImpactScale;
  FlightEffect->DeactivateSystem(); FlightEffect->KillParticlesForced();
- FlightEffect->SetTemplate(D->WaveFlightEffect); FlightEffect->SetRelativeScale3D(FVector(EffectScale));
+ FlightEffect->SetTemplate(D->WaveFlightEffect); FlightEffect->SetRelativeScale3D(FVector(D->WaveEffectScale));
  Super::InitializeCombatProjectile(Wave,Speed);
  if (TPCCombatVFX::IsEnabled() && D->WaveFlightEffect) FlightEffect->ActivateSystem(true);
 }
@@ -35,5 +35,5 @@ void ABossBloodWave::DeactivateProjectile()
 void ABossBloodWave::PlayImpactEffect(const FHitResult& Hit)
 {
  // World-owned one-shot: returning the wave must not truncate its impact burst.
- if (TPCCombatVFX::IsEnabled()) UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ImpactEffect,Hit.ImpactPoint,Hit.ImpactNormal.Rotation(),FVector(EffectScale),true);
+ if (TPCCombatVFX::IsEnabled()) UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),ImpactEffect,Hit.ImpactPoint,Hit.ImpactNormal.Rotation(),FVector(ImpactScale),true);
 }

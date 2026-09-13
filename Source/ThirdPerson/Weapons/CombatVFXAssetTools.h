@@ -11,4 +11,7 @@ class THIRDPERSON_API UCombatVFXAssetTools : public UBlueprintFunctionLibrary
 public:
     UFUNCTION(BlueprintCallable, Category="Combat|Editor") static FString InspectSources();
     UFUNCTION(BlueprintCallable, Category="Combat|Editor") static bool BuildCombatVFX();
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor") static FString InspectCountessReadability();
+    /** Boss-only, idempotent tuning. Does not rebuild montages or touch player/vendor assets. */
+    UFUNCTION(BlueprintCallable, Category="Combat|Editor") static bool BuildCountessReadability();
 };
