@@ -55,16 +55,28 @@ FTransform Bone(const FAnimPose& Pose, FName Name)
 
 bool Bake(UAnimSequence* Source, UAnimSequence* Target, USkeletalMesh* TargetMesh,
     const FTransform& SourceGripR, const FTransform& SourceGripL,
-    const FTransform& TargetGripR, const FTransform& TargetGripL)
+    const FTransform& TargetGripR, const FTransform& TargetGripL, bool bRotationOnly)
 {
     const auto* Model = Target->GetDataModel();
     const int32 Count = Model->GetNumberOfKeys();
     if (Count < 2 || Source->GetPlayLength() <= 0.f) return false;
+    TArray<FName> ExistingTracks; Model->GetBoneTrackNames(ExistingTracks);
+    if (bRotationOnly && !ExistingTracks.Contains(ControlBone)) return false;
     TArray<FVector3f> Positions, Scales; TArray<FQuat4f> Rotations;
     Positions.Reserve(Count); Rotations.Reserve(Count); Scales.Init(FVector3f::OneVector, Count);
     FAnimPoseEvaluationOptions SourceOptions, TargetOptions;
     SourceOptions.bShouldRetarget = false;
     TargetOptions.OptionalSkeletalMesh = TargetMesh;
+    FAnimPose SourceStart, TargetStart;
+    UAnimPoseExtensions::GetAnimPoseAtTime(Source, 0., SourceOptions, SourceStart);
+    UAnimPoseExtensions::GetAnimPoseAtTime(Target, 0., TargetOptions, TargetStart);
+    if (!SourceStart.IsValid() || !TargetStart.IsValid()) return false;
+    // The hand bones use different local axes after retargeting. Calibrate from corresponding
+    // poses, not artist-authored grip socket rotations (HandGrip_L made the blade point up).
+    const FQuat RightBasis = Bone(TargetStart, TEXT("hand_r")).GetRotation().Inverse() *
+        Bone(SourceStart, TEXT("hand_r")).GetRotation();
+    const FQuat LeftBasis = Bone(TargetStart, TEXT("hand_l")).GetRotation().Inverse() *
+        Bone(SourceStart, TEXT("hand_l")).GetRotation();
     // Evaluate all input poses before adding keys; subsequent runs produce the same weapon track.
     for (int32 Frame = 0; Frame < Count; ++Frame)
     {
@@ -83,13 +95,26 @@ bool Bake(UAnimSequence* Source, UAnimSequence* Target, USkeletalMesh* TargetMes
         // Grip-space retargeting adapts proportions while retaining the source's flips and release motion.
         // Smoothly change anchor near a handoff; never teleport between two sockets at a timer boundary.
         const float LeftWeight = FMath::SmoothStep(-12.f, 12.f, RightDistance - LeftDistance);
+        FTransform RightMapped = Weapon.GetRelativeTransform(SourceR) * TargetR;
+        FTransform LeftMapped = Weapon.GetRelativeTransform(SourceL) * TargetL;
+        // Keep the established grip positions. Correct orientation separately so a socket-axis
+        // correction cannot orbit the sword hilt away from the hand, including during release.
+        RightMapped.SetRotation(Bone(T, TEXT("hand_r")).GetRotation() * RightBasis *
+            Bone(S, TEXT("hand_r")).GetRotation().Inverse() * Weapon.GetRotation());
+        LeftMapped.SetRotation(Bone(T, TEXT("hand_l")).GetRotation() * LeftBasis *
+            Bone(S, TEXT("hand_l")).GetRotation().Inverse() * Weapon.GetRotation());
         FTransform World;
-        World.Blend(Weapon.GetRelativeTransform(SourceR) * TargetR,
-            Weapon.GetRelativeTransform(SourceL) * TargetL, LeftWeight);
+        World.Blend(RightMapped, LeftMapped, LeftWeight);
         FTransform Local = World.GetRelativeTransform(Bone(T, TEXT("hand_r")));
         Local.NormalizeRotation();
         if (Local.ContainsNaN()) return false;
-        Positions.Add(FVector3f(Local.GetTranslation())); Rotations.Add(FQuat4f(Local.GetRotation()));
+        if (bRotationOnly)
+        {
+            const FTransform Existing = Model->GetBoneTrackTransform(ControlBone, FFrameNumber(Frame));
+            Positions.Add(FVector3f(Existing.GetTranslation())); Scales[Frame] = FVector3f(Existing.GetScale3D());
+        }
+        else Positions.Add(FVector3f(Local.GetTranslation()));
+        Rotations.Add(FQuat4f(Local.GetRotation()));
     }
     Target->Modify();
     auto& Controller = Target->GetController();
@@ -107,7 +132,7 @@ bool Bake(UAnimSequence* Source, UAnimSequence* Target, USkeletalMesh* TargetMes
 }
 #endif
 
-bool USwordMotionAssetTools::BuildSwordMotion()
+bool USwordMotionAssetTools::BuildSwordMotion(bool bRotationOnly)
 {
 #if WITH_EDITOR
     using namespace SwordMotion;
@@ -125,6 +150,8 @@ bool USwordMotionAssetTools::BuildSwordMotion()
     const FTransform SourceGripR = SourceRef.GetRefBonePose()[SR];
     const FTransform SourceGripL = SourceRef.GetRefBonePose()[SL];
     const int32 Existing = Quinn->GetRefSkeleton().FindBoneIndex(ControlBone);
+    if (bRotationOnly && (Existing == INDEX_NONE || Manny->GetRefSkeleton().FindBoneIndex(ControlBone) == INDEX_NONE ||
+        Equip->BoneName != ControlBone)) return false;
     const FTransform TargetGripR = Existing != INDEX_NONE ? Quinn->GetRefSkeleton().GetRefBonePose()[Existing] : SocketLocal(Equip);
     const FTransform TargetGripL = SocketLocal(Left);
     struct FPair { UAnimSequence* Source; UAnimSequence* Target; };
@@ -141,47 +168,50 @@ bool USwordMotionAssetTools::BuildSwordMotion()
             Pairs.Add({Source, Target});
         }
     }
-    Skeleton->Modify();
-    for (auto* Mesh : {Quinn, Manny})
+    if (!bRotationOnly)
     {
-        if (Mesh->GetRefSkeleton().FindBoneIndex(ControlBone) == INDEX_NONE)
+        Skeleton->Modify();
+        for (auto* Mesh : {Quinn, Manny})
         {
-            auto* Modifier = NewObject<USkeletonModifier>();
-            if (!Modifier->SetSkeletalMesh(Mesh) || !Modifier->AddBone(ControlBone, TEXT("hand_r"), TargetGripR) ||
-                !Modifier->CommitSkeletonToSkeletalMesh()) return false;
+            if (Mesh->GetRefSkeleton().FindBoneIndex(ControlBone) == INDEX_NONE)
+            {
+                auto* Modifier = NewObject<USkeletonModifier>();
+                if (!Modifier->SetSkeletalMesh(Mesh) || !Modifier->AddBone(ControlBone, TEXT("hand_r"), TargetGripR) ||
+                    !Modifier->CommitSkeletonToSkeletalMesh()) return false;
+            }
+        }
+        const int32 NewBone = Skeleton->GetReferenceSkeleton().FindBoneIndex(ControlBone);
+        if (NewBone == INDEX_NONE) return false;
+        Skeleton->SetBoneTranslationRetargetingMode(NewBone, EBoneTranslationRetargetingMode::Animation, false);
+        SetSocket(Skeleton, TEXT("weapon_r"), FTransform::Identity);
+        // Existing animation-notify names now follow the same animated control bone as the actual weapon.
+        for (const FName Name : {FName(TEXT("Weapon_R_Trail_A")), FName(TEXT("Weapon_R_Trail_B"))})
+        {
+            const auto* SourceSocket = SourceMesh->FindSocket(Name);
+            if (!SourceSocket) return false;
+            SetSocket(Skeleton, Name, SocketLocal(SourceSocket));
+        }
+        auto* SwordMesh = Load<USkeletalMesh>(TEXT("/Game/SwordAnimsetPro/Demo/Character/Mesh/Weapon_Sword"));
+        if (!SwordMesh) return false;
+        for (const auto& Names : {TPair<FName,FName>(TEXT("SwordTrailBase"), TEXT("BladeBase")),
+            TPair<FName,FName>(TEXT("SwordTrailTip"), TEXT("BladeTip"))})
+        {
+            const auto* Socket = SwordMesh->FindSocket(Names.Value);
+            if (!Socket) return false;
+            SetSocket(Skeleton, Names.Key, SocketLocal(Socket));
+        }
+        // Preserve preview attachments, only redirect this sword's right-hand preview to its animated control.
+        for (int32 Index = 0; Index < Skeleton->PreviewAttachedAssetContainer.Num(); ++Index)
+        {
+            auto& Pair = Skeleton->PreviewAttachedAssetContainer[Index];
+            if (Pair.GetAttachedObject() == SwordMesh && (Pair.AttachedTo == TEXT("HandGrip_R") || Pair.AttachedTo == TEXT("weapon_r")))
+                Pair.AttachedTo = TEXT("weapon_r");
         }
     }
-    const int32 NewBone = Skeleton->GetReferenceSkeleton().FindBoneIndex(ControlBone);
-    if (NewBone == INDEX_NONE) return false;
-    Skeleton->SetBoneTranslationRetargetingMode(NewBone, EBoneTranslationRetargetingMode::Animation, false);
-    SetSocket(Skeleton, TEXT("weapon_r"), FTransform::Identity);
-    // Existing animation-notify names now follow the same animated control bone as the actual weapon.
-    for (const FName Name : {FName(TEXT("Weapon_R_Trail_A")), FName(TEXT("Weapon_R_Trail_B"))})
-    {
-        const auto* SourceSocket = SourceMesh->FindSocket(Name);
-        if (!SourceSocket) return false;
-        SetSocket(Skeleton, Name, SocketLocal(SourceSocket));
-    }
-    auto* SwordMesh = Load<USkeletalMesh>(TEXT("/Game/SwordAnimsetPro/Demo/Character/Mesh/Weapon_Sword"));
-    if (!SwordMesh) return false;
-    for (const auto& Names : {TPair<FName,FName>(TEXT("SwordTrailBase"), TEXT("BladeBase")),
-        TPair<FName,FName>(TEXT("SwordTrailTip"), TEXT("BladeTip"))})
-    {
-        const auto* Socket = SwordMesh->FindSocket(Names.Value);
-        if (!Socket) return false;
-        SetSocket(Skeleton, Names.Key, SocketLocal(Socket));
-    }
-    // Preserve preview attachments, only redirect this sword's right-hand preview to its animated control.
-    for (int32 Index = 0; Index < Skeleton->PreviewAttachedAssetContainer.Num(); ++Index)
-    {
-        auto& Pair = Skeleton->PreviewAttachedAssetContainer[Index];
-        if (Pair.GetAttachedObject() == SwordMesh && (Pair.AttachedTo == TEXT("HandGrip_R") || Pair.AttachedTo == TEXT("weapon_r")))
-            Pair.AttachedTo = TEXT("weapon_r");
-    }
     for (const FPair& Pair : Pairs)
-        if (!Bake(Pair.Source, Pair.Target, Quinn, SourceGripR, SourceGripL, TargetGripR, TargetGripL)) return false;
+        if (!Bake(Pair.Source, Pair.Target, Quinn, SourceGripR, SourceGripL, TargetGripR, TargetGripL, bRotationOnly)) return false;
     FAssetCompilingManager::Get().FinishAllCompilation();
-    return Save(Quinn) && Save(Manny) && Save(Skeleton);
+    return bRotationOnly || (Save(Quinn) && Save(Manny) && Save(Skeleton));
 #else
     return false;
 #endif

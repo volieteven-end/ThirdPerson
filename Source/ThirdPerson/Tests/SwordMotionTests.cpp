@@ -68,4 +68,54 @@ bool FSwordMotionAssetTest::RunTest(const FString&)
     }
     return true;
 }
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FSwordMotionOrientationTest, "ThirdPerson.SwordMotion.SourceOrientation",
+    EAutomationTestFlags::EditorContext | EAutomationTestFlags::EngineFilter)
+bool FSwordMotionOrientationTest::RunTest(const FString&)
+{
+    // Compare against vendor animation, not against our own baked raw data: a wrong bake can
+    // survive compression perfectly. Check the entire motion, including both handoffs.
+    for (int32 Index = 1; Index <= 4; ++Index)
+    {
+        const FString Name = FString::Printf(TEXT("Attack_Combo_01_%02d_Anim"), Index);
+        auto* Source = LoadObject<UAnimSequence>(nullptr, *(TEXT("/Game/SwordAnimsetPro/Animations/Root-Motion/") + Name + TEXT(".") + Name));
+        if (!TestNotNull(TEXT("Original UE4 animation"), Source)) return false;
+        for (const FString& Prefix : {FString(TEXT("/Game/Third/SwordAnimation/")), FString(TEXT("/Game/Third/Actions/Sword/Sequences/AS_"))})
+        {
+            const FString ObjectName = Prefix.EndsWith(TEXT("AS_")) ? TEXT("AS_") + Name : Name;
+            auto* Target = LoadObject<UAnimSequence>(nullptr, *(Prefix + Name + TEXT(".") + ObjectName));
+            if (!TestNotNull(TEXT("Repaired animation"), Target)) return false;
+            for (const TCHAR* MeshName : {TEXT("SKM_Quinn_Simple"), TEXT("SKM_Manny_Simple")})
+            {
+                const FString MeshPath = FString(TEXT("/Game/Characters/Mannequins/Meshes/")) + MeshName + TEXT(".") + MeshName;
+                auto* Mesh = LoadObject<USkeletalMesh>(nullptr, *MeshPath);
+                if (!TestNotNull(TEXT("Target proportions"), Mesh)) return false;
+                FAnimPoseEvaluationOptions SO, TO; SO.bShouldRetarget = false;
+                TO.OptionalSkeletalMesh = Mesh; TO.EvaluationType = EAnimDataEvalType::Compressed;
+                float MaxRotationError = 0.f, MaxBladeError = 0.f;
+                const int32 Keys = Target->GetDataModel()->GetNumberOfKeys();
+                for (int32 Frame = 0; Frame < Keys; ++Frame)
+                {
+                    const double Alpha = static_cast<double>(Frame) / (Keys - 1);
+                    FAnimPose S, T;
+                    UAnimPoseExtensions::GetAnimPoseAtTime(Source, Alpha * Source->GetPlayLength(), SO, S);
+                    UAnimPoseExtensions::GetAnimPoseAtTime(Target, Alpha * Target->GetPlayLength(), TO, T);
+                    if (!S.IsValid() || !T.IsValid()) { AddError(TEXT("Invalid comparison pose")); return false; }
+                    const FQuat SQ = UAnimPoseExtensions::GetBonePose(S, TEXT("weapon_r"), EAnimPoseSpaces::World).GetRotation();
+                    const FQuat TQ = UAnimPoseExtensions::GetBonePose(T, TEXT("sword_motion"), EAnimPoseSpaces::World).GetRotation();
+                    MaxRotationError = FMath::Max(MaxRotationError, FMath::RadiansToDegrees(SQ.AngularDistance(TQ)));
+                    MaxBladeError = FMath::Max(MaxBladeError, FMath::RadiansToDegrees(FMath::Acos(
+                        FMath::Clamp(FVector::DotProduct(SQ.GetAxisX(), TQ.GetAxisX()), -1., 1.))));
+                    if (Index == 2 && Frame == 32)
+                        TestTrue(TEXT("Second attack frame 32 is horizontal, not upright"), FMath::Abs(TQ.GetAxisX().Z) < .1);
+                }
+                AddInfo(FString::Printf(TEXT("%s %s: max orientation %.3f deg, blade direction %.3f deg"),
+                    *Target->GetName(), MeshName, MaxRotationError, MaxBladeError));
+                TestTrue(TEXT("Full sword rotation agrees with original UE4 clip within one degree"), MaxRotationError < 1.f);
+                TestTrue(TEXT("Sword blade direction agrees with original UE4 clip within one degree"), MaxBladeError < 1.f);
+            }
+        }
+    }
+    return true;
+}
 #endif

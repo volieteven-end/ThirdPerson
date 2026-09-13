@@ -9,5 +9,6 @@ class THIRDPERSON_API USwordMotionAssetTools : public UBlueprintFunctionLibrary
 {
     GENERATED_BODY()
 public:
-    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool BuildSwordMotion();
+    /** Rotation-only mode preserves existing weapon positions/scales and never saves meshes or sockets. */
+    UFUNCTION(BlueprintCallable, Category="Sword|Editor") static bool BuildSwordMotion(bool bRotationOnly = false);
 };
