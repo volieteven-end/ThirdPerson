@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Camera/CameraActor.h"
+#include "Camera/CameraComponent.h"
 #include "EngineUtils.h"
 #include "Engine/Engine.h"
 #include "Misc/PackageName.h"
@@ -118,7 +119,7 @@ AMainMenuGameMode::AMainMenuGameMode() { DefaultPawnClass=nullptr; PlayerControl
 void AMainMenuController::BeginPlay()
 {
     Super::BeginPlay();
-    for (TActorIterator<ACameraActor> It(GetWorld());It;++It) { SetViewTarget(*It); break; }
+    for (TActorIterator<ACameraActor> It(GetWorld());It;++It) { It->GetCameraComponent()->SetConstraintAspectRatio(false); SetViewTarget(*It); break; }
     auto Class=LoadClass<UMainMenuWidget>(nullptr,TEXT("/Game/Third/UI/MainMenu/WBP_MainMenu.WBP_MainMenu_C"));
     Menu=Class?CreateWidget<UMainMenuWidget>(this,Class):nullptr;
     if (Menu) { Menu->AddToViewport(100); FInputModeUIOnly Input; Input.SetWidgetToFocus(Menu->TakeWidget()); SetInputMode(Input); }

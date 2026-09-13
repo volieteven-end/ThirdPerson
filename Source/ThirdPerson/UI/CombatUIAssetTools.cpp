@@ -21,6 +21,7 @@
 #include "Components/HorizontalBoxSlot.h"
 #include "Components/WidgetSwitcher.h"
 #include "Components/SizeBox.h"
+#include "Components/ScaleBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/Image.h"
 #include "Brushes/SlateRoundedBoxBrush.h"
@@ -65,6 +66,15 @@ template<class T> T* Widget(UWidgetTree* Tree,const TCHAR* Name)
 }
 bool CompileAndSave(UWidgetBlueprint* BP)
 {
+    if (auto* Portrait=Cast<UImage>(BP->WidgetTree->FindWidget(TEXT("CharacterPortrait"))))
+    {
+        if (auto* Slot=Cast<UCanvasPanelSlot>(Portrait->Slot))
+        {
+            auto* Parent=Cast<UCanvasPanel>(Portrait->GetParent()); const FAnchorData Layout=Slot->GetLayout();
+            Portrait->RemoveFromParent(); auto* Frame=Widget<UScaleBox>(BP->WidgetTree,TEXT("PortraitAspectFrame")); Frame->SetStretch(EStretch::ScaleToFit);
+            Portrait->SetDesiredSizeOverride(FVector2D(512,512)); Frame->AddChild(Portrait); Parent->AddChildToCanvas(Frame)->SetLayout(Layout);
+        }
+    }
     BP->WidgetTree->ForEachWidget([BP](UWidget* W) { BP->WidgetVariableNameToGuidMap.FindOrAdd(W->GetFName(),FGuid::NewGuid()); });
     BP->WidgetTree->ForEachWidget([](UWidget* W) { if (auto* Text=Cast<UTextBlock>(W)) if (Cast<UButton>(W->GetParent())) Text->SetAutoWrapText(false); });
     if (auto* Panel=Cast<UBorder>(BP->WidgetTree->FindWidget(TEXT("InventoryPanel"))))
@@ -185,7 +195,7 @@ bool BuildMap()
     auto* SkyActor=W->SpawnActor<AActor>(); auto* Atmosphere=NewObject<USkyAtmosphereComponent>(SkyActor); SkyActor->SetRootComponent(Atmosphere); SkyActor->AddInstanceComponent(Atmosphere); Atmosphere->RegisterComponent();
     auto* Post=W->SpawnActor<APostProcessVolume>(); Post->bUnbound=true; Post->Settings.bOverride_AutoExposureBias=true; Post->Settings.AutoExposureBias=-.4f; Post->Settings.bOverride_BloomIntensity=true; Post->Settings.BloomIntensity=.2f;
     const FVector Position(-6500,-4400,760),LookAt(-3400,-1800,180);
-    auto* Camera=W->SpawnActor<ACameraActor>(Position,(LookAt-Position).Rotation()); Camera->SetActorLabel(TEXT("MainMenuCamera")); Camera->GetCameraComponent()->SetFieldOfView(65);
+    auto* Camera=W->SpawnActor<ACameraActor>(Position,(LookAt-Position).Rotation()); Camera->SetActorLabel(TEXT("MainMenuCamera")); Camera->GetCameraComponent()->SetFieldOfView(65); Camera->GetCameraComponent()->SetConstraintAspectRatio(false);
     return FEditorFileUtils::SaveLevel(W->PersistentLevel,FPackageName::LongPackageNameToFilename(MapPath,FPackageName::GetMapPackageExtension()));
 }
 bool CompleteMenuScenery()

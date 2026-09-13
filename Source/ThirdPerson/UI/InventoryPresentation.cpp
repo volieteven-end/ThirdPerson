@@ -51,7 +51,7 @@ AInventoryPreviewActor::AInventoryPreviewActor()
     { C->SetCollisionEnabled(ECollisionEnabled::NoCollision); C->SetCanEverAffectNavigation(false); C->SetVisibleInSceneCaptureOnly(true); C->SetCastShadow(false); C->SetLightingChannels(false,true,false); }
     Body->SetComponentTickEnabled(false); SkeletalWeapon->SetComponentTickEnabled(false);
     Capture=CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("PortraitCapture")); Capture->SetupAttachment(Root);
-    Capture->SetRelativeLocation(FVector(320,0,95)); Capture->SetRelativeRotation(FRotator(0,180,0)); Capture->FOVAngle=40;
+    Capture->SetRelativeLocation(FVector(320,35,95)); Capture->SetRelativeRotation(FRotator(0,180,0)); Capture->FOVAngle=40;
     Capture->bCaptureEveryFrame=false; Capture->bCaptureOnMovement=false; Capture->PrimitiveRenderMode=ESceneCapturePrimitiveRenderMode::PRM_UseShowOnlyList;
     Capture->CaptureSource=ESceneCaptureSource::SCS_SceneColorHDR;
     Capture->ShowFlags.SetAtmosphere(false); Capture->ShowFlags.SetFog(false); Capture->ShowFlags.SetMotionBlur(false); Capture->ShowFlags.SetTemporalAA(false);
