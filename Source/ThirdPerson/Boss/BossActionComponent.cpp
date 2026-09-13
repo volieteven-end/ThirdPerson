@@ -67,6 +67,8 @@ void UBossActionComponent::EndPlay(const EEndPlayReason::Type Reason)
 }
 void UBossActionComponent::SetState(EBossState NewState)
 {
+ bStandoff=false;
+ if (NewState==EBossState::Combat) bStandoffRolled=false;
  State=NewState; StateStarted=Now(); OnStatusChanged.Broadcast();
  UE_LOG(LogTemp,Verbose,TEXT("Countess State=%d Action=%d Serial=%lld Phase=%d Poise=%.1f MoveSource=%u"),static_cast<int32>(State),static_cast<int32>(CurrentAction),ActionSerial,Phase,Poise,MoveSourceId);
 }
@@ -627,13 +629,41 @@ void UBossActionComponent::MoveToGoal(const FVector& Goal,float Speed,bool bStra
  Request.SetProjectGoalLocation(true); Request.SetAllowPartialPath(false); Request.SetCanStrafe(bStrafe);
  // Reset completion and navigation use capsule-center tolerances, also for scaled bosses.
  if (State==EBossState::Resetting) { Request.SetAcceptanceRadius(55.f); Request.SetReachTestIncludesAgentRadius(false); }
- if (AI->MoveTo(Request).Code==EPathFollowingRequestResult::Failed) bReversingOrbit=!bReversingOrbit;
+ if (AI->MoveTo(Request).Code==EPathFollowingRequestResult::Failed)
+ { bReversingOrbit=!bReversingOrbit; if (bStandoff && ++StandoffPathFailures>=2) bStandoff=false; }
+}
+bool UBossActionComponent::TickStandoff(float Distance)
+{
+ if (!bStandoff) return false;
+ if (!CanMove() || bPhasePending || Now()>=StandoffUntil || Distance<180 || Distance>600 || !bHasLOS)
+ { bStandoff=false; NextMoveRequest=0; return false; }
+ const FVector Away=(Boss->GetActorLocation()-Target->GetActorLocation()).GetSafeNormal2D();
+ const FVector Side=FVector::CrossProduct(FVector::UpVector,Away)*(bReversingOrbit?-1.f:1.f);
+ const float Radius=FMath::Clamp(Distance,260.f,420.f);
+ MoveToGoal(Target->GetActorLocation()+Away*Radius+Side*145,GetDefinition()->OrbitSpeed,true);
+ return bStandoff;
 }
 void UBossActionComponent::DriveDecision()
 {
  if (!CanMove() || !Target.IsValid()) return;
  float Distance=FVector::Dist2D(Boss->GetActorLocation(),Target->GetActorLocation());
- if (const EBossAction Action=SelectAction(Distance,bHasLOS); Action!=EBossAction::None && TryStartAction(Action)) return;
+ if (TickStandoff(Distance)) return;
+ if (const EBossAction Action=SelectAction(Distance,bHasLOS); Action!=EBossAction::None)
+ {
+  if (!bStandoffRolled)
+  {
+   bStandoffRolled=true;
+   if (Distance>=180 && Distance<=600 && Now()>=NextStandoffAt && Random.FRand()<GetDefinition()->StandoffChance)
+   {
+    bStandoff=true; StandoffPathFailures=0; bReversingOrbit=Random.RandRange(0,1)!=0; NextMoveRequest=0;
+    const FVector2D D=GetDefinition()->StandoffDuration;
+    StandoffUntil=Now()+Random.FRandRange(FMath::Max(.1,D.X),FMath::Max(FMath::Max(.1,D.X),D.Y));
+    NextStandoffAt=Now()+FMath::Max(0.f,GetDefinition()->StandoffCooldown);
+    if (TickStandoff(Distance)) return;
+   }
+  }
+  if (TryStartAction(Action)) return;
+ }
  if (!bHasLOS || Distance>400)
  { MoveToGoal(LastKnownLocation,Phase==2?GetDefinition()->ChaseSpeedTwo:GetDefinition()->ChaseSpeed,false); return; }
  FVector Away=(Boss->GetActorLocation()-Target->GetActorLocation()).GetSafeNormal2D();
@@ -702,6 +732,7 @@ void UBossActionComponent::CompleteReset()
  if (auto* AI=Cast<AAIController>(Boss->GetController())) AI->StopMovement();
  Phase=1; Poise=GetMaxPoise(); bPhasePending=false; CooldownUntil.Reset(); LastSpecial=EBossAction::None;
  OutsideSince=-1; PoiseImmuneUntil=0; RecoilUntil=0; LastPoiseHit=-100;
+ bStandoff=false; bStandoffRolled=false; NextStandoffAt=0; StandoffUntil=0;
  Health->SetCurrentHealth(Health->MaxHealth); Health->SetEncounterInvulnerable(false); RestoreMovement();
  Boss->SetActorRotation(HomeRotation); SetState(EBossState::Dormant);
 }

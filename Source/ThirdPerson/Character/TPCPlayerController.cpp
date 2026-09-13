@@ -62,6 +62,7 @@ void ATPCPlayerController::RestoreGameplayInput()
 	if (InventoryWidget)
 	{
 		InventoryWidget->SetInventoryPanelOpen(false);
+		InventoryWidget->SetPresentationOpen(false);
 	}
 	FInputModeGameOnly InputMode;
 	SetInputMode(InputMode);
@@ -112,6 +113,7 @@ void ATPCPlayerController::ToggleInventory()
 	if (GetPawn()) if (auto* Actions = GetPawn()->FindComponentByClass<UActionComponent>())
 		Actions->SetInputSuppressed(bIsInventoryOpen || bIsPauseMenuOpen);
 	InventoryWidget->SetInventoryPanelOpen(bIsInventoryOpen);
+	InventoryWidget->SetPresentationOpen(bIsInventoryOpen);
 	if (bIsInventoryOpen)
 	{
 		bShowMouseCursor = true;
@@ -166,9 +168,13 @@ void ATPCPlayerController::TogglePauseMenu()
 
 		SetPause(false);
 		if (GetPawn()) if (auto* Actions = GetPawn()->FindComponentByClass<UActionComponent>()) Actions->SetInputSuppressed(bIsInventoryOpen);
-		bShowMouseCursor = false;
-		FInputModeGameOnly InputMode;
-		SetInputMode(InputMode);
+		bShowMouseCursor = bIsInventoryOpen;
+		if (bIsInventoryOpen && InventoryWidget)
+		{
+			FInputModeGameAndUI InputMode; InputMode.SetWidgetToFocus(InventoryWidget->TakeWidget());
+			InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); SetInputMode(InputMode);
+		}
+		else { FInputModeGameOnly InputMode; SetInputMode(InputMode); }
 	}
 }
 
@@ -177,7 +183,7 @@ void ATPCPlayerController::ShowDeathScreen()
 {
     if (!IsLocalController() || IsDeathScreenOpen()) return;
     if (PauseMenuWidget) PauseMenuWidget->RemoveFromParent();
-    if (InventoryWidget) InventoryWidget->SetInventoryPanelOpen(false);
+    if (InventoryWidget) { InventoryWidget->SetInventoryPanelOpen(false); InventoryWidget->SetPresentationOpen(false); }
     bIsPauseMenuOpen = bIsInventoryOpen = false;
     DeathScreen = CreateWidget<UPlayerDeathWidget>(this, UPlayerDeathWidget::StaticClass());
     if (!DeathScreen) return;

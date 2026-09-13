@@ -16,7 +16,8 @@ class UInputAction;
 class UInteractionComponent;
 class UInventoryComponent;
 class UHealthComponent;
-class UCombatComponent;	
+class UHitFeedbackComponent;
+class UCombatComponent;
 class UActionComponent;
 class UStaminaComponent;
 class UEquipmentComponent;
@@ -75,6 +76,7 @@ public:
 	TObjectPtr<UInventoryComponent> InventoryComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UHealthComponent> HealthComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components") TObjectPtr<UHitFeedbackComponent> HitFeedbackComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<UCombatComponent> CombatComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

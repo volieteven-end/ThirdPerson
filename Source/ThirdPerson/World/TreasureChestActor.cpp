@@ -14,6 +14,17 @@ ATreasureChestActor::ATreasureChestActor()
 	ChestMesh->SetCollisionProfileName(TEXT("BlockAll"));
 }
 
+void ATreasureChestActor::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+	if (!OriginalMesh && !bIsOpened) OriginalMesh=ChestMesh->GetStaticMesh();
+	RefreshChestAppearance();
+}
+void ATreasureChestActor::RefreshChestAppearance()
+{
+	UStaticMesh* Desired=bIsOpened && OpenedMesh ? OpenedMesh.Get() : ClosedMesh ? ClosedMesh.Get() : OriginalMesh.Get();
+	if (Desired) ChestMesh->SetStaticMesh(Desired);
+}
 FText ATreasureChestActor::GetInteractionText() const
 {
 	return FText::FromString(bIsOpened? TEXT("Empty chest"): TEXT("Open chest"));
@@ -27,6 +38,7 @@ void ATreasureChestActor::Interact(APawn* InstigatorPawn)
 	}
 
 	bIsOpened = true;
+	RefreshChestAppearance();
 	UWorld* World = GetWorld();
 	if (World)
 	{

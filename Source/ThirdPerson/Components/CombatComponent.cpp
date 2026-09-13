@@ -745,7 +745,9 @@ void UCombatComponent::PerformAttackHit()
 		if (UHealthComponent* Health =
 			HitActor->FindComponentByClass<UHealthComponent>())
 		{
-            const FCombatHitResult Result = Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerActor);
+            const FCombatHitSpec Spec = MakeCurrentHitSpec(Hit.ImpactPoint);
+            const FCombatHitResult Result = Health->ApplyCombatHit(Spec, OwnerActor);
+            OnMeleeHitResolved.Broadcast(HitActor, Spec, Result);
             if (Result.ActualDamage > 0.f) SpawnMeleeHitEffect(Hit);
             if (Result.ActualDamage > 0.f && !Result.bBlocked && !Result.bParried && !Result.bKilled) ApplySpecialHitReaction(HitActor);
 			bHit = true;
@@ -893,7 +895,9 @@ void UCombatComponent::TickComponent(
 			if (UHealthComponent* Health =
 				HitActor->FindComponentByClass<UHealthComponent>())
 			{
-				const FCombatHitResult Result = Health->ApplyCombatHit(MakeCurrentHitSpec(Hit.ImpactPoint), OwnerCharacter);
+				const FCombatHitSpec Spec = MakeCurrentHitSpec(Hit.ImpactPoint);
+				const FCombatHitResult Result = Health->ApplyCombatHit(Spec, OwnerCharacter);
+				OnMeleeHitResolved.Broadcast(HitActor, Spec, Result);
 				if (Result.ActualDamage > 0.f) SpawnMeleeHitEffect(Hit);
 				if (Result.ActualDamage > 0.f && !Result.bBlocked && !Result.bParried && !Result.bKilled) ApplySpecialHitReaction(HitActor);
 			}

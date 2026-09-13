@@ -32,6 +32,7 @@ public:
     static const TCHAR* BossMap();
     static const TCHAR* WaveMap();
     static bool IsArena(const UObject* Context);
+    void ResetSession();
     bool Travel(ATPCCharacter* Player, const FString& Map, FName Start, bool bRetry = false);
     bool SaveFormal(ATPCCharacter* Player, bool bRestoreVitals = false);
     bool InitializeArenaPlayer(ATPCCharacter& Player);

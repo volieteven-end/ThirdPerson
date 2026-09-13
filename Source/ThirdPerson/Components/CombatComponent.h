@@ -19,6 +19,7 @@ class UActionDefinition;
 class UActionSet;
 
 DECLARE_MULTICAST_DELEGATE(FOnMeleeAttackStartedNative);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnMeleeHitResolvedNative,AActor*,const FCombatHitSpec&,const FCombatHitResult&);
 
 enum class EActiveCombatAttackType : uint8
 {
@@ -41,6 +42,8 @@ public:
 	UCombatComponent();
 	/** Native hook used by the owning character for facing and target magnetism. */
 	FOnMeleeAttackStartedNative OnMeleeAttackStarted;
+	FOnMeleeHitResolvedNative OnMeleeHitResolved;
+	UFUNCTION(BlueprintPure, Category="Combat|Attributes") float GetPresentationDamage() const { return GetEffectiveDamage(); }
 
 	void TryAttack();
 	/** AI-facing ranged entry point. The projectile is aimed at TargetActor. */

@@ -7,6 +7,7 @@
 #include "TreasureChestActor.generated.h"
 
 class UStaticMeshComponent;
+class UStaticMesh;
 class APickupActor;
 
 UCLASS()
@@ -17,13 +18,19 @@ class THIRDPERSON_API ATreasureChestActor
 
 public:
 	ATreasureChestActor();
+	virtual void OnConstruction(const FTransform& Transform) override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Chest|Appearance") TObjectPtr<UStaticMesh> ClosedMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Chest|Appearance") TObjectPtr<UStaticMesh> OpenedMesh;
+	UFUNCTION(BlueprintCallable, Category="Chest") void RefreshChestAppearance();
 
 	virtual FText GetInteractionText() const override;
 	virtual void Interact(APawn* InstigatorPawn) override;
 
 protected:
+	friend struct FCombatUIAccess;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UStaticMeshComponent> ChestMesh;
+	UPROPERTY(Transient) TObjectPtr<UStaticMesh> OriginalMesh;
 
 	// 用现有 BP_PickupActor 或它的子类作为奖励
 	UPROPERTY(EditDefaultsOnly, Category = "Reward")

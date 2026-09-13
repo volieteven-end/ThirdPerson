@@ -39,6 +39,11 @@ bool UArenaTravelSubsystem::IsArena(const UObject* Context)
 {
     return Context && Context->GetWorld() && Context->GetWorld()->GetAuthGameMode<AArenaGameMode>() != nullptr;
 }
+void UArenaTravelSubsystem::ResetSession()
+{
+    Formal=nullptr; Tutorial=FTutorialTravelSnapshot(); PendingMap.Reset(); PendingStart=NAME_None;
+    bTravelPending=false; bResumeTutorial=false; bFormalInitialized=false; LastError=FText::GetEmpty(); ErrorUntil=0;
+}
 bool UArenaTravelSubsystem::LoadFormal()
 {
     if (Formal) return true;

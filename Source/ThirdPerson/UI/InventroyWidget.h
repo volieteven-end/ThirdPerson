@@ -13,6 +13,7 @@ class UStaminaComponent;
 class UUniformGridPanel;
 class UInventorySlotWidget;
 class ULevelComponent;
+class AInventoryPreviewActor;
 struct FLevelUpgradeChoice;
 UCLASS()
 class THIRDPERSON_API UInventoryWidget : public UUserWidget
@@ -20,6 +21,8 @@ class THIRDPERSON_API UInventoryWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category="Inventory") void SwitchPage(int32 PageIndex);
+	void SetPresentationOpen(bool bOpen);
 	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
 	void RefreshInventoryText(const FText& InventoryText);
 	UFUNCTION(BlueprintImplementableEvent, Category = "Inventory")
@@ -42,6 +45,9 @@ public:
 	void ChooseLevelUpgrade(int32 ChoiceIndex);
 	
 protected:
+	virtual void NativeConstruct() override;
+	virtual FReply NativeOnPreviewKeyDown(const FGeometry& Geometry,const FKeyEvent& Event) override;
+	virtual void NativeTick(const FGeometry& Geometry,float Delta) override;
 	virtual void NativeDestruct() override;
 	UFUNCTION()
 	void HandleHealthChanged(float CurrentHealth, float MaxHealth);
@@ -105,6 +111,11 @@ protected:
 	void RefreshObjectiveText(const FText& InText);
 	void RefreshObjective();
 private:
+	UFUNCTION() void ShowBagPage();
+	UFUNCTION() void ShowAttributesPage();
+	UPROPERTY(Transient) TObjectPtr<AInventoryPreviewActor> Portrait;
+	bool bPresentationOpen=false;
+	double NextAttributeRefresh=0,NextPortraitCapture=0;
 	UPROPERTY(Transient)
 	TObjectPtr<UInventoryComponent> InventoryComponent;
 	UFUNCTION()

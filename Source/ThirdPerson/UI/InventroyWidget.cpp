@@ -2,6 +2,12 @@
 
 
 #include "InventroyWidget.h"
+#include "InventoryPresentation.h"
+#include "../Character/TPCCharacter.h"
+#include "Components/WidgetSwitcher.h"
+#include "Components/Button.h"
+#include "InputCoreTypes.h"
+#include "Components/TextBlock.h"
 #include "../Save/TPCSaveSlots.h"
 #include "../Components/InventoryComponent.h"
 #include "../Components/HealthComponent.h"
@@ -39,6 +45,65 @@ void RefreshForestItemPreview(UUserWidget* Widget, const UItemDefinition* Defini
 }
 }
 
+void UInventoryWidget::NativeConstruct()
+{
+    Super::NativeConstruct();
+    if (auto* B=Cast<UButton>(GetWidgetFromName(TEXT("BagPageButton")))) B->OnClicked.AddUniqueDynamic(this,&ThisClass::ShowBagPage);
+    if (auto* B=Cast<UButton>(GetWidgetFromName(TEXT("AttributesPageButton")))) B->OnClicked.AddUniqueDynamic(this,&ThisClass::ShowAttributesPage);
+    SwitchPage(0);
+}
+void UInventoryWidget::ShowBagPage() { SwitchPage(0); }
+FReply UInventoryWidget::NativeOnPreviewKeyDown(const FGeometry& Geometry,const FKeyEvent& Event)
+{
+    if (Event.GetKey()==EKeys::Tab && bPresentationOpen && !UGameplayStatics::IsGamePaused(this))
+    { if (auto* PC=Cast<ATPCPlayerController>(GetOwningPlayer())) { PC->ToggleInventory(); return FReply::Handled(); } }
+    return Super::NativeOnPreviewKeyDown(Geometry,Event);
+}
+void UInventoryWidget::ShowAttributesPage() { SwitchPage(1); }
+void UInventoryWidget::SwitchPage(int32 PageIndex)
+{
+    const int32 Page=FMath::Clamp(PageIndex,0,1);
+    if (auto* Pages=Cast<UWidgetSwitcher>(GetWidgetFromName(TEXT("InventoryPages")))) Pages->SetActiveWidgetIndex(Page);
+    const FName Names[]={TEXT("BagPageButton"),TEXT("AttributesPageButton")};
+    for (int32 I=0;I<2;++I) if (auto* B=Cast<UButton>(GetWidgetFromName(Names[I]))) B->SetBackgroundColor(I==Page?FLinearColor(.18f,.42f,.34f,1):FLinearColor(.07f,.11f,.1f,1));
+    NextAttributeRefresh=0;
+}
+void UInventoryWidget::SetPresentationOpen(bool bOpen)
+{
+    bPresentationOpen=bOpen;
+    if (bOpen) { SwitchPage(0); NextPortraitCapture=0; }
+    else if (IsValid(Portrait)) { Portrait->Destroy(); Portrait=nullptr; }
+}
+void UInventoryWidget::NativeTick(const FGeometry& Geometry,float Delta)
+{
+    Super::NativeTick(Geometry,Delta);
+    auto* Panel=GetWidgetFromName(TEXT("InventoryPanel"));
+    const bool Visible=Panel && Panel->IsVisible();
+    auto* Player=Cast<ATPCCharacter>(GetOwningPlayerPawn());
+    if (!Visible || !Player || Player->HealthComponent->GetCurrentHealth()<=0)
+    { if (bPresentationOpen) SetPresentationOpen(false); return; }
+    if (!bPresentationOpen) SetPresentationOpen(true);
+    const double Now=FPlatformTime::Seconds();
+    auto* Pages=Cast<UWidgetSwitcher>(GetWidgetFromName(TEXT("InventoryPages")));
+    if (Pages && Pages->GetActiveWidgetIndex()==1 && Now>=NextAttributeRefresh)
+    {
+        NextAttributeRefresh=Now+.1;
+        if (auto* Text=Cast<UTextBlock>(GetWidgetFromName(TEXT("AttributesText")))) Text->SetText(UInventoryPresentation::FormatAttributes(UInventoryPresentation::ReadAttributes(Player)));
+    }
+    auto* Image=Cast<UImage>(GetWidgetFromName(TEXT("CharacterPortrait")));
+    if (!Image) return;
+    if (!IsValid(Portrait))
+    {
+        Portrait=GetWorld()->SpawnActor<AInventoryPreviewActor>(FVector(0,0,-100000),FRotator::ZeroRotator);
+        if (Portrait) Portrait->BindImage(Image);
+    }
+    if (Portrait && Now>=NextPortraitCapture)
+    {
+        NextPortraitCapture=Now+1./30.; float X=0,Y=0; int32 Width=1,Height=1;
+        GetOwningPlayer()->GetMousePosition(X,Y); GetOwningPlayer()->GetViewportSize(Width,Height);
+        Portrait->UpdatePreview(Player,(X/FMath::Max(1,Width)-.5f)*44.f);
+    }
+}
 void UInventoryWidget::SetInventory(UInventoryComponent* InInventory)
 {
 	if (InventoryComponent)
@@ -84,6 +149,7 @@ void UInventoryWidget::HandleInventoryChanged()
 
 void UInventoryWidget::NativeDestruct()
 {
+	SetPresentationOpen(false);
 	if (InventoryComponent)
 	{
 		InventoryComponent->OnInventoryChanged.RemoveDynamic(this,&ThisClass::HandleInventoryChanged);
@@ -564,8 +630,8 @@ void UInventoryWidget::ChooseLevelUpgrade(int32 ChoiceIndex)
 	if (APlayerController* PlayerController = GetOwningPlayer())
 	{
 		PlayerController->SetPause(false);
-		PlayerController->bShowMouseCursor = false;
-		FInputModeGameOnly InputMode;
-		PlayerController->SetInputMode(InputMode);
+		PlayerController->bShowMouseCursor = bPresentationOpen;
+		if (bPresentationOpen) { FInputModeGameAndUI InputMode; InputMode.SetWidgetToFocus(TakeWidget()); InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock); PlayerController->SetInputMode(InputMode); }
+		else { FInputModeGameOnly InputMode; PlayerController->SetInputMode(InputMode); }
 	}
 }

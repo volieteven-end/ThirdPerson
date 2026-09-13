@@ -89,6 +89,9 @@ public:
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ChaseSpeed = 400.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ChaseSpeedTwo = 450.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float OrbitSpeed = 180.f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss|Standoff", meta=(ClampMin="0",ClampMax="1")) float StandoffChance=.3f;
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss|Standoff") FVector2D StandoffDuration=FVector2D(.8,1.4);
+ UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss|Standoff", meta=(ClampMin="0")) float StandoffCooldown=5.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float RetreatSpeed = 220.f;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") float ComboGap = .35f;
  /** Versioned, targeted editor migration. Never rebuilds the encounter map or vendor package. */

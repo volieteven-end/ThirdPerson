@@ -64,6 +64,7 @@ public:
  float GetHitReactionAlpha() const;
  float GetHitReactionTime() const { return FMath::Max(0.f,static_cast<float>(Now()-LastHitReaction)); }
  bool IsStrafing() const { return bStrafing; }
+ UFUNCTION(BlueprintPure, Category="Boss") bool IsStandoffActive() const { return bStandoff; }
  float GetFacingDelta() const;
  int32 GetContextRevision() const { return ContextRevision; }
  int32 GetHitReactionDirection() const { return HitReactionDirection; }
@@ -73,6 +74,12 @@ private:
  friend struct FCountessPIETestAccess;
  friend struct FCountessReadableMovementAccess;
  friend struct FArenaTestAccess;
+ friend struct FCombatUIAccess;
+ bool bStandoff=false;
+ bool bStandoffRolled=false;
+ int32 StandoffPathFailures=0;
+ double StandoffUntil=0,NextStandoffAt=0;
+ bool TickStandoff(float Distance);
  enum class EActionStep : uint8 { None, Telegraph, Playing, Recovery };
  UPROPERTY(Transient) TObjectPtr<ACountessBossCharacter> Boss;
  UPROPERTY(Transient) TObjectPtr<UHealthComponent> Health;

@@ -15,6 +15,7 @@
 #include "../Components/InteractionComponent.h"
 #include "../Components/InventoryComponent.h"
 #include "../Components/HealthComponent.h"
+#include "../Components/HitFeedbackComponent.h"
 #include "../Components/CombatComponent.h"
 #include "../Components/ActionComponent.h"
 #include "GameFramework/GameModeBase.h"
@@ -87,6 +88,7 @@ ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
 	InteractionComponent=CreateDefaultSubobject<UInteractionComponent>(TEXT("InteractionComponent"));
 	InventoryComponent=CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 	HealthComponent=CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComponent"));
+	HitFeedbackComponent=CreateDefaultSubobject<UHitFeedbackComponent>(TEXT("HitFeedbackComponent"));
 	CombatComponent=CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	CombatComponent->BaseMeleeReachScale = 1.15f;
 	ActionComponent=CreateDefaultSubobject<UActionComponent>(TEXT("ActionComponent"));
