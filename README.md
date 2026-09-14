@@ -6,6 +6,14 @@
 
 **技术栈：** C++ · UE 5.8 · Enhanced Input · Animation Blueprint / Montage · Behavior Tree / Blackboard · Motion Warping · UMG · Data Asset
 
+## 演示视频
+
+[观看 / 下载 ThirdPerson 实机演示](https://github.com/volieteven-end/ThirdPerson/raw/refs/heads/main/Docs/Demo/ThirdPerson_Gameplay_Demo_2026-09-14.mp4) · [视频文件页](Docs/Demo/ThirdPerson_Gameplay_Demo_2026-09-14.mp4)
+
+2026-09-14 更新，时长约 4 分 52 秒，1920×1080 / 30 FPS，约 256 MiB。保留原始视频画质，使用 Git LFS 存储。
+
+视频采用 HEVC / H.265 编码；如果浏览器无法直接播放，请下载后使用支持该编码的本地播放器观看。
+
 ## 项目重点
 
 ### 1. 数据驱动的动作系统
