@@ -8,19 +8,18 @@
 class AWeaponActor;
 class UWeaponVFXProfile;
 class UNiagaraComponent;
-class UNiagaraSystem;
 class UCombatComponent;
 class UEquipmentComponent;
 class UActionComponent;
 
-/** Two reusable Niagara components; polls buff state at 20 Hz, ticks sockets only while visible. */
+/** 可选的自动武器特效管理器，复用 Niagara 组件并管理启停；主角默认关闭此通道，保留动画自带特效。 */
 UCLASS(ClassGroup=(Effects), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UWeaponVFXComponent : public UActorComponent
 {
     GENERATED_BODY()
 public:
     UWeaponVFXComponent();
-    /** Legacy automatic player effects are opt-in. Authored animation notifies own sword FX by default. */
+    /** 自动主角特效需要显式开启；默认由动画内的通知负责刀光，不能同时开启造成叠加。 */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon|Effects") bool bEnableAutomaticEffects = false;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon|Effects") TObjectPtr<UWeaponVFXProfile> Profile;
     void SetAttackActive(bool bActive);

@@ -5,7 +5,7 @@
 class UStaticMeshComponent;
 class UMaterialInstanceDynamic;
 class UMaterialInterface;
-/** Cosmetic ground warning. Collision/damage is exclusively owned by BossActionComponent. */
+/** Boss 地面预警的纯表现 Actor，控制范围提示和显示生命周期，不参与命中结算。 */
 UCLASS()
 class THIRDPERSON_API ABossTelegraph : public AActor
 {

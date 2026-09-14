@@ -3,7 +3,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SwordMotionAssetTools.generated.h"
 
-/** Local, additive repair of weapon tracks. Never rebuilds combat montages or character graphs. */
+/** 编辑器专用武器换手与骨骼修正工具；会保存对应剑术动画、骨架和预览配置，不应在运行时调用。 */
 UCLASS()
 class THIRDPERSON_API USwordMotionAssetTools : public UBlueprintFunctionLibrary
 {

@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,6 +15,7 @@ enum class EAttackNotifyWindowType : uint8
 	WeaponEffect
 };
 
+/** 动画窗口桥接：开启或关闭伤害、连招输入及可选武器特效窗口；结束通知只能影响所属攻击实例。 */
 UCLASS()
 class THIRDPERSON_API UAttackWindowNotifyState
 	: public UAnimNotifyState

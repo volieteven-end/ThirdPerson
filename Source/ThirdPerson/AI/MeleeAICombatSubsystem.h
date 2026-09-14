@@ -6,10 +6,7 @@
 
 class APawn;
 
-/**
- * Coordinates melee enemies targeting the same player.
- * It assigns positions around the target and limits simultaneous attackers.
- */
+/** 世界级近战协调器：分配包围位置与攻击令牌；每个世界独立，敌人退出交战时必须释放占用。 */
 UCLASS()
 class THIRDPERSON_API UMeleeAICombatSubsystem : public UWorldSubsystem
 {

@@ -1,3 +1,4 @@
+// Boss 实机回归：覆盖招式、受击、死亡、导航和脱战重入，检查不同帧率下的状态清理。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

@@ -11,7 +11,7 @@ class UCombatComponent;
 class ACharacter;
 class AAIController;
 
-/** Updates the distance bands used by a ranged-enemy Behavior Tree. */
+/** 远程战斗黑板更新：根据距离、视线和角色状态决定射击、后撤或追击，不在服务中直接结算伤害。 */
 UCLASS()
 class THIRDPERSON_API UBTService_UpdateRangedCombat : public UBTService
 {
@@ -68,7 +68,7 @@ private:
 	bool bRetreating = false;
 };
 
-/** Selects a navigable point away from the player with a small side-step. */
+/** 在导航可达区域选择远离目标的后撤点，为弓手保留射击距离。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_SelectRangedRetreatPosition : public UBTTaskNode
 {
@@ -88,7 +88,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat", meta = (ClampMin = "0.0", ClampMax = "1.0")) float SideStepAmount = 0.3f;
 };
 
-/** Starts a ranged montage and waits until its projectile-release cycle finishes. */
+/** 驱动一次远程攻击并等待动作结束；真正放箭由动画通知交给战斗组件处理。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_PerformRangedAttack : public UBTTaskNode
 {
@@ -117,7 +117,7 @@ private:
 	TWeakObjectPtr<UCombatComponent> ActiveCombatComponent;
 };
 
-/** PatrolPoints takes precedence; otherwise choose a reachable point inside the home radius. */
+/** 为远程敌人选择可达巡逻点，未发现目标时使用。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_SelectRangedPatrolLocation : public UBTTaskNode
 {

@@ -1,3 +1,4 @@
+// Boss 重试反馈回归：覆盖连续死亡重启与抬高出生位置后的恢复。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

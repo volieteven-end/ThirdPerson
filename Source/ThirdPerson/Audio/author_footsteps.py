@@ -1,3 +1,4 @@
+# 编辑器写入工具：为目标动画配置脚步通知，执行前核对资源范围并保存编辑器中的修改。
 """Run through UE's PythonScript commandlet after building the native audio classes.
 
 Only adds/replaces the TPC_Footsteps track on the two live locomotion blend spaces'

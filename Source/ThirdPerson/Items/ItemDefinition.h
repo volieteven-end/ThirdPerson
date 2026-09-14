@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,6 +15,7 @@ enum class EItemType : uint8
 	Material,
 	Consumable
 };
+/** 物品的共享静态配置，描述名称、类型和使用效果；持有数量由背包槽位保存。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UItemDefinition : public UPrimaryDataAsset
 {

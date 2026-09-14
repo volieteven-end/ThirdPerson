@@ -4,7 +4,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RangedAIAssetTools.generated.h"
 
-/** Repeatable migration of the existing ranged enemy, blackboard and behavior tree. */
+/** 编辑器专用远程 AI 资源工具；生成或配置黑板、行为树及测试资产，调用前确认目标资源可被修改。 */
 UCLASS()
 class THIRDPERSON_API URangedAIAssetTools : public UBlueprintFunctionLibrary
 {

@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "InventoryComponent.generated.h"
 class UItemDefinition;
+/** 背包槽位数据：物品定义、数量及实例标识，供背包逻辑和 UI 共同读取。 */
 USTRUCT( BlueprintType )
 struct FInventorySlot
 {
@@ -20,13 +20,13 @@ struct FInventorySlot
 };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryChanged);
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnConsumableUsed, UItemDefinition*, float, int32);
+/** 背包与药水逻辑：管理容量、拾取、使用和丢弃，并通过事件通知界面；显示层不直接修改槽位。 */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UInventoryComponent();
 	bool AddItem(
 	UItemDefinition* InItemDefinition,
@@ -49,11 +49,9 @@ public:
 	bool RefillHealthPotionsAfterDeath();
 	void RestoreRespawnInventory(const UInventoryComponent& Source);
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 	void TryUseFirstConsumable();
 	bool UseFirstConsumable();

@@ -4,7 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "LockOnMarkerWidget.generated.h"
 
-/** Small white core with a soft halo, drawn at the enemy's projected chest position. */
+/** 锁定目标的屏幕标记，跟随当前目标更新位置，不负责选择或切换锁定目标。 */
 UCLASS()
 class THIRDPERSON_API ULockOnMarkerWidget : public UUserWidget
 {

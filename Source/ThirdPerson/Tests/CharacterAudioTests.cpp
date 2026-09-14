@@ -1,3 +1,4 @@
+// 角色音频回归：核对脚步通知、声音资源与运动／战斗触发，防止重复播放。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

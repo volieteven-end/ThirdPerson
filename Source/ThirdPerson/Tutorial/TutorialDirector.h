@@ -15,6 +15,7 @@ class UItemDefinition;
 class UWeaponDefinition;
 struct FTutorialTravelSnapshot;
 
+/** 教程运行协调器：连接训练区域、陪练和真实战斗事件，持有课程进度并处理重试、练习及跨地图恢复。 */
 UCLASS()
 class THIRDPERSON_API ATutorialDirector : public AActor
 {

@@ -1,3 +1,4 @@
+// 武器换手回归：核对剑术骨骼、挂点和动画姿态，防止 UE4 转 UE5 后握剑方向错误。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "AnimPose.h"

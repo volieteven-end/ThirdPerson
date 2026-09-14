@@ -1,3 +1,4 @@
+// 完整下砸回归：在不同帧率验证低空／高空播放顺序与接地伤害时机，使用临时存档。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

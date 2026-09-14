@@ -1,3 +1,4 @@
+# 本地音频检查工具：分析录音数据与素材信息，不承担游戏内音效播放。
 """Check the real mixer WAVs from -CharacterAudioRender, not request telemetry."""
 import array
 import json

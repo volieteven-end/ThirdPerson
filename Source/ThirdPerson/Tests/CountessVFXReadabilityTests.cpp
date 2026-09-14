@@ -1,3 +1,4 @@
+// Countess 特效资源回归：检查远程与下砸表现所需资产和可读性参数。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "../Boss/BossDefinition.h"

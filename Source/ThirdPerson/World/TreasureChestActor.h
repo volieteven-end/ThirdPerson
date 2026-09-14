@@ -10,6 +10,7 @@ class UStaticMeshComponent;
 class UStaticMesh;
 class APickupActor;
 
+/** 宝箱交互和一次性奖励入口，根据开启状态选择模型；缺少开启模型时保留显示，不重复发奖。 */
 UCLASS()
 class THIRDPERSON_API ATreasureChestActor
 	: public AActor, public IInteractable

@@ -9,7 +9,7 @@ class USkeletalMeshComponent;
 class UWeaponDefinition;
 class UWeaponVFXComponent;
 
-/** Visual world representation of an equipped weapon. */
+/** 已装备武器的场景实例，负责模型挂载和表现入口；基础数值来自武器定义，伤害由战斗组件计算。 */
 UCLASS()
 class THIRDPERSON_API AWeaponActor : public AActor
 {

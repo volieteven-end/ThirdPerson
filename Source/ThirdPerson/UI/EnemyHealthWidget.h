@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,6 +7,7 @@
 
 class UHealthComponent;
 
+/** 普通敌人血条显示，绑定生命组件并在角色更换或销毁时解除旧绑定。 */
 UCLASS()
 class THIRDPERSON_API UEnemyHealthWidget : public UUserWidget
 {

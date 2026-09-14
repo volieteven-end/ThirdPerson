@@ -1,3 +1,4 @@
+// 教程纯逻辑回归：覆盖事件去重、课程解锁和落地命中安全，不靠模拟完成信号跳过玩法。
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "../Tutorial/TutorialCourse.h"

@@ -1,3 +1,4 @@
+// 下砸接触回归：覆盖敌人头顶与真实地面，防止胶囊碰撞提前结束下砸。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

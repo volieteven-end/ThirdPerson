@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -10,13 +9,13 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	const FText&,
 	PromptText);
 
+/** 选择当前可交互对象并更新提示；拾取优先考虑角色前方范围，其他交互遵守距离与目标规则。 */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UInteractionComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
 	UInteractionComponent();
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnInteractionPromptChanged OnInteractionPromptChanged;
@@ -32,7 +31,6 @@ public:
 	float PickupVerticalTolerance = 140.f;
 	virtual void TickComponent(float DeltaTime,ELevelTick TickType,FActorComponentTickFunction* ThisTickFunction) override;
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
 public:

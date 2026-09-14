@@ -1,3 +1,4 @@
+// Boss 移动回归：在 30／60／120 FPS 下检查起停、转向与移动动画衔接。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

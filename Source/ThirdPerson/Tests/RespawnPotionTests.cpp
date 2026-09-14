@@ -1,3 +1,4 @@
+// 存档与药水回归：检查药水使用、进度恢复和重生交接，测试数据与正式槽位分离。
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Engine/Engine.h"

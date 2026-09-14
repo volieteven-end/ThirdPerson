@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,6 +10,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(
 	int32,
 	NewDefeatedCount);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameWon);
+/** 普通关卡规则：管理玩家生成、敌人击杀与胜负；教程和竞技场通过派生类调整规则。 */
 UCLASS()
 class THIRDPERSON_API ATPCGameMode : public AGameModeBase
 {

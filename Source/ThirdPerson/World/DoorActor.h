@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,6 +10,7 @@ class UInventoryComponent;
 class USceneComponent;
 class UStaticMeshComponent;
 
+/** 可交互的门，结合背包条件处理开启并暴露门状态，供所属地图的检查点保存。 */
 UCLASS()
 class THIRDPERSON_API ADoorActor
 	: public AActor, public IInteractable

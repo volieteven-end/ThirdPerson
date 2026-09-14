@@ -6,7 +6,7 @@
 UENUM(BlueprintType)
 enum class ECombatHitOutcome : uint8 { Ignored, Hit, Blocked, Parried, Killed };
 
-/** One attempt, not a second health/damage system. All damage still goes through HealthComponent. */
+/** 一次命中尝试的数据：伤害、破韧、格挡规则与命中组；统一交给生命组件结算，不是第二套血量系统。 */
 USTRUCT(BlueprintType)
 struct THIRDPERSON_API FCombatHitSpec
 {
@@ -20,6 +20,7 @@ struct THIRDPERSON_API FCombatHitSpec
  UPROPERTY(EditAnywhere, BlueprintReadWrite) FName WindowId;
 };
 
+/** 命中结算结果，记录实际扣血及格挡、弹反、击杀等状态；反馈与奖励应读取结果而非请求伤害。 */
 USTRUCT(BlueprintType)
 struct THIRDPERSON_API FCombatHitResult
 {

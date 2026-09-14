@@ -3,7 +3,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TPCCharacterMovementComponent.generated.h"
 
-/** Landing inertia and a swept, dive-only escape from non-standable enemy capsules. */
+/** 主角物理移动扩展，处理动作相关的地面与空中移动约束，不代替动画通知决定伤害时刻。 */
 UCLASS()
 class THIRDPERSON_API UTPCCharacterMovementComponent : public UCharacterMovementComponent
 {

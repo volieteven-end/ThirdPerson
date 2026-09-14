@@ -4,7 +4,7 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "ComboChainPointNotify.generated.h"
 
-/** Place once at the earliest legal follow-up frame, on an attack montage. */
+/** 连招衔接通知：动画到达指定帧后才消费缓存输入，并验证蒙太奇实例，避免旧动作推进新连招。 */
 UCLASS(meta = (DisplayName = "Combo Chain Point"))
 class THIRDPERSON_API UComboChainPointNotify : public UAnimNotify
 {

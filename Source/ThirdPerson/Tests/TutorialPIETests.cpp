@@ -1,3 +1,4 @@
+// 教程实机回归：观察真实输入、移动与命中事件，验证课程推进、练习和重试，不重建课程资产。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

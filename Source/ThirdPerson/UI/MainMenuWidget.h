@@ -8,6 +8,7 @@ class UButton;
 class UTextBlock;
 class UBorder;
 
+/** 独立开始菜单：管理新游戏确认、继续存档校验和退出，不复用背包界面承载菜单。 */
 UCLASS()
 class THIRDPERSON_API UMainMenuWidget : public UUserWidget
 {
@@ -41,6 +42,7 @@ private:
     FDelegateHandle TravelFailureHandle;
 };
 
+/** 主菜单输入控制器，只创建菜单并管理鼠标和键盘焦点，不生成游戏 HUD。 */
 UCLASS()
 class THIRDPERSON_API AMainMenuController : public APlayerController
 {
@@ -50,6 +52,7 @@ protected:
     UPROPERTY(Transient) TObjectPtr<UMainMenuWidget> Menu;
 };
 
+/** 主菜单专用规则，只加载展示背景与菜单控制器，不启动战斗或教程。 */
 UCLASS()
 class THIRDPERSON_API AMainMenuGameMode : public AGameModeBase
 {

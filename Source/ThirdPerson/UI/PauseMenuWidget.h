@@ -8,6 +8,7 @@
 #include "Input/Reply.h"
 #include "PauseMenuWidget.generated.h"
 
+/** 暂停菜单和输入焦点处理，独立于背包分页，不承载物品操作。 */
 UCLASS()
 class THIRDPERSON_API UPauseMenuWidget : public UUserWidget
 {

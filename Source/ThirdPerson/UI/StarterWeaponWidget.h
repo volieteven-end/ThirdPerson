@@ -6,7 +6,7 @@
 
 class AStarterWeaponNPC;
 
-/** C++ bridge for a minimal two-button starter weapon selection widget. */
+/** 初始武器选择界面，展示可选配置并通知选择结果，不自行生成可战斗角色。 */
 UCLASS()
 class THIRDPERSON_API UStarterWeaponWidget : public UUserWidget
 {

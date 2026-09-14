@@ -1,3 +1,4 @@
+# 编辑器写入工具：会生成或保存教程场景和课程配置，日常回归不执行此脚本。
 """Run through UE's PythonScript commandlet after building ThirdPersonEditor.
 
 The native builder creates missing tutorial assets only; rerunning preserves the

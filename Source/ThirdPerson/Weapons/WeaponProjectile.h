@@ -7,7 +7,7 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UPrimitiveComponent;
 
-/** Swept sphere owns hit detection; attached meshes are cosmetic and never push characters. */
+/** 通用投射物：处理飞行、碰撞、单次命中和嵌入／回收；对象池复用前必须清除上次发射状态。 */
 UCLASS()
 class THIRDPERSON_API AWeaponProjectile : public AActor
 {

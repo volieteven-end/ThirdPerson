@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,6 +8,7 @@
 class USceneComponent;
 class AEnemyCharacter;
 
+/** 普通关卡的单敌人生成与补充点：敌人销毁后延迟重生；随机竞技场波次由独立管理器负责。 */
 UCLASS()
 class THIRDPERSON_API AEnemySpawner : public AActor
 {

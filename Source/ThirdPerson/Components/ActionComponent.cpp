@@ -68,6 +68,7 @@ bool UActionComponent::AuthorizeOrBuffer(ETPCActionIntent Intent)
     return false;
 }
 
+// —— 输入缓存有期限且只有一个待处理意图；派发前检查落地和动作权限。
 void UActionComponent::BufferIntent(ETPCActionIntent Intent, bool bRequireGround)
 {
     if (State == ETPCActionState::Dead || State == ETPCActionState::HitReact ||
@@ -86,6 +87,7 @@ void UActionComponent::ClearInputBuffers()
     ComboBuffer.Reset(InstanceId);
 }
 
+// —— 动作代际：先清理上一个动作，再生成新编号，阻止旧蒙太奇回调结束新动作。
 uint64 UActionComponent::BeginAction(ETPCActionState InState, const UActionDefinition* InDefinition)
 {
     if (State == ETPCActionState::Dead && InState != ETPCActionState::Dead) return 0;
@@ -129,6 +131,7 @@ void UActionComponent::EndAction(uint64 ExpectedId)
     ComboBuffer.Reset(InstanceId);
 }
 
+// —— 只清理当前动作的临时资源：命中窗口、拖尾、运动扭曲和根运动缩放。
 void UActionComponent::CleanupActionTransient()
 {
     bDamageActive = false;
@@ -207,7 +210,7 @@ void UActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
     if (Definition && !bCommitted && Definition->CommitTime >= 0.f && MontageInstanceId != INDEX_NONE &&
         GetMontagePosition() >= Definition->CommitTime)
     {
-        bCommitted = true; // Frame crossing, including low FPS, commits once per action generation.
+        bCommitted = true; // 低帧率跨过提交时刻也只对当前动作提交一次。
         if (auto* Combat = GetOwner()->FindComponentByClass<UCombatComponent>()) Combat->CommitSpecialMovement();
     }
     if (BufferedIntent == ETPCActionIntent::None || !GetWorld()) return;
@@ -220,7 +223,7 @@ void UActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
     }
     if (!CanRequest(BufferedIntent) || (BufferedIntent == ETPCActionIntent::PrimaryAttack && State != ETPCActionState::Free)) return;
     const auto Intent = BufferedIntent;
-    BufferedIntent = ETPCActionIntent::None; // Consume before entering any callback.
+    BufferedIntent = ETPCActionIntent::None; // 先消费缓存再进入回调，避免重入时重复派发。
     DispatchIntent(Intent);
 }
 

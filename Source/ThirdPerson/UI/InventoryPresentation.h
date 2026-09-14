@@ -11,6 +11,7 @@ class UTextureRenderTarget2D;
 class UMaterialInstanceDynamic;
 class UImage;
 
+/** 属性页的只读快照：分别显示装备基础攻击力与当前有效基础伤害，不包含单招倍率和目标减伤。 */
 USTRUCT(BlueprintType)
 struct FPlayerAttributeSnapshot
 {
@@ -30,6 +31,7 @@ struct FPlayerAttributeSnapshot
     UPROPERTY(BlueprintReadOnly) bool bDoubleJump=false;
     UPROPERTY(BlueprintReadOnly) FText Upgrades;
 };
+/** 把角色各组件汇总为属性快照，复用战斗系统的伤害计算，避免 UMG 再维护一套公式。 */
 UCLASS()
 class THIRDPERSON_API UInventoryPresentation : public UBlueprintFunctionLibrary
 {
@@ -39,7 +41,7 @@ public:
     static FText FormatAttributes(const FPlayerAttributeSnapshot& Value);
 };
 
-/** Only mesh components, never a gameplay pawn or a weapon actor. */
+/** 背包中的纯展示对象，仅使用模型和场景捕获组件；不是可战斗 Pawn，不触发伤害或动画特效通知。 */
 UCLASS()
 class THIRDPERSON_API AInventoryPreviewActor : public AActor
 {

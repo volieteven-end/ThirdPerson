@@ -19,7 +19,7 @@ enum class ETPCActionIntent : uint8 { None, PrimaryAttack, Dodge, Guard, Jump, D
 UENUM(BlueprintType)
 enum class ETPCHitReactionProfile : uint8 { Light, Launch, Knockback, Knockdown };
 
-/** Immutable authored move. Runtime state and hit sets belong to the owning components. */
+/** 单个招式的只读配置：保存动画、消耗、倍率与动作窗口；播放状态和命中记录由组件持有，不写回资产。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UActionDefinition : public UPrimaryDataAsset
 {
@@ -37,23 +37,22 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin="0")) float PoiseDamage = 10.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) ETPCHitReactionProfile HitReactionProfile = ETPCHitReactionProfile::Light;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TArray<FName> AllowedNextActions;
-    /** Montage timeline seconds, NOT elapsed wall time; playback speed stays independent. */
+    /** 使用蒙太奇时间轴上的秒数，不是真实经过时间；调整播放速度不会改变窗口在动画中的位置。 */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float CancelStart = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float CancelEnd = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TArray<ETPCActionIntent> CancelIntents;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float FacingEnd = 0.18f;
-    /** Independent of PlayRate: bound large native displacement without speeding the animation. */
+    /** 独立于播放速度缩放根运动位移，限制位移量时不加快动画。 */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin="0",ClampMax="1")) float RootMotionTranslationScale = 1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float CommitTime = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float InvulnerabilityStart = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) float InvulnerabilityEnd = -1.f;
-    /** Dodge montage time when its displacement is effectively finished and control returns.
-     * The visual recovery blends out independently; -1 uses the character's legacy fallback. */
+    /** 闪避位移结束并归还控制权的蒙太奇时刻；视觉收招独立混出，-1 沿用角色兼容回退。 */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(Units="s")) float ControlReturnTime = -1.f;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta=(ClampMin="0.02", ClampMax="0.25", Units="s")) float ControlReturnBlendTime = .10f;
 };
 
-/** Weapon-owned style. The old weapon montage array is used only when no action set exists. */
+/** 武器动作集合：将攻击意图和连招阶段映射到招式资产，不负责播放动画或结算伤害。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UActionSet : public UPrimaryDataAsset
 {
@@ -68,7 +67,7 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TObjectPtr<UActionDefinition> Buff;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TObjectPtr<UActionDefinition> DrawWeapon;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TObjectPtr<UActionDefinition> SheatheWeapon;
-    /** Forward, backward, left, right, matching the character-local quantization. */
+    /** 按前、后、左、右排列，与角色局部方向的量化结果一致。 */
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TArray<TObjectPtr<UActionDefinition>> Dodges;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TArray<TObjectPtr<UActionDefinition>> Turns;
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TObjectPtr<UAnimMontage> DoubleJumpMontage;

@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,14 +7,13 @@
 
 // This class does not need to be modified.
 UINTERFACE()
+/** 供 Unreal 反射识别的交互接口类型；实际交互约定由 IInteractable 定义。 */
 class UInteractable : public UInterface
 {
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
+/** 可交互对象的共用约定：提供提示文本并接收交互发起者，由各 Actor 实现具体行为。 */
 class THIRDPERSON_API IInteractable
 {
 	GENERATED_BODY()

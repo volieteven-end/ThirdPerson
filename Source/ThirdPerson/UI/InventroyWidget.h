@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -15,6 +14,7 @@ class UInventorySlotWidget;
 class ULevelComponent;
 class AInventoryPreviewActor;
 struct FLevelUpgradeChoice;
+/** 游戏 HUD 与背包窗口入口：保持已有蓝图绑定，通过分页显示背包或属性，关闭窗口时停止角色预览捕获。 */
 UCLASS()
 class THIRDPERSON_API UInventoryWidget : public UUserWidget
 {

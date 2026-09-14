@@ -14,7 +14,7 @@ class AArenaBounds;
 
 DECLARE_MULTICAST_DELEGATE(FOnBossStatusChanged);
 
-/** Sole skill owner. AI requests actions, animation supplies pose, this component owns hit windows. */
+/** Boss 遭遇与动作状态机：统一处理选招、对峙、阶段、破韧、伤害窗口和重置，防止多个状态同时控制角色。 */
 UCLASS(ClassGroup=(Boss), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UBossActionComponent : public UActorComponent
 {
@@ -25,7 +25,7 @@ public:
  virtual void EndPlay(const EEndPlayReason::Type Reason) override;
  virtual void TickComponent(float Delta, ELevelTick Type, FActorComponentTickFunction* Function) override;
  UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Boss") TObjectPtr<UBossDefinition> Definition;
- /** Explicit arena overrides radial/lost-sight disengagement. Unbound bosses retain legacy policy. */
+ /** 绑定场地后以边界判断脱战，替代距离与遮挡超时规则；未绑定的 Boss 保持旧规则。 */
  UPROPERTY(EditInstanceOnly, BlueprintReadOnly, Category="Boss|Arena") TObjectPtr<AArenaBounds> ArenaBoundary;
  UPROPERTY(EditAnywhere, Category="Boss|Arena", meta=(ClampMin="0.1")) float ArenaExitGrace = 2.f;
  UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category="Boss") EBossState State = EBossState::Dormant;

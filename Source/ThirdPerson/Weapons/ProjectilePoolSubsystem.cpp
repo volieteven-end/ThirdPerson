@@ -1,5 +1,6 @@
 #include "ProjectilePoolSubsystem.h"
 #include "WeaponProjectile.h"
+#include "../Components/CombatHitTypes.h"
 #include "Components/SphereComponent.h"
 #include "Engine/World.h"
 

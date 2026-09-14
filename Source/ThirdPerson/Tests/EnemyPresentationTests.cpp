@@ -1,3 +1,4 @@
+// 敌人表现回归：检查近战／远程血条、死亡动画和相机碰撞响应，包括运行时生成的敌人。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

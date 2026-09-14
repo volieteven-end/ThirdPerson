@@ -3,7 +3,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "SwordActionAssetTools.generated.h"
 
-/** Deterministic editor authoring for the sword design; runtime never constructs project assets. */
+/** 编辑器专用剑术资源工具；可重写招式、蒙太奇、动画图和输入配置。旧迁移入口会覆盖手工配置，日常运行不调用。 */
 UCLASS()
 class THIRDPERSON_API USwordActionAssetTools : public UBlueprintFunctionLibrary
 {

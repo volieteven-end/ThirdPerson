@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,6 +6,7 @@
 #include "InventorySlotWidget.generated.h"
 class UTexture2D;
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInventorySlotClicked,int32,SlotIndex);
+/** 背包单个格子的展示与点击入口，绑定物品数据并向上层窗口报告选择。 */
 UCLASS()
 class THIRDPERSON_API UInventorySlotWidget
 	: public UUserWidget

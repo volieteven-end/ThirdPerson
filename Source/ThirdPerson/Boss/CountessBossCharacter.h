@@ -3,7 +3,7 @@
 #include "../AI/EnemyCharacter.h"
 #include "CountessBossCharacter.generated.h"
 class UBossActionComponent;
-/** Data-only BP child is optional. Never inherits the old Paragon player/VR blueprint. */
+/** Countess 角色外壳：复用敌人基础能力，连接 Boss 动作、动画和状态显示。 */
 UCLASS()
 class THIRDPERSON_API ACountessBossCharacter : public AEnemyCharacter
 {

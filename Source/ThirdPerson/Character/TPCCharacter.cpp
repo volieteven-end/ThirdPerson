@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TPCCharacter.h"
@@ -60,7 +59,6 @@ namespace
 		return Origin;
 	}
 }
-// Sets default values
 ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
     : Super(ObjectInitializer.SetDefaultSubobjectClass<UTPCCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -106,7 +104,7 @@ ATPCCharacter::ATPCCharacter(const FObjectInitializer& ObjectInitializer)
 	UnarmedAnimationClass = UnarmedBP.Class;
 } 	
 
-// Called when the game starts or when spawned
+// —— 初始化：连接组件和存档交接；不同地图的角色状态由各自规则恢复。
 void ATPCCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -185,7 +183,7 @@ void ATPCCharacter::BeginPlay()
 
 
 
-// Called to bind functionality to input
+// —— 输入绑定：物理按键以输入映射资产为准，当前空格跳跃、Shift 点按闪避／长按快跑。
 void ATPCCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -317,6 +315,7 @@ void ATPCCharacter::FinishLookInput()
 	AccumulatedSwitchInput = 0.f;
 	bTargetSwitchLatched = false;
 }
+// —— 短按／长按判定：记录按下时间，松开与持续按住分别交给闪避和快跑逻辑。
 void ATPCCharacter::StartSprintOrDodgeInput()
 {
     if (bActionDead || !GetWorld()) return;
@@ -388,6 +387,7 @@ void ATPCCharacter::StopSprint()
 }
 
 
+// —— 死亡与重生：先停止战斗和输入，等待死亡表现，再交接角色进度。
 void ATPCCharacter::HandleDeath()
 {
 	if (bActionDead) { return; }
@@ -812,6 +812,7 @@ void ATPCCharacter::StopBlock()
 	}
 }
 
+// —— 战斗意图转发：角色选择意图，动作和战斗组件决定是否允许执行。
 void ATPCCharacter::HandlePrimaryAttack()
 {
 	if (ActionComponent && !ActionComponent->AuthorizeOrBuffer(ETPCActionIntent::PrimaryAttack)) return;
@@ -892,6 +893,7 @@ void ATPCCharacter::HandleAirDiveAttack()
     ApplyActionRotationPolicy();
 }
 
+// —— 接地处理：更新物理状态并通知战斗组件，不在这里强制跳到下砸收招。
 void ATPCCharacter::Landed(const FHitResult& Hit)
 {
 	if (CharacterAudioComponent) { CharacterAudioComponent->PlayLanding(FMath::Abs(GetVelocity().Z)); }
@@ -907,6 +909,7 @@ void ATPCCharacter::Landed(const FHitResult& Hit)
 }
 
 
+// —— 攻击朝向与吸附：服从动作转向窗口和根运动所有权。
 void ATPCCharacter::FaceAttackDirection()
 {
 	FVector DesiredDirection = FVector::ZeroVector;
@@ -1070,6 +1073,7 @@ bool ATPCCharacter::IsGuardHitReactionActive() const
         !HealthComponent->GetLastCombatHitResult().bGuardBroken && CombatComponent && CombatComponent->IsBlocking();
 }
 
+// —— 锁定相机：筛选合法目标、切换目标，并与角色转向规则协调。
 void ATPCCharacter::ToggleLockOn()
 {
 	if (LockedTarget)
@@ -1319,6 +1323,7 @@ bool ATPCCharacter::HasActionRotationOwner() const
 		(CombatComponent && (CombatComponent->IsMeleeAttackInProgress() || CombatComponent->IsRangedAttackInProgress()));
 }
 
+// —— 动作运动所有权：避免移动朝向、镜头和根运动同时控制旋转。
 void ATPCCharacter::ApplyActionRotationPolicy()
 {
 	UCharacterMovementComponent* Movement = GetCharacterMovement();

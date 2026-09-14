@@ -1,3 +1,4 @@
+// Boss 逻辑回归：验证实际伤害、破韧与阶段优先级、选招、取消及投射物回收。
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Engine/Engine.h"

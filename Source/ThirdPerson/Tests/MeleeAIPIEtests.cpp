@@ -1,3 +1,4 @@
+// 近战 AI 回归：核对保存的行为树以及包围、进攻名额和取消后的释放。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

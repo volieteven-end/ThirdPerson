@@ -68,6 +68,7 @@ void UArenaTravelSubsystem::ReportFailure(const FText& Message) const
 }
 FText UArenaTravelSubsystem::GetErrorText() const
 { return FPlatformTime::Seconds() < ErrorUntil ? LastError : FText::GetEmpty(); }
+// —— 正式进度保存：保留原检查点归属；教程训练属性不能覆盖正式装备和奖励。
 bool UArenaTravelSubsystem::SaveFormal(ATPCCharacter* Player, bool bRestoreVitals)
 {
     if (!Player || ATutorialDirector::Find(Player)) return false;
@@ -89,11 +90,12 @@ bool UArenaTravelSubsystem::SaveFormal(ATPCCharacter* Player, bool bRestoreVital
 bool UArenaTravelSubsystem::InitializeArenaPlayer(ATPCCharacter& Player)
 {
     if (!IsArena(&Player)) return false;
-    if (!LoadFormal()) return true; // Never fall through to legacy checkpoint teleport.
+    if (!LoadFormal()) return true; // 加载失败不能继续执行旧检查点传送，避免误用其他地图坐标。
     if (bFormalInitialized) TPCPlayerProgress::Apply(Player, *Formal);
     else { TPCPlayerProgress::Capture(Player, *Formal); bFormalInitialized = true; }
     return true;
 }
+// —— 传送事务：先校验目的地图并保存，再设置一次性交接信息和打开地图。
 bool UArenaTravelSubsystem::Travel(ATPCCharacter* Player, const FString& InMap, FName Start, bool bRetry)
 {
     const FString Map=UWorld::RemovePIEPrefix(InMap);
@@ -123,6 +125,7 @@ void UArenaTravelSubsystem::ConsumeArrival(const UObject* Context)
 {
     if (!GetArrivalTag(Context).IsNone()) { bTravelPending = false; PendingStart = NAME_None; PendingMap.Reset(); }
 }
+// —— 回到教程只恢复课程值数据，不复用旧世界的敌人指针或动作实例。
 bool UArenaTravelSubsystem::RestoreTutorial(ATutorialDirector& Director)
 {
     if (!bResumeTutorial) return false;

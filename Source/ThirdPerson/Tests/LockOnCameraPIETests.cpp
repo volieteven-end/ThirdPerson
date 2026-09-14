@@ -1,3 +1,4 @@
+// 锁定相机回归：在不同帧率检查目标切换、自由观察和镜头跟随，避免锁定强夺镜头控制。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

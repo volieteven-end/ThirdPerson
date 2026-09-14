@@ -7,6 +7,7 @@
 class UNiagaraSystem;
 class UParticleSystem;
 
+/** 自动武器特效的共享配置，保存各档位系统与颜色尺寸；原资源包保持独立。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UWeaponVFXProfile : public UDataAsset
 {

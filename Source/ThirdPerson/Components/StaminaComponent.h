@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -8,6 +7,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStaminaChanged, float, CurrentStamina, float, MaxStamina);
 
+/** 耐力消耗与恢复组件，提供动作消耗校验和数值变化通知，不直接决定动作播放。 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UStaminaComponent : public UActorComponent
 {

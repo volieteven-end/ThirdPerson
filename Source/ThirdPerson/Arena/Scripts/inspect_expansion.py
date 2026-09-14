@@ -1,3 +1,4 @@
+# 只读检查双向入口与竞技场资源，输出场地配置供人工核对。
 """Read-only geometry/portal audit for the additive arena expansion."""
 import unreal
 

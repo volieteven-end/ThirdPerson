@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-#include "InteractionComponent.h"
+﻿#include "InteractionComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
 #include "GameFramework/Pawn.h"
@@ -8,14 +7,12 @@
 #include "ThirdPerson/Items/PickupActor.h"
 #include "EngineUtils.h"
 
-// Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
 
-// Called when the game starts
 void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();

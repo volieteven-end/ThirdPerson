@@ -6,8 +6,7 @@
 
 class ATPCCharacter;
 
-/** Scoped to one synchronous RestartPlayer call, never shared across PIE worlds.
- * Pawn BeginPlay runs before possession, so the controller cannot carry this handoff. */
+/** 单次同步重生的世界内交接器：Pawn 的 BeginPlay 早于占有，故在此暂存旧角色来源，不跨世界共享。 */
 UCLASS()
 class THIRDPERSON_API UTPCRespawnSubsystem : public UWorldSubsystem
 {

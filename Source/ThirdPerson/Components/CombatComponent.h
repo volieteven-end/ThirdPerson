@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -32,6 +31,7 @@ enum class EActiveCombatAttackType : uint8
     DrawWeapon,
     SheatheWeapon
 };
+/** 战斗执行层：播放攻击、管理防御与命中窗口、计算有效伤害并发起命中；最终扣血统一由生命组件处理。 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UCombatComponent : public UActorComponent
 {
@@ -40,15 +40,15 @@ class THIRDPERSON_API UCombatComponent : public UActorComponent
 public:
     void SetAttackTraceDebugVisible(bool bVisible) { bDrawHandTraceDebug = bVisible; }
 	UCombatComponent();
-	/** Native hook used by the owning character for facing and target magnetism. */
+	/** 供角色监听的原生事件，用于攻击朝向与目标吸附。 */
 	FOnMeleeAttackStartedNative OnMeleeAttackStarted;
 	FOnMeleeHitResolvedNative OnMeleeHitResolved;
 	UFUNCTION(BlueprintPure, Category="Combat|Attributes") float GetPresentationDamage() const { return GetEffectiveDamage(); }
 
 	void TryAttack();
-	/** AI-facing ranged entry point. The projectile is aimed at TargetActor. */
+	/** AI 发起远程攻击的入口，投射物瞄准 TargetActor。 */
 	bool TryRangedAttackAt(AActor* TargetActor);
-	/** Called by the ranged release AnimNotify at the authored bow-release frame. */
+	/** 由远程攻击动画通知在松弦帧调用，不在起手时提前发射。 */
 	void ReleaseRangedProjectile();
 	bool IsRangedAttackInProgress() const { return bRangedAttackInProgress; }
 	void TryUppercutAttack();
@@ -58,15 +58,15 @@ public:
     bool TryToggleWeapon();
     UFUNCTION(BlueprintPure, Category="Combat|Buff") float GetSwordBuffMultiplier() const;
     void ClearSwordBuff() { SwordBuffExpiresAt = -1.f; SwordBuffMultiplier = 1.f; }
-    /** Call at the montage's commit notify; stale montage instances are discarded. */
+    /** 在蒙太奇提交通知中调用，丢弃已过期实例的回调。 */
     void NotifyActionCommit(UAnimSequenceBase* Animation, int32 MontageInstanceId);
 	void CommitSpecialMovement();
 	void UpdateDiveApproach();
 	const UActionSet* GetActionSet() const;
 	void TryAirAttack();
-	/** A separate input action; normal air attacks never force a downward launch. */
+	/** 独立的下砸输入；普通空中攻击不会强制向下发射角色。 */
 	void TryAirDiveAttack();
-	/** True until physical ground contact; enemy capsules must not end a dive. */
+	/** 真实接触地面前保持下落状态；敌人胶囊体不能被当作下砸终点。 */
 	bool IsAirDiveDescending() const
 	{
 		return bCombatEnabled && bMeleeAttackInProgress &&
@@ -75,7 +75,7 @@ public:
 	void HandleOwnerLanded();
 	void CancelActiveAttack(float BlendOutTime = 0.1f);
 
-    // Only the first dash of a normal ground combo may preserve its next stage.
+    // 普通地面连招仅第一次闪避可以保留待续阶段。
     void CancelAttackForDash(float BlendOutTime);
     bool FinishDashForCombo(bool bInterrupted, float ContinueWindow);
     bool QueueAttackDuringDash();
@@ -105,7 +105,7 @@ public:
 	void MultiplyDamage(float Multiplier);
 	void MultiplyAttackCooldown(float Multiplier);
 	void MultiplyMeleeReach(float Multiplier);
-	/** Baseline tuning, separate from permanent upgrade multipliers. */
+	/** 基础配置，与永久升级倍率分开保存和计算。 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Combat", meta=(ClampMin="0.1"))
 	float BaseMeleeReachScale = 1.f;
 	void RestoreRespawnAttributes(const UCombatComponent& Source);
@@ -113,6 +113,7 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Combat|Combo")
 	bool HasBufferedComboInput() const;
 protected:
+	/** 无可用武器时的基础伤害回退，不与武器基础伤害相加。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	float Damage = 25.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
@@ -121,16 +122,17 @@ protected:
 	float AttackRadius = 50.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat")
 	float AttackCooldown = 0.5f;
+	/** 保留蓝图序列化字段；当前原生实现未读取此值，不作为现行调参入口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Animation")
 	TArray<TObjectPtr<UAnimMontage>> AttackMontages;
-	/** Used for unarmed attacks or weapons without their own hit effect. */
+	/** 用于徒手攻击或没有专属命中特效的武器。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Effects")
 	TObjectPtr<UParticleSystem> DefaultMeleeHitEffect;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Special Attacks")
 	TObjectPtr<UAnimMontage> UppercutMontage;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Special Attacks")
 	TObjectPtr<UAnimMontage> AirAttackMontage;
-	/** Optional ordered air combo. Empty uses the existing single AirAttackMontage. */
+	/** 可选的有序空中连招；为空时回退到原有单个空中攻击蒙太奇。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Air Attacks")
 	TArray<TObjectPtr<UAnimMontage>> AirAttackMontages;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Air Attacks")
@@ -150,24 +152,25 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Special Attacks", meta = (ClampMin = "0.0"))
 	float UppercutLaunchVelocity = 520.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Special Attacks", meta = (ClampMin = "0.0"))
-	/** Legacy property name retained for BP values; applies ONLY to Air Dive. */
+	/** 为保留蓝图已存数值而沿用旧字段名；该向下速度只作用于下砸。 */
 	float AirAttackDownwardVelocity = 650.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Block", meta = (ClampMin = "0.0", ClampMax = "1.0"))
 	float BlockDamageMultiplier = 0.25f;
-	/** Total frontal blocking arc in degrees. */
+	/** 正面可格挡扇形的总角度，单位为度。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Block", meta = (ClampMin = "0.0", ClampMax = "360.0"))
 	float BlockArcDegrees = 120.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Block", meta = (ClampMin = "0.0"))
 	float BlockStaminaCostPerHit = 15.f;
-	/** Initial perfect-parry window. A quick tap keeps this window alive after release. */
+	/** 起始完美弹反窗口；快速点按松开后仍保留尚未结束的窗口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Block", meta = (ClampMin = "0.05", ClampMax = "1.0"))
 	float PerfectParryWindow = 0.22f;
+	/** 保留蓝图序列化字段；当前原生实现未读取此值，不作为现行调参入口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Animation")
 	float ComboResetTime = 1.f;
-	/** Accept the next attack press before the montage's ComboInput window opens. */
+	/** 允许在动画的连招输入窗口打开前缓存下一次攻击按键。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Combo")
 	bool bAllowEarlyComboBuffer = true;
-	/** Migration switch only. Prefer an explicit Combo Chain Point notify. */
+	/** 仅用于兼容旧资源；新动作使用明确的连招衔接点通知。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Combo")
 	bool bChainOnLegacyComboWindowEnd = false;
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Debug")

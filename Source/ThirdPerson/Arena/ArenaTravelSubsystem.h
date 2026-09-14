@@ -6,7 +6,7 @@ class ATPCCharacter;
 class UTPCSaveGame;
 class ATutorialDirector;
 
-/** Session-only tutorial state; contains no world actor or action-instance references. */
+/** 跨地图暂存的教程进度，仅保存可恢复的值数据；不携带旧世界 Actor 或正在播放的动作。 */
 USTRUCT()
 struct FTutorialTravelSnapshot
 {
@@ -20,6 +20,7 @@ struct FTutorialTravelSnapshot
     UPROPERTY() bool bPractice = false;
 };
 
+/** 游戏会话级地图交接：分离训练状态和正式进度，先校验并保存再传送，防止重复交互和坐标串图。 */
 UCLASS()
 class THIRDPERSON_API UArenaTravelSubsystem : public UGameInstanceSubsystem
 {

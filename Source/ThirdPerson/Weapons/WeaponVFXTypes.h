@@ -1,3 +1,4 @@
+// 可选自动武器特效的风格枚举；动画自带特效不依赖此枚举重新生成。
 #pragma once
 
 #include "CoreMinimal.h"

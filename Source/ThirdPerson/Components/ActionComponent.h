@@ -8,7 +8,7 @@
 
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnActionPlaybackStarted, uint64, ETPCActionState, const UActionDefinition*);
 
-/** The one full-body action channel. Combat owns traces/damage; Character owns physical movement. */
+/** 主角全身动作的唯一状态通道：管理输入缓存、动作实例、取消和转向权限；战斗组件负责命中，角色负责物理移动。 */
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UActionComponent : public UActorComponent
 {
@@ -27,12 +27,12 @@ public:
     UFUNCTION(BlueprintPure) float GetMontagePosition() const;
     uint64 GetActionInstanceId() const { return InstanceId; }
     int32 GetMontageInstanceId() const { return MontageInstanceId; }
-    /** Observation only: broadcast after a real montage instance has been bound. */
+    /** 只用于观察：绑定实际蒙太奇实例后才广播，不允许监听者代替动作系统发起播放。 */
     FOnActionPlaybackStarted OnActionPlaybackStarted;
     bool AuthorizeOrBuffer(ETPCActionIntent Intent);
     void BufferIntent(ETPCActionIntent Intent, bool bRequireGround = false);
     void ClearInputBuffers();
-    /** Called BEFORE playback. Old callbacks cannot end the new generation. */
+    /** 播放前调用并生成新的动作编号，旧回调不能结束新动作。 */
     uint64 BeginAction(ETPCActionState InState, const UActionDefinition* InDefinition = nullptr);
     void BindMontage(uint64 ExpectedId, UAnimMontage* Montage, int32 InMontageInstanceId);
     void EndAction(uint64 ExpectedId);

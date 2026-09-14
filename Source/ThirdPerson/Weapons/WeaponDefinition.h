@@ -18,7 +18,7 @@ enum class EWeaponType : uint8
 	Ranged
 };
 
-/** Data shared by weapon pickups, equipment, combat and UI. */
+/** 武器共享配置：保存基础伤害、招式集合、挂载和模型信息；运行中的 Buff 与连招状态由组件持有。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UWeaponDefinition : public UPrimaryDataAsset
 {

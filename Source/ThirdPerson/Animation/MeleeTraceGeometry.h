@@ -1,3 +1,4 @@
+// 无世界状态的近战几何辅助函数，统一从角色原点缩放检测距离，避免不同攻击路径使用不同范围公式。
 #pragma once
 #include "CoreMinimal.h"
 

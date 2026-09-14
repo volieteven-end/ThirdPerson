@@ -1,3 +1,4 @@
+// 角色进度的读取／恢复接口，仅处理可保存的角色数据；地图位置和门状态由所属地图流程负责。
 #pragma once
 #include "CoreMinimal.h"
 class ATPCCharacter;

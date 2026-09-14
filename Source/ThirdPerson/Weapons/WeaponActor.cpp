@@ -27,7 +27,7 @@ AWeaponActor::AWeaponActor()
 void AWeaponActor::InitializeWeapon(UWeaponDefinition* InWeaponDefinition)
 {
 	WeaponDefinition = InWeaponDefinition;
-    // A weapon's helper boxes/spheres must never be rendered; this does not disable their collision.
+    // 隐藏武器辅助盒体／球体的显示，但不改变其碰撞功能。
     TInlineComponentArray<UShapeComponent*> Shapes(this);
     for (auto* Shape : Shapes) { Shape->SetHiddenInGame(true); Shape->SetVisibility(false); }
 }

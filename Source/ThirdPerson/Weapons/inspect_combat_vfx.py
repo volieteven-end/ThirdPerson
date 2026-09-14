@@ -1,3 +1,4 @@
+# 只读检查特效源资源与配置；不调用构建入口、不保存动画或特效资产。
 """Read-only UE commandlet audit of the external assets needed by the combat VFX copies."""
 import unreal
 

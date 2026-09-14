@@ -5,7 +5,7 @@
 #include "Containers/Ticker.h"
 #include "HitFeedbackComponent.generated.h"
 
-/** Cosmetic, real-time hit stop. Never owns damage, montages or game pause. */
+/** 监听已结算的有效近战命中，提供短暂全局慢动作；按真实时间恢复，并避免覆盖其他系统后设的倍率。 */
 UCLASS(ClassGroup=(Combat), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UHitFeedbackComponent : public UActorComponent
 {

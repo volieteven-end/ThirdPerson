@@ -3,7 +3,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "TutorialAssetTools.generated.h"
 
-/** Creates missing tutorial assets only. Existing maps and material edits are never regenerated. */
+/** 编辑器专用教程资源工具；会保存课程、训练场地图及关联配置，日常检查不应执行重建入口。 */
 UCLASS()
 class THIRDPERSON_API UTutorialAssetTools : public UBlueprintFunctionLibrary
 {

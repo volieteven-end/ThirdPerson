@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,6 +10,7 @@ class UPlayerDeathWidget;
 class UInventoryWidget;
 class UHealthPotionWidget;
 class UPauseMenuWidget;
+/** 玩家输入与界面的协调层：管理 HUD、背包、暂停和死亡界面的焦点，以及重生后的重新绑定。 */
 UCLASS()
 class THIRDPERSON_API ATPCPlayerController : public APlayerController
 {

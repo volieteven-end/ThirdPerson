@@ -4,7 +4,7 @@
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "ActionCommitNotify.generated.h"
 
-/** Commits movement, buff or equipment once on the owning action instance. */
+/** 动作提交通知：在动画指定帧落实下砸、Buff 或收拔刀等行为；过期蒙太奇通知不生效。 */
 UCLASS(meta=(DisplayName="Action Commit"))
 class THIRDPERSON_API UActionCommitNotify : public UAnimNotify
 {

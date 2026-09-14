@@ -6,6 +6,7 @@
 class UBoxComponent;
 class AEnemyCharacter;
 
+/** 可编辑的战斗场边界，提供包含判断和内部位置约束；用于 Boss 脱战判断及竞技场生成位置筛选。 */
 UCLASS()
 class THIRDPERSON_API AArenaBounds : public AActor
 {
@@ -18,6 +19,7 @@ public:
     FVector ClampToInterior(const FVector& Position, float Margin = 100.f) const;
 };
 
+/** 通过交互触发的跨地图入口，把目的地图和抵达标签交给会话子系统；不触发普通关卡通关。 */
 UCLASS()
 class THIRDPERSON_API AArenaPortal : public AActor, public IInteractable
 {
@@ -33,6 +35,7 @@ public:
     FString GetDestinationMap() const;
 };
 
+/** 随机波次管理：安全区外启动挑战，跟踪实际生成和存活的敌人，全部击败后保存并等待下一波。 */
 UCLASS()
 class THIRDPERSON_API AArenaWaveDirector : public AActor
 {
@@ -44,7 +47,7 @@ public:
     UPROPERTY(EditAnywhere, Category="Arena") TSubclassOf<AEnemyCharacter> RangedClass;
     UPROPERTY(EditAnywhere, Category="Arena", meta=(ClampMin="0.1")) float WaveDelay = 3.f;
     UPROPERTY(EditAnywhere, Category="Arena", meta=(ClampMin="200")) float PlayerSpawnClearance = 700.f;
-    UPROPERTY(EditAnywhere, Category="Arena") int32 RandomSeed = 0; // Zero selects a new session seed.
+    UPROPERTY(EditAnywhere, Category="Arena") int32 RandomSeed = 0; // 为零时使用新的会话随机种子。
     int32 GetWave() const { return Wave; }
     int32 GetRemaining() const;
     FText GetStatusText() const;

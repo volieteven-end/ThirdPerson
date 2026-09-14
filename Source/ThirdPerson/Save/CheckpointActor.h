@@ -1,16 +1,14 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../World/DoorActor.h"
-#include "EngineUtils.h"
 #include "CheckpointActor.generated.h"
 
 class UBoxComponent;
 class UPrimitiveComponent;
 class USceneComponent;
+/** 普通关卡检查点：玩家进入后保存所属地图、重生位置和角色进度，并通知关卡表现。 */
 UCLASS()
 class THIRDPERSON_API ACheckpointActor : public AActor
 {

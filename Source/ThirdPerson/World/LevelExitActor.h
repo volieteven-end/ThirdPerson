@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -10,6 +9,7 @@
 class UBoxComponent;
 class UStaticMeshComponent;
 
+/** 普通关卡通关出口，遵守关卡胜利条件；教程与竞技场往返使用独立传送入口。 */
 UCLASS()
 class THIRDPERSON_API ALevelExitActor : public AActor,public IInteractable
 {

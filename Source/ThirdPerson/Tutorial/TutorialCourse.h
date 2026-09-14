@@ -15,6 +15,7 @@ enum class ETutorialSignal : uint8
 UENUM(BlueprintType)
 enum class ETutorialLessonStatus : uint8 { Locked, Available, Completed, Skipped };
 
+/** 单个教程目标的事件类型、目标标识和计数要求，供课程进度规则匹配。 */
 USTRUCT(BlueprintType)
 struct FTutorialObjective
 {
@@ -26,6 +27,7 @@ struct FTutorialObjective
     UPROPERTY(EditAnywhere, BlueprintReadOnly) FName TargetId;
 };
 
+/** 一节课程的静态说明与目标列表，运行中完成情况存放在进度结构而非资产内。 */
 USTRUCT(BlueprintType)
 struct FTutorialLesson
 {
@@ -37,6 +39,7 @@ struct FTutorialLesson
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<FTutorialObjective> Objectives;
 };
 
+/** 课程配置资产，定义课程顺序、目标和返回地图；默认课程同时供编辑器工具和测试使用。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UTutorialCourse : public UDataAsset
 {
@@ -44,17 +47,17 @@ class THIRDPERSON_API UTutorialCourse : public UDataAsset
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TArray<FTutorialLesson> Lessons;
     UPROPERTY(EditAnywhere, BlueprintReadOnly) TSoftObjectPtr<UWorld> ReturnMap;
-    /** Default curriculum is shared by the asset builder and deterministic tests. */
+    /** 默认课程由资源工具和确定性测试共用。 */
     static void PopulateDefaults(UTutorialCourse& Course);
     bool IsValidCourse(FString& Error) const;
 };
 
 enum class ETutorialProgressResult : uint8 { Ignored, Counted, ObjectiveCompleted, LessonCompleted };
 
-/** Pure progress rules: no input simulation, actor mutation, disk IO or timers. */
+/** 不依赖世界的课程进度规则：计数、去重、重试和解锁；不模拟输入、不修改 Actor、不执行磁盘读写。 */
 struct THIRDPERSON_API FTutorialProgress
 {
-    const UTutorialCourse* Course = nullptr; // Owned by the world's director.
+    const UTutorialCourse* Course = nullptr; // 课程对象由当前世界的导演持有。
     TArray<ETutorialLessonStatus> Status;
     int32 Lesson = INDEX_NONE;
     int32 Objective = 0;

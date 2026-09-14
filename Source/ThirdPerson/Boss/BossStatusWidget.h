@@ -3,6 +3,7 @@
 #include "Blueprint/UserWidget.h"
 #include "BossStatusWidget.generated.h"
 class ACountessBossCharacter;
+/** Boss 血量、韧性和状态显示，从 Boss 组件读取数据，不改变遭遇状态。 */
 UCLASS()
 class THIRDPERSON_API UBossStatusWidget : public UUserWidget
 {

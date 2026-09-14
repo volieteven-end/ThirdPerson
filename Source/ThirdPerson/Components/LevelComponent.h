@@ -15,6 +15,7 @@ enum class ELevelUpgradeType : uint8
 	IronSkin
 };
 
+/** 一次升级选项的描述与数值配置，选择后由等级组件应用对应效果。 */
 USTRUCT(BlueprintType)
 struct FLevelUpgradeChoice
 {
@@ -44,6 +45,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	const FLevelUpgradeChoice&, ChoiceB,
 	const FLevelUpgradeChoice&, ChoiceC);
 
+/** 管理等级、经验和永久升级，应用选择后通知其他组件及 UI；存档保存进度而非界面状态。 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API ULevelComponent : public UActorComponent
 {

@@ -1,10 +1,10 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
-#include "../Components/CombatHitTypes.h"
 #include "ProjectilePoolSubsystem.generated.h"
 class AWeaponProjectile;
-/** World-local, bounded pool. Active / embedded arrows are never stolen for another shot. */
+struct FCombatHitSpec;
+/** 世界内有上限的投射物池；按具体类复用，正在飞行或嵌入的投射物不会被其他发射请求抢占。 */
 UCLASS()
 class THIRDPERSON_API UProjectilePoolSubsystem : public UWorldSubsystem
 {

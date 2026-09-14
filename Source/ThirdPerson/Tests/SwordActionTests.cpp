@@ -1,3 +1,4 @@
+// 剑术配置与权限回归：核对招式资产、连招规则、输入缓存和失败路径；资源断言失败需结合当前设计判断。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Misc/PackageName.h"

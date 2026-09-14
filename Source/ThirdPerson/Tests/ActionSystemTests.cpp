@@ -1,3 +1,4 @@
+// 动作规则回归：覆盖缓存有效期、动作代际、闪避续接和根运动交接；测试由框架注册，不是未使用代码。
 #if WITH_DEV_AUTOMATION_TESTS
 
 #include "Misc/AutomationTest.h"

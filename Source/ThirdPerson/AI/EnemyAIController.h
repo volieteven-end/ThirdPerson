@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -11,6 +10,7 @@ class UBehaviorTree;
 class UAIPerceptionComponent;
 class UAISenseConfig_Sight;
 
+/** 普通敌人的感知与行为树入口，维护目标和巡逻状态；近战与远程行为由对应节点实现。 */
 UCLASS()
 class THIRDPERSON_API AEnemyAIController
 	: public AAIController

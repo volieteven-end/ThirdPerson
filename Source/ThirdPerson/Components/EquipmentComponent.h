@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 	UWeaponDefinition*, WeaponDefinition,
 	AWeaponActor*, WeaponActor);
 
+/** 管理装备定义与实际武器 Actor，通知换装并切换手持／背挂；不把装备基础数值直接当作最终伤害。 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UEquipmentComponent : public UActorComponent
 {
@@ -26,7 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Equipment")
 	void UnequipWeapon();
 
-    /** Animation commit moves the same actor between its hand and back mounts. */
+    /** 动画提交时将同一个武器 Actor 切换到手部或背部挂点。 */
     UFUNCTION(BlueprintCallable, Category = "Equipment") void SetWeaponDrawn(bool bDrawn);
     UFUNCTION(BlueprintPure, Category = "Equipment") bool IsWeaponDrawn() const { return bWeaponDrawn; }
 
@@ -43,7 +44,7 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	/** Leave empty on the player to start unarmed. Useful for armed enemies and testing. */
+	/** 主角留空则以徒手开始；预装备主要用于敌人和测试。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Equipment")
 	TObjectPtr<UWeaponDefinition> StartingWeapon;
 

@@ -21,6 +21,7 @@ enum class EBossHitShape : uint8 { Blades, Radial, Projectile };
 UENUM(BlueprintType)
 enum class EBossLocomotionState : uint8 { Idle, Start, Moving, Stop, Pivot, Turn };
 
+/** Boss 招式的一个动画阶段，配置命中窗口、移动与转向时机；运行时进度不保存在资产内。 */
 USTRUCT(BlueprintType)
 struct THIRDPERSON_API FBossActionStage
 {
@@ -48,6 +49,7 @@ struct THIRDPERSON_API FBossActionStage
  bool ReadHitWindow(float& Start,float& End) const;
 };
 
+/** Boss 一项招式的完整配置：距离、权重、冷却、预警、收招及各动画阶段。 */
 USTRUCT(BlueprintType)
 struct THIRDPERSON_API FBossActionDefinition
 {
@@ -63,7 +65,7 @@ struct THIRDPERSON_API FBossActionDefinition
  UPROPERTY(EditAnywhere, BlueprintReadOnly) float PhaseTwoWeight = 35.f;
 };
 
-/** First playable tuning; all source animations remain in the Paragon package. */
+/** Countess 的共享配置资产，集中保存招式、动画、表现和阶段参数；当前状态由 Boss 动作组件持有。 */
 UCLASS(BlueprintType)
 class THIRDPERSON_API UBossDefinition : public UDataAsset
 {

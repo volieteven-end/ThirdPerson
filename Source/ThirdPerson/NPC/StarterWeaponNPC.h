@@ -18,7 +18,7 @@ enum class EStarterWeaponChoice : uint8
 	Ranged
 };
 
-/** Interaction-only starter NPC. Its mesh, dialogue art and animations are optional. */
+/** 初始武器选择交互入口，展示选择界面并通过装备组件落实选择。 */
 UCLASS()
 class THIRDPERSON_API AStarterWeaponNPC : public AActor, public IInteractable
 {

@@ -1,3 +1,4 @@
+// 投射物回归：验证单次伤害、友军过滤、碰撞约束和回收后的完整状态重置。
 #if WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Engine/Engine.h"

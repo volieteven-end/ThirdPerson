@@ -18,6 +18,7 @@ enum class ETPCAudioCue : uint8
 	SwordLight, SwordHeavy, FleshLight, FleshHeavy, Block, Parry, PlayerHurt
 };
 
+/** 一组同用途音效及其随机选择配置，供角色音频组件读取。 */
 USTRUCT(BlueprintType)
 struct FTPCAudioBank
 {
@@ -25,7 +26,7 @@ struct FTPCAudioBank
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly) TArray<TObjectPtr<USoundBase>> Sounds;
 };
 
-/** Native instrumentation describes a request, not proof that a speaker rendered it. */
+/** 一次声音播放请求：携带事件、位置和动作来源，用于去重与播放策略选择。 */
 struct FTPCAudioRequest
 {
 	ETPCAudioCue Cue;
@@ -38,7 +39,7 @@ struct FTPCAudioRequest
 };
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnTPCAudioRequested, const FTPCAudioRequest&);
 
-/** Animation notifies own foot/swing timing. Resolved damage owns impact/pain audio. */
+/** 角色声音的统一入口：协调脚步、运动和战斗反馈，管理重复请求及音效生命周期，不改变战斗结算。 */
 UCLASS(ClassGroup=(Audio), meta=(BlueprintSpawnableComponent))
 class THIRDPERSON_API UTPCCharacterAudioComponent : public UActorComponent
 {

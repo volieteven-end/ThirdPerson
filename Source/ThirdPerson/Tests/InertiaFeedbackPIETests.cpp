@@ -1,3 +1,4 @@
+// 惯性与箭矢表现回归：检查移动收尾、空中姿态和投射物显示。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

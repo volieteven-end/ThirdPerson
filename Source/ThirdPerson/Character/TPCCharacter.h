@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -30,13 +29,13 @@ struct FInputActionValue;
 
 enum class ETPCMotionAction : uint8 { None, Dodge, Turn };
 
+/** 主角装配与运动入口：连接输入、相机、移动和各功能组件；动作、战斗、背包及存档各自保留独立职责。 */
 UCLASS()
 class THIRDPERSON_API ATPCCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ATPCCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
     UFUNCTION(BlueprintCallable, Category="Death") void RestartAfterDeath();
     /** Switch only when no full-body action owns the current animation instance. */
@@ -44,7 +43,6 @@ public:
     UPROPERTY(EditDefaultsOnly, Category="Animation|Equipment") TSubclassOf<UAnimInstance> UnarmedAnimationClass;
 	
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void Landed(const FHitResult& Hit) override;
     virtual void OnJumped_Implementation() override;
@@ -62,7 +60,6 @@ protected:
 	FTimerHandle RespawnTimerHandle;
 public:	
 
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	TObjectPtr<USpringArmComponent> CameraBoom;
@@ -192,6 +189,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Combat|Attack Assist", meta = (ClampMin = "0.0"))
 	float AttackFallbackTurnRate = 540.f;
 
+	/** 保留蓝图序列化字段；当前原生实现未读取此值，不作为现行调参入口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float DashStrength = 900.f;
 	/** Sprint speed; StopSprint restores the pre-sprint CharacterMovement speed. */
@@ -207,6 +205,7 @@ public:
     float LandingInertiaDrag = 4.f;
     bool IsLandingInertiaActive() const;
 
+	/** 保留蓝图序列化字段；当前原生实现未读取此值，不作为现行调参入口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Movement")
 	float DashCooldown = 0.8f;
     /** Ground combo may resume its next stage after its first dodge. Timed from dodge end. */

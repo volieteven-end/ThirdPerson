@@ -11,11 +11,7 @@ class UCombatComponent;
 class ACharacter;
 class AAIController;
 
-/**
- * Periodically writes a nearby-enemy avoidance destination to the Blackboard.
- * Put a high-priority separation branch above chase/slot movement so crowded
- * melee enemies spread out without moving during an attack montage.
- */
+/** 更新敌人间的分离信息，缓解多个近战敌人追击同一目标时的重叠。 */
 UCLASS()
 class THIRDPERSON_API UBTService_UpdateEnemySeparation : public UBTService
 {
@@ -54,6 +50,7 @@ protected:
 	bool bIgnoreWhileAttacking = true;
 };
 
+/** 刷新近战 AI 的目标、距离和攻击条件，供行为树分支决策使用。 */
 UCLASS()
 class THIRDPERSON_API UBTService_UpdateMeleeCombat : public UBTService
 {
@@ -77,7 +74,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat") float TooCloseReleaseDistance = 130.f;
 };
 
-/** Owns the reservation for the ENTIRE approach/attack sequence, including failed MoveTo and aborts. */
+/** 在行为树分支存续期间维护攻击预约；分支退出时释放占用，避免令牌泄漏。 */
 UCLASS()
 class THIRDPERSON_API UBTService_MeleeAttackReservation : public UBTService
 {
@@ -92,6 +89,7 @@ private:
 	TWeakObjectPtr<APawn> ReservedPawn;
 };
 
+/** 向世界级近战协调器申请接近目标的位置，避免所有敌人挤向同一点。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_RequestCombatSlot : public UBTTaskNode
 {
@@ -110,6 +108,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat") float MaxRadius = 300.f;
 };
 
+/** 申请同时进攻的名额；成功后才进入攻击分支，不直接触发伤害。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_RequestAttackToken : public UBTTaskNode
 {
@@ -125,6 +124,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector HasAttackTokenKey;
 };
 
+/** 归还攻击名额，让其他敌人可以发起进攻。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_ReleaseAttackToken : public UBTTaskNode
 {
@@ -140,6 +140,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Blackboard") FBlackboardKeySelector HasAttackTokenKey;
 };
 
+/** 发起近战动作并等待完成；中止时清理任务状态，攻击窗口仍由战斗组件管理。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_PerformMeleeAttack : public UBTTaskNode
 {
@@ -185,6 +186,7 @@ private:
 	bool bPreviousControllerYaw = false;
 };
 
+/** 选择近战收招后的可达退让点，为下一轮交战留出空间。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_SelectRetreatPosition : public UBTTaskNode
 {
@@ -202,6 +204,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Combat") float RetreatDistance = 180.f;
 };
 
+/** 把当前巡逻目标写入黑板，衔接行为树的移动任务。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_SetCurrentPatrolPoint : public UBTTaskNode
 {
@@ -218,7 +221,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Patrol") bool bAdvanceFirst = false;
 };
 
-/** Clears one selected Blackboard entry after an investigate/search branch. */
+/** 清除指定黑板键，避免上一行为分支的数据影响下一轮决策。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_ClearBlackboardValue : public UBTTaskNode
 {

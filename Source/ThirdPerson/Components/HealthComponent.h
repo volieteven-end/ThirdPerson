@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -16,6 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
 DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnCombatHitResolved, const FCombatHitSpec&, const FCombatHitResult&, AActor*);
 
+/** 统一生命与受击结算入口：处理免疫、格挡／弹反后的实际伤害，广播生命变化和死亡结果。 */
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class THIRDPERSON_API UHealthComponent : public UActorComponent
 {
@@ -31,7 +31,7 @@ public:
 	FCombatHitResult ApplyCombatHit(const FCombatHitSpec& Spec, AActor* DamageSource);
 	const FCombatHitResult& GetLastCombatHitResult() const { return LastHitResult; }
 	FOnCombatHitResolved OnCombatHitResolved;
-	/** Separate encounter immunity; does not overwrite the player's timed dodge immunity. */
+	/** 遭遇期间的独立免疫开关，不覆盖玩家闪避的限时无敌。 */
 	void SetEncounterInvulnerable(bool bEnabled) { bEncounterInvulnerable = bEnabled; }
 	AActor* GetLastDamageSource() const { return LastDamageSource.Get(); }
 

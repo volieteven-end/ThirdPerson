@@ -1,3 +1,4 @@
+// 剑术实机回归：覆盖主地图启动、动作生命周期、连招和闪避控制交接。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

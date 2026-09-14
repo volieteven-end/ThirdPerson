@@ -15,6 +15,7 @@ inline bool BlocksDodge(bool Dead, bool Hit, bool Guard, bool Dodge)
 }
 
 // The window starts at the natural end of the FIRST dodge, not at input time.
+/** 闪避后续接连招的短暂窗口，记录待续阶段与期限，避免每次闪避无限保留连招。 */
 struct FDashComboWindow
 {
     int NextIndex = -1;
@@ -48,6 +49,7 @@ struct FDashComboWindow
 
 // A single intent belongs to exactly one action generation. Early clicks are
 // retained until its chain point; interruption never carries them to a new action.
+/** 有有效期的连招输入缓存，仅在允许衔接时消费，过期或取消时清除。 */
 struct FComboBuffer
 {
     unsigned long long Generation = 0;

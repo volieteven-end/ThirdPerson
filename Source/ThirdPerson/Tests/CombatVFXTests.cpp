@@ -1,3 +1,4 @@
+// 特效回归：检查可选自动刀光及 Boss 特效的启停、取消和对象池复用，不因此启用主角自动特效。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

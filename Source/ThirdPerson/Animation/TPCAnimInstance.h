@@ -17,6 +17,7 @@ enum class ETPCTurnInPlaceDirection : uint8
 	Right180
 };
 
+/** 把主角运动与动作状态提供给动画蓝图；动作所有权来自动作组件，不在动画图中重复结算战斗。 */
 UCLASS(BlueprintType, Blueprintable)
 class THIRDPERSON_API UTPCAnimInstance : public UAnimInstance
 {

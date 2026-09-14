@@ -6,6 +6,7 @@
 class AArenaWaveDirector;
 class ACountessBossCharacter;
 
+/** 竞技场状态显示，只读取波次管理器的信息，不生成敌人或结算奖励。 */
 UCLASS()
 class THIRDPERSON_API UArenaHUDWidget : public UUserWidget
 {
@@ -14,6 +15,7 @@ protected:
     virtual TSharedRef<SWidget> RebuildWidget() override;
 };
 
+/** 竞技场规则入口：配置出生、HUD 与挑战生命周期，避免套用普通关卡的击杀通关条件。 */
 UCLASS()
 class THIRDPERSON_API AArenaGameMode : public ATPCGameMode
 {

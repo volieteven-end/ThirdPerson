@@ -116,6 +116,7 @@ bool UBossActionComponent::HasLineOfSightTo(AActor* Actor) const
  TArray<AActor*> Attached; Actor->GetAttachedActors(Attached,true,true); Q.AddIgnoredActors(Attached);
  return !GetWorld()->LineTraceSingleByChannel(Hit,Boss->GetActorLocation()+FVector(0,0,40),Actor->GetActorLocation()+FVector(0,0,40),ECC_Visibility,Q);
 }
+// —— 遭遇入口：建立目标与场地状态；死亡、转阶段和重置优先于普通决策。
 bool UBossActionComponent::BeginEncounter(AActor* Player)
 {
  const APawn* Pawn=Cast<APawn>(Player);
@@ -134,6 +135,7 @@ bool UBossActionComponent::BeginEncounter(AActor* Player)
  }
  return true;
 }
+// —— 脱战判断：绑定场地时使用边界宽限，场内短暂遮挡不重置；攻击仍需视线合法。
 void UBossActionComponent::UpdateContext(float Delta)
 {
  ++ContextRevision;
@@ -174,6 +176,7 @@ void UBossActionComponent::ConsiderPhase(float Current,float Max)
  if (Phase==1 && Current>0 && Current<=Max*GetDefinition()->PhaseThreshold && IsEncounterActive()) bPhasePending=true;
  OnStatusChanged.Broadcast();
 }
+// —— 受击结果：根据实际结算推进破韧、反馈和阶段，不根据请求伤害提前判断。
 void UBossActionComponent::OnResolvedHit(const FCombatHitSpec& Spec,const FCombatHitResult& Result,AActor* Source)
 {
  if (State==EBossState::Dead || Result.ActualDamage<=0) return;
@@ -248,6 +251,7 @@ void UBossActionComponent::ClearEffects()
  for (UParticleSystemComponent* FX:Effects) if (IsValid(FX)) { FX->EndTrails(); FX->DeactivateSystem(); FX->DestroyComponent(); }
  Effects.Reset();
 }
+// —— 取消与清理：停止当前动作拥有的移动、预警及特效，不遗留到下一次遭遇。
 void UBossActionComponent::CancelAction()
 {
  ++ActionSerial; bWindowOpen=false; WindowHits.Reset(); Step=EActionStep::None; CurrentAction=EBossAction::None;
@@ -267,6 +271,7 @@ bool UBossActionComponent::IsActionLegal(EBossAction Id,float Distance,bool bLOS
  if (const double* Until=CooldownUntil.Find(Id); Until && Now()<*Until) return false;
  return true;
 }
+// —— 选招：先过滤距离、冷却和视线，再按当前阶段权重抽取。
 EBossAction UBossActionComponent::SelectAction(float Distance,bool bLOS)
 {
  TArray<const FBossActionDefinition*> Legal; float Total=0;
@@ -334,6 +339,7 @@ void UBossActionComponent::UpdateTelegraphTransform()
  { Location=Floor.ImpactPoint+Floor.ImpactNormal*3.f; Rotation=FRotationMatrix::MakeFromZX(Floor.ImpactNormal,Boss->GetActorForwardVector()).Rotator(); }
  TelegraphActor->SetActorLocationAndRotation(Location,Rotation);
 }
+// —— 招式阶段：驱动动画、预警与转向锁定，收招仍属于当前动作生命周期。
 void UBossActionComponent::StartStage()
 {
  const auto* A=GetDefinition()->FindAction(CurrentAction);
@@ -440,6 +446,7 @@ void UBossActionComponent::NotifyWindow(bool bOpen,const UAnimSequenceBase* Anim
  if (IsCurrentNotify(Animation,Id)) bWindowOpen=bOpen;
  // Hit timing remains driven by montage position, so skipped/low-weight notifies cannot create missing damage or stale windows.
 }
+// —— 伤害窗口采样：处理低帧率跨过窗口的情况，并在命中组内去重。
 void UBossActionComponent::SampleDamage(float OldTime,float NewTime)
 {
  const auto* A=GetDefinition()->FindAction(CurrentAction); if (!A || !A->Stages.IsValidIndex(StageIndex)) return;
@@ -632,6 +639,7 @@ void UBossActionComponent::MoveToGoal(const FVector& Goal,float Speed,bool bStra
  if (AI->MoveTo(Request).Code==EPathFollowingRequestResult::Failed)
  { bReversingOrbit=!bReversingOrbit; if (bStandoff && ++StandoffPathFailures>=2) bStandoff=false; }
 }
+// —— 主动对峙：固定本次绕行方向和结束时刻，距离、视线或路径不合适时退出。
 bool UBossActionComponent::TickStandoff(float Distance)
 {
  if (!bStandoff) return false;
@@ -677,6 +685,7 @@ void UBossActionComponent::DriveDecision()
  { Seen.Add(E); Goal+=(Boss->GetActorLocation()-E->GetActorLocation()).GetSafeNormal2D()*100; }
  MoveToGoal(Goal,Distance<180?GetDefinition()->RetreatSpeed:GetDefinition()->OrbitSpeed,true);
 }
+// —— 重置遭遇：清理动作与投射物后恢复挑战，不能把普通寻路波动当作脱战。
 void UBossActionComponent::RequestReset()
 {
  if (!bInitialized || State==EBossState::Dead || State==EBossState::Resetting || State==EBossState::Dormant) return;

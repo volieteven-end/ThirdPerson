@@ -1,8 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
-using System.Collections.Generic;
 
+// 游戏构建目标；沿用同一运行时模块，不包含编辑器资源重建依赖。
 public class ThirdPersonTarget : TargetRules
 {
 	public ThirdPersonTarget(TargetInfo Target) : base(Target)

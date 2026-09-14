@@ -1,3 +1,4 @@
+// 竞技场回归：检查地图资源、边界、随机波次和往返重生；使用临时存档，不修改正式玩家进度。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

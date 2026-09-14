@@ -2,7 +2,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "CountessBossAssetTools.generated.h"
-/** Editor-only implementation. Writes only missing assets under Third/Bosses/Countess, never Paragon originals. */
+/** 编辑器专用 Countess 资源工具；会生成或升级动作、行为树和测试地图，运行时不重建资产。 */
 UCLASS()
 class THIRDPERSON_API UCountessBossAssetTools : public UBlueprintFunctionLibrary
 {

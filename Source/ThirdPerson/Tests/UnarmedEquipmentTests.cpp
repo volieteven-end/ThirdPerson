@@ -1,3 +1,4 @@
+// 徒手与装备回归：核对基础攻击距离、收拔刀、背挂和无武器状态的回退规则。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

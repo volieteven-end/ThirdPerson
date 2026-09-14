@@ -1,3 +1,4 @@
+// 远程 AI 回归：核对行为树、射击和后撤循环，以及不同帧率下的动作结束。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

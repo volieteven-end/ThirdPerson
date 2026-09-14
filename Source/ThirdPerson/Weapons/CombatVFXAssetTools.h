@@ -3,7 +3,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "CombatVFXAssetTools.generated.h"
 
-/** Targeted editor migration: never reconstructs combat montages, maps or vendor assets. */
+/** 编辑器专用特效配置工具；会保存项目特效副本及相关配置，Boss 局部调整不重建整套动作或原素材。 */
 UCLASS()
 class THIRDPERSON_API UCombatVFXAssetTools : public UBlueprintFunctionLibrary
 {

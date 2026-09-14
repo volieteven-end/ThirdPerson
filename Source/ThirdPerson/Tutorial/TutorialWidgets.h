@@ -6,6 +6,7 @@
 
 class ATutorialDirector;
 
+/** 教程目标与课程进度显示，只观察课程导演，不通过模拟输入推进课程。 */
 UCLASS()
 class THIRDPERSON_API UTutorialHUDWidget : public UUserWidget
 {
@@ -23,6 +24,7 @@ private:
     FText Direction() const;
 };
 
+/** 教程暂停界面，在通用暂停菜单基础上提供课程重试与练习入口。 */
 UCLASS()
 class THIRDPERSON_API UTutorialPauseWidget : public UPauseMenuWidget
 {

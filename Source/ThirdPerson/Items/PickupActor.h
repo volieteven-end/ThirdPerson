@@ -1,5 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
+﻿
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,6 +8,7 @@
 class UStaticMeshComponent;
 class UItemDefinition;
 class URotatingMovementComponent;
+/** 世界中的可拾取物品实例；交互成功后交给背包组件接收，不在 UI 中直接增添物品。 */
 UCLASS()
 class THIRDPERSON_API APickupActor : public AActor,public IInteractable
 {
@@ -16,14 +16,12 @@ class THIRDPERSON_API APickupActor : public AActor,public IInteractable
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this actor's properties
 	APickupActor();
 	virtual FText GetInteractionText() const override;
 	virtual void Interact(APawn* InstigatorPawn) override;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	TObjectPtr<URotatingMovementComponent> RotatingMovement;
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Components")
 	TObjectPtr<UStaticMeshComponent> PickupMesh;

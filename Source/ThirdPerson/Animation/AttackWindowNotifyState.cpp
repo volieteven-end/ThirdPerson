@@ -38,7 +38,7 @@ void UAttackWindowNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAn
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->OpenComboInputWindow(); }
 	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->StartAttackWindow(AttackBoneName, TraceRadius, HitGroup); }
 	else if (WindowType == EAttackNotifyWindowType::WeaponEffect) { SetEquippedWeaponEffect(MeshComp, true, EffectStyle); }
-	// Damage windows no longer synthesize FX; animation-authored trail/Niagara notifies own them.
+	// 伤害窗口不再自动生成刀光；拖尾和 Niagara 特效由动画自带通知控制。
 }
 
 void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -48,7 +48,7 @@ void UAttackWindowNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnim
 	if (!MeshComp || !MeshComp->GetWorld() || !MeshComp->GetWorld()->IsGameWorld()) { return; }
 	AActor* Owner = MeshComp->GetOwner();
 	UCombatComponent* Combat = Owner ? Owner->FindComponentByClass<UCombatComponent>() : nullptr;
-	// Outgoing NotifyEnd cannot close the next attack's damage / FX window.
+	// 上一招的结束通知不能关闭下一招的伤害或特效窗口。
 	if (!Combat || !Combat->IsCurrentAttackNotify(Animation, GetCombatNotifyMontageInstanceId(EventReference))) { return; }
 	if (WindowType == EAttackNotifyWindowType::ComboInput) { Combat->CloseComboInputWindow(); }
 	else if (WindowType == EAttackNotifyWindowType::Damage) { Combat->FinishAuthoredDamageWindow(Animation, GetCombatNotifyMontageInstanceId(EventReference)); }

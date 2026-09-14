@@ -5,6 +5,7 @@
 #include "BossDefinition.h"
 #include "BossBehaviorNodes.generated.h"
 
+/** 更新 Boss 行为树上下文，将遭遇状态和目标信息交给状态任务。 */
 UCLASS()
 class THIRDPERSON_API UBTService_UpdateBossContext : public UBTService
 {
@@ -15,7 +16,7 @@ protected:
  virtual void TickNode(UBehaviorTreeComponent& Owner,uint8* Memory,float Delta) override;
 };
 
-/** One state branch. A changed state completes on the next decision tick, then the priority selector reevaluates. */
+/** 驱动 Boss 当前状态对应的行为；具体招式、对峙和重置由 Boss 动作组件统一调度。 */
 UCLASS()
 class THIRDPERSON_API UBTTask_BossState : public UBTTaskNode
 {

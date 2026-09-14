@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "CombatComponent.h"
@@ -37,7 +36,6 @@ namespace
 			Source->IsA<AEnemyCharacter>() && Target->IsA<AEnemyCharacter>();
 	}
 }
-// Sets default values for this component's properties
 void UCombatComponent::RestoreRespawnAttributes(const UCombatComponent& Source)
 {
 	Damage = Source.Damage;
@@ -57,6 +55,7 @@ UCombatComponent::UCombatComponent()
 	SetComponentTickEnabled(false);
 }
 
+// —— 攻击入口：区分武器动作集合、旧蒙太奇和徒手回退。
 void UCombatComponent::TryAttack()
 {
 	UWorld* World = GetWorld();
@@ -169,6 +168,7 @@ void UCombatComponent::TryAirDiveAttack()
 	}
 }
 
+// —— 物理落地只记录接地状态；下砸动画到达伤害窗口后才允许落地命中。
 void UCombatComponent::HandleOwnerLanded()
 {
 	NextAirAttackIndex = 0;
@@ -191,6 +191,7 @@ void UCombatComponent::HandleOwnerLanded()
 }
 
 
+// —— 防御与弹反：统一检查正面角度、耐力及弹反窗口。
 void UCombatComponent::StartBlock()
 {
 	if (UActionComponent* Actions = GetActions())
@@ -467,6 +468,7 @@ void UCombatComponent::CloseComboInputWindow()
 	}
 }
 
+// —— 动画回调归属：资源相同不代表播放实例相同，旧通知不得改变当前攻击。
 bool UCombatComponent::IsCurrentAttackNotify(const UAnimSequenceBase* Animation, int32 MontageInstanceId) const
 {
 	if (!bCombatEnabled || !bMeleeAttackInProgress || !ActiveAttackMontage.IsValid()) { return false; }
@@ -564,6 +566,7 @@ void UCombatComponent::StopAttackEffects()
 	}
 }
 
+// —— 动作收尾：清除命中、缓存与表现状态，受击和死亡也走相同清理路径。
 void UCombatComponent::ResetMeleeAction()
 {
     if (bPosePolicySaved)
@@ -613,6 +616,7 @@ bool UCombatComponent::IsDashComboContextValid() const
     return true;
 }
 
+// —— 闪避续接：仅保留规则允许的连招进度，不能把旧伤害窗口带进闪避。
 void UCombatComponent::CancelAttackForDash(float BlendOutTime)
 {
     const ACharacter* Character = Cast<ACharacter>(GetOwner());
@@ -698,6 +702,7 @@ void UCombatComponent::CancelActiveAttack(float BlendOutTime)
 }
 
 
+// —— 命中检测：使用当前攻击实例与命中组去重，结算后才广播有效命中。
 void UCombatComponent::PerformAttackHit()
 {
 	if (!bCombatEnabled) { return; }
@@ -948,7 +953,7 @@ void UCombatComponent::TickComponent(
             const FVector TraceBeforeTip = TPCMeleeTrace::Extend(BeforeTip,Origin,Reach);
             const FVector TraceAfterBase = TPCMeleeTrace::Extend(AfterBase,Origin,Reach);
             const FVector TraceAfterTip = TPCMeleeTrace::Extend(AfterTip,Origin,Reach);
-            // Overlapping spheres cover the blade's full length, not just its tip.
+            // 沿刀刃布置相互重叠的球体，覆盖整段刀刃而非只检测剑尖。
             const float Length = FMath::Max(FVector::Distance(BeforeBase, BeforeTip), FVector::Distance(AfterBase, AfterTip));
             const int32 Samples = FMath::Clamp(FMath::CeilToInt(Length / FMath::Max(1.f, ActiveTraceRadius * 1.5f)) + 1, 5, 32);
             for (int32 I = 0; I < Samples; ++I)
@@ -959,7 +964,7 @@ void UCombatComponent::TickComponent(
                     FMath::Lerp(TraceAfterBase, TraceAfterTip, Alpha), FQuat::Identity, ECC_Pawn,
                     FCollisionShape::MakeSphere(ActiveTraceRadius), QueryParams);
                 ApplyHits(Hits);
-                if (!bAttackWindowActive) break; // A parry can interrupt the attacker inside ApplyCombatHit.
+                if (!bAttackWindowActive) break; // 命中结算中的弹反可能立即中断攻击者，必须停止剩余检测。
             }
         };
         const UWeaponDefinition* Weapon = GetEquippedWeaponDefinition();
@@ -968,8 +973,8 @@ void UCombatComponent::TickComponent(
         const float Span = Position - PreviousTraceMontagePosition;
         const FTransform MeshWorld = CharacterMesh->GetComponentTransform();
         FTransform CurrentAuthoredPose;
-        // A rapidly rotating blade follows an arc, NOT the straight chord between rendered poses.
-        // Sample real compressed bone tracks at <= 1/120 s, bounded to 16 substeps for hitches.
+        // 快速转动的刀刃沿弧线运动，不能只扫掠两帧姿态之间的直线。
+        // 按不大于 1/120 秒的间隔采样实际压缩骨骼轨迹，卡顿时最多细分 16 步。
         const bool bSampleArc = GetActionSet() && Weapon && Span > 1.f / 120.f + .0001f && Span < .15f &&
             TPCBladeSampling::SampleEquipmentPose(ActiveAttackMontage.Get(), Position, CharacterMesh, Weapon->EquipSocketName, CurrentAuthoredPose);
         const int32 Steps = bSampleArc ? FMath::Clamp(FMath::CeilToInt(Span * 120.f), 1, 16) : 1;
@@ -989,7 +994,7 @@ void UCombatComponent::TickComponent(
                     CharacterMesh, Weapon->EquipSocketName, AuthoredPose))
                 {
                     FTransform InterpolatedWorld; InterpolatedWorld.Blend(PreviousTraceMeshTransform, MeshWorld, Alpha);
-                    // Anchor at the evaluated current pose so retargeting / montage blend offsets are retained.
+                    // 以当前求值姿态为基准，保留重定向和蒙太奇混合产生的偏移。
                     const FTransform EquipAtTime = AuthoredPose.GetRelativeTransform(CurrentAuthoredPose) * ActualEquip * InterpolatedWorld;
                     NextBase = (BladeBaseOffset * EquipAtTime).GetTranslation();
                     NextTip = (BladeTipOffset * EquipAtTime).GetTranslation();
@@ -1089,6 +1094,7 @@ bool UCombatComponent::IsUnarmedPlayer() const
     return GetOwner() && GetOwner()->IsA<ATPCCharacter>() && !GetEquippedWeaponDefinition();
 }
 
+// —— 基础伤害：装备／徒手基础值加等级加成，再应用永久倍率和当前 Buff；单招倍率在命中规格中计算。
 float UCombatComponent::GetEffectiveDamage() const
 {
 	const UWeaponDefinition* Weapon = GetEquippedWeaponDefinition();
@@ -1151,6 +1157,7 @@ void UCombatComponent::MultiplyMeleeReach(float Multiplier)
 	}
 }
 
+// —— 兼容入口：没有动作集合时仍需旧蒙太奇数组，不能按主角当前配置删除。
 const TArray<TObjectPtr<UAnimMontage>>& UCombatComponent::GetEffectiveAttackMontages() const
 {
 	if (const UActionSet* Set = GetActionSet())
@@ -1165,6 +1172,7 @@ const TArray<TObjectPtr<UAnimMontage>>& UCombatComponent::GetEffectiveAttackMont
 		: AttackMontages;
 }
 
+// —— 远程攻击：起手、松弦通知与实际发射分开，投射物继承统一命中规格。
 bool UCombatComponent::TryRangedAttackAt(AActor* TargetActor)
 {
 	UWorld* World = GetWorld();
@@ -1368,7 +1376,7 @@ void UCombatComponent::CommitSpecialMovement()
         if (ActiveAttackType == EActiveCombatAttackType::Buff)
         {
             SwordBuffExpiresAt = GetWorld()->GetTimeSeconds() + Set->BuffDuration;
-            SwordBuffMultiplier = Set->BuffDamageMultiplier; // Refresh duration, never multiply repeatedly.
+            SwordBuffMultiplier = Set->BuffDamageMultiplier; // 刷新持续时间，不重复叠乘倍率。
         }
     }
     if (ActiveAttackType == EActiveCombatAttackType::DrawWeapon || ActiveAttackType == EActiveCombatAttackType::SheatheWeapon)
@@ -1380,6 +1388,7 @@ void UCombatComponent::CommitSpecialMovement()
         Character->LaunchCharacter(FVector(0.f, 0.f, -AirAttackDownwardVelocity), false, true);
 }
 
+// —— 下砸衔接：分别跟踪物理接地与动画阶段，低空不跳过起手，高空在接地前等待。
 void UCombatComponent::UpdateDiveApproach()
 {
     if (!bCombatEnabled || !bMeleeAttackInProgress || ActiveAttackType != EActiveCombatAttackType::AirDive || !GetWorld()) return;
@@ -1390,7 +1399,7 @@ void UCombatComponent::UpdateDiveApproach()
     const bool bHasDescent = M->GetSectionIndex(TEXT("Descent")) != INDEX_NONE;
     if (!bHasDescent)
     {
-        // Compatibility for non-sword legacy Start/Loop/Land montages.
+        // 保留非剑术旧版 Start／Loop／Land 蒙太奇的衔接规则。
         if (bAirDiveLanded)
         {
             Anim->Montage_SetNextSection(AirDiveStartSection, AirDiveLandSection, M);
@@ -1409,7 +1418,7 @@ void UCombatComponent::UpdateDiveApproach()
         Anim->Montage_SetNextSection(TEXT("Descent"), Wait, M);
         if (Wait != AirDiveLandSection) Anim->Montage_SetNextSection(Wait, AirDiveLandSection, M);
         Anim->Montage_Resume(M);
-        // Only the holding loop can be skipped. Start and the flip-out always play through.
+        // 只允许结束滞空循环；起手和翻转下砸仍完整播放。
         if (Section == AirDiveLoopSection) Anim->Montage_JumpToSection(TEXT("Descent"), M);
         return;
     }
@@ -1424,7 +1433,7 @@ void UCombatComponent::UpdateDiveApproach()
             if (Position + GetWorld()->GetDeltaSeconds() * FMath::Max(1.f, Anim->Montage_GetPlayRate(M)) * 1.1f >= Contact)
             {
                 Anim->Montage_SetPosition(M, Contact - 1.f / 60.f);
-                Anim->Montage_Pause(M); // Physical contact opens the barrier, not a timer.
+                Anim->Montage_Pause(M); // 由真实落地解除等待，不能用计时器代替接地。
             }
         }
         return;

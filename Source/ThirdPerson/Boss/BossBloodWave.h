@@ -4,7 +4,7 @@
 #include "BossBloodWave.generated.h"
 class UParticleSystemComponent;
 class UParticleSystem;
-/** Uses the existing bounded world pool; unlike arrows, blood waves never embed in a victim. */
+/** Countess 血浪投射物：复用投射物碰撞、伤害和对象池，仅补充飞行与撞击表现。 */
 UCLASS()
 class THIRDPERSON_API ABossBloodWave : public AWeaponProjectile
 {

@@ -1,5 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
+// 注册 ThirdPerson 主游戏模块；编辑器资源工具通过编译条件隔离，游戏运行不构建资产。
 #include "ThirdPerson.h"
 #include "Modules/ModuleManager.h"
 

@@ -1,3 +1,4 @@
+// 集中解析存档槽位；自动化可通过 TPCSaveSlot 指定临时槽位，不能覆盖玩家正式存档。
 #pragma once
 
 #include "CoreMinimal.h"

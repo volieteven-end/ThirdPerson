@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 #include "CoreMinimal.h"
@@ -16,6 +15,7 @@ class UWeaponDefinition;
 class AWeaponActor;
 UENUM(BlueprintType)
 enum class EEnemyLaunchPhase : uint8 { None, Airborne, LandImpact, DownIdle, DownHit, GetUp, Dead };
+/** 普通敌人的共用角色基类：连接生命、装备、战斗、血条及死亡表现；Boss 和训练敌人复用基础能力。 */
 UCLASS()
 class THIRDPERSON_API AEnemyCharacter : public ACharacter
 {
@@ -73,6 +73,7 @@ public:
 	float UppercutLaunchVelocity = 620.f;
 	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut", meta = (ClampMin = "0.0"))
 	float UppercutHorizontalVelocity = 180.f;
+	/** 保留蓝图序列化字段；当前原生实现未读取此值，不作为现行调参入口。 */
 	UPROPERTY(EditDefaultsOnly, Category = "Animation|Uppercut", meta = (ClampMin = "0.1"))
 	float UppercutStunFallbackDuration = 1.f;
 	/** Optional landing/get-up montage. AI remains stunned until it finishes. */

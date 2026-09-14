@@ -1,3 +1,4 @@
+// 测试用截图辅助函数：记录 Boss 动作可读性证据，只在开发测试中调用。
 #pragma once
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Engine/World.h"

@@ -3,7 +3,7 @@
 #include "Animation/AnimInstance.h"
 #include "BossDefinition.h"
 #include "CountessBossAnimInstance.generated.h"
-/** Works without the legacy player AnimBP. A custom AnimBP may instead consume these same variables. */
+/** Countess 原生动画驱动，提供移动、转向和招式姿态；自定义动画蓝图也可读取相同状态。 */
 UCLASS(Transient,Blueprintable)
 class THIRDPERSON_API UCountessBossAnimInstance : public UAnimInstance
 {

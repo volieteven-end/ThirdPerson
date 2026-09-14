@@ -1,8 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
-using System.Collections.Generic;
 
+// 编辑器构建目标，启用资源编辑和开发测试所需的模块条件。
 public class ThirdPersonEditorTarget : TargetRules
 {
 	public ThirdPersonEditorTarget(TargetInfo Target) : base(Target)

@@ -1,3 +1,4 @@
+// 运动反馈回归：验证输入、移动和弹反衔接，不重新生成输入或动画资产。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"

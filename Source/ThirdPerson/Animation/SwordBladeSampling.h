@@ -1,3 +1,4 @@
+// 从蒙太奇实际骨骼轨迹采样装备挂点，为高速挥剑提供帧间弧线补采样；失败时由调用者回退。
 #pragma once
 #include "CoreMinimal.h"
 class UAnimMontage;

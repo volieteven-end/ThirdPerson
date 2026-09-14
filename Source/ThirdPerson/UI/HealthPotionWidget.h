@@ -7,7 +7,7 @@
 
 class UInventoryComponent;
 
-/** Display only: potion ownership/count always comes from the actual inventory. */
+/** 快捷药水数量和使用提示，数据来自背包组件，不单独保存消耗数量。 */
 UCLASS()
 class THIRDPERSON_API UHealthPotionWidget : public UUserWidget
 {

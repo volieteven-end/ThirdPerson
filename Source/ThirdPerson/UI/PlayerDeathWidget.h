@@ -3,6 +3,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PlayerDeathWidget.generated.h"
 
+/** 死亡后的重试界面，等待死亡表现允许重生后调用角色重试入口。 */
 UCLASS()
 class THIRDPERSON_API UPlayerDeathWidget : public UUserWidget
 {

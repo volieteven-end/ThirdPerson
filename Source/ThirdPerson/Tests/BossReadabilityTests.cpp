@@ -1,3 +1,4 @@
+// Boss 动画资源回归：核对预警、命中、转向锁定及收招时间轴。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Animation/AnimMontage.h"

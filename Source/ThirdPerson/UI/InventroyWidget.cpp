@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "InventroyWidget.h"
@@ -45,6 +44,7 @@ void RefreshForestItemPreview(UUserWidget* Widget, const UItemDefinition* Defini
 }
 }
 
+// —— 绑定现有蓝图控件：保留格子、提示和事件名称，分页只整理背包窗口区域。
 void UInventoryWidget::NativeConstruct()
 {
     Super::NativeConstruct();
@@ -60,6 +60,7 @@ FReply UInventoryWidget::NativeOnPreviewKeyDown(const FGeometry& Geometry,const 
     return Super::NativeOnPreviewKeyDown(Geometry,Event);
 }
 void UInventoryWidget::ShowAttributesPage() { SwitchPage(1); }
+// —— 分页切换：通过 WidgetSwitcher 切背包／属性，不隐藏世界 HUD 和教程提示。
 void UInventoryWidget::SwitchPage(int32 PageIndex)
 {
     const int32 Page=FMath::Clamp(PageIndex,0,1);
@@ -68,6 +69,7 @@ void UInventoryWidget::SwitchPage(int32 PageIndex)
     for (int32 I=0;I<2;++I) if (auto* B=Cast<UButton>(GetWidgetFromName(Names[I]))) B->SetBackgroundColor(I==Page?FLinearColor(.18f,.42f,.34f,1):FLinearColor(.07f,.11f,.1f,1));
     NextAttributeRefresh=0;
 }
+// —— 展示生命周期：仅在背包打开时更新属性与模型，关闭后停止捕获并销毁展示对象。
 void UInventoryWidget::SetPresentationOpen(bool bOpen)
 {
     bPresentationOpen=bOpen;
@@ -147,6 +149,7 @@ void UInventoryWidget::HandleInventoryChanged()
     HandleInventorySlotClicked(SelectedInventorySlotIndex);
 }
 
+// —— 解绑外部事件，避免重生或重建界面后重复接收旧角色通知。
 void UInventoryWidget::NativeDestruct()
 {
 	SetPresentationOpen(false);
@@ -218,7 +221,7 @@ void UInventoryWidget::SetHealthComponent(
 		MaxHealth);
 
 	RefreshHealthText(FText::FromString(Text));
-    // Drive the actual fill as well as its text; Designer Percent is only a preview value.
+    // 同时更新血条填充和文字；设计器中的 Percent 仅用于预览。
     if (UProgressBar* Bar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPbar"))))
     {
         Bar->SetPercent(MaxHealth > 0.f ? FMath::Clamp(CurrentHealth / MaxHealth, 0.f, 1.f) : 0.f);
@@ -366,6 +369,7 @@ void UInventoryWidget::CloseInventory()
 	}
 }
 
+// —— 背包交互：刷新格子与选择，使用／丢弃继续走背包组件。
 void UInventoryWidget::RefreshInventoryGrid()
 {
 	if (!InventoryGrid ||!InventorySlotWidgetClass ||!InventoryComponent)

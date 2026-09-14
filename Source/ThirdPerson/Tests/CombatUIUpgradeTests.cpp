@@ -1,3 +1,4 @@
+// 命中反馈与 UI 回归：覆盖菜单存档策略、分页、属性和角色预览；视觉捕获用例与运行时用例分开。
 #if WITH_EDITOR && WITH_DEV_AUTOMATION_TESTS
 #include "Misc/AutomationTest.h"
 #include "Tests/AutomationEditorCommon.h"
