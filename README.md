@@ -108,8 +108,8 @@ $ProjectFile = (Resolve-Path '.\ThirdPerson.uproject').Path
 | WASD / 鼠标移动 | 移动 / 观察 |
 | 鼠标左键 | 攻击、接续连招；弹反成功后可反击 |
 | 鼠标右键点按 / 长按 | 弹反 / 持续格挡 |
-| 空格短按松开 / 长按并移动 | 闪避 / 疾跑；疾跑时左键为疾跑斩 |
-| F | 跳跃；解锁后可二段跳 |
+| Shift 短按松开 / 长按并移动 | 闪避 / 冲刺；冲刺时左键为疾跑斩 |
+| 空格 | 跳跃；解锁后可二段跳 |
 | C + 左键 | 升龙，随后左键可接空中连击 |
 | 空中 R | 下落攻击 |
 | 鼠标中键 | 锁定 / 解除锁定 |
@@ -118,7 +118,7 @@ $ProjectFile = (Resolve-Path '.\ThirdPerson.uproject').Path
 | Q / E | 使用消耗品 / 交互 |
 | Tab / Esc | 背包与属性 / 暂停菜单 |
 
-空格不是跳跃键。按键以角色当前使用的 Enhanced Input 映射为准，默认映射位于 `Content/Third/Input/IMC_Default`；更换或修改角色蓝图后可能不同。
+空格用于跳跃，Shift 用于冲刺与短按闪避。按键以角色当前使用的 Enhanced Input 映射为准，默认映射位于 `Content/Third/Input/IMC_Default`；更换或修改角色蓝图后可能不同。
 
 ## 代码导航
 
